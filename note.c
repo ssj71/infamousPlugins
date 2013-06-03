@@ -4,10 +4,15 @@
 #include<note.h>
 #include<math.h>
 
+#define ENV_ATTACK  0
+#define ENV_DECAY   1
+#define ENV_BREAK   2
+#define ENV_SWELL   3
+#define ENV_SUSTAIN 4
+#define ENV_RELEASE 5
 //private function prototypes
-void playnote(NOTE *self, uint32_t nframes, float buffer[] );
 
-NOTE *init_note(NOTE *self, unsigned char value, unsigned char velocity, unsigned char nharmonics)
+NOTE *init_note(NOTE *self, unsigned char value, unsigned char velocity, unsigned char nharmonics, float envelope[])
 {
     unsigned char i;
     self->value = value;
@@ -36,9 +41,21 @@ NOTE *init_note(NOTE *self, unsigned char value, unsigned char velocity, unsigne
     self->base_func_max = PI;
 
     self->env_gain = 0;
-    self->nenv_chng = 0;
+    self->stop_frame = 0;
+    for(i=0;i<6;i++)
+    {
+        self->envelope[i] = envelope[i];
+    }
 
-    self->play = &playnote;
+    self->fmod_func = &sin;
+    self->fmod_gain = 0;//start this at 0
+    self->fmod_phase = 0;
+    self->fmod_step = 0;
+
+    self->amod_func = &sin;
+    self->amod_gain = 0;//start this at 0
+    self->amod_phase = 0;
+    self->amod_step = 0;
 }
 
 void set_envelope(NOTE *self, float adsr)
@@ -47,32 +64,99 @@ void set_envelope(NOTE *self, float adsr)
     self->l_env[nharmchng++] = frame_no;
 }
 
-void set_harmonics(NOTE *self, unsigned short harmonics, uint32_t frame_no)
+void set_harmonics(NOTE *self, unsigned short harmonics)
 {
-    self->harmonics[nharm_chng] = harmonics;
-    self->harm_chng_frame[nharm_chng++] = frame_no;
+    unsigned char i;
+    self->harmonics = harmonics;
+    for(i=0;i<self->nharmonics;i++)//harmonics
+    {
+        if(!harmonics&(1<<k))//if cell is !alive
+            self->phase[i] = 0;
+    }
 }
 
 
-void playnote(NOTE *self, uint32_t nframes, float buffer[])
+void end_note(NOTE *self)
+{
+    self->env_state = ENV_RELEASE;//set to release
+}
+
+
+void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[])
 {
     unsigned char i,j,k;
-    uint32_t frame = 0;
-    uint32_t chunk[MAX_N_CELL_CHANGES + 3];
+    uint32_t frame = start_frame;
+    //uint32_t chunk[MAX_N_CELL_CHANGES + 3];
     unsigned short harmonics = self->harmonics[0];
     uint32_t *harm_chng_frame = self->harm_chng_frame;
     harm_chng_frame[self->nharm_chng++] = nframes;
 
+    float fmod_g = 0;
+    float fmod_coeff = 1;
+
+    //divide into chunks per envelpe region
+    uint32_t chunk = nframes - start_frame;
+    float env_slope = envelope[env_state];
+    float env_end_gain = env_gain + env_slope*chunk;
+    bool recurse = FALSE;
+    if (self->env_state<ENV_SUSTAIN)
+    {
+        if(self->env_state != ENV_SWELL)
+        {
+            if(env_end_gain > 1.0)
+            {
+                //do no. frames till Attack complete
+                self->env_state++;
+                recurse = TRUE;
+            }
+            else if(env_end_gain <= envelope[ENV_BREAK])
+            {
+                //do no. frames till Decay complete
+
+                self->env_state+=2;//skip B
+                recurse = TRUE;
+            }
+        }
+        else if(env_end_gain >= envelope[ENV_SUSTAIN])
+        {
+            //do no. frames till Swell complete
+
+            self->env_state++;
+            recurse = TRUE;
+        }
+    }else if(self->env_state > ENV_SUSTAIN)//release
+    {
+        if (env_end_gain <= 0)
+        {
+            note_dead = TRUE;
+            chunk = floor(env_gain/env_slope);//don't process past note death
+        }
+    }
+    else//in sustain
+    {
+        fmod_g = self->fmod_gain;
+
+        env_slopef = 0;
+    }
 
     for(i=0;i<self->nharm_chng;i++) //cell generations
     {
-
-        for(j=0;j<nharmonics;j++)//harmonics
+        // I think I should just handle the cell lifetimes outside of the note and play chunks.
+        for(j=frame;j<harm_chng_frame[i];j++ )
         {
-            if(harmonics&(1<<j))//if cell is alive
+            fmod_coeff = 1 + fmod_g*(self->fmod_func(self->fmod_phase);
+            self->fmod_phase += self->fmod_step;
+            for(k=0;k<self->nharmonics;k++)//harmonics
             {
-                for(k=frame;k<harm_chng_frame[i];k++ )
-                    buffer[k] += self->base_func(phase);
+                if(harmonics&(1<<k))//if cell is alive
+                {
+
+                    env_gain += env_slope;
+                    buffer[k] += (env_gain)*(self->base_func(self->phase[k]));
+                    self->phase[k] += fmod_coeff*self->step[k];
+
+
+                }
             }
         }
         //now the root
