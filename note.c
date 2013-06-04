@@ -84,16 +84,13 @@ void end_note(NOTE *self)
 
 void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[])
 {
-    unsigned char i,j,k;
-    uint32_t frame = start_frame;
+    unsigned char i,j;
     //uint32_t chunk[MAX_N_CELL_CHANGES + 3];
     unsigned short harmonics = self->harmonics[0];
     uint32_t *harm_chng_frame = self->harm_chng_frame;
     harm_chng_frame[self->nharm_chng++] = nframes;
 
-    float fmod_g = 0;
     float fmod_coeff = 1;
-    float amod_g = 0;
     float amod_coeff = 1;
 
     //divide into chunks per envelpe region
@@ -136,33 +133,58 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
     }
     else//in sustain
     {
-        fmod_g = self->fmod_gain;
-        amod_g = self->amod_gain;
         env_slopef = 0;
     }
 
-    for(i=0;i<self->nharm_chng;i++) //cell generations
+
+    //handle the cell lifetimes outside of the note and play chunks.
+    for(i=start_frame;i<chunk+start_frame;i++ )
     {
-        // I think I should just handle the cell lifetimes outside of the note and play chunks.
-        for(j=frame;j<harm_chng_frame[i];j++ )
+        //modulation
+        if(self->env_state == ENV_SUSTAIN)
         {
-            fmod_coeff = 1 + fmod_g*(self->fmod_func(self->fmod_phase);
+            fmod_coeff = 1 + self->fmod_gain*(self->fmod_func(self->fmod_phase));
             self->fmod_phase += self->fmod_step;
-            amod_coeff = 1 + amod_g*(self->fmod_func(self->amod_phase));
-            self->amod_phase += self->amod_step;
-            for(k=0;k<self->nharmonics;k++)//harmonics
+            if(self->fmod_phase >= self->amod_func_max)
             {
-                if(harmonics&(1<<k))//if cell is alive
-                {
-
-                    env_gain += env_slope;
-                    buffer[k] += (env_gain*amod_coeff)*(self->base_func(self->phase[k]));
-                    self->phase[k] += fmod_coeff*self->step[k];
-
-                }
+                self->fmod_phase -= self->fmod_func_max - self->fmod_func_min;
             }
-            //now the root
+            amod_coeff = 1 + self->amod_gain*(self->amod_func(self->amod_phase));
+            self->amod_phase += self->amod_step;
+            if(self->amod_phase >= self->amod_func_max)
+            {
+                self->amod_phase -= self->amod_func_max - self->amod_func_min;
+            }
         }
+        env_gain += env_slope;
+        //harmonics
+        for(j=0;j<self->nharmonics;j++)
+        {
+            if(harmonics&(1<<j))//if cell is alive
+            {
 
+                buffer[i] += (env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                self->phase[j] += fmod_coeff*self->step[j];
+                if(self->phase[j] >= self->base_func_max)
+                {
+                    self->phase[j] -= self->base_func_max - self->base_func_min;
+                }
+
+            }
+        }
+        //now the root
+        j = MAX_N_HARMONICS;
+        buffer[i] += (env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
+        self->phase[j] += fmod_coeff*self->step[j];
+        if(self->phase[j] >= self->base_func_max)
+        {
+            self->phase[j] -= self->base_func_max - self->base_func_min;
+        }
     }
+    //recurse as necessary
+    if(recurse)
+    {
+        playnote(self,nframes,chunk+start_frame,buffer);
+    }
+
 }

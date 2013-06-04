@@ -36,11 +36,15 @@ typedef struct _NOTE
     float amod_gain;
     double amod_step;
     double amod_phase;
+    double amod_func_min;//domain of function i.e. [-pi,pi]
+    double amod_func_max;
 
     void (*fmod_func)(double);
     float fmod_gain;
     double fmod_step;
     double fmod_phase;
+    double fmod_func_min;//domain of function i.e. [-pi,pi]
+    double fmod_func_max;
 
 }NOTE;
 
