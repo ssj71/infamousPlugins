@@ -93,6 +93,8 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
 
     float fmod_g = 0;
     float fmod_coeff = 1;
+    float amod_g = 0;
+    float amod_coeff = 1;
 
     //divide into chunks per envelpe region
     uint32_t chunk = nframes - start_frame;
@@ -135,7 +137,7 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
     else//in sustain
     {
         fmod_g = self->fmod_gain;
-
+        amod_g = self->amod_gain;
         env_slopef = 0;
     }
 
@@ -146,20 +148,21 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
         {
             fmod_coeff = 1 + fmod_g*(self->fmod_func(self->fmod_phase);
             self->fmod_phase += self->fmod_step;
+            amod_coeff = 1 + amod_g*(self->fmod_func(self->amod_phase));
+            self->amod_phase += self->amod_step;
             for(k=0;k<self->nharmonics;k++)//harmonics
             {
                 if(harmonics&(1<<k))//if cell is alive
                 {
 
                     env_gain += env_slope;
-                    buffer[k] += (env_gain)*(self->base_func(self->phase[k]));
+                    buffer[k] += (env_gain*amod_coeff)*(self->base_func(self->phase[k]));
                     self->phase[k] += fmod_coeff*self->step[k];
-
 
                 }
             }
+            //now the root
         }
-        //now the root
 
     }
 }
