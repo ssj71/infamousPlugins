@@ -15,3 +15,6 @@ HEADERS += \
     casynth.h \
     cell_automation.h
 
+OTHER_FILES += \
+    notes.txt
+

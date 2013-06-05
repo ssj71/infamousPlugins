@@ -1,0 +1,14 @@
+ports:
+
+--handled/conditioned by synth--
+nharmonics
+initial condition (cells)
+harmonic mode
+base func
+envelope
+amod_freq
+fmod_freq
+
+--directly linked to notes--
+amod_gain (0,1)
+fmod_gain (0,2)

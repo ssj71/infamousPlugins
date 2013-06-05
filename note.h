@@ -3,12 +3,13 @@
 #include<constants.h>
 
 
+//need to sort out which ones will be controllable by ports :\
 typedef struct _NOTE
 {
     //midi stuff
     unsigned char value;
-    unsigned char velocity;
-    short pitchbend;
+    float velocity;
+    double pitchbend;
     unsigned char mod;
 
     //harmonics stuff
@@ -33,25 +34,24 @@ typedef struct _NOTE
     bool note_dead;
 
     void (*amod_func)(double);
-    float amod_gain;
-    double amod_step;
+    float amod_gain;//port
+    double amod_step;//we'll just link these to the synth
     double amod_phase;
     double amod_func_min;//domain of function i.e. [-pi,pi]
     double amod_func_max;
 
     void (*fmod_func)(double);
-    float fmod_gain;
+    float fmod_gain;//port //gain 1 mods \pm 1 semitone
     double fmod_step;
     double fmod_phase;
     double fmod_func_min;//domain of function i.e. [-pi,pi]
     double fmod_func_max;
-
 }NOTE;
 
 void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[] );
 
 //these must be called when a new note is played
-NOTE* init_note(NOTE *self, unsigned char value, unsigned char velocity, unsigned char nharmonics, bool *harmonics);
+NOTE* init_note(NOTE *self, unsigned char value, unsigned char velocity, short pitchbend, unsigned char nharmonics, bool *harmonics);
 
 //these must be called before play is called
 void set_envelope(NOTE *self, float slope);

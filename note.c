@@ -12,33 +12,34 @@
 #define ENV_RELEASE 5
 //private function prototypes
 
-NOTE *init_note(NOTE *self, unsigned char value, unsigned char velocity, unsigned char nharmonics, float envelope[])
+//need separate init and start functions
+NOTE *init_note(NOTE *self, double sample_rate, unsigned char value, unsigned char velocity, short pitchbend, unsigned char nharmonics, float envelope[])
 {
     unsigned char i;
     self->value = value;
-    self->velocity = velocity;
-    self->nharmonics = nharmonics;
-    self->nharm_chng = 0;
-    for(i=0;i<nharmonics;i++)
-    {
-        self->self->harmonics[i] = harmonics[i];
-        self->phase[i] = 0;
-        if(self->harmonic_mode == HARMONIC_MODE_SIN)
-            self->harm_gain[i] = 1/(nharmonics+1);
-        else if(self->harmonic_mode == HARMONIC_MODE_SAW)
-            self->harm_gain[i] = .29/(i+2);
-        else if(self->harmonic_mode == HARMONIC_MODE_SQR)
-            self->harm_gain[i] = (i%2==0)*.29/(i+2);
-        else if(self->harmonic_mode == HARMONIC_MODE_TRI)
-            self->harm_gain[i] = .29/(i+1);
-
-    }
-    phase[nharmonics] = 0;//0th harmonic is root
+    self->velocity = velocity/127;//currently linear, which is lame.
+    self->pitchbend = pow(2,pitchbend/49152);//convert to step coefficient //MOVE TO SYNTH!!!
 
     //currently hardcoding in function, may use optimised or selectable versions later
     self->base_func = &sin;
     self->base_func_min = -PI;
     self->base_func_max = PI;
+
+    self->nharmonics = nharmonics;
+    for(i=0;i<nharmonics;i++)//need to invert this loop
+    {
+        self->phase[i] = 0;
+        self->step[i] = (self->base_func_max - self->base_func_min)*440/sample_rate*pow(2,(value-69)/12);
+        if(self->harmonic_mode == HARMONIC_MODE_SIN)
+            self->harm_gain[i] = self->velocity/(nharmonics+1);
+        else if(self->harmonic_mode == HARMONIC_MODE_SAW)
+            self->harm_gain[i] = self->velocity*.29/(i+2);
+        else if(self->harmonic_mode == HARMONIC_MODE_SQR)
+            self->harm_gain[i] = self->velocity*(i%2==0)*.29/(i+2);
+        else if(self->harmonic_mode == HARMONIC_MODE_TRI)
+            self->harm_gain[i] = self->velocity*.29/(i+1);
+    }
+    phase[nharmonics] = 0;//0th harmonic is root
 
     self->env_gain = 0;
     self->stop_frame = 0;
@@ -81,6 +82,11 @@ void end_note(NOTE *self)
     self->env_state = ENV_RELEASE;//set to release
 }
 
+
+void set_pitchbend(NOTE *self, short pitchbend)
+{
+    self->pitchbend = pow(2,pitchbend/49152);//convert to step coefficient
+}
 
 void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[])
 {
@@ -143,9 +149,9 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
         //modulation
         if(self->env_state == ENV_SUSTAIN)
         {
-            fmod_coeff = 1 + self->fmod_gain*(self->fmod_func(self->fmod_phase));
+            fmod_coeff = pow(2,-self->fmod_gain*(self->fmod_func(self->fmod_phase)));
             self->fmod_phase += self->fmod_step;
-            if(self->fmod_phase >= self->amod_func_max)
+            if(self->fmod_phase >= self->fmod_func_max)
             {
                 self->fmod_phase -= self->fmod_func_max - self->fmod_func_min;
             }
@@ -164,7 +170,7 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
             {
 
                 buffer[i] += (env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
-                self->phase[j] += fmod_coeff*self->step[j];
+                self->phase[j] += self->pitchbend*fmod_coeff*self->step[j];
                 if(self->phase[j] >= self->base_func_max)
                 {
                     self->phase[j] -= self->base_func_max - self->base_func_min;
@@ -175,7 +181,7 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
         //now the root
         j = MAX_N_HARMONICS;
         buffer[i] += (env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
-        self->phase[j] += fmod_coeff*self->step[j];
+        self->phase[j] += self->pitchbend*fmod_coeff*self->step[j];
         if(self->phase[j] >= self->base_func_max)
         {
             self->phase[j] -= self->base_func_max - self->base_func_min;
