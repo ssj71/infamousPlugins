@@ -59,6 +59,11 @@ NOTE *init_note(NOTE *self, double sample_rate, unsigned char value, unsigned ch
     self->amod_step = 0;
 }
 
+void startnote(NOTE *self, unsigned char velocity, unsigned char harmonic_gain[],float envelope[])
+{
+
+}
+
 void set_envelope(NOTE *self, float adsr)
 {
     self->envelope[nharm_chng] = slope;
