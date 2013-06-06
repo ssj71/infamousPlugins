@@ -12,27 +12,28 @@
 #define ENV_RELEASE 5
 //private function prototypes
 
-//need separate init and start functions
-NOTE *init_note(NOTE *self, double sample_rate, unsigned char value, unsigned char velocity, short pitchbend, unsigned char nharmonics, float envelope[])
+void init_note(NOTE *self, double sample_rate, unsigned char value, float* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
 {
     unsigned char i;
     self->value = value;
     self->velocity = .8;
-    self->pitchbend = pow(2,pitchbend/49152);//convert to step coefficient //MOVE TO SYNTH!!!
+    self->pitchbend = 0;//pow(2,pitchbend/49152);//convert to step coefficient //MOVE TO SYNTH!!!
 
     //currently hardcoding in function, may use optimised or selectable versions later
+    self->base_wave = FUNC_SIN;
     self->base_func = &sin;
     self->base_func_min = -PI;
     self->base_func_max = PI;
 
     self->nharmonics = nharmonics;
-    for(i=0;i<nharmonics;i++)//need to invert this loop
+    self->harm_length = harmonic_length;
+    for(i=0;i<MAX_N_HARMONICS;i++)
     {
         self->phase[i] = 0;
         self->step[i] = (self->base_func_max - self->base_func_min)*440/sample_rate*pow(2,(value-69)/12);
 
     }
-    phase[nharmonics] = 0;//0th harmonic is root
+    phase[MAX_N_HARMONICS] = 0;//0th harmonic is root
 
     self->env_gain = 0;
     self->stop_frame = 0;
@@ -143,40 +144,17 @@ void start_note(NOTE*           self,
     }
 }
 
-void set_envelope(NOTE *self, float adsr)
-{
-    self->envelope[nharm_chng] = slope;
-    self->l_env[nharmchng++] = frame_no;
-}
 
-void set_harmonics(NOTE *self, unsigned short harmonics)
-{
-    unsigned char i;
-    self->harmonics = harmonics;
-    for(i=0;i<self->nharmonics;i++)//harmonics
-    {
-        if(!harmonics&(1<<k))//if cell is !alive
-            self->phase[i] = 0;
-    }
-}
-
-
-void end_note(NOTE *self)
-{
-    self->env_state = ENV_RELEASE;//set to release
-}
-
-
-void set_pitchbend(NOTE *self, short pitchbend)
-{
-    self->pitchbend = pow(2,pitchbend/49152);//convert to step coefficient
-}
-
-void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[])
+void playnote(NOTE *self,
+              uint32_t nframes,
+              uint32_t start_frame,
+              float buffer[],
+              double pitchbend,
+              double amod_step,
+              double fmod_step)
 {
     unsigned char i,j;
     //uint32_t chunk[MAX_N_CELL_CHANGES + 3];
-    unsigned short harmonics = self->harmonics[0];
     uint32_t *harm_chng_frame = self->harm_chng_frame;
     harm_chng_frame[self->nharm_chng++] = nframes;
 
@@ -186,8 +164,20 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
     //divide into chunks per envelpe region
     uint32_t chunk = nframes - start_frame;
     float env_slope = envelope[env_state];
+    bool recurse = false;
+    bool newcells = false;
+
+    //need to make sure chunks aren't overlapping!
+    //divide into chunks for cell lifetimes
+    if(self->nframes_since_harm_change + chunk > *self->harm_length)
+    {
+        chunk = *self->harm_length - self->nframes_since_harm_change;
+        recurse = true;
+        newcells = true;
+    }
+
+    //divide into chunks for envelope
     float env_end_gain = env_gain + env_slope*chunk;
-    bool recurse = FALSE;
     if (self->env_state<ENV_SUSTAIN)
     {
         if(self->env_state != ENV_SWELL)
@@ -195,13 +185,14 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
             if(env_end_gain > 1.0)
             {
                 //do no. frames till Attack complete
+                chunk = floor((1-env_gain)/env_slope);
                 self->env_state++;
                 recurse = TRUE;
             }
             else if(env_end_gain <= envelope[ENV_BREAK])
             {
                 //do no. frames till Decay complete
-
+                chunk = floor((self->envelope[ENV_BREAK] - env_gain)/env_slope);
                 self->env_state+=2;//skip B
                 recurse = TRUE;
             }
@@ -209,7 +200,7 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
         else if(env_end_gain >= envelope[ENV_SUSTAIN])
         {
             //do no. frames till Swell complete
-
+            chunk = floor((self->envelope[ENV_SUSTAIN] - env_gain)/env_slope);
             self->env_state++;
             recurse = TRUE;
         }
@@ -217,8 +208,8 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
     {
         if (env_end_gain <= 0)
         {
-            note_dead = TRUE;
             chunk = floor(env_gain/env_slope);//don't process past note death
+            note_dead = TRUE;
         }
     }
     else//in sustain
@@ -233,48 +224,65 @@ void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[]
         //modulation
         if(self->env_state == ENV_SUSTAIN)
         {
-            fmod_coeff = pow(2,-self->fmod_gain*(self->fmod_func(self->fmod_phase)));
-            self->fmod_phase += self->fmod_step;
+            fmod_coeff = pow(2,*self->fmod_gain*(self->fmod_func(self->fmod_phase)));
+            self->fmod_phase += fmod_step;
             if(self->fmod_phase >= self->fmod_func_max)
             {
                 self->fmod_phase -= self->fmod_func_max - self->fmod_func_min;
             }
-            amod_coeff = 1 + self->amod_gain*(self->amod_func(self->amod_phase));
-            self->amod_phase += self->amod_step;
+            amod_coeff = 1 + *self->amod_gain*(self->amod_func(self->amod_phase));
+            self->amod_phase += amod_step;
             if(self->amod_phase >= self->amod_func_max)
             {
                 self->amod_phase -= self->amod_func_max - self->amod_func_min;
             }
         }
         env_gain += env_slope;
+
         //harmonics
-        for(j=0;j<self->nharmonics;j++)
+        for(j=0;j<*self->nharmonics;j++)
         {
-            if(harmonics&(1<<j))//if cell is alive
+            if(self->harmonics&(1<<j))//if cell is alive
             {
 
                 buffer[i] += (env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
-                self->phase[j] += self->pitchbend*fmod_coeff*self->step[j];
+                self->phase[j] += pitchbend*fmod_coeff*self->step[j];
                 if(self->phase[j] >= self->base_func_max)
                 {
                     self->phase[j] -= self->base_func_max - self->base_func_min;
                 }
-
             }
         }
         //now the root
         j = MAX_N_HARMONICS;
         buffer[i] += (env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
-        self->phase[j] += self->pitchbend*fmod_coeff*self->step[j];
+        self->phase[j] += pitchbend*fmod_coeff*self->step[j];
         if(self->phase[j] >= self->base_func_max)
         {
             self->phase[j] -= self->base_func_max - self->base_func_min;
         }
     }
+
     //recurse as necessary
+    if(newcells)
     if(recurse)
     {
         playnote(self,nframes,chunk+start_frame,buffer);
     }
+}
 
+void end_note(NOTE *self)
+{
+    self->env_state = ENV_RELEASE;//set to release
+}
+
+void set_harmonics(NOTE *self, unsigned short harmonics)
+{
+    unsigned char i;
+    self->harmonics = harmonics;
+    for(i=0;i<MAX_N_HARMONICS;i++)//harmonics
+    {
+        if(!harmonics&(1<<k))//if cell is !alive
+            self->phase[i] = 0;
+    }
 }

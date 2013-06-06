@@ -1,6 +1,7 @@
 ports:
 
 --handled/conditioned by synth--
+channel (016) 16 all chans
 master_gain (0,2)*
 cell lifetime (.001,10)*
 rule  (0,255)
@@ -19,7 +20,6 @@ base wave (0,3)
 amod wave (0,3)
 fmod wave (0,3)
 -passed each period-
-nharmonics (0,16)
 amod_freq (0,110)*
 fmod_freq  (0,110)*
 //pitchbend (-8191,8192)<midi not port
@@ -27,6 +27,8 @@ fmod_freq  (0,110)*
 --directly linked to notes--
 amod_gain (0,1)
 fmod_gain (0,2)
+nharmonics (0,16)
 
 
 *exponential (otherwise linear)
+
