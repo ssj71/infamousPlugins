@@ -10,19 +10,18 @@ typedef struct _NOTE
     unsigned char value;
     float velocity;
     double pitchbend;
-    unsigned char mod;
 
     //harmonics stuff
     unsigned char nharmonics;
     unsigned short harmonics; //list of currently alive harmonics
     uint32_t nframes_since_harm_change;
-    unsigned char harmonic_mode;//harmonic gains are set according to this mode
     float harm_gain[MAX_N_HARMONICS+1];
 
     double step[MAX_N_HARMONICS+1];//step size between frames
     double phase[MAX_N_HARMONICS+1];//phase of all waves + fundamental
     
     void (*base_func)(double); //sin, tri, sqr, other?
+    unsigned char base_wave;
     double base_func_min;//domain of function i.e. [-pi,pi]
     double base_func_max;
 
@@ -34,6 +33,7 @@ typedef struct _NOTE
     bool note_dead;
 
     void (*amod_func)(double);
+    unsigned char amod_wave;
     float amod_gain;//port
     double amod_step;//we'll just link these to the synth
     double amod_phase;
@@ -41,6 +41,7 @@ typedef struct _NOTE
     double amod_func_max;
 
     void (*fmod_func)(double);
+    unsigned char fmod_wave;
     float fmod_gain;//port //gain 1 mods \pm 1 semitone
     double fmod_step;
     double fmod_phase;
@@ -48,7 +49,7 @@ typedef struct _NOTE
     double fmod_func_max;
 }NOTE;
 
-void start_note(NOTE *self, unsigned char velocity, unsigned char harmonic_gain[],float envelope[])
+void start_note(NOTE *self, unsigned char velocity, float harmonic_gain[], unsigned short harmonics, float envelope[], unsigned char base_wave, unsigned char amod_wave, unsigned char fmod_wave);
 void play_note(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[] );
 
 NOTE* init_note(NOTE *self, unsigned char value, unsigned char velocity, short pitchbend, unsigned char nharmonics, bool *harmonics);

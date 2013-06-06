@@ -17,7 +17,7 @@ NOTE *init_note(NOTE *self, double sample_rate, unsigned char value, unsigned ch
 {
     unsigned char i;
     self->value = value;
-    self->velocity = velocity/127;//currently linear, which is lame.
+    self->velocity = .8;
     self->pitchbend = pow(2,pitchbend/49152);//convert to step coefficient //MOVE TO SYNTH!!!
 
     //currently hardcoding in function, may use optimised or selectable versions later
@@ -30,14 +30,7 @@ NOTE *init_note(NOTE *self, double sample_rate, unsigned char value, unsigned ch
     {
         self->phase[i] = 0;
         self->step[i] = (self->base_func_max - self->base_func_min)*440/sample_rate*pow(2,(value-69)/12);
-        if(self->harmonic_mode == HARMONIC_MODE_SIN)
-            self->harm_gain[i] = self->velocity/(nharmonics+1);
-        else if(self->harmonic_mode == HARMONIC_MODE_SAW)
-            self->harm_gain[i] = self->velocity*.29/(i+2);
-        else if(self->harmonic_mode == HARMONIC_MODE_SQR)
-            self->harm_gain[i] = self->velocity*(i%2==0)*.29/(i+2);
-        else if(self->harmonic_mode == HARMONIC_MODE_TRI)
-            self->harm_gain[i] = self->velocity*.29/(i+1);
+
     }
     phase[nharmonics] = 0;//0th harmonic is root
 
@@ -59,9 +52,95 @@ NOTE *init_note(NOTE *self, double sample_rate, unsigned char value, unsigned ch
     self->amod_step = 0;
 }
 
-void startnote(NOTE *self, unsigned char velocity, unsigned char harmonic_gain[],float envelope[])
+void start_note(NOTE*           self,
+                unsigned char   velocity,
+                float           harmonic_gain[],
+                unsigned short  harmonics,
+                float           envelope[],
+                unsigned char   base_wave,
+                unsigned char   amod_wave,
+                unsigned char   fmod_wave)
 {
+    unsigned char i;
+    self->velocity = (float)velocity/127;//currently linear which is lame
 
+    //harmonics
+    self->nframes_since_harm_change = 0;
+    for(i=0;i<MAX_N_HARMONICS;i++)
+    {
+        self->harm_gain[i] = self->velocity*harmonic_gain[i];
+        self->phase[i] = 0;
+    }
+    //and the root
+    i = MAX_N_HARMONICS;
+    self->harm_gain[i] = self->velocity*harmonic_gain[i];
+    self->phase[i] = 0;
+    if(harmonics)
+        self->harmonics = harmonics;
+
+    //envelope
+    self->env_gain = 0;
+    self->env_state = ENV_ATTACK;
+    self->note_dead = false;
+    for(i=0;i<6;i++)
+        self->envelope[i] = envelope[i];
+
+    //waveform
+    if(self->base_wave != base_wave)
+    {
+        self->base_wave = base_wave;
+        switch(base_wave)
+        {
+            case FUNC_SIN:
+                self->base_func = &sin;
+                self->base_func_min = -PI;
+                self->base_func_max = PI;
+                break;
+            default:
+                self->base_func = &sin;
+                self->base_func_min = -PI;
+                self->base_func_max = PI;
+                break;
+        }
+    }
+
+    //modulations
+    self->amod_phase = 0;
+    if(self->amod_wave != amod_wave)
+    {
+        self->amod_wave = amod_wave;
+        switch(amod_wave)
+        {
+            case FUNC_SIN:
+                self->amod_func = &sin;
+                self->amod_func_min = -PI;
+                self->amod_func_max = PI;
+                break;
+            default:
+                self->amod_func = &sin;
+                self->amod_func_min = -PI;
+                self->amod_func_max = PI;
+                break;
+        }
+    }
+
+    self->fmod_phase = 0;
+    if(self->fmod_wave != fmod_wave)
+    {
+        switch(fmod_wave)
+        {
+            case FUNC_SIN:
+                self->fmod_func = &sin;
+                self->fmod_func_min = -PI;
+                self->fmod_func_max = PI;
+                break;
+            default:
+                self->fmod_func = &sin;
+                self->fmod_func_min = -PI;
+                self->fmod_func_max = PI;
+                break;
+        }
+    }
 }
 
 void set_envelope(NOTE *self, float adsr)

@@ -8,6 +8,7 @@ typedef struct _CASYNTH
     NOTE note[127];
     unsigned char active[127];
     unsigned char nactive;
+    unsigned char harmonic_mode;
 
     double sample_rate;
 
