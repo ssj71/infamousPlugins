@@ -8,6 +8,7 @@ base func
 envelope
 amod_freq
 fmod_freq
+master_gain
 
 --directly linked to notes--
 amod_gain (0,1)
