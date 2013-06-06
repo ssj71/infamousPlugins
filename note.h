@@ -48,9 +48,9 @@ typedef struct _NOTE
     double fmod_func_max;
 }NOTE;
 
-void playnote(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[] );
+void start_note(NOTE *self, unsigned char velocity, unsigned char harmonic_gain[],float envelope[])
+void play_note(NOTE *self, uint32_t nframes, uint32_t start_frame, float buffer[] );
 
-//these must be called when a new note is played
 NOTE* init_note(NOTE *self, unsigned char value, unsigned char velocity, short pitchbend, unsigned char nharmonics, bool *harmonics);
 
 //these must be called before play is called
