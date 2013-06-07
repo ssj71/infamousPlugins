@@ -4,6 +4,9 @@
 #include<constants.h>
 #include<string.h>
 
+//private functions
+void run_active_notes(CASYNTH *synth, uint32_t nframes, float buffer[]);
+
 LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     CASYNTH* synth = malloc(sizeof(CASYNTH));
@@ -82,8 +85,8 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
     uint32_t frame_no = 0;
     unsigned char* message;
     unsigned char type;
-    unsigned char num, vel, val;
-    unsigned short bend;
+    unsigned char num, val;
+    short bend;
 
     for(i=0;i<nframes;i++)//start by filling buffer with 0s, we'll add to this
         buf[i] = 0;
@@ -102,13 +105,14 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
                     if(type == MIDI_NOTE_ON)
                     {
                         num = message[1]&MIDI_DATA_MASK;
-                        vel = message[2]&MIDI_DATA_MASK;
-                        if(synth->note[num]->note_dead == true)
+                        val = message[2]&MIDI_DATA_MASK;
+                        if(synth->note[num].note_dead == true)
                         {
                             synth->active[synth->nactive++] = num;//push new note onto active stack
                         }
                         start_note(&(synth->note[num]),
-                                   vel,event->time.frames,
+                                   val,
+                                   event->time.frames,
                                    synth->harm_gains,
                                    *synth->init_cells_p,
                                    synth->envelope,
@@ -123,27 +127,87 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
                         {
                             if(synth->active[i] == num)
                             {
-                                end_note(&(synth->note[num]),event->time.frames);
+                                if(synth->sus)
+                                {
+                                    if(!synth->note[num].sus)
+                                    {
+                                        synth->note[num].sus = true;
+                                        synth->sustained[synth->nsustained++] = num;
+                                    }
+                                }
+                                else
+                                {
+                                    end_note(&(synth->note[num]),event->time.frames);
+                                }
                             }
                         }
 
                     }
                     else if(type == MIDI_CONTROL_CHANGE)
                     {
+                        num = message[1]&MIDI_DATA_MASK;
+                        if(num == MIDI_SUSTAIN_PEDAL)
+                        {
+                            val = message[2]&MIDI_DATA_MASK;
+                            if(val < 64)
+                            {
+                                synth->sus = false;
+                                //end all sus. notes
+                                for(i=0;i<synth->nsustained;i++)
+                                {
+                                    end_note(&(synth->note[synth->sustained[i]]),event->time.frames);
+                                }
+                                synth->nsustained = 0;
+                            }
+                            else
+                            {
+                                synth->sus = true;
+                            }
+                        }
 
                     }
                     else if(type == MIDI_PITCHBEND)
                     {
-                        //update current position because this blocks
+                        bend = message[1]&MIDI_DATA_MASK + (message[2]&MIDI_DATA_MASK)<<7 - MIDI_PITCH_CENTER;
+                        synth->pitchbend = pow(2,bend/49152);//49152 is 12*8192/2
+                        //run and update current position because this blocks
+                        run_active_notes(synth, event->time.frames - frame_no, &(buf[frame_no]));
                         frame_no = event->time.frames;
-                    }
+                    }//message types
+                }//correct channel
+            }//actually midi
+        }//for each event
+    }//there are events
 
-                }
+    //finish off whatever frames are left
+    if(frame_no != nframes-1)
+        run_active_notes(synth, nframes - frame_no, &(buf[frame_no]));
+}
+
+void run_active_notes(CASYNTH *synth, uint32_t nframes, float buffer[])
+{
+    unsigned char i,j;
+    NOTE* note;
+    double astep = *synth->amod_freq_p/synth->sample_rate;
+    double fstep = *synth->fmod_freq_p/synth->sample_rate;//need to decide where to calculate this. Probably not here.
+    for(i=0;i<synth->nactive;i++)
+    {
+        note = &(synth->note[synth->active[i]]);
+        play_note( note,
+                   nframes,
+                   buffer,
+                   synth->pitchbend,
+                   (unsigned char)*synth->rule_p,
+                   astep,
+                   fstep);
+        //cleanup dead notes
+        if(note->note_dead)
+        {
+            nactive--;
+            for(j=i;j<nactive;j++)
+            {
+                synth->active[j] = synth->active[j+1];
             }
         }
-    }
-    else//no events probably can just fall through
-    {
-
     }
 }

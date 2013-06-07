@@ -30,6 +30,8 @@
 #define MIDI_TYPE_MASK       0xF0
 #define MIDI_CHANNEL_MASK    0x0F
 #define MIDI_DATA_MASK       0x7F
+#define MIDI_PITCH_CENTER    0x2000
+#define MIDI_SUSTAIN_PEDAL   0x40
 
 
 //angles

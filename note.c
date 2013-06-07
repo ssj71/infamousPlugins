@@ -21,9 +21,10 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, float* nharm
     unsigned char i;
     self->value = value;
     self->velocity = .8;
-    self->pitchbend = 0;//pow(2,pitchbend/49152);//convert to step coefficient //MOVE TO SYNTH!!!
+    self->pitchbend = 0;
     self->start_frame = 0;
     self->release_frame = 0;
+    self->sus = 0;
 
     //currently hardcoding in function, may use optimised or selectable versions later
     self->base_wave = FUNC_SIN;
@@ -73,6 +74,7 @@ void start_note(NOTE*           self,
     self->velocity = (float)velocity/127;//currently linear which is lame
     self->start_frame = start_frame;
     self->release_frame = 0;
+    self->sus = 0;
 
     //harmonics
     self->nframes_since_harm_change = 0;

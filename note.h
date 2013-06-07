@@ -10,6 +10,7 @@ typedef struct _NOTE
     double pitchbend;
     uint32_t start_frame;
     uint32_t release_frame;
+    bool sus;
 
     //harmonics stuff
     float* nharmonics;
