@@ -10,7 +10,11 @@
 #define ENV_SWELL   3
 #define ENV_SUSTAIN 4
 #define ENV_RELEASE 5
+
 //private function prototypes
+unsigned short torus_of_life(unsigned char rule, unsigned short cells, unsigned char ncells);
+
+
 
 void init_note(NOTE *self, double sample_rate, unsigned char value, float* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
 {
@@ -18,6 +22,8 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, float* nharm
     self->value = value;
     self->velocity = .8;
     self->pitchbend = 0;//pow(2,pitchbend/49152);//convert to step coefficient //MOVE TO SYNTH!!!
+    self->start_frame = 0;
+    self->release_frame = 0;
 
     //currently hardcoding in function, may use optimised or selectable versions later
     self->base_wave = FUNC_SIN;
@@ -33,28 +39,29 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, float* nharm
         self->step[i] = (self->base_func_max - self->base_func_min)*440/sample_rate*pow(2,(value-69)/12);
 
     }
-    phase[MAX_N_HARMONICS] = 0;//0th harmonic is root
+    self->phase[MAX_N_HARMONICS] = 0;//maxth harmonic is root
 
     self->env_gain = 0;
-    self->stop_frame = 0;
+    self->note_dead = true;
     for(i=0;i<6;i++)
     {
-        self->envelope[i] = envelope[i];
+        self->envelope[i] = 1;
     }
 
     self->fmod_func = &sin;
-    self->fmod_gain = 0;//start this at 0
+    self->fmod_gain = fmod_gain;//start this at 0
     self->fmod_phase = 0;
     self->fmod_step = 0;
 
     self->amod_func = &sin;
-    self->amod_gain = 0;//start this at 0
+    self->amod_gain = amod_gain;//start this at 0
     self->amod_phase = 0;
     self->amod_step = 0;
 }
 
 void start_note(NOTE*           self,
                 unsigned char   velocity,
+                uint32_t        start_frame,
                 float           harmonic_gain[],
                 unsigned short  harmonics,
                 float           envelope[],
@@ -64,6 +71,8 @@ void start_note(NOTE*           self,
 {
     unsigned char i;
     self->velocity = (float)velocity/127;//currently linear which is lame
+    self->start_frame = start_frame;
+    self->release_frame = 0;
 
     //harmonics
     self->nframes_since_harm_change = 0;
@@ -147,142 +156,167 @@ void start_note(NOTE*           self,
 
 void playnote(NOTE *self,
               uint32_t nframes,
-              uint32_t start_frame,
               float buffer[],
               double pitchbend,
+              unsigned short rule,
               double amod_step,
               double fmod_step)
 {
     unsigned char i,j;
-    //uint32_t chunk[MAX_N_CELL_CHANGES + 3];
-    uint32_t *harm_chng_frame = self->harm_chng_frame;
-    harm_chng_frame[self->nharm_chng++] = nframes;
-
     float fmod_coeff = 1;
     float amod_coeff = 1;
-
-    //divide into chunks per envelpe region
-    uint32_t chunk = nframes - start_frame;
-    float env_slope = envelope[env_state];
-    bool recurse = false;
+    uint32_t chunk;
+    uint32_t start_frame = self->start_frame;
+    uint32_t release_frame = self->release_frame;
+    float env_slope;
     bool newcells = false;
 
     //need to make sure chunks aren't overlapping!
-    //divide into chunks for cell lifetimes
-    if(self->nframes_since_harm_change + chunk > *self->harm_length)
+    //go through all the chunks in this period
+    for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
     {
-        chunk = *self->harm_length - self->nframes_since_harm_change;
-        recurse = true;
-        newcells = true;
-    }
-
-    //divide into chunks for envelope
-    float env_end_gain = env_gain + env_slope*chunk;
-    if (self->env_state<ENV_SUSTAIN)
-    {
-        if(self->env_state != ENV_SWELL)
+        //divide into chunk for release
+        if(release_frame)
         {
-            if(env_end_gain > 1.0)
-            {
-                //do no. frames till Attack complete
-                chunk = floor((1-env_gain)/env_slope);
-                self->env_state++;
-                recurse = TRUE;
-            }
-            else if(env_end_gain <= envelope[ENV_BREAK])
-            {
-                //do no. frames till Decay complete
-                chunk = floor((self->envelope[ENV_BREAK] - env_gain)/env_slope);
-                self->env_state+=2;//skip B
-                recurse = TRUE;
-            }
+            chunk = release_frame - start_frame;
         }
-        else if(env_end_gain >= envelope[ENV_SUSTAIN])
+
+        //divide into chunks for cell lifetimes
+        if(self->nframes_since_harm_change + chunk > *self->harm_length)
         {
-            //do no. frames till Swell complete
-            chunk = floor((self->envelope[ENV_SUSTAIN] - env_gain)/env_slope);
-            self->env_state++;
-            recurse = TRUE;
+            chunk = *self->harm_length - self->nframes_since_harm_change;
+            newcells = true;
         }
-    }else if(self->env_state > ENV_SUSTAIN)//release
-    {
-        if (env_end_gain <= 0)
+
+        //divide into chunks for envelope
+        env_slope = self->envelope[self->env_state];
+        float env_end_gain = self->env_gain + env_slope*chunk;
+        if (self->env_state<ENV_SUSTAIN)
         {
-            chunk = floor(env_gain/env_slope);//don't process past note death
-            note_dead = TRUE;
-        }
-    }
-    else//in sustain
-    {
-        env_slopef = 0;
-    }
-
-
-    //handle the cell lifetimes outside of the note and play chunks.
-    for(i=start_frame;i<chunk+start_frame;i++ )
-    {
-        //modulation
-        if(self->env_state == ENV_SUSTAIN)
-        {
-            fmod_coeff = pow(2,*self->fmod_gain*(self->fmod_func(self->fmod_phase)));
-            self->fmod_phase += fmod_step;
-            if(self->fmod_phase >= self->fmod_func_max)
+            if(self->env_state != ENV_SWELL)
             {
-                self->fmod_phase -= self->fmod_func_max - self->fmod_func_min;
-            }
-            amod_coeff = 1 + *self->amod_gain*(self->amod_func(self->amod_phase));
-            self->amod_phase += amod_step;
-            if(self->amod_phase >= self->amod_func_max)
-            {
-                self->amod_phase -= self->amod_func_max - self->amod_func_min;
-            }
-        }
-        env_gain += env_slope;
-
-        //harmonics
-        for(j=0;j<*self->nharmonics;j++)
-        {
-            if(self->harmonics&(1<<j))//if cell is alive
-            {
-
-                buffer[i] += (env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
-                self->phase[j] += pitchbend*fmod_coeff*self->step[j];
-                if(self->phase[j] >= self->base_func_max)
+                if(env_end_gain > 1.0)
                 {
-                    self->phase[j] -= self->base_func_max - self->base_func_min;
+                    //do no. frames till Attack complete
+                    chunk = floor((1-self->env_gain)/env_slope);
+                    self->env_state++;
+                    newcells = false;//cancel the new cells, we aren't going to get there in this chunk
+                }
+                else if(env_end_gain <= self->envelope[ENV_BREAK])
+                {
+                    //do no. frames till Decay complete
+                    chunk = floor((self->envelope[ENV_BREAK] - self->env_gain)/env_slope);
+                    self->env_state+=2;//skip B
+                    newcells = false;
                 }
             }
-        }
-        //now the root
-        j = MAX_N_HARMONICS;
-        buffer[i] += (env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
-        self->phase[j] += pitchbend*fmod_coeff*self->step[j];
-        if(self->phase[j] >= self->base_func_max)
+            else if(env_end_gain >= self->envelope[ENV_SUSTAIN])
+            {
+                //do no. frames till Swell complete
+                chunk = floor((self->envelope[ENV_SUSTAIN] - self->env_gain)/env_slope);
+                self->env_state++;
+                newcells = false;
+            }
+        }else if(self->env_state > ENV_SUSTAIN)//release
         {
-            self->phase[j] -= self->base_func_max - self->base_func_min;
+            if (env_end_gain <= 0)
+            {
+                chunk = floor(self->env_gain/env_slope);//don't process past note death
+                self->note_dead = true;
+                newcells = false;
+            }
+        }
+        else//in sustain
+        {
+            env_slope = 0;
+        }
+
+        //now handle the current chunk
+        for(i=start_frame;i<chunk+start_frame;i++ )
+        {
+            //modulation
+            if(self->env_state == ENV_SUSTAIN)
+            {
+                fmod_coeff = pow(2,(*self->fmod_gain)*(self->fmod_func(self->fmod_phase)));
+                self->fmod_phase += fmod_step;
+                if(self->fmod_phase >= self->fmod_func_max)
+                {
+                    self->fmod_phase -= self->fmod_func_max - self->fmod_func_min;
+                }
+                amod_coeff = 1 + *self->amod_gain*(self->amod_func(self->amod_phase));
+                self->amod_phase += amod_step;
+                if(self->amod_phase >= self->amod_func_max)
+                {
+                    self->amod_phase -= self->amod_func_max - self->amod_func_min;
+                }
+            }
+            self->env_gain += env_slope;
+
+            //harmonics
+            for(j=0;j<*self->nharmonics;j++)
+            {
+                if(self->harmonics&(1<<j))//if cell is alive
+                {
+
+                    buffer[i] += (self->env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                    self->phase[j] += pitchbend*fmod_coeff*self->step[j];
+                    if(self->phase[j] >= self->base_func_max)
+                    {
+                        self->phase[j] -= self->base_func_max - self->base_func_min;
+                    }
+                }
+            }
+            //now the root
+            j = MAX_N_HARMONICS;
+            buffer[i] += (self->env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
+            self->phase[j] += pitchbend*fmod_coeff*self->step[j];
+            if(self->phase[j] >= self->base_func_max)
+            {
+                self->phase[j] -= self->base_func_max - self->base_func_min;
+            }
+        }
+
+        if(newcells)
+        {
+            //calculate next state
+            self->harmonics = torus_of_life(rule,self->harmonics,MAX_N_HARMONICS);
+            for(i=0;i<MAX_N_HARMONICS;i++)//harmonics
+            {
+                if( !(self->harmonics&(1<<i)) )//if cell is !alive
+                    self->phase[i] = 0;
+            }
+        }
+        start_frame += chunk;
+        if( start_frame == release_frame )
+        {
+            self->env_state = ENV_RELEASE;
+            release_frame = 0;
         }
     }
-
-    //recurse as necessary
-    if(newcells)
-    if(recurse)
-    {
-        playnote(self,nframes,chunk+start_frame,buffer);
-    }
 }
 
-void end_note(NOTE *self)
+void end_note(NOTE *self, uint32_t release_frame)
 {
-    self->env_state = ENV_RELEASE;//set to release
+    self->release_frame = release_frame;
 }
 
-void set_harmonics(NOTE *self, unsigned short harmonics)
+
+unsigned short torus_of_life(unsigned char rule, unsigned short cells, unsigned char ncells)
 {
-    unsigned char i;
-    self->harmonics = harmonics;
-    for(i=0;i<MAX_N_HARMONICS;i++)//harmonics
+    unsigned short temp;
+    unsigned char index;
+    ncells--;
+    temp=0;
+    for(index=0;index<=ncells;index++)
     {
-        if(!harmonics&(1<<k))//if cell is !alive
-            self->phase[i] = 0;
+        //the idea is to shift the rule mask (w/rollover) according to the 3
+        //bits in the neighborhood at $index, mask that bit in the rule to
+        //then determine the next cell state and OR it into a temp value
+        //       |cell state-----------------------------------------------|
+        //               | rule mask ---------------------------------|
+        //                   |neighborhood ---------------------------|
+        temp |= ((rule & 1<<((cells>>index|cells<<(ncells-index+1) )&7) )>0)<<index;
     }
+    cells=temp<<1|temp>>ncells;
+    return cells;
 }

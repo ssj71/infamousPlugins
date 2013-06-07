@@ -1,5 +1,8 @@
 //constants.h
 
+#include<stdbool.h>
+#include <stdint.h>
+
 //harmonic stuff
 #define MAX_N_CELL_CHANGES 8 //changes per period, this is a function of cell lifetime & nsamp/period
 #define MAX_N_HARMONICS 16

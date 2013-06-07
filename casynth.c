@@ -82,6 +82,8 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
     uint32_t frame_no = 0;
     unsigned char* message;
     unsigned char type;
+    unsigned char num, vel, val;
+    unsigned short bend;
 
     for(i=0;i<nframes;i++)//start by filling buffer with 0s, we'll add to this
         buf[i] = 0;
@@ -93,31 +95,46 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
             if (event && event->body.type == synth->midi_event_type)//make sure its a midi event
             {
                 message = (unsigned char*) LV2_ATOM_BODY(&event->body);
-                if(!(*synth->channel_p) || message[0]&MIDI_CHANNEL_MASK == synth->channel_p+1)
+                if(!(*synth->channel_p) || message[0]&MIDI_CHANNEL_MASK == *synth->channel_p+1)
                 {
                     type = message[0]&MIDI_TYPE_MASK;
 
                     if(type == MIDI_NOTE_ON)
                     {
-
-                        //update current position
-                        frame_no = event->time.frames;
+                        num = message[1]&MIDI_DATA_MASK;
+                        vel = message[2]&MIDI_DATA_MASK;
+                        if(synth->note[num]->note_dead == true)
+                        {
+                            synth->active[synth->nactive++] = num;//push new note onto active stack
+                        }
+                        start_note(&(synth->note[num]),
+                                   vel,event->time.frames,
+                                   synth->harm_gains,
+                                   *synth->init_cells_p,
+                                   synth->envelope,
+                                   *synth->wave_p,
+                                   *synth->amod_wave_p,
+                                   *synth->fmod_wave_p);
                     }
                     else if(type == MIDI_NOTE_OFF)
                     {
+                        num = message[1]&MIDI_DATA_MASK;
+                        for(i=0;i<synth->nactive;i++)
+                        {
+                            if(synth->active[i] == num)
+                            {
+                                end_note(&(synth->note[num]),event->time.frames);
+                            }
+                        }
 
-                        //update current position
-                        frame_no = event->time.frames;
                     }
                     else if(type == MIDI_CONTROL_CHANGE)
                     {
 
-                        //update current position
-                        frame_no = event->time.frames;
                     }
                     else if(type == MIDI_PITCHBEND)
                     {
-                        //update current position
+                        //update current position because this blocks
                         frame_no = event->time.frames;
                     }
 
