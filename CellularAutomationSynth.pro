@@ -14,6 +14,8 @@ HEADERS += \
     casynth.h
 
 OTHER_FILES += \
-    notes.txt
+    notes.txt \
+    casynth.ttl \
+    manifest.ttl
 
 

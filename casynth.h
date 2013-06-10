@@ -76,21 +76,21 @@ enum casynth_ports
     CHANNEL,
     MASTER_GAIN,
     RULE,
-    CELL_LIFE,
+    CELL_LIFE,//5
     INIT_CELLS,
     NHARMONICS,
     HARM_MODE,
     WAVE,
-    ENV_A,
+    ENV_A,//10
     ENV_D,
     ENV_B,
     ENV_SWL,
     ENV_SUS,
-    ENV_R,
+    ENV_R,//15
     AMOD_WAV,
     AMOD_FREQ,
     AMOD_GAIN,
     FMOD_WAV,
-    FMOD_FREQ,
+    FMOD_FREQ,//20
     FMOD_GAIN
 };

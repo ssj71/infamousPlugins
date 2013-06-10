@@ -19,6 +19,7 @@ unsigned short torus_of_life(unsigned char rule, unsigned short cells, unsigned 
 void init_note(NOTE *self, double sample_rate, unsigned char value, float* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
 {
     unsigned char i;
+    double step;
     self->value = value;
     self->velocity = .8;
     self->pitchbend = 0;
@@ -34,10 +35,11 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, float* nharm
 
     self->nharmonics = nharmonics;
     self->harm_length = harmonic_length;
+    step = (self->base_func_max - self->base_func_min)*440/sample_rate*pow(2,(value-69)/12);
     for(i=0;i<MAX_N_HARMONICS;i++)
     {
         self->phase[i] = 0;
-        self->step[i] = (self->base_func_max - self->base_func_min)*440/sample_rate*pow(2,(value-69)/12);
+        self->step[i] = (i+1)*step;
 
     }
     self->phase[MAX_N_HARMONICS] = 0;//maxth harmonic is root
