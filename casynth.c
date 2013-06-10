@@ -7,6 +7,8 @@
 #include<stdio.h>
 #include<math.h>
 
+
+
 //private functions
 void run_active_notes(CASYNTH *synth, uint32_t nframes, float buffer[]);
 
@@ -34,11 +36,15 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
     }
 
     synth->harmonic_mode = HARMONIC_MODE_SINC;
-    synth->harm_gain_sinc[i] = 1/(MAX_N_HARMONICS +1);//(nharmonics+1);
-    synth->harm_gain_saw[i] = .29/(i+2);//.29 makes it so gain=1 if all harmonics play
-    synth->harm_gain_sqr[i] = (i%2!=0)*.48/(i+2);//odd harmonics
-    synth->harm_gain_tri[i] = (i%2!=0)*.83/((i+2)*(i+2));
+    for(i=0;i<MAX_N_HARMONICS;i++)
+    {
+        synth->harm_gain_sinc[i] = 1/(MAX_N_HARMONICS +1);//(nharmonics+1);
+        synth->harm_gain_saw[i] = .29/(i+2);//.29 makes it so gain=1 if all harmonics play
+        synth->harm_gain_sqr[i] = (i%2!=0)*.48/(i+2);//odd harmonics
+        synth->harm_gain_tri[i] = (i%2!=0)*.83/((i+2)*(i+2));
+    }
     synth->harm_gains = synth->harm_gain_sinc;
+
 
     //get urid map value for midi events
     for (int i = 0; host_features[i]; ++i)
@@ -110,7 +116,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
             if (event && event->body.type == synth->midi_event_type)//make sure its a midi event
             {
                 message = (unsigned char*) LV2_ATOM_BODY(&(event->body));
-                if( !(*synth->channel_p) || (message[0]&MIDI_CHANNEL_MASK == (*synth->channel_p)+1) )
+                if( !(*synth->channel_p) || ((message[0]&MIDI_CHANNEL_MASK) == (*synth->channel_p)+1) )
                 {
                     type = message[0]&MIDI_TYPE_MASK;
 
@@ -126,12 +132,12 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                         {
                             firstnote = false;
                             //condition envelope
-                            synth->envelope[ENV_A] = 1/(*synth->env_a_p*synth->sample_rate);
-                            synth->envelope[ENV_D] = (*synth->env_b_p-1)/(*synth->env_d_p*synth->sample_rate);
-                            synth->envelope[ENV_B] = *synth->env_b_p;
-                            synth->envelope[ENV_SWL] = (*synth->env_sus_p - *synth->env_b_p)/(*synth->env_swl_p*synth->sample_rate);
-                            synth->envelope[ENV_SUS] = *synth->env_sus_p;
-                            synth->envelope[ENV_R] = -*synth->env_sus_p/(*synth->env_r_p*synth->sample_rate);
+                            synth->envelope[ENV_ATTACK] = 1/(*synth->env_a_p*synth->sample_rate);
+                            synth->envelope[ENV_DECAY] = (*synth->env_b_p-1)/(*synth->env_d_p*synth->sample_rate);
+                            synth->envelope[ENV_BREAK] = *synth->env_b_p;
+                            synth->envelope[ENV_SWELL] = (*synth->env_sus_p - *synth->env_b_p)/(*synth->env_swl_p*synth->sample_rate);
+                            synth->envelope[ENV_SUSTAIN] = *synth->env_sus_p;
+                            synth->envelope[ENV_RELEASE] = -*synth->env_sus_p/(*synth->env_r_p*synth->sample_rate);
 
                             //set harmonic gains
                             if(*synth->harmonic_mode_p != synth->harmonic_mode)
@@ -213,7 +219,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                     }
                     else if(type == MIDI_PITCHBEND)
                     {
-                        bend = message[1]&MIDI_DATA_MASK + ((message[2]&MIDI_DATA_MASK)<<7) - MIDI_PITCH_CENTER;
+                        bend = (message[1]&MIDI_DATA_MASK) + ((message[2]&MIDI_DATA_MASK)<<7) - MIDI_PITCH_CENTER;
                         //run and update current position because this blocks
                         run_active_notes(synth, event->time.frames - frame_no -1, &(buf[frame_no]));
                         synth->pitchbend = pow(2,bend/49152);//49152 is 12*8192/2

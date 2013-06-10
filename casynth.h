@@ -6,6 +6,7 @@
 #include<lv2/lv2plug.in/ns/ext/atom/util.h>
 #include<note.h>
 
+
 typedef struct _CASYNTH
 {
     double sample_rate;

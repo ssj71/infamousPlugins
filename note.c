@@ -4,12 +4,6 @@
 #include<note.h>
 #include<math.h>
 
-#define ENV_ATTACK  0
-#define ENV_DECAY   1
-#define ENV_BREAK   2
-#define ENV_SWELL   3
-#define ENV_SUSTAIN 4
-#define ENV_RELEASE 5
 
 //private function prototypes
 unsigned short torus_of_life(unsigned char rule, unsigned short cells, unsigned char ncells);
