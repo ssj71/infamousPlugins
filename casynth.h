@@ -16,6 +16,8 @@ typedef struct _CASYNTH
     unsigned char sustained[127];
     unsigned char nsustained;
 
+    double pitchbend;
+
     unsigned char harmonic_mode;
     float harm_gain_sinc[MAX_N_HARMONICS+1];
     float harm_gain_saw[MAX_N_HARMONICS+1];
@@ -61,10 +63,10 @@ typedef struct _CASYNTH
 
 
 //lv2 stuff
-static LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features);
-static void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data);
-static void run_casynth( LV2_Handle handle, uint32_t nframes);
-static void cleanup_casynth(LV2_Handle handle);
+LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features);
+void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data);
+void run_casynth( LV2_Handle handle, uint32_t nframes);
+void cleanup_casynth(LV2_Handle handle);
 
 
 enum casynth_ports

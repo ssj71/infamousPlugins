@@ -3,6 +3,9 @@
 #include<casynth.h>
 #include<constants.h>
 #include<string.h>
+#include<stdlib.h>
+#include<stdio.h>
+#include<math.h>
 
 //private functions
 void run_active_notes(CASYNTH *synth, uint32_t nframes, float buffer[]);
@@ -19,7 +22,13 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
     synth->nsustained = 0;
     for(i=0;i<127;i++)
     {
-        init_note(&(note[i]),sample_rate,i,synth->nharmonics_p,synth->amod_gain_p,synth->fmod_gain_p);
+        init_note(&(synth->note[i]),
+                  sample_rate,
+                  i,
+                  synth->nharmonics_p,
+                  synth->cell_life_p,
+                  synth->amod_gain_p,
+                  synth->fmod_gain_p);
         synth->active[i] = 0;
         synth->sustained[i] = 0;
     }
@@ -48,7 +57,7 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
     return synth;
 }
 
-static void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
+void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
 {
     CASYNTH* synth = (CASYNTH*)handle;
     if(port == MIDI_IN)         synth->midi_in_p = (LV2_Atom_Sequence*)data;
@@ -76,7 +85,7 @@ static void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
     else puts("UNKNOWN PORT YO!!");
 }
 
-static void run_casynth( LV2_Handle handle, uint32_t nframes)
+void run_casynth( LV2_Handle handle, uint32_t nframes)
 {
     CASYNTH* synth = (CASYNTH*)handle;
     unsigned char i;
@@ -87,6 +96,9 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
     unsigned char type;
     unsigned char num, val;
     short bend;
+    bool firstnote = true;
+
+
 
     for(i=0;i<nframes;i++)//start by filling buffer with 0s, we'll add to this
         buf[i] = 0;
@@ -97,8 +109,8 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
         {
             if (event && event->body.type == synth->midi_event_type)//make sure its a midi event
             {
-                message = (unsigned char*) LV2_ATOM_BODY(&event->body);
-                if(!(*synth->channel_p) || message[0]&MIDI_CHANNEL_MASK == *synth->channel_p+1)
+                message = (unsigned char*) LV2_ATOM_BODY(&(event->body));
+                if( !(*synth->channel_p) || (message[0]&MIDI_CHANNEL_MASK == (*synth->channel_p)+1) )
                 {
                     type = message[0]&MIDI_TYPE_MASK;
 
@@ -109,6 +121,39 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
                         if(synth->note[num].note_dead == true)
                         {
                             synth->active[synth->nactive++] = num;//push new note onto active stack
+                        }
+                        if(firstnote)//only calculate these if there is a note in this period
+                        {
+                            firstnote = false;
+                            //condition envelope
+                            synth->envelope[ENV_A] = 1/(*synth->env_a_p*synth->sample_rate);
+                            synth->envelope[ENV_D] = (*synth->env_b_p-1)/(*synth->env_d_p*synth->sample_rate);
+                            synth->envelope[ENV_B] = *synth->env_b_p;
+                            synth->envelope[ENV_SWL] = (*synth->env_sus_p - *synth->env_b_p)/(*synth->env_swl_p*synth->sample_rate);
+                            synth->envelope[ENV_SUS] = *synth->env_sus_p;
+                            synth->envelope[ENV_R] = -*synth->env_sus_p/(*synth->env_r_p*synth->sample_rate);
+
+                            //set harmonic gains
+                            if(*synth->harmonic_mode_p != synth->harmonic_mode)
+                            {
+                                type = synth->harmonic_mode = *synth->harmonic_mode_p;
+                                if(type == HARMONIC_MODE_SINC)
+                                {
+                                    synth->harm_gains = synth->harm_gain_sinc;
+                                }
+                                else if(type == HARMONIC_MODE_SAW)
+                                {
+                                    synth->harm_gains = synth->harm_gain_saw;
+                                }
+                                else if(type == HARMONIC_MODE_SQR)
+                                {
+                                    synth->harm_gains = synth->harm_gain_sqr;
+                                }
+                                else if(type == HARMONIC_MODE_TRI)
+                                {
+                                    synth->harm_gains = synth->harm_gain_tri;
+                                }
+                            }
                         }
                         start_note(&(synth->note[num]),
                                    val,
@@ -168,7 +213,7 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
                     }
                     else if(type == MIDI_PITCHBEND)
                     {
-                        bend = message[1]&MIDI_DATA_MASK + (message[2]&MIDI_DATA_MASK)<<7 - MIDI_PITCH_CENTER;
+                        bend = message[1]&MIDI_DATA_MASK + ((message[2]&MIDI_DATA_MASK)<<7) - MIDI_PITCH_CENTER;
                         //run and update current position because this blocks
                         run_active_notes(synth, event->time.frames - frame_no -1, &(buf[frame_no]));
                         synth->pitchbend = pow(2,bend/49152);//49152 is 12*8192/2
@@ -182,6 +227,12 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
     //finish off whatever frames are left
     if(frame_no != nframes-1)
         run_active_notes(synth, nframes - frame_no, &(buf[frame_no]));
+
+    //now apply master gain
+    for(i=0;i<nframes;i++)
+    {
+        buf[i] *= *synth->master_gain_p;
+    }
 }
 
 void run_active_notes(CASYNTH *synth, uint32_t nframes, float buffer[])
@@ -200,11 +251,12 @@ void run_active_notes(CASYNTH *synth, uint32_t nframes, float buffer[])
                    (unsigned char)*synth->rule_p,
                    astep,
                    fstep);
+
         //cleanup dead notes
         if(note->note_dead)
         {
-            nactive--;
-            for(j=i;j<nactive;j++)
+            synth->nactive--;
+            for(j=i;j<synth->nactive;j++)
             {
                 synth->active[j] = synth->active[j+1];
             }
@@ -212,8 +264,9 @@ void run_active_notes(CASYNTH *synth, uint32_t nframes, float buffer[])
     }
 }
 
-static void cleanup_casynth(LV2_Handle handle)
+void cleanup_casynth(LV2_Handle handle)
 {
     CASYNTH* synth = (CASYNTH*) handle;
     free(synth);
 }
+

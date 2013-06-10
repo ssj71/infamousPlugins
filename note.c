@@ -172,6 +172,7 @@ void playnote(NOTE *self,
     uint32_t release_frame = self->release_frame;
     float env_slope;
     bool newcells = false;
+    float env_end_gain;
 
     //need to make sure chunks aren't overlapping!
     //go through all the chunks in this period
@@ -192,7 +193,7 @@ void playnote(NOTE *self,
 
         //divide into chunks for envelope
         env_slope = self->envelope[self->env_state];
-        float env_end_gain = self->env_gain + env_slope*chunk;
+        env_end_gain = self->env_gain + env_slope*chunk;
         if (self->env_state<ENV_SUSTAIN)
         {
             if(self->env_state != ENV_SWELL)
@@ -277,6 +278,7 @@ void playnote(NOTE *self,
                 self->phase[j] -= self->base_func_max - self->base_func_min;
             }
         }
+        self->nframes_since_harm_change += chunk;
 
         if(newcells)
         {
@@ -287,6 +289,7 @@ void playnote(NOTE *self,
                 if( !(self->harmonics&(1<<i)) )//if cell is !alive
                     self->phase[i] = 0;
             }
+            self->nframes_since_harm_change = 0;
         }
         start_frame += chunk;
         if( start_frame == release_frame )
