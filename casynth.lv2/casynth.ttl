@@ -9,7 +9,7 @@
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
 
-<http://synthv1.sourceforge.net/lv2>
+<https://sourceforge.net/projects/infamousplugins/>
         a lv2:Plugin, lv2:InstrumentPlugin ;
         doap:name "cellular automation synth" ;
         doap:maintainer [

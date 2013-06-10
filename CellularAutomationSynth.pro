@@ -17,7 +17,8 @@ HEADERS += \
 
 OTHER_FILES += \
     notes.txt \
-    manifest.ttl
+    manifest.ttl \
+    README
 
 
 unix {
