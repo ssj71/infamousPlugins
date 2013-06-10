@@ -169,9 +169,9 @@ static void run_casynth( LV2_Handle handle, uint32_t nframes)
                     else if(type == MIDI_PITCHBEND)
                     {
                         bend = message[1]&MIDI_DATA_MASK + (message[2]&MIDI_DATA_MASK)<<7 - MIDI_PITCH_CENTER;
-                        synth->pitchbend = pow(2,bend/49152);//49152 is 12*8192/2
                         //run and update current position because this blocks
-                        run_active_notes(synth, event->time.frames - frame_no, &(buf[frame_no]));
+                        run_active_notes(synth, event->time.frames - frame_no -1, &(buf[frame_no]));
+                        synth->pitchbend = pow(2,bend/49152);//49152 is 12*8192/2
                         frame_no = event->time.frames;
                     }//message types
                 }//correct channel
@@ -210,4 +210,10 @@ void run_active_notes(CASYNTH *synth, uint32_t nframes, float buffer[])
             }
         }
     }
+}
+
+static void cleanup_casynth(LV2_Handle handle)
+{
+    CASYNTH* synth = (CASYNTH*) handle;
+    free(synth);
 }
