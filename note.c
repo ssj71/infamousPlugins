@@ -160,7 +160,8 @@ void play_note(NOTE *self,
               double amod_step,
               double fmod_step)
 {
-    unsigned char i,j;
+    unsigned short i;
+    unsigned char j;
     float fmod_coeff = 1;
     float amod_coeff = 1;
     uint32_t chunk;
@@ -280,10 +281,10 @@ void play_note(NOTE *self,
         {
             //calculate next state
             self->harmonics = torus_of_life(rule,self->harmonics,MAX_N_HARMONICS);
-            for(i=0;i<MAX_N_HARMONICS;i++)//harmonics
+            for(j=0;j<MAX_N_HARMONICS;j++)//harmonics
             {
-                if( !(self->harmonics&(1<<i)) )//if cell is !alive
-                    self->phase[i] = 0;
+                if( !(self->harmonics&(1<<j)) )//if cell is !alive
+                    self->phase[j] = 0;
             }
             self->nframes_since_harm_change = 0;
         }
