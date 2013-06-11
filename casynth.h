@@ -6,6 +6,8 @@
 #include<lv2/lv2plug.in/ns/ext/atom/util.h>
 #include<note.h>
 
+#define CASYNTH_URI "https://sourceforge.net/projects/infamousplugins/"
+
 
 typedef struct _CASYNTH
 {
@@ -80,7 +82,7 @@ void cleanup_casynth(LV2_Handle handle);
 .extension_data=NULL,
 };*/
 static const LV2_Descriptor casynth_descriptor={
-    "infamousplugins:cellular_automation_synth",
+    CASYNTH_URI,
     init_casynth,
     connect_casynth_ports,
     NULL,//activate

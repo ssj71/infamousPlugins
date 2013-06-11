@@ -60,7 +60,7 @@ typedef struct _NOTE
 
 void init_note(NOTE *self, double sample_rate, unsigned char value, float* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain);
 void start_note(NOTE *self, unsigned char velocity, uint32_t start_frame, float harmonic_gain[], unsigned short harmonics, float envelope[], unsigned char base_wave, unsigned char amod_wave, unsigned char fmod_wave);
-void play_note(NOTE *self, uint32_t nframes, float buffer[], double pitchbend, unsigned short rule, double amod_step, double fmod_step);
+void play_note(NOTE *self, uint32_t nframes, float buffer[], double pitchbend, float gain, unsigned short rule, double amod_step, double fmod_step);
 void end_note(NOTE *self, uint32_t release_frame);
 
 //these must be called before play is called maybe...

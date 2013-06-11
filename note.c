@@ -155,6 +155,7 @@ void play_note(NOTE *self,
               uint32_t nframes,
               float buffer[],
               double pitchbend,
+              float gain,
               unsigned short rule,
               double amod_step,
               double fmod_step)
@@ -256,7 +257,7 @@ void play_note(NOTE *self,
                 if(self->harmonics&(1<<j))//if cell is alive
                 {
 
-                    buffer[i] += (self->env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                    buffer[i] += (gain*self->env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
                     self->phase[j] += pitchbend*fmod_coeff*self->step[j];
                     if(self->phase[j] >= self->base_func_max)
                     {

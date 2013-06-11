@@ -32,3 +32,4 @@ nharmonics (0,16)
 
 *exponential (otherwise linear)
 
+valgrind --tool=callgrind --dump-instr=yes --simulate-cache=yes --collect-jumps=yes jalv https://sourceforge.net/projects/infamousplugins/

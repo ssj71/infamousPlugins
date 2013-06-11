@@ -5,7 +5,9 @@ TEMPLATE = lib
 CONFIG += shared plugin
 CONFIG -= qt
 
-QMAKE_CFLAGS += -std=c99
+QMAKE_CFLAGS += -std=c99 \
+    -g
+
 
 SOURCES += note.c \
     casynth.c
