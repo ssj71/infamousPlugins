@@ -69,6 +69,37 @@ void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data);
 void run_casynth( LV2_Handle handle, uint32_t nframes);
 void cleanup_casynth(LV2_Handle handle);
 
+/*LV2_Descriptor casynth_Descriptor = {
+.URI="urn:ssj71:plugins:Cellular Automation Synth",
+.instantiate=init_casynth,
+.connect_port=connect_casynth_ports,
+.activate=NULL,
+.run=run_casynth,
+.deactivate=NULL,
+.cleanup=cleanup_casynth,
+.extension_data=NULL,
+};*/
+static const LV2_Descriptor casynth_descriptor={
+    "infamousplugins:cellular_automation_synth",
+    init_casynth,
+    connect_casynth_ports,
+    NULL,//activate
+    run_casynth,
+    NULL,//deactivate
+    cleanup_casynth,
+    NULL//extension
+};
+
+LV2_SYMBOL_EXPORT
+const LV2_Descriptor* lv2_descriptor(uint32_t index)
+{
+    switch (index) {
+    case 0:
+        return &casynth_descriptor;
+    default:
+        return NULL;
+    }
+}
 
 enum casynth_ports
 {

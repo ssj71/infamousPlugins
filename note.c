@@ -151,8 +151,7 @@ void start_note(NOTE*           self,
     }
 }
 
-
-void playnote(NOTE *self,
+void play_note(NOTE *self,
               uint32_t nframes,
               float buffer[],
               double pitchbend,
