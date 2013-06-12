@@ -3,11 +3,11 @@
 
 #include<note.h>
 #include<math.h>
+#include<waves.h>
 
 
 //private function prototypes
 unsigned short torus_of_life(unsigned char rule, unsigned short cells, unsigned char ncells);
-
 
 
 void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned char* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
@@ -23,13 +23,13 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned cha
 
     //currently hardcoding in function, may use optimised or selectable versions later
     self->base_wave = FUNC_SIN;
-    self->base_func = &sin;
+    self->base_func = &mySin;
     self->base_func_min = -PI;
     self->base_func_max = PI;
 
     self->nharmonics = nharmonics;
     self->harm_length = harmonic_length;
-    step = (self->base_func_max - self->base_func_min)*440/sample_rate*pow(2,(value-69)/12);
+    step = (self->base_func_max - self->base_func_min)*440/sample_rate*pow(2,(value-69)/12);//leave this using more accurate pow since during init
     for(i=0;i<MAX_N_HARMONICS;i++)
     {
         self->phase[i] = 0;
@@ -45,12 +45,12 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned cha
         self->envelope[i] = 1;
     }
 
-    self->fmod_func = &sin;
+    self->fmod_func = &mySin;
     self->fmod_gain = fmod_gain;//start this at 0
     self->fmod_phase = 0;
     self->fmod_step = 0;
 
-    self->amod_func = &sin;
+    self->amod_func = &mySin;
     self->amod_gain = amod_gain;//start this at 0
     self->amod_phase = 0;
     self->amod_step = 0;
@@ -166,7 +166,7 @@ void play_note(NOTE *self,
     float total_gain;
     float fmod_coeff = 1;
     float amod_coeff = 1;
-    uint32_t chunk;
+    uint32_t chunk, stop_frame;
     uint32_t start_frame = self->start_frame;
     uint32_t release_frame = self->release_frame;
     float env_slope;
@@ -234,12 +234,13 @@ void play_note(NOTE *self,
         }
 
         //now handle the current chunk
-        for(i=start_frame;i<chunk+start_frame;i++ )
+        stop_frame = chunk+start_frame;
+        for(i=start_frame;i<stop_frame;i++ )
         {
             //modulation
             if(self->env_state == ENV_SUSTAIN)
             {
-                fmod_coeff = pitchbend*pow(2,(*self->fmod_gain)*(self->fmod_func(self->fmod_phase)));
+                fmod_coeff = pitchbend*myPow2((*self->fmod_gain)*(self->fmod_func(self->fmod_phase)));
                 self->fmod_phase += fmod_step;
                 if(self->fmod_phase >= self->fmod_func_max)
                 {
@@ -256,7 +257,7 @@ void play_note(NOTE *self,
             total_gain = gain*self->env_gain*amod_coeff;
 
             //harmonics
-            for(j=0;j<*self->nharmonics;j++)
+            for(j=0;j<*self->nharmonics;j++)//could unroll this but... it'd get ugly
             {
                 if(self->harmonic[j])//if cell is alive
                 {

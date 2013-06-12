@@ -2,6 +2,7 @@
 //casynth.c
 #include<casynth.h>
 #include<constants.h>
+#include<waves.h>
 #include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
@@ -278,7 +279,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             }
                         }
                     }
-                    synth->pitchbend = pow(2,bend/49152);//49152 is 12*8192/2
+                    synth->pitchbend = myPow2(bend/49152);//49152 is 12*8192/2
                     frame_no = event->time.frames;
                 }//message types
             }//correct channel

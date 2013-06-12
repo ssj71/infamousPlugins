@@ -2,6 +2,9 @@
 //waves.c
 
 #include<waves.h>
+#include<stdlib.h>
+#include<time.h>
+#include<math.h>
 
 void init_waves()
 {
@@ -43,6 +46,29 @@ void init_waves()
     V = V2 = 2*random() / (float)RAND_MAX - 1;
     last = random();
 
+}
+
+//based on an algorithm by Martin Ankerl
+double myPow2(double x)
+{
+    char i = (char)x;
+    union {
+      double d;
+      long a[2];
+    }u;
+    u.a[1] = (long)((x-i)*1109377 + 1072632447);
+    u.a[0] = 0;
+    //need to calculate 2^i
+    if(i<0)
+        return u.d/(double)(1<<-i);
+    else
+        return u.d*(double)(1<<i);
+}
+
+double mySin(double x)
+{
+    double y = 1.27323954474*x - 0.40528473456*x*(x>0?x:-x);
+    return 0.225*(y*(y>0?y:-y) - y) + y;
 }
 
 double saw(double phase)
@@ -111,7 +137,7 @@ double white(double phase)
 //currently a uniform distribution
 //returns 2 random values per cycle
 //this isn't going to work becuase there will be multiple callers
-double random(double phase)
+double randomsnh(double phase)
 {
     if(!above != !(phase > half_phase))
     {

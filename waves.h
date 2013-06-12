@@ -14,13 +14,14 @@ double saw_step;
 double half_phase;
 bool above;
 
-
+double myPow2(double x);
+double mySin(double x);
 double saw(double phase);
 double square(double phase);
 double triangle(double phase);
 double white(double phase);
-double random(double phase);
+double randomsnh(double phase);
 
-float V;
+float V,V2;
 float last;
 
