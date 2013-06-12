@@ -63,6 +63,65 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned cha
 void start_note(NOTE *self, unsigned char velocity, uint32_t start_frame, float harmonic_gain[], unsigned short harmonics, float envelope[], unsigned char base_wave, unsigned char amod_wave, unsigned char fmod_wave);
 void play_note(NOTE *self, uint32_t nframes, float buffer[], double pitchbend, float gain, unsigned short rule, double amod_step, double fmod_step);
 void end_note(NOTE *self, uint32_t release_frame);
-
-//these must be called before play is called maybe...
 void release(NOTE *self, unsigned short harmonics);
+
+inline double fastPrecisePow(double a, double b) {
+  // calculate approximation with fraction of the exponent
+  int e = (int) b;
+  union {
+    double d;
+    int x[2];
+  } u = { a };
+  u.x[1] = (int)((b - e) * (u.x[1] - 1072632447) + 1072632447);
+  u.x[0] = 0;
+
+  // exponentiation by squaring with the exponent's integer part
+  // double r = u.d makes everything much slower, not sure why
+  double r = 1.0;
+  while (e) {
+    if (e & 1) {
+      r *= a;
+    }
+    a *= a;
+    e >>= 1;
+  }
+
+  return r * u.d;
+}
+
+inline double fastPow(double a, double b) {
+  union {
+    double d;
+    int x[2];
+  } u = { a };
+  u.x[1] = (int)(b * (u.x[1] - 1072632447) + 1072632447);1073741824 - 1072632447
+  u.x[0] = 0;
+  return u.d;
+}
+
+//based on algorithms by Martin Ankerl
+inline double myPow(double x)
+{
+    union {
+      double d;
+      short a[2];
+    }u;
+    u.a[1] = (short)(x*1109377 - 1072632447);
+    u.a[0] = 0;
+    return u.d;
+}
+inline double myPow2(double x)
+{
+    char i = (char)x;
+    union {
+      double d;
+      short a[2];
+    }u;
+    u.a[1] = (short)((x-i)*1109377 - 1072632447);
+    u.a[0] = 0;
+    //need to calculate 2^i
+    if(1<0)
+        1/(1<<-i) + u.d;
+    else
+        return (1<<i) + u.d;
+}
