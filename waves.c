@@ -65,6 +65,7 @@ double myPow2(double x)
         return u.d*(double)(1<<i);
 }
 
+//based on an algorithm by Nicolas Capens
 double mySin(double x)
 {
     double y = 1.27323954474*x - 0.40528473456*x*(x>0?x:-x);

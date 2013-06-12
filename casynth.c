@@ -9,39 +9,6 @@
 #include<math.h>
 
 
-
-//private functions
-inline void run_active_notes(CASYNTH *synth, uint32_t nframes, float buffer[])
-{
-    unsigned char j,k;
-    NOTE* note;
-    double astep = *synth->amod_freq_p/synth->sample_rate;
-    double fstep = *synth->fmod_freq_p/synth->sample_rate;//need to decide where to calculate this. Probably not here.
-    for(j=0;j<synth->nactive;j++)
-    {
-        note = &(synth->note[synth->active[j]]);
-        play_note( note,
-                   nframes,
-                   buffer,
-                   synth->pitchbend,
-                   *synth->master_gain_p,
-                   (unsigned char)*synth->rule_p,
-                   astep,
-                   fstep);
-
-        //cleanup dead notes
-        if(note->note_dead)
-        {
-            synth->nactive--;
-            for(k=j;k<synth->nactive;k++)
-            {
-                synth->active[k] = synth->active[k+1];
-            }
-        }
-    }
-}
-
-
 //main functions
 LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
@@ -256,7 +223,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                 {
                     bend = (message[1]&MIDI_DATA_MASK) + ((message[2]&MIDI_DATA_MASK)<<7) - MIDI_PITCH_CENTER;
                     //run and update current position because this blocks (affects all notes)
-                    //run_active_notes(synth, event->time.frames - frame_no -1, &(buf[frame_no]));
+                    //run_active_notes
                     for(j=0;j<synth->nactive;j++)
                     {
                         note = &(synth->note[synth->active[j]]);
@@ -289,7 +256,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     //finish off whatever frames are left
     if(frame_no != nframes-1)
     {
-        //run_active_notes(synth, nframes - frame_no, &(buf[frame_no]));
+        //run_active_notes
         for(j=0;j<synth->nactive;j++)
         {
             note = &(synth->note[synth->active[j]]);
@@ -313,6 +280,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
             }
         }//active notes
     }//leftovers
+
 }
 
 

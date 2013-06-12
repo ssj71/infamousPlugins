@@ -29,7 +29,7 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned cha
 
     self->nharmonics = nharmonics;
     self->harm_length = harmonic_length;
-    step = (self->base_func_max - self->base_func_min)*440/sample_rate*pow(2,(value-69)/12);//leave this using more accurate pow since during init
+    step = (self->base_func_max - self->base_func_min)*(440/sample_rate)*powf(2,(float)(value-69)/12);//leave this using more accurate pow since during init
     for(i=0;i<MAX_N_HARMONICS;i++)
     {
         self->phase[i] = 0;
@@ -37,6 +37,7 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned cha
 
     }
     self->phase[MAX_N_HARMONICS] = 0;//maxth harmonic is root
+    self->step[MAX_N_HARMONICS] = step;
 
     self->env_gain = 0;
     self->note_dead = true;
@@ -173,7 +174,87 @@ void play_note(NOTE *self,
     bool newcells = false;
     float env_end_gain;
 
-    //need to make sure chunks aren't overlapping!
+    //testing stuff
+    //slowly building up gotta make sound :(
+    for(i=start_frame;i<nframes;i++ )
+    {
+        for(j=0;j<16;j++)//*self->nharmonics;j++)//could unroll this but... it'd get ugly
+        {
+            if(self->harmonic[j])//if cell is alive
+            {
+                buffer[i] += (gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                self->phase[j] += self->step[j];
+                if(self->phase[j] >= self->base_func_max)
+                {
+                    self->phase[j] -= self->base_func_max - self->base_func_min;
+                }
+            }
+        }
+        j = MAX_N_HARMONICS;
+        buffer[i] += gain*self->harm_gain[j]*(self->base_func(self->phase[j]));
+        self->phase[j] += self->step[j];
+        if(self->phase[j] >= self->base_func_max)
+        {
+            self->phase[j] -= self->base_func_max - self->base_func_min;
+        }
+    }
+    if(release_frame)
+    {
+        self->note_dead = true;
+    }
+    //step 2
+    /*
+    for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
+    {
+        if(self->nframes_since_harm_change + chunk > *(self->harm_length))
+        {
+            chunk = *self->harm_length - self->nframes_since_harm_change;
+            newcells = true;
+        }
+        stop_frame = chunk+start_frame;
+        for(i=start_frame;i<stop_frame;i++ )
+        {
+            for(j=0;j<16;j++)//could unroll this but... it'd get ugly
+            {
+                if(self->harmonic[j])//if cell is alive
+                {
+                    buffer[i] += (gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                    self->phase[j] += self->step[j];
+                    if(self->phase[j] >= self->base_func_max)
+                    {
+                        self->phase[j] -= self->base_func_max - self->base_func_min;
+                    }
+                }
+            }
+            j = MAX_N_HARMONICS;
+            buffer[i] += gain*self->harm_gain[j]*(self->base_func(self->phase[j]));
+            self->phase[j] += self->step[j];
+            if(self->phase[j] >= self->base_func_max)
+            {
+                self->phase[j] -= self->base_func_max - self->base_func_min;
+            }
+        }
+        self->nframes_since_harm_change += chunk;
+
+        if(newcells)
+        {
+            //calculate next state
+            self->cells = torus_of_life(rule,self->cells,MAX_N_HARMONICS);
+            for(j=0;j<MAX_N_HARMONICS;j++)//harmonics
+            {
+                self->harmonic[j] = self->cells&(1<<j);
+                if( !self->harmonic[j] )//if cell is !alive
+                    self->phase[j] = 0;
+            }
+            self->nframes_since_harm_change = 0;
+        }
+        start_frame += chunk;
+    }
+    if(release_frame)
+    {
+        self->note_dead = true;
+    }
+    /*
     //go through all the chunks in this period
     for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
     {
@@ -298,7 +379,7 @@ void play_note(NOTE *self,
             self->env_state = ENV_RELEASE;
             release_frame = 0;
         }
-    }
+    }*/
 }
 
 void end_note(NOTE *self, uint32_t release_frame)
