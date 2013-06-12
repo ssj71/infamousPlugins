@@ -10,7 +10,7 @@ unsigned short torus_of_life(unsigned char rule, unsigned short cells, unsigned 
 
 
 
-void init_note(NOTE *self, double sample_rate, unsigned char value, float* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
+void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned char* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
 {
     unsigned char i;
     double step;
@@ -74,17 +74,18 @@ void start_note(NOTE*           self,
 
     //harmonics
     self->nframes_since_harm_change = 0;
+    if(harmonics)
+        self->cells = harmonics;
     for(i=0;i<MAX_N_HARMONICS;i++)
     {
         self->harm_gain[i] = self->velocity*harmonic_gain[i];
         self->phase[i] = 0;
+        self->harmonic[i] = harmonics&(1<<i);
     }
     //and the root
     i = MAX_N_HARMONICS;
     self->harm_gain[i] = self->velocity*harmonic_gain[i];
     self->phase[i] = 0;
-    if(harmonics)
-        self->harmonics = harmonics;
 
     //envelope
     self->env_gain = 0;
@@ -162,6 +163,7 @@ void play_note(NOTE *self,
 {
     unsigned short i;
     unsigned char j;
+    float total_gain;
     float fmod_coeff = 1;
     float amod_coeff = 1;
     uint32_t chunk;
@@ -182,7 +184,7 @@ void play_note(NOTE *self,
         }
 
         //divide into chunks for cell lifetimes
-        if(self->nframes_since_harm_change + chunk > *self->harm_length)
+        if(self->nframes_since_harm_change + chunk > *(self->harm_length))
         {
             chunk = *self->harm_length - self->nframes_since_harm_change;
             newcells = true;
@@ -237,7 +239,7 @@ void play_note(NOTE *self,
             //modulation
             if(self->env_state == ENV_SUSTAIN)
             {
-                fmod_coeff = pow(2,(*self->fmod_gain)*(self->fmod_func(self->fmod_phase)));
+                fmod_coeff = pitchbend*pow(2,(*self->fmod_gain)*(self->fmod_func(self->fmod_phase)));
                 self->fmod_phase += fmod_step;
                 if(self->fmod_phase >= self->fmod_func_max)
                 {
@@ -251,15 +253,15 @@ void play_note(NOTE *self,
                 }
             }
             self->env_gain += env_slope;
+            total_gain = gain*self->env_gain*amod_coeff;
 
             //harmonics
             for(j=0;j<*self->nharmonics;j++)
             {
-                if(self->harmonics&(1<<j))//if cell is alive
+                if(self->harmonic[j])//if cell is alive
                 {
-
-                    buffer[i] += (gain*self->env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
-                    self->phase[j] += pitchbend*fmod_coeff*self->step[j];
+                    buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                    self->phase[j] += fmod_coeff*self->step[j];
                     if(self->phase[j] >= self->base_func_max)
                     {
                         self->phase[j] -= self->base_func_max - self->base_func_min;
@@ -268,8 +270,8 @@ void play_note(NOTE *self,
             }
             //now the root
             j = MAX_N_HARMONICS;
-            buffer[i] += (self->env_gain*amod_coeff*self->harm_gain[j])*(self->base_func(self->phase[j]));
-            self->phase[j] += pitchbend*fmod_coeff*self->step[j];
+            buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
+            self->phase[j] += fmod_coeff*self->step[j];
             if(self->phase[j] >= self->base_func_max)
             {
                 self->phase[j] -= self->base_func_max - self->base_func_min;
@@ -280,10 +282,11 @@ void play_note(NOTE *self,
         if(newcells)
         {
             //calculate next state
-            self->harmonics = torus_of_life(rule,self->harmonics,MAX_N_HARMONICS);
+            self->cells = torus_of_life(rule,self->cells,MAX_N_HARMONICS);
             for(j=0;j<MAX_N_HARMONICS;j++)//harmonics
             {
-                if( !(self->harmonics&(1<<j)) )//if cell is !alive
+                self->harmonic[j] = self->cells&(1<<j);
+                if( !self->harmonic[j] )//if cell is !alive
                     self->phase[j] = 0;
             }
             self->nframes_since_harm_change = 0;

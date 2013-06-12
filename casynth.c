@@ -57,10 +57,10 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
         init_note(&(synth->note[i]),
                   sample_rate,
                   i,
-                  synth->nharmonics_p,
-                  synth->cell_life_p,
-                  synth->amod_gain_p,
-                  synth->fmod_gain_p);
+                  &(synth->ncells),
+                  &(synth->cell_lifetime),
+                  &(synth->amod_g),
+                  &(synth->fmod_g));
         synth->active[i] = 0;
         synth->sustained[i] = 0;
     }
@@ -96,28 +96,28 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
 void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
 {
     CASYNTH* synth = (CASYNTH*)handle;
-    if(port == MIDI_IN)         synth->midi_in_p = (const LV2_Atom_Sequence*)data;
-    else if(port == OUTPUT)     synth->output_p = (const float*)data;
-    else if(port == CHANNEL)    synth->channel_p = (const float*)data;
-    else if(port == MASTER_GAIN)synth->master_gain_p = (const float*)data;
-    else if(port == RULE)       synth->cell_life_p = (const float*)data;
-    else if(port == CELL_LIFE)  synth->rule_p = (const float*)data;
-    else if(port == INIT_CELLS) synth->init_cells_p = (const float*)data;
-    else if(port == NHARMONICS) synth->nharmonics_p = (const float*)data;
-    else if(port == HARM_MODE)  synth->harmonic_mode_p = (const float*)data;
-    else if(port == WAVE)       synth->wave_p = (const float*)data;
-    else if(port == ENV_A)      synth->env_a_p = (const float*)data;
-    else if(port == ENV_D)      synth->env_d_p = (const float*)data;
-    else if(port == ENV_B)      synth->env_b_p = (const float*)data;
-    else if(port == ENV_SWL)    synth->env_swl_p = (const float*)data;
-    else if(port == ENV_SUS)    synth->env_sus_p = (const float*)data;
-    else if(port == ENV_R)      synth->env_r_p = (const float*)data;
-    else if(port == AMOD_WAV)   synth->amod_wave_p = (const float*)data;
-    else if(port == AMOD_FREQ)  synth->amod_freq_p = (const float*)data;
-    else if(port == AMOD_GAIN)  synth->amod_gain_p = (const float*)data;
-    else if(port == FMOD_WAV)   synth->fmod_wave_p = (const float*)data;
-    else if(port == FMOD_FREQ)  synth->fmod_freq_p = (const float*)data;
-    else if(port == FMOD_GAIN)  synth->fmod_gain_p = (const float*)data;
+    if(port == MIDI_IN)         synth->midi_in_p = (LV2_Atom_Sequence*)data;
+    else if(port == OUTPUT)     synth->output_p = (float*)data;
+    else if(port == CHANNEL)    synth->channel_p = (float*)data;
+    else if(port == MASTER_GAIN)synth->master_gain_p = (float*)data;
+    else if(port == RULE)       synth->cell_life_p = (float*)data;
+    else if(port == CELL_LIFE)  synth->rule_p = (float*)data;
+    else if(port == INIT_CELLS) synth->init_cells_p = (float*)data;
+    else if(port == NHARMONICS) synth->nharmonics_p = (float*)data;
+    else if(port == HARM_MODE)  synth->harmonic_mode_p = (float*)data;
+    else if(port == WAVE)       synth->wave_p = (float*)data;
+    else if(port == ENV_A)      synth->env_a_p = (float*)data;
+    else if(port == ENV_D)      synth->env_d_p = (float*)data;
+    else if(port == ENV_B)      synth->env_b_p = (float*)data;
+    else if(port == ENV_SWL)    synth->env_swl_p = (float*)data;
+    else if(port == ENV_SUS)    synth->env_sus_p = (float*)data;
+    else if(port == ENV_R)      synth->env_r_p = (float*)data;
+    else if(port == AMOD_WAV)   synth->amod_wave_p = (float*)data;
+    else if(port == AMOD_FREQ)  synth->amod_freq_p = (float*)data;
+    else if(port == AMOD_GAIN)  synth->amod_gain_p = (float*)data;
+    else if(port == FMOD_WAV)   synth->fmod_wave_p = (float*)data;
+    else if(port == FMOD_FREQ)  synth->fmod_freq_p = (float*)data;
+    else if(port == FMOD_GAIN)  synth->fmod_gain_p = (float*)data;
     else puts("UNKNOWN PORT YO!!");
 }
 
@@ -136,6 +136,11 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     NOTE* note;
     double astep = *synth->amod_freq_p/synth->sample_rate;
     double fstep = *synth->fmod_freq_p/synth->sample_rate;//need to decide where to calculate this. Probably not here.
+
+    synth->ncells = *synth->nharmonics_p;
+    synth->cell_lifetime = *synth->cell_life_p;
+    synth->amod_g = *synth->amod_gain_p;
+    synth->fmod_g = *synth->fmod_gain_p;
 
 
     memset(buf,0, sizeof(float)*nframes);//start by filling buffer with 0s, we'll add to this

@@ -22,6 +22,8 @@ typedef struct _CASYNTH
     double pitchbend;
 
     unsigned char harmonic_mode;
+    unsigned char ncells;
+    float cell_lifetime;
     float harm_gain_sinc[MAX_N_HARMONICS+1];
     float harm_gain_saw[MAX_N_HARMONICS+1];
     float harm_gain_sqr[MAX_N_HARMONICS+1];
@@ -29,6 +31,9 @@ typedef struct _CASYNTH
     float* harm_gains;//points to appropriate array
 
     float envelope[6];
+
+    float amod_g;
+    float fmod_g;
 
     //lv2 stuff
     uint32_t midi_event_type;
