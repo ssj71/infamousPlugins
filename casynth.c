@@ -73,8 +73,8 @@ void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
     else if(port == OUTPUT)     synth->output_p = (float*)data;
     else if(port == CHANNEL)    synth->channel_p = (float*)data;
     else if(port == MASTER_GAIN)synth->master_gain_p = (float*)data;
-    else if(port == RULE)       synth->cell_life_p = (float*)data;
-    else if(port == CELL_LIFE)  synth->rule_p = (float*)data;
+    else if(port == RULE)       synth->rule_p = (float*)data;
+    else if(port == CELL_LIFE)  synth->cell_life_p = (float*)data;
     else if(port == INIT_CELLS) synth->init_cells_p = (float*)data;
     else if(port == NHARMONICS) synth->nharmonics_p = (float*)data;
     else if(port == HARM_MODE)  synth->harmonic_mode_p = (float*)data;
@@ -111,7 +111,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     double fstep = *synth->fmod_freq_p/synth->sample_rate;//need to decide where to calculate this. Probably not here.
 
     synth->ncells = *synth->nharmonics_p;
-    synth->cell_lifetime = *synth->cell_life_p;
+    synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p);
     synth->amod_g = *synth->amod_gain_p;
     synth->fmod_g = *synth->fmod_gain_p;
 

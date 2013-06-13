@@ -96,7 +96,7 @@
                 lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Square"; rdf:value 2 ] ;
                 lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 3 ] ;
-                lv2:default 0.0 ;
+                lv2:default 1.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 3.0 ;
         ], [

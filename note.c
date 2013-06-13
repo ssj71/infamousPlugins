@@ -82,6 +82,8 @@ void start_note(NOTE*           self,
         self->harm_gain[i] = self->velocity*harmonic_gain[i];
         self->phase[i] = 0;
         self->harmonic[i] = harmonics&(1<<i);
+        //test stuff
+        self->harmonic[i] = false;
     }
     //and the root
     i = MAX_N_HARMONICS;
@@ -209,7 +211,7 @@ void play_note(NOTE *self,
 
     for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
     {
-        if(self->nframes_since_harm_change + chunk > *(self->harm_length))
+        if(self->nframes_since_harm_change + chunk > *self->harm_length)
         {
             chunk = *self->harm_length - self->nframes_since_harm_change;
             newcells = true;
@@ -250,6 +252,7 @@ void play_note(NOTE *self,
                     self->phase[j] = 0;
             }
             self->nframes_since_harm_change = 0;
+            newcells = false;
         }
         start_frame += chunk;
     }
@@ -375,6 +378,7 @@ void play_note(NOTE *self,
                     self->phase[j] = 0;
             }
             self->nframes_since_harm_change = 0;
+            newcells = false;
         }
         start_frame += chunk;
         if( start_frame == release_frame )
@@ -383,6 +387,7 @@ void play_note(NOTE *self,
             release_frame = 0;
         }
     }*/
+    self->start_frame = 0;
 }
 
 void end_note(NOTE *self, uint32_t release_frame)
