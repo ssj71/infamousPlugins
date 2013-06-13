@@ -44,7 +44,8 @@ void init_waves()
     //white and random
     srandom ((unsigned int) time (NULL));
     V = V2 = 2*random() / (float)RAND_MAX - 1;
-    last = random();
+    alast = flast = random();
+    aprev = fprev = 0;
 
 }
 
@@ -136,13 +137,21 @@ double white(double phase)
 }
 
 //currently a uniform distribution
-//returns 2 random values per cycle
-//this isn't going to work becuase there will be multiple callers
-double randomsnh(double phase)
+double arandomsnh(double phase)
 {
-    if(!above != !(phase > half_phase))
+    if(phase < aprev)
     {
-        last = random();
+        alast = random();
     }
-    return last;
+    aprev = phase;
+    return alast;
+}
+double frandomsnh(double phase)
+{
+    if(phase < fprev)
+    {
+        flast = random();
+    }
+    fprev = phase;
+    return flast;
 }

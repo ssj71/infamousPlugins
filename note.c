@@ -176,11 +176,14 @@ void play_note(NOTE *self,
 
     //testing stuff
     //slowly building up gotta make sound :(
+    //this works!
+    /*
+    start_frame = 0;
     for(i=start_frame;i<nframes;i++ )
     {
         for(j=0;j<16;j++)//*self->nharmonics;j++)//could unroll this but... it'd get ugly
         {
-            if(self->harmonic[j])//if cell is alive
+            //if(self->harmonic[j])//if cell is alive
             {
                 buffer[i] += (gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
                 self->phase[j] += self->step[j];
@@ -201,9 +204,9 @@ void play_note(NOTE *self,
     if(release_frame)
     {
         self->note_dead = true;
-    }
+    }*/
     //step 2
-    /*
+
     for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
     {
         if(self->nframes_since_harm_change + chunk > *(self->harm_length))

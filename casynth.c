@@ -36,13 +36,18 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
     synth->harmonic_mode = HARMONIC_MODE_SINC;
     for(i=0;i<MAX_N_HARMONICS;i++)
     {
-        synth->harm_gain_sinc[i] = 1/(MAX_N_HARMONICS +1);//(nharmonics+1);
-        synth->harm_gain_saw[i] = .29/(i+2);//.29 makes it so gain=1 if all harmonics play
-        synth->harm_gain_sqr[i] = (i%2!=0)*.48/(i+2);//odd harmonics
-        synth->harm_gain_tri[i] = (i%2!=0)*.83/((i+2)*(i+2));
+        synth->harm_gain_sinc[i] = 1/(float)(MAX_N_HARMONICS +1);//(nharmonics+1);
+        synth->harm_gain_saw[i] = .29/(float)(i+2);//.29 makes it so gain=1 if all harmonics play
+        synth->harm_gain_sqr[i] = (i%2!=0)*.48/(float)(i+2);//odd harmonics
+        synth->harm_gain_tri[i] = (i%2!=0)*.83/(float)((i+2)*(i+2));
     }
-    synth->harm_gains = synth->harm_gain_sinc;
+    //fundamental
+    synth->harm_gain_sinc[i] = 1/(float)(MAX_N_HARMONICS +1);//(nharmonics+1);
+    synth->harm_gain_saw[i] = .29;//.29 makes it so gain=1 if all harmonics play
+    synth->harm_gain_sqr[i] = .48;
+    synth->harm_gain_tri[i] = .83;
 
+    synth->harm_gains = synth->harm_gain_sinc;
 
     //get urid map value for midi events
     for (int i = 0; host_features[i]; i++)
