@@ -139,8 +139,8 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                     {
                         firstnote = false;
                         //condition envelope
-                        synth->envelope[ENV_ATTACK] = 1/(*synth->env_a_p*synth->sample_rate);
-                        synth->envelope[ENV_DECAY] = (*synth->env_b_p-1)/(*synth->env_d_p*synth->sample_rate);
+                        synth->envelope[ENV_ATTACK] = 1/(float)(*synth->env_a_p*synth->sample_rate);
+                        synth->envelope[ENV_DECAY] = (*synth->env_b_p-1)/(float)(*synth->env_d_p*synth->sample_rate);
                         synth->envelope[ENV_BREAK] = *synth->env_b_p;
                         synth->envelope[ENV_SWELL] = (*synth->env_sus_p - *synth->env_b_p)/(*synth->env_swl_p*synth->sample_rate);
                         synth->envelope[ENV_SUSTAIN] = *synth->env_sus_p;
