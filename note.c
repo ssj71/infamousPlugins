@@ -260,8 +260,18 @@ void play_note(NOTE *self,
     }*/
 
     //step 3 fix envelope
+    //currently works until release.
+    self->envelope[0] = 0.00001133786;
+    self->envelope[1] = -0.00001133786;
     for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
     {
+        //divide into chunk for release
+        if(release_frame)
+        {
+            chunk = release_frame - start_frame;
+        }
+
+        //cells
         if(self->nframes_since_harm_change + chunk > *self->harm_length)
         {
             chunk = *self->harm_length - self->nframes_since_harm_change;
@@ -272,29 +282,76 @@ void play_note(NOTE *self,
         //divide into chunks for envelope
         env_slope = self->envelope[self->env_state];
         env_end_gain = self->env_gain + env_slope*chunk;
-        if (self->env_state<ENV_SUSTAIN)
+        if(self->env_state == ENV_ATTACK)
+        {
+            if(env_end_gain >= 1)
+            {
+                chunk = (uint32_t)((1-self->env_gain)/env_slope);
+                self->env_state++;
+                newcells = false;//cancel the new cells, we aren't going to get there in this chunk
+            }
+
+        }
+        else if(self->env_state == ENV_DECAY)
+        {
+            if(env_end_gain <= self->envelope[ENV_BREAK])
+            {
+                chunk = (uint32_t)((self->envelope[ENV_BREAK] - self->env_gain)/env_slope);//removed
+                self->env_state+=2;//skip B
+                newcells = false;
+                //test stuff
+                    //chunk = (uint32_t)(-self->env_gain/env_slope);//don't process past note death
+                    //self->note_dead = true;
+            }
+
+        }
+        else if(self->env_state == ENV_SWELL)
+        {
+            if(!(env_slope > 0) != !(env_end_gain <= self->envelope[ENV_SUSTAIN]))
+            {
+                chunk = (uint32_t)((self->envelope[ENV_SUSTAIN] - self->env_gain)/env_slope);
+                self->env_state++;
+                newcells = false;
+            }
+        }
+        else if(self->env_state == ENV_SUSTAIN)
+        {
+            env_slope = 0;
+        }
+        else if(self->env_state == ENV_RELEASE)
+        {
+            if (env_end_gain <= 0)
+            {
+                chunk = (uint32_t)(self->env_gain/env_slope);//don't process past note death
+                self->note_dead = true;
+                newcells = false;
+            }
+        }
+
+        /*if (self->env_state<ENV_SUSTAIN)
         {
             if(self->env_state != ENV_SWELL)
             {
-                if(env_end_gain > 1.0)
+                if(env_end_gain >= 1.0)
                 {
                     //do no. frames till Attack complete
                     chunk = (uint32_t)((1-self->env_gain)/env_slope);
                     self->env_state++;
                     newcells = false;//cancel the new cells, we aren't going to get there in this chunk
                 }
-                else if(env_end_gain <= 0)//self->envelope[ENV_BREAK])
+                else if(env_end_gain <= self->envelope[ENV_BREAK])
                 {
                     //do no. frames till Decay complete
                     chunk = (uint32_t)((self->envelope[ENV_BREAK] - self->env_gain)/env_slope);//removed
                     self->env_state+=2;//skip B
                     newcells = false;
                     //test stuff
-                      //  chunk = (uint32_t)(self->env_gain/env_slope);//don't process past note death
-                      //  self->note_dead = true;
+                        chunk = (uint32_t)(-self->env_gain/env_slope);//don't process past note death
+                        self->note_dead = true;
                       //  newcells = false;
+                      //  self->env_state = ENV_SUSTAIN;
                 }
-            }
+            } }/*
             else if(env_end_gain >= self->envelope[ENV_SUSTAIN])
             {
                 //do no. frames till Swell complete
@@ -315,7 +372,7 @@ void play_note(NOTE *self,
         else//in sustain
         {
             env_slope = 0;
-        }
+        }*/
 
         stop_frame = chunk+start_frame;
         for(i=start_frame;i<stop_frame;i++ )
@@ -324,14 +381,14 @@ void play_note(NOTE *self,
 
             //envelope
             self->env_gain += env_slope;
-            total_gain = gain*self->env_gain*amod_coeff;
+            total_gain = gain*self->env_gain;
 
             //harmonics
             for(j=0;j<*self->nharmonics;j++)//could unroll this but... it'd get ugly
             {
                 if(self->harmonic[j])//if cell is alive
                 {
-                    buffer[i] += (gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                    buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
                     self->phase[j] += self->step[j];
                     if(self->phase[j] >= self->base_func_max)
                     {
@@ -341,7 +398,7 @@ void play_note(NOTE *self,
             }
             //fundamental
             j = MAX_N_HARMONICS;
-            buffer[i] += gain*self->harm_gain[j]*(self->base_func(self->phase[j]));
+            buffer[i] += total_gain*self->harm_gain[j]*(self->base_func(self->phase[j]));
             self->phase[j] += self->step[j];
             if(self->phase[j] >= self->base_func_max)
             {
@@ -366,6 +423,7 @@ void play_note(NOTE *self,
             newcells = false;
         }
     }
+    //test
     if(release_frame)
     {
         self->note_dead = true;
