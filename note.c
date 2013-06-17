@@ -261,8 +261,8 @@ void play_note(NOTE *self,
 
     //step 3 fix envelope
     //currently works until release.
-    self->envelope[0] = 0.00001133786;
-    self->envelope[1] = -0.00001133786;
+    //self->envelope[0] = 0.00001133786;
+    //self->envelope[1] = -0.00001133786;
     for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
     {
         //divide into chunk for release
@@ -322,7 +322,7 @@ void play_note(NOTE *self,
         {
             if (env_end_gain <= 0)
             {
-                chunk = (uint32_t)(self->env_gain/env_slope);//don't process past note death
+                chunk = (uint32_t)(-self->env_gain/env_slope);//don't process past note death
                 self->note_dead = true;
                 newcells = false;
             }
@@ -407,7 +407,14 @@ void play_note(NOTE *self,
         }
 
         self->nframes_since_harm_change += chunk;
-        start_frame += chunk;
+        start_frame = stop_frame;
+        if( start_frame == release_frame )
+        {
+            //test
+            //self->note_dead = true;
+            self->env_state = ENV_RELEASE;
+            release_frame = self->release_frame = 0;
+        }
 
         if(newcells)
         {
@@ -424,10 +431,10 @@ void play_note(NOTE *self,
         }
     }
     //test
-    if(release_frame)
-    {
-        self->note_dead = true;
-    }
+    //if(release_frame)
+    //{
+    //    self->note_dead = true;
+    //}
     /*
     //go through all the chunks in this period
     for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
