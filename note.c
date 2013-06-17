@@ -413,44 +413,50 @@ void play_note(NOTE *self,
         //divide into chunks for envelope
         env_slope = self->envelope[self->env_state];
         env_end_gain = self->env_gain + env_slope*chunk;
-        if (self->env_state<ENV_SUSTAIN)
+        if(self->env_state == ENV_ATTACK)
         {
-            if(self->env_state != ENV_SWELL)
+            if(env_end_gain >= 1)
             {
-                if(env_end_gain > 1.0)
-                {
-                    //do no. frames till Attack complete
-                    chunk = (uint32_t)((1-self->env_gain)/env_slope);
-                    self->env_state++;
-                    newcells = false;//cancel the new cells, we aren't going to get there in this chunk
-                }
-                else if(env_end_gain <= self->envelope[ENV_BREAK])
-                {
-                    //do no. frames till Decay complete
-                    chunk = (uint32_t)((self->envelope[ENV_BREAK] - self->env_gain)/env_slope);
-                    self->env_state+=2;//skip B
-                    newcells = false;
-                }
+                chunk = (uint32_t)((1-self->env_gain)/env_slope);
+                self->env_state++;
+                newcells = false;//cancel the new cells, we aren't going to get there in this chunk
             }
-            else if(env_end_gain >= self->envelope[ENV_SUSTAIN])
+
+        }
+        else if(self->env_state == ENV_DECAY)
+        {
+            if(env_end_gain <= self->envelope[ENV_BREAK])
             {
-                //do no. frames till Swell complete
+                chunk = (uint32_t)((self->envelope[ENV_BREAK] - self->env_gain)/env_slope);//removed
+                self->env_state+=2;//skip B
+                newcells = false;
+                //test stuff
+                    //chunk = (uint32_t)(-self->env_gain/env_slope);//don't process past note death
+                    //self->note_dead = true;
+            }
+
+        }
+        else if(self->env_state == ENV_SWELL)
+        {
+            if(!(env_slope > 0) != !(env_end_gain <= self->envelope[ENV_SUSTAIN]))
+            {
                 chunk = (uint32_t)((self->envelope[ENV_SUSTAIN] - self->env_gain)/env_slope);
                 self->env_state++;
                 newcells = false;
             }
-        }else if(self->env_state > ENV_SUSTAIN)//release
+        }
+        else if(self->env_state == ENV_SUSTAIN)
+        {
+            env_slope = 0;
+        }
+        else if(self->env_state == ENV_RELEASE)
         {
             if (env_end_gain <= 0)
             {
-                chunk = (uint32_t)(self->env_gain/env_slope);//don't process past note death
+                chunk = (uint32_t)(-self->env_gain/env_slope);//don't process past note death
                 self->note_dead = true;
                 newcells = false;
             }
-        }
-        else//in sustain
-        {
-            env_slope = 0;
         }
 
         //now handle the current chunk
@@ -460,7 +466,8 @@ void play_note(NOTE *self,
             //modulation
             if(self->env_state == ENV_SUSTAIN)
             {
-                fmod_coeff = pitchbend*myPow2((*self->fmod_gain)*(self->fmod_func(self->fmod_phase)));
+                //testing
+                fmod_coeff = 1 + pitchbend*myPow2((*self->fmod_gain)*(self->fmod_func(self->fmod_phase)));
                 self->fmod_phase += fmod_step;
                 if(self->fmod_phase >= self->fmod_func_max)
                 {

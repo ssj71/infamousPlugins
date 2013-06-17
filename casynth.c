@@ -168,15 +168,39 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             }
                         }
                     }
-                    start_note(&(synth->note[num]),
-                               val,
-                               event->time.frames,
-                               synth->harm_gains,
-                               *synth->init_cells_p,
-                               synth->envelope,
-                               *synth->wave_p,
-                               *synth->amod_wave_p,
-                               *synth->fmod_wave_p);
+                    if(val)
+                    {
+                        start_note(&(synth->note[num]),
+                                   val,
+                                   event->time.frames,
+                                   synth->harm_gains,
+                                   *synth->init_cells_p,
+                                   synth->envelope,
+                                   *synth->wave_p,
+                                   *synth->amod_wave_p,
+                                   *synth->fmod_wave_p);
+                    }
+                    else//velocity zero == note off
+                    {
+                        for(i=0;i<synth->nactive;i++)
+                        {
+                            if(synth->active[i] == num)
+                            {
+                                if(synth->sus)
+                                {
+                                    if(!synth->note[num].sus)
+                                    {
+                                        synth->note[num].sus = true;
+                                        synth->sustained[synth->nsustained++] = num;
+                                    }
+                                }
+                                else
+                                {
+                                    end_note(&(synth->note[num]),event->time.frames);
+                                }
+                            }
+                        }
+                    }
                 }
                 else if(type == MIDI_NOTE_OFF)
                 {
@@ -221,6 +245,17 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                         {
                             synth->sus = true;
                         }
+                    }
+                    else if(num == MIDI_ALL_NOTES_OFF)
+                    {
+                        for(i=0;i<synth->nactive;i++)
+                        {
+                            num = synth->active[i];
+                            end_note(&(synth->note[num]),event->time.frames);
+
+                        }
+                        synth->nactive = 0;
+                        synth->nsustained = 0;
                     }
 
                 }
