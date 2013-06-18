@@ -6,7 +6,8 @@ make
 gksudo make install
 
 cd ..
-gcc rule.c -o ../rule
+mkdir -p ../utils
+gcc rule.c -o ../utils/rule
 
 
 echo "install complete!"
