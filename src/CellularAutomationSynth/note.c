@@ -276,6 +276,15 @@ void play_note(NOTE *self,
                         self->phase[j] -= self->base_func_max - self->base_func_min;
                     }
                 }
+                else if(self->phase[j] != 0)
+                {
+                    buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                    self->phase[j] += fmod_coeff*self->step[j];
+                    if(self->phase[j] >= self->base_func_max)
+                    {
+                        self->phase[j] = 0;
+                    }
+                }
             }
             //now the root
             j = MAX_N_HARMONICS;
@@ -305,8 +314,8 @@ void play_note(NOTE *self,
             for(j=0;j<MAX_N_HARMONICS;j++)//harmonics
             {
                 self->harmonic[j] = self->cells&(1<<j);
-                if( !self->harmonic[j] )//if cell is !alive
-                    self->phase[j] = 0;
+                //if( !self->harmonic[j] )//if cell is !alive
+                //    self->phase[j] = 0;
             }
             self->nframes_since_harm_change = 0;
             newcells = false;
