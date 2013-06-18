@@ -165,7 +165,7 @@ void play_note(NOTE *self,
     unsigned short i;
     unsigned char j;
     float total_gain;
-    float fmod_coeff = 1;
+    float fmod_coeff = pitchbend;
     float amod_coeff = 1;
     uint32_t chunk, stop_frame;
     uint32_t start_frame = self->start_frame;
@@ -173,226 +173,6 @@ void play_note(NOTE *self,
     float env_slope;
     bool newcells = false;
     float env_end_gain;
-
-    //testing stuff
-    //slowly building up gotta make sound :(
-    //this works!
-    /*
-    start_frame = 0;
-    for(i=start_frame;i<nframes;i++ )
-    {
-        for(j=0;j<16;j++)//*self->nharmonics;j++)//could unroll this but... it'd get ugly
-        {
-            //if(self->harmonic[j])//if cell is alive
-            {
-                buffer[i] += (gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
-                self->phase[j] += self->step[j];
-                if(self->phase[j] >= self->base_func_max)
-                {
-                    self->phase[j] -= self->base_func_max - self->base_func_min;
-                }
-            }
-        }
-        j = MAX_N_HARMONICS;
-        buffer[i] += gain*self->harm_gain[j]*(self->base_func(self->phase[j]));
-        self->phase[j] += self->step[j];
-        if(self->phase[j] >= self->base_func_max)
-        {
-            self->phase[j] -= self->base_func_max - self->base_func_min;
-        }
-    }
-    if(release_frame)
-    {
-        self->note_dead = true;
-    }*/
-    //step 2 cells
-/*
-    for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
-    {
-        if(self->nframes_since_harm_change + chunk > *self->harm_length)
-        {
-            chunk = *self->harm_length - self->nframes_since_harm_change;
-            newcells = true;
-        }
-        stop_frame = chunk+start_frame;
-        for(i=start_frame;i<stop_frame;i++ )
-        {
-            for(j=0;j<*self->nharmonics;j++)//could unroll this but... it'd get ugly
-            {
-                if(self->harmonic[j])//if cell is alive
-                {
-                    buffer[i] += (gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
-                    self->phase[j] += self->step[j];
-                    if(self->phase[j] >= self->base_func_max)
-                    {
-                        self->phase[j] -= self->base_func_max - self->base_func_min;
-                    }
-                }
-            }
-            j = MAX_N_HARMONICS;
-            buffer[i] += gain*self->harm_gain[j]*(self->base_func(self->phase[j]));
-            self->phase[j] += self->step[j];
-            if(self->phase[j] >= self->base_func_max)
-            {
-                self->phase[j] -= self->base_func_max - self->base_func_min;
-            }
-        }
-        self->nframes_since_harm_change += chunk;
-
-        if(newcells)
-        {
-            //calculate next state
-            self->cells = torus_of_life(rule,self->cells,MAX_N_HARMONICS);
-            for(j=0;j<MAX_N_HARMONICS;j++)//harmonics
-            {
-                self->harmonic[j] = self->cells&(1<<j);
-                if( !self->harmonic[j] )//if cell is !alive
-                    self->phase[j] = 0;
-            }
-            self->nframes_since_harm_change = 0;
-            newcells = false;
-        }
-        start_frame += chunk;
-    }
-    if(release_frame)
-    {
-        self->note_dead = true;
-    }*/
-
-    //step 3 fix envelope it works!
-    //currently works until release.
-    //self->envelope[0] = 0.00001133786;
-    //self->envelope[1] = -0.00001133786;
-    /*for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
-    {
-        //divide into chunk for release
-        if(release_frame)
-        {
-            chunk = release_frame - start_frame;
-        }
-
-        //cells
-        if(self->nframes_since_harm_change + chunk > *self->harm_length)
-        {
-            chunk = *self->harm_length - self->nframes_since_harm_change;
-            newcells = true;
-        }
-
-        //test stuff
-        //divide into chunks for envelope
-        env_slope = self->envelope[self->env_state];
-        env_end_gain = self->env_gain + env_slope*chunk;
-        if(self->env_state == ENV_ATTACK)
-        {
-            if(env_end_gain >= 1)
-            {
-                chunk = (uint32_t)((1-self->env_gain)/env_slope);
-                self->env_state++;
-                newcells = false;//cancel the new cells, we aren't going to get there in this chunk
-            }
-
-        }
-        else if(self->env_state == ENV_DECAY)
-        {
-            if(env_end_gain <= self->envelope[ENV_BREAK])
-            {
-                chunk = (uint32_t)((self->envelope[ENV_BREAK] - self->env_gain)/env_slope);//removed
-                self->env_state+=2;//skip B
-                newcells = false;
-                //test stuff
-                    //chunk = (uint32_t)(-self->env_gain/env_slope);//don't process past note death
-                    //self->note_dead = true;
-            }
-
-        }
-        else if(self->env_state == ENV_SWELL)
-        {
-            if(!(env_slope > 0) != !(env_end_gain <= self->envelope[ENV_SUSTAIN]))
-            {
-                chunk = (uint32_t)((self->envelope[ENV_SUSTAIN] - self->env_gain)/env_slope);
-                self->env_state++;
-                newcells = false;
-            }
-        }
-        else if(self->env_state == ENV_SUSTAIN)
-        {
-            env_slope = 0;
-        }
-        else if(self->env_state == ENV_RELEASE)
-        {
-            if (env_end_gain <= 0)
-            {
-                chunk = (uint32_t)(-self->env_gain/env_slope);//don't process past note death
-                self->note_dead = true;
-                newcells = false;
-            }
-        }
-
-
-        stop_frame = chunk+start_frame;
-        for(i=start_frame;i<stop_frame;i++ )
-        {
-            //modulation goes here
-
-            //envelope
-            self->env_gain += env_slope;
-            total_gain = gain*self->env_gain;
-
-            //harmonics
-            for(j=0;j<*self->nharmonics;j++)//could unroll this but... it'd get ugly
-            {
-                if(self->harmonic[j])//if cell is alive
-                {
-                    buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
-                    self->phase[j] += self->step[j];
-                    if(self->phase[j] >= self->base_func_max)
-                    {
-                        self->phase[j] -= self->base_func_max - self->base_func_min;
-                    }
-                }
-            }
-            //fundamental
-            j = MAX_N_HARMONICS;
-            buffer[i] += total_gain*self->harm_gain[j]*(self->base_func(self->phase[j]));
-            self->phase[j] += self->step[j];
-            if(self->phase[j] >= self->base_func_max)
-            {
-                self->phase[j] -= self->base_func_max - self->base_func_min;
-            }
-        }
-
-        self->nframes_since_harm_change += chunk;
-        start_frame = stop_frame;
-        if( start_frame == release_frame )
-        {
-            self->env_state = ENV_RELEASE;
-            release_frame = self->release_frame = 0;
-        }
-        else if( self->note_dead )
-        {
-            return;
-        }
-
-        if(newcells)
-        {
-            //calculate next state
-            self->cells = torus_of_life(rule,self->cells,MAX_N_HARMONICS);
-            for(j=0;j<MAX_N_HARMONICS;j++)//harmonics
-            {
-                self->harmonic[j] = self->cells&(1<<j);
-                if( !self->harmonic[j] )//if cell is !alive
-                    self->phase[j] = 0;
-            }
-            self->nframes_since_harm_change = 0;
-            newcells = false;
-        }
-    }
-    //test
-    //if(release_frame)
-    //{
-    //    self->note_dead = true;
-    //}
-    */
 
     //go through all the chunks in this period
     for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
@@ -406,7 +186,14 @@ void play_note(NOTE *self,
         //divide into chunks for cell lifetimes
         if(self->nframes_since_harm_change + chunk > *(self->harm_length))
         {
-            chunk = *self->harm_length - self->nframes_since_harm_change;
+            if(*self->harm_length > self->nframes_since_harm_change)
+            {
+                chunk = *self->harm_length - self->nframes_since_harm_change;
+            }
+            else//we're overdue, change now (usually because parameter is changing)
+            {
+                chunk = 0;
+            }
             newcells = true;
         }
 
@@ -430,9 +217,6 @@ void play_note(NOTE *self,
                 chunk = (uint32_t)((self->envelope[ENV_BREAK] - self->env_gain)/env_slope);//removed
                 self->env_state+=2;//skip B
                 newcells = false;
-                //test stuff
-                    //chunk = (uint32_t)(-self->env_gain/env_slope);//don't process past note death
-                    //self->note_dead = true;
             }
 
         }
@@ -464,22 +248,19 @@ void play_note(NOTE *self,
         for(i=start_frame;i<stop_frame;i++ )
         {
             //modulation
-            if(self->env_state == ENV_SUSTAIN)
+            fmod_coeff = pitchbend*myPow2((*self->fmod_gain)*(self->fmod_func(self->fmod_phase))/12);
+            self->fmod_phase += (self->fmod_func_max - self->fmod_func_min)*fmod_step;
+            if(self->fmod_phase >= self->fmod_func_max)
             {
-                //testing
-                fmod_coeff = 1 + pitchbend*myPow2((*self->fmod_gain)*(self->fmod_func(self->fmod_phase)));
-                self->fmod_phase += fmod_step;
-                if(self->fmod_phase >= self->fmod_func_max)
-                {
-                    self->fmod_phase -= self->fmod_func_max - self->fmod_func_min;
-                }
-                amod_coeff = 1 + *self->amod_gain*(self->amod_func(self->amod_phase));
-                self->amod_phase += amod_step;
-                if(self->amod_phase >= self->amod_func_max)
-                {
-                    self->amod_phase -= self->amod_func_max - self->amod_func_min;
-                }
+                self->fmod_phase -= self->fmod_func_max - self->fmod_func_min;
             }
+            amod_coeff = 1 + *self->amod_gain*(self->amod_func(self->amod_phase));
+            self->amod_phase += (self->amod_func_max - self->amod_func_min)*amod_step;
+            if(self->amod_phase >= self->amod_func_max)
+            {
+                self->amod_phase -= self->amod_func_max - self->amod_func_min;
+            }
+
             self->env_gain += env_slope;
             total_gain = gain*self->env_gain*amod_coeff;
 

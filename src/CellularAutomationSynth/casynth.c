@@ -20,6 +20,7 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
     synth->midi_in_p = NULL;
     synth->nactive = 0;
     synth->nsustained = 0;
+    synth->pitchbend = 1;
     for(i=0;i<127;i++)
     {
         init_note(&(synth->note[i]),

@@ -60,10 +60,12 @@ double myPow2(double x)
     u.a[1] = (long)((x-i)*1109377 + 1072632447);
     u.a[0] = 0;
     //need to calculate 2^i
-    if(i<0)
+    if(x<0)
         return u.d/(double)(1<<-i);
-    else
+    else if(x>0)
         return u.d*(double)(1<<i);
+    else
+        return 1;
 }
 
 //based on an algorithm by Nicolas Capens
