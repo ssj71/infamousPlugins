@@ -12,7 +12,7 @@ void init_waves(WAVESOURCE* self)
     unsigned char j;
     char k=0;
     double phase = 0;
-    self->half_phase = TABLE_LENGTH/2;
+    self->half_phase = PI;
     self->saw_step = 2*PI/TABLE_LENGTH;
     self->phase_coeff = TABLE_LENGTH/(2*PI);
     self->phase_offset = TABLE_LENGTH/2;
@@ -103,6 +103,7 @@ double mySin(WAVESOURCE *self, HYSTERESIS *mem, double x)
 
 double saw(WAVESOURCE* self, HYSTERESIS* mem, double phase)
 {
+    phase = phase*self->phase_coeff + self->phase_offset;
     unsigned short hi,lo;
     lo = (unsigned short) phase;
     hi = lo +1;
@@ -111,7 +112,7 @@ double saw(WAVESOURCE* self, HYSTERESIS* mem, double phase)
 
 double square(WAVESOURCE* self, HYSTERESIS* mem, double phase)
 {
-    if(phase > self->half_phase)
+    if(phase > 0)
     {
         return saw(self,mem,phase) - saw(self,mem,phase - self->half_phase);
     }
@@ -123,6 +124,7 @@ double square(WAVESOURCE* self, HYSTERESIS* mem, double phase)
 
 double triangle(WAVESOURCE* self, HYSTERESIS *mem, double phase)
 {
+    phase = phase*self->phase_coeff + self->phase_offset;
     unsigned short hi,lo;
     lo = (unsigned short) phase;
     hi = lo +1;

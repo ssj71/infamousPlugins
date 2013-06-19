@@ -37,9 +37,9 @@ struct _WAVESOURCE
     double (*white_func)(WAVESOURCE* , HYSTERESIS* , double);
     double (*rand_func)(WAVESOURCE* , HYSTERESIS* , double);
 
-    double func_min[6];
-    double func_max[6];
-    double func_domain[6];
+    double func_min;
+    double func_max;
+    double func_domain;
 
     double V;
     double V2;

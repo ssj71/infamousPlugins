@@ -110,9 +110,11 @@
                 lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Square"; rdf:value 2 ] ;
                 lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 3 ] ;
+                lv2:scalePoint [ rdfs:label "White Noise"; rdf:value 4 ] ;
+                lv2:scalePoint [ rdfs:label "Random"; rdf:value 5 ] ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
-                lv2:maximum 0.0 ;
+                lv2:maximum 5.0 ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 10 ;
@@ -179,7 +181,7 @@
                 lv2:scalePoint [ rdfs:label "Random"; rdf:value 5 ] ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
-                lv2:maximum 0.0 ;
+                lv2:maximum 5.0 ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 17 ;
@@ -195,7 +197,7 @@
                 lv2:symbol "AMOD_GAIN" ;
                 lv2:name "AM Gain" ;
                 lv2:default 0.10 ;
-                lv2:minimum 0.00 ;
+                lv2:minimum -1.00 ;
                 lv2:maximum 1.00 ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -211,7 +213,7 @@
                 lv2:scalePoint [ rdfs:label "Random"; rdf:value 5 ] ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
-                lv2:maximum 0.0 ;
+                lv2:maximum 5.0 ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 20 ;
@@ -227,6 +229,6 @@
                 lv2:symbol "FMOD_GAIN" ;
                 lv2:name "FM Gain" ;
                 lv2:default 0.10 ;
-                lv2:minimum 0.00 ;
+                lv2:minimum -2.00 ;
                 lv2:maximum 2.00 ;
         ].

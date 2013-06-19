@@ -2,7 +2,6 @@
 //casynth.c
 #include<casynth.h>
 #include<constants.h>
-#include<waves.h>
 #include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
@@ -17,6 +16,8 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
 
     synth->sample_rate = sample_rate;
 
+    init_waves(&(synth->waves));
+
     synth->midi_in_p = NULL;
     synth->nactive = 0;
     synth->nsustained = 0;
@@ -24,6 +25,7 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
     for(i=0;i<127;i++)
     {
         init_note(&(synth->note[i]),
+                  &(synth->waves),
                   sample_rate,
                   i,
                   &(synth->ncells),
@@ -108,8 +110,8 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     short bend;
     bool firstnote = true;
     NOTE* note;
-    double astep = *synth->amod_freq_p/synth->sample_rate;
-    double fstep = *synth->fmod_freq_p/synth->sample_rate;//need to decide where to calculate this. Probably not here.
+    double astep = synth->waves.func_domain*(*synth->amod_freq_p)/synth->sample_rate;
+    double fstep = synth->waves.func_domain*(*synth->fmod_freq_p)/synth->sample_rate;//need to decide where to calculate this. Probably not here.
 
     synth->ncells = *synth->nharmonics_p;
     synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p);
@@ -172,14 +174,12 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                     if(val)
                     {
                         start_note(&(synth->note[num]),
+                                   &(synth->waves),
                                    val,
                                    event->time.frames,
                                    synth->harm_gains,
                                    *synth->init_cells_p,
-                                   synth->envelope,
-                                   *synth->wave_p,
-                                   *synth->amod_wave_p,
-                                   *synth->fmod_wave_p);
+                                   synth->envelope);
                     }
                     else//velocity zero == note off
                     {
@@ -269,13 +269,17 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                     {
                         note = &(synth->note[synth->active[j]]);
                         play_note( note,
+                                   &(synth->waves),
                                    event->time.frames - frame_no -1,//play to frame before event
                                    &(buf[frame_no]),
                                    synth->pitchbend,
                                    *synth->master_gain_p,
                                    (unsigned char)*synth->rule_p,
-                                   astep,
-                                   fstep);
+                                   *synth->wave_p,
+                                   *synth->fmod_wave_p,
+                                   fstep,
+                                   *synth->amod_wave_p,
+                                   astep);
 
                         //cleanup dead notes
                         if(note->note_dead)
@@ -302,13 +306,17 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
         {
             note = &(synth->note[synth->active[j]]);
             play_note( note,
+                       &(synth->waves),
                        nframes - frame_no,
                        &(buf[frame_no]),
                        synth->pitchbend,
                        *synth->master_gain_p,
                        (unsigned char)*synth->rule_p,
-                       astep,
-                       fstep);
+                       *synth->wave_p,
+                       *synth->fmod_wave_p,
+                       fstep,
+                       *synth->amod_wave_p,
+                       astep);
 
             //cleanup dead notes
             if(note->note_dead)

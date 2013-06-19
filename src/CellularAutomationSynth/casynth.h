@@ -12,6 +12,7 @@
 typedef struct _CASYNTH
 {
     double sample_rate;
+    WAVESOURCE waves;
     NOTE note[127];
     unsigned char active[127];
     unsigned char nactive;

@@ -3,7 +3,6 @@
 
 #include<note.h>
 #include<math.h>
-#include<waves.h>
 
 
 //private function prototypes
@@ -27,15 +26,16 @@ void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, unsigned char 
 
     self->nharmonics = nharmonics;
     self->harm_length = harmonic_length;
-    step = (self->base_func_max - self->base_func_min)*(440/sample_rate)*powf(2,(float)(value-69)/12);//leave this using more accurate pow since during init
+    step = (waves->func_domain)*(440/sample_rate)*powf(2,(float)(value-69)/12);//leave this using more accurate pow since during init
     for(i=0;i<MAX_N_HARMONICS;i++)
     {
         self->phase[i] = 0;
         self->step[i] = (i+1)*step;
-
+        init_hysteresis(&(self->hyst[i]));
     }
     self->phase[MAX_N_HARMONICS] = 0;//maxth harmonic is root
     self->step[MAX_N_HARMONICS] = step;
+    init_hysteresis(&(self->hyst[MAX_N_HARMONICS]));
 
     self->env_gain = 0;
     self->note_dead = true;
@@ -48,11 +48,13 @@ void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, unsigned char 
     self->fmod_gain = fmod_gain;//start this at 0
     self->fmod_phase = 0;
     self->fmod_step = 0;
+    init_hysteresis(&(self->fhyst));
 
     self->amod_func = &mySin;
     self->amod_gain = amod_gain;//start this at 0
     self->amod_phase = 0;
     self->amod_step = 0;
+    init_hysteresis(&(self->ahyst));
 }
 
 void start_note(NOTE*           self,
@@ -61,10 +63,7 @@ void start_note(NOTE*           self,
                 uint32_t        start_frame,
                 float           harmonic_gain[],
                 unsigned short  harmonics,
-                float           envelope[],
-                unsigned char   base_wave,
-                unsigned char   amod_wave,
-                unsigned char   fmod_wave)
+                float           envelope[])
 {
     unsigned char i;
     self->velocity = (float)velocity/127;//currently linear which is lame
@@ -112,12 +111,12 @@ void start_note(NOTE*           self,
                 break;
         }
     }*/
-    self->base_func = waves->wave_func[base_wave];
+    //self->base_func = waves->wave_func[base_wave];
 
 
     //modulations
     self->amod_phase = 0;
-    if(self->amod_wave != amod_wave)
+    /*if(self->amod_wave != amod_wave)
     {
         self->amod_wave = amod_wave;
         switch(amod_wave)
@@ -133,10 +132,10 @@ void start_note(NOTE*           self,
                 self->amod_func_max = PI;
                 break;
         }
-    }
+    }*/
 
     self->fmod_phase = 0;
-    if(self->fmod_wave != fmod_wave)
+    /*if(self->fmod_wave != fmod_wave)
     {
         switch(fmod_wave)
         {
@@ -151,18 +150,22 @@ void start_note(NOTE*           self,
                 self->fmod_func_max = PI;
                 break;
         }
-    }
+    }*/
 }
 
 void play_note(NOTE *self,
-              WAVESOURCE* waves,
-              uint32_t nframes,
-              float buffer[],
-              double pitchbend,
-              float gain,
-              unsigned short rule,
-              double amod_step,
-              double fmod_step)
+               WAVESOURCE* waves,
+               uint32_t nframes,
+               float buffer[],
+               double pitchbend,
+               float gain,
+               unsigned short rule,
+               unsigned char base_wave,
+               unsigned char fmod_wave,
+               double fmod_step,
+               unsigned char amod_wave,
+               double amod_step)
+
 {
     unsigned short i;
     unsigned char j;
@@ -250,17 +253,17 @@ void play_note(NOTE *self,
         for(i=start_frame;i<stop_frame;i++ )
         {
             //modulation
-            fmod_coeff = pitchbend*myPow2((*self->fmod_gain)*(self->fmod_func(self->fmod_phase))/12);
-            self->fmod_phase += (self->fmod_func_max - self->fmod_func_min)*fmod_step;
-            if(self->fmod_phase >= self->fmod_func_max)
+            fmod_coeff = pitchbend*myPow2( (*self->fmod_gain) * (waves->wave_func[fmod_wave](waves, &(self->fhyst), self->fmod_phase))/12 );
+            self->fmod_phase += fmod_step;
+            if(self->fmod_phase >= waves->func_max)
             {
-                self->fmod_phase -= self->fmod_func_max - self->fmod_func_min;
+                self->fmod_phase -= waves->func_domain;
             }
-            amod_coeff = 1 + *self->amod_gain*(self->amod_func(self->amod_phase));
-            self->amod_phase += (self->amod_func_max - self->amod_func_min)*amod_step;
-            if(self->amod_phase >= self->amod_func_max)
+            amod_coeff = 1 + *self->amod_gain * (waves->wave_func[amod_wave](waves, &(self->ahyst), self->amod_phase));
+            self->amod_phase += amod_step;
+            if(self->amod_phase >= waves->func_max)
             {
-                self->amod_phase -= self->amod_func_max - self->amod_func_min;
+                self->amod_phase -= waves->func_domain;
             }
 
             self->env_gain += env_slope;
@@ -271,27 +274,18 @@ void play_note(NOTE *self,
             {
                 if(self->harmonic[j])//if cell is alive
                 {
-                    buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                    buffer[i] += (total_gain*self->harm_gain[j]) * (waves->wave_func[base_wave](waves, &(self->hyst[j]), self->phase[j]));
                     self->phase[j] += fmod_coeff*self->step[j];
-                    if(self->phase[j] >= waves->func_max[self->base_wave])
+                    if(self->phase[j] >= waves->func_max)
                     {
-                        self->phase[j] -= waves->func_domain[self->base_wave];
+                        self->phase[j] -= waves->func_domain;
                     }
                 }
                 else if(self->phase[j] != 0 )
                 {
-                    buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
+                    buffer[i] += (total_gain*self->harm_gain[j]) * (waves->wave_func[base_wave](waves, &(self->hyst[j]), self->phase[j]));
                     self->phase[j] += fmod_coeff*self->step[j];
-                    if(self->phase[j] >= self->base_func_max)
-                    {
-                        self->phase[j] = 0;
-                    }
-                }
-                else if(self->phase[j] != 0)
-                {
-                    buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
-                    self->phase[j] += fmod_coeff*self->step[j];
-                    if(self->phase[j] >= self->base_func_max)
+                    if(self->phase[j] >= waves->func_max)
                     {
                         self->phase[j] = 0;
                     }
@@ -299,11 +293,11 @@ void play_note(NOTE *self,
             }
             //now the root
             j = MAX_N_HARMONICS;
-            buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
+            buffer[i] += (total_gain*self->harm_gain[j]) * (waves->wave_func[base_wave](waves, &(self->hyst[j]), self->phase[j]));
             self->phase[j] += fmod_coeff*self->step[j];
-            if(self->phase[j] >= self->base_func_max)
+            if(self->phase[j] >= waves->func_max)
             {
-                self->phase[j] -= self->base_func_max - self->base_func_min;
+                self->phase[j] -= waves->func_domain;
             }
         }
         self->nframes_since_harm_change += chunk;
