@@ -26,6 +26,8 @@ struct _WAVESOURCE
     double tri_table[TABLE_LENGTH];
     double saw_step;
     double half_phase;
+    double phase_coeff;
+    double phase_offset;
 
     double (*wave_func[6])(WAVESOURCE* , HYSTERESIS* , double);
     double (*sin_func)(WAVESOURCE* , HYSTERESIS* , double);

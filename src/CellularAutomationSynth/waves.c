@@ -14,6 +14,8 @@ void init_waves(WAVESOURCE* self)
     double phase = 0;
     self->half_phase = TABLE_LENGTH/2;
     self->saw_step = 2*PI/TABLE_LENGTH;
+    self->phase_coeff = TABLE_LENGTH/(2*PI);
+    self->phase_offset = TABLE_LENGTH/2;
 
     //saw
     for(i=0;i<TABLE_LENGTH;i++)
@@ -62,24 +64,9 @@ void init_waves(WAVESOURCE* self)
     self->wave_func[FUNC_RAND] = self->rand_func;
 
 
-    self->func_max[FUNC_SIN] = PI;
-    self->func_max[FUNC_SAW] = TABLE_LENGTH;
-    self->func_max[FUNC_SQR] = TABLE_LENGTH;
-    self->func_max[FUNC_TRI] = TABLE_LENGTH;
-    self->func_max[FUNC_WHITE] = TABLE_LENGTH;
-    self->func_max[FUNC_RAND] = TABLE_LENGTH;
-
-    self->func_min[FUNC_SIN] = -PI;
-    self->func_min[FUNC_SAW] = 0;
-    self->func_min[FUNC_SQR] = 0;
-    self->func_min[FUNC_TRI] = 0;
-    self->func_min[FUNC_WHITE] = 0;
-    self->func_min[FUNC_RAND] = 0;
-
-    for(i=0;i<6;i++)
-    {
-        self->func_domain[i] = self->func_max[i] - self->func_min[i];
-    }
+    self->func_max = PI;
+    self->func_min = -PI;
+    self->func_domain = self->func_max - self->func_min;
 }
 
 void init_hysteresis(HYSTERESIS *self)

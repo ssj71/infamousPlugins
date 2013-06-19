@@ -10,7 +10,7 @@
 unsigned short torus_of_life(unsigned char rule, unsigned short cells, unsigned char ncells);
 
 
-void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned char* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
+void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, unsigned char value, unsigned char* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
 {
     unsigned char i;
     double step;
@@ -23,9 +23,7 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned cha
 
     //currently hardcoding in function, may use optimised or selectable versions later
     self->base_wave = FUNC_SIN;
-    self->base_func = &mySin;
-    self->base_func_min = -PI;
-    self->base_func_max = PI;
+    self->base_func = waves->wave_func[FUNC_SIN];
 
     self->nharmonics = nharmonics;
     self->harm_length = harmonic_length;
@@ -58,6 +56,7 @@ void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned cha
 }
 
 void start_note(NOTE*           self,
+                WAVESOURCE* waves,
                 unsigned char   velocity,
                 uint32_t        start_frame,
                 float           harmonic_gain[],
@@ -96,7 +95,7 @@ void start_note(NOTE*           self,
         self->envelope[i] = envelope[i];
 
     //waveform
-    if(self->base_wave != base_wave)
+    /*if(self->base_wave != base_wave)
     {
         self->base_wave = base_wave;
         switch(base_wave)
@@ -112,7 +111,9 @@ void start_note(NOTE*           self,
                 self->base_func_max = PI;
                 break;
         }
-    }
+    }*/
+    self->base_func = waves->wave_func[base_wave];
+
 
     //modulations
     self->amod_phase = 0;
@@ -154,6 +155,7 @@ void start_note(NOTE*           self,
 }
 
 void play_note(NOTE *self,
+              WAVESOURCE* waves,
               uint32_t nframes,
               float buffer[],
               double pitchbend,
@@ -270,9 +272,9 @@ void play_note(NOTE *self,
                 {
                     buffer[i] += (total_gain*self->harm_gain[j])*(self->base_func(self->phase[j]));
                     self->phase[j] += fmod_coeff*self->step[j];
-                    if(self->phase[j] >= self->base_func_max)
+                    if(self->phase[j] >= waves->func_max[self->base_wave])
                     {
-                        self->phase[j] -= self->base_func_max - self->base_func_min;
+                        self->phase[j] -= waves->func_domain[self->base_wave];
                     }
                 }
                 else if(self->phase[j] != 0 )
