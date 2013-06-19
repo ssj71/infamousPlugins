@@ -29,7 +29,6 @@ typedef struct _NOTE
     double base_func_min;//domain of function i.e. [-pi,pi]
     double base_func_max;
 
-
     //the envelope transitions are handled through recursing, midi events through multiple calls of play
     float env_gain;
     unsigned char env_state;//0a, 1d, 2b, 3s, 4s, 5r
@@ -53,8 +52,8 @@ typedef struct _NOTE
     double fmod_func_max;
 }NOTE;
 
-void init_note(NOTE *self, double sample_rate, unsigned char value, unsigned char* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain);
-void start_note(NOTE *self, unsigned char velocity, uint32_t start_frame, float harmonic_gain[], unsigned short harmonics, float envelope[], unsigned char base_wave, unsigned char amod_wave, unsigned char fmod_wave);
-void play_note(NOTE *self, uint32_t nframes, float buffer[], double pitchbend, float gain, unsigned short rule, double amod_step, double fmod_step);
+void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, unsigned char value, unsigned char* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain);
+void start_note(NOTE *self, WAVESOURCE* waves, unsigned char velocity, uint32_t start_frame, float harmonic_gain[], unsigned short harmonics, float envelope[], unsigned char base_wave, unsigned char amod_wave, unsigned char fmod_wave);
+void play_note(NOTE *self, WAVESOURCE* waves, uint32_t nframes, float buffer[], double pitchbend, float gain, unsigned short rule, double amod_step, double fmod_step);
 void end_note(NOTE *self, uint32_t release_frame);
 void release(NOTE *self, unsigned short harmonics);
