@@ -5,6 +5,7 @@
 
 @prefix lv2:     <http://lv2plug.in/ns/lv2core#> .
 @prefix lv2ui:   <http://lv2plug.in/ns/extensions/ui#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
 @prefix lv2atom: <http://lv2plug.in/ns/ext/atom#> .
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
@@ -232,3 +233,93 @@
                 lv2:minimum -2.00 ;
                 lv2:maximum 2.00 ;
         ].
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:00Dfault>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "00 Dfault" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:01RawSaw>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "01 RawSaw" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:02RawSqr>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "02 RawSqr" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:03Rule30>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "03 Rule30" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:04Rule110>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "04 Rule110" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:05Chimin>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "05 Chimin" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:06Downer>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "06 Downer" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:07Growe>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "07 Growe" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:08HapE>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "08 HapE" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:09Jangley>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "09 Jangley" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:10Phazour>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "10 Phazour" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:11Phoney>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "11 Phoney" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:12Roar>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "12 Roar" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:13Shiny>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "13 Shiny" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+
+<http://sourceforge.net/projects/infamousplugins:casynth:preset:14Soothe>
+        a pset:Preset ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        rdfs:label "14 Soothe" ;
+        rdfs:seeAlso <casynth_presets.ttl> .

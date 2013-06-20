@@ -22,7 +22,8 @@ HEADERS += \
 OTHER_FILES += \
     notes.txt \
     manifest.ttl \
-    README
+    README \
+    casynth.lv2/casynth_presets.ttl
 
 
 unix {

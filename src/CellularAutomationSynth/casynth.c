@@ -238,7 +238,10 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             //end all sus. notes
                             for(i=0;i<synth->nsustained;i++)
                             {
-                                end_note(&(synth->note[synth->sustained[i]]),event->time.frames);
+                                if(synth->note[synth->sustained[i]].sus)
+                                {
+                                    end_note(&(synth->note[synth->sustained[i]]),event->time.frames);
+                                }
                             }
                             synth->nsustained = 0;
                         }

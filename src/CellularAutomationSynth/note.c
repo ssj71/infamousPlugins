@@ -93,64 +93,9 @@ void start_note(NOTE*           self,
     for(i=0;i<6;i++)
         self->envelope[i] = envelope[i];
 
-    //waveform
-    /*if(self->base_wave != base_wave)
-    {
-        self->base_wave = base_wave;
-        switch(base_wave)
-        {
-            case FUNC_SIN:
-                self->base_func = &sin;
-                self->base_func_min = -PI;
-                self->base_func_max = PI;
-                break;
-            default:
-                self->base_func = &sin;
-                self->base_func_min = -PI;
-                self->base_func_max = PI;
-                break;
-        }
-    }*/
-    //self->base_func = waves->wave_func[base_wave];
-
-
     //modulations
     self->amod_phase = 0;
-    /*if(self->amod_wave != amod_wave)
-    {
-        self->amod_wave = amod_wave;
-        switch(amod_wave)
-        {
-            case FUNC_SIN:
-                self->amod_func = &sin;
-                self->amod_func_min = -PI;
-                self->amod_func_max = PI;
-                break;
-            default:
-                self->amod_func = &sin;
-                self->amod_func_min = -PI;
-                self->amod_func_max = PI;
-                break;
-        }
-    }*/
-
     self->fmod_phase = 0;
-    /*if(self->fmod_wave != fmod_wave)
-    {
-        switch(fmod_wave)
-        {
-            case FUNC_SIN:
-                self->fmod_func = &sin;
-                self->fmod_func_min = -PI;
-                self->fmod_func_max = PI;
-                break;
-            default:
-                self->fmod_func = &sin;
-                self->fmod_func_min = -PI;
-                self->fmod_func_max = PI;
-                break;
-        }
-    }*/
 }
 
 void play_note(NOTE *self,
@@ -307,7 +252,7 @@ void play_note(NOTE *self,
             self->env_state = ENV_RELEASE;
             release_frame = self->release_frame = 0;
         }
-        else if( self->note_dead )
+        if( self->note_dead )
         {
             return;
         }
