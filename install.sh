@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd src/CellularAutomationSynth
+cd src/CellularAutomatonSynth
 qmake 
 make
 gksudo make install

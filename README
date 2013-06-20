@@ -18,16 +18,16 @@ Dependencies:
 Now lets talk about what you're installing:
 
 ==========================================
-1. Cellular Automation Synth
+1. Cellular Automaton Synth
 
-This synthesizer plugin is an additive synthesizer, where 16 harmonics are added according to rules of cellular automation. A rule is created and determines whether a cell will survive, die, or be created based on its previous state and its neighbors. Thus a harmonic will either play or be silent according to its associated cell's state. The 16 cells are on a torus where the ends wrap around to meet, therefore the highest harmonic influences the state of the first harmonic. This synth has no filter, so harmonics must be controlled through the rule and initial condition. To assist in your sound design there is a command line utility included called rule that will print out the cell states in sequence (see rule on line 53).
+This synthesizer plugin is an additive synthesizer, where 16 harmonics are added according to rules of elementary cellular automata. A rule is created and determines whether a cell will survive, die, or be created based on its previous state and its neighbors. Thus a harmonic will either play or be silent according to its associated cell's state. The 16 cells are on a torus where the ends wrap around to meet, therefore the highest harmonic influences the state of the first harmonic. This synth has no filter, so harmonics must be controlled through the rule and initial condition. To assist in your sound design there is a command line utility included called rule that will print out the cell states in sequence (see rule on line 53). For more information regarding Cellular Automaton in general read wikipedia under Elementary Cellular Automaton.
 
 It is unlimitedly polyphonic and has 2 LFOs. It also features an ADBSSR envelope generator for the amplitude envelope.
 
 Parameter Description:
     CHANNEL - Midi channel, set to 0 for all channels
     MASTER_GAIN - total volume
-    RULE - rule for determining next state in cellular automation
+    RULE - rule for determining next state in cellular automaton
     CELL_LIFE - length between cell states
     INIT_CELLS - initial condition of cells when a note is played
     NHARMONICS - number of harmonics added in
@@ -52,7 +52,7 @@ Parameter Description:
 ==========================================
 2. rule
 
-This visulizes cell automation on a torus. Run it by opening a terminal, navigating to the utils folder and run 
+This visulizes cell automata on a torus. Run it by opening a terminal, navigating to the utils folder and run 
 
     ./rule <rule number> <initial condition>
     
