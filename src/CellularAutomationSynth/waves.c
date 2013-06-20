@@ -11,6 +11,7 @@ void init_waves(WAVESOURCE* self)
     unsigned short i =0;
     unsigned char j;
     char k=0;
+    bool even = false;
     double phase = 0;
     self->half_phase = PI;
     self->saw_step = 2*PI/TABLE_LENGTH;
@@ -24,7 +25,7 @@ void init_waves(WAVESOURCE* self)
         k=1;
         for(j=0;j<MAX_N_HARMONICS;j++)
         {
-            self->saw_table[i] += k*sin(phase)/(j+1);
+            self->saw_table[i] += k*sin(j*phase)/(j+1);
             k = -k;
         }
         phase += self->saw_step;
@@ -34,10 +35,13 @@ void init_waves(WAVESOURCE* self)
     for(i=0;i<TABLE_LENGTH;i++)
     {
         self->tri_table[i] = 0;
-        k=1;
+        k=7;
         for(j=0;j<MAX_N_HARMONICS;j++)
         {
-            self->tri_table[i] += k*sin(phase)/((j+1)*(j+1));
+            even = !even;
+            if(even)
+                continue;
+            self->tri_table[i] += k*sin(j*phase)/((j+1)*(j+1));
             k = -k;
         }
         phase += self->saw_step;
@@ -107,7 +111,7 @@ double saw(WAVESOURCE* self, HYSTERESIS* mem, double phase)
     unsigned short hi,lo;
     lo = (unsigned short) phase;
     hi = lo +1;
-    return self->saw_table[lo] + (phase - lo)*(self->saw_table[hi] - self->saw_table[lo])/self->saw_step;
+    return self->saw_table[lo] + (phase - lo)*(self->saw_table[hi] - self->saw_table[lo]);
 }
 
 double square(WAVESOURCE* self, HYSTERESIS* mem, double phase)
@@ -128,7 +132,7 @@ double triangle(WAVESOURCE* self, HYSTERESIS *mem, double phase)
     unsigned short hi,lo;
     lo = (unsigned short) phase;
     hi = lo +1;
-    return self->tri_table[lo] + (phase - lo)*(self->tri_table[hi] - self->tri_table[lo])/self->saw_step;
+    return self->tri_table[lo] + (phase - lo)*(self->tri_table[hi] - self->tri_table[lo]);
 }
 
 //normal distribution approximation calculated by a modified Marsaglia polar method

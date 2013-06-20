@@ -6,7 +6,7 @@
 #include<lv2/lv2plug.in/ns/ext/atom/util.h>
 #include<note.h>
 
-#define CASYNTH_URI "https://sourceforge.net/projects/infamousplugins/"
+#define CASYNTH_URI "http://sourceforge.net/projects/infamousplugins:casynth"
 
 
 typedef struct _CASYNTH
