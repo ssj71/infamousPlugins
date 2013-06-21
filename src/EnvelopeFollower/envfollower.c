@@ -11,43 +11,41 @@
 //main functions
 LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
-    envfollower* plug = malloc(sizeof(envfollower));
+    ENVFOLLOWER* plug = malloc(sizeof(envfollower));
+    LV2_URID_Map *urid_map
     unsigned char i;
 
     plug->sample_rate = sample_rate;
 
-    plug->nsum = 0;
+    plug->peak = 0;
+    plug->rms = 0;
+    plug->nsum = 1;
     plug->sum = 0;
+    plug->previn = 0;
+    plug->prevout = 0;
 
     //get urid map value for midi events
     for (int i = 0; host_features[i]; i++)
     {
         if (strcmp(host_features[i]->URI, LV2_URID__map) == 0)
         {
-            LV2_URID_Map *urid_map = (LV2_URID_Map *) host_features[i]->data;
+            urid_map = (LV2_URID_Map *) host_features[i]->data;
             if (urid_map)
             {
                 plug->midi_event_type = urid_map->map(urid_map->handle, LV2_MIDI__MidiEvent);
-                plug->other_type = urid_map->map(urid_map->handle, LV2_ATOM__Blank);
-                plug->long_type = urid_map->map(urid_map->handle, LV2_ATOM__Long);
-                plug->float_type = urid_map->map(urid_map->handle, LV2_ATOM__Float);
-                plug->time_info_type = urid_map->map(urid_map->handle, LV2_TIME__Position);
-                plug->beatsperbar_type = urid_map->map(urid_map->handle, LV2_TIME__barBeat);
-                plug->bpm_type = urid_map->map(urid_map->handle, LV2_TIME__beatsPerMinute);
-                plug->speed_type = urid_map->map(urid_map->handle, LV2_TIME__speed);
-                plug->frame_type = urid_map->map(urid_map->handle, LV2_TIME__frame);
-                plug->framespersec_type = urid_map->map(urid_map->handle, LV2_TIME__framesPerSecond);
                 break;
             }
         }
     }
+
+    lv2_atom_forge_init(plug->forge,uird_map);
 
     return plug;
 }
 
 void connect_envfollower_ports(LV2_Handle handle, uint32_t port, void *data)
 {
-    envfollower* plug = (envfollower*)handle;
+    ENVFOLLOWER* plug = (envfollower*)handle;
     if(port == INPUT)           plug->input_p = (float*)data;
     else if(port == OUTPUT)     plug->output_p = (float*)data;
     else if(port == MIDI_OUT)   plug->midi_out_p = (LV2_Atom_Sequence*)data;
@@ -64,107 +62,108 @@ void connect_envfollower_ports(LV2_Handle handle, uint32_t port, void *data)
 }
 
 
-static void
-update_position(MidiFilter* self, const LV2_Atom_Object* obj)
-{
-    const MidiFilterURIs* uris = &self->uris;
-
-    // Received new transport position/speed
-    LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
-    LV2_Atom *fps = NULL, *frame = NULL;
-    lv2_atom_object_get(obj,
-    uris->time_barBeat, &beat,
-    uris->time_beatsPerMinute, &bpm,
-    uris->time_speed, &speed,
-    uris->time_frame, &frame,
-    uris->time_fps, &fps,
-    NULL);
-    if (bpm && bpm->type == uris->atom_Float) {
-        // Tempo changed, update BPM
-        self->bpm = ((LV2_Atom_Float*)bpm)->body;
-        self->available_info |= NFO_BPM;
-    }
-    if (speed && speed->type == uris->atom_Float) {
-        // Speed changed, e.g. 0 (stop) to 1 (play)
-        self->speed = ((LV2_Atom_Float*)speed)->body;
-        self->available_info |= NFO_SPEED;
-    }
-    if (beat && beat->type == uris->atom_Float) {
-        const double samples_per_beat = 60.0 / self->bpm * self->samplerate;
-        self->bar_beats = ((LV2_Atom_Float*)beat)->body;
-        self->beat_beats = self->bar_beats - floor(self->bar_beats);
-        self->pos_bbt = self->beat_beats * samples_per_beat;
-        self->available_info |= NFO_BEAT;
-    }
-    if (fps && fps->type == uris->atom_Float) {
-        self->frames_per_second = ((LV2_Atom_Float*)frame)->body;
-        self->available_info |= NFO_FPS;
-    }
-    if (frame && frame->type == uris->atom_Long) {
-        self->pos_frame = ((LV2_Atom_Long*)frame)->body;
-        self->available_info |= NFO_FRAME;
-    }
-}
-
-
 void run_envfollower( LV2_Handle handle, uint32_t nframes)
 {
-    envfollower* plug = (envfollower*)handle;
+    ENVFOLLOWER* plug = (ENVFOLLOWER*)handle;
+    LV2_Atom midiatom;
     u_int32_t i;
-    unsigned char j,k;
-    float* buf = synth->output_p;
-    LV2_Atom_Event event;
-    uint32_t frame_no = 0;
-    unsigned char* message;
-    unsigned char type;
-    unsigned char num, val;
-    short bend;
-    bool firstnote = true;
-    NOTE* note;
-    double astep = synth->waves.func_domain*(*synth->amod_freq_p)/synth->sample_rate;
-    double fstep = synth->waves.func_domain*(*synth->fmod_freq_p)/synth->sample_rate;//need to decide where to calculate this. Probably not here.
+    float *buf = plug->input_p;
+    float mapping = (*plug->max_p - *plug->min_p)/(*plug->saturation_p - *plug->threshold_p);
+    unsigned char msg[3];
 
-    synth->ncells = *synth->nharmonics_p;
-    synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p);
-    synth->amod_g = *synth->amod_gain_p;
-    synth->fmod_g = *synth->fmod_gain_p;
+    //get midi port ready
+    lv2_atom_forge_set_buffer(&plug->forge,(uint8_t*)plug->midi_out_p, plug->midi_out_p->atom.size);
+    lv2_atom_forge_sequence_head(&plug->forge, &plug->frame, 0);
 
-
-    memset(buf,0, sizeof(float)*nframes);//start by filling buffer with 0s, we'll add to this
-
-
-
-    //finish off whatever frames are left
-    if(frame_no != nframes-1)
+    //recalculate filter coefficients as necessary
+    if(plug->atime != *plug->atime_p)
     {
-        //run_active_notes
-        for(j=0;j<synth->nactive;j++)
-        {
-            note = &(synth->note[synth->active[j]]);
-            play_note( note,
-                       &(synth->waves),
-                       nframes - frame_no,
-                       &(buf[frame_no]),
-                       synth->pitchbend,
-                       *synth->master_gain_p,
-                       (unsigned char)*synth->rule_p,
-                       *synth->wave_p,
-                       *synth->fmod_wave_p,
-                       fstep,
-                       *synth->amod_wave_p,
-                       astep);
+        plug->atime = *plug->atime_p;
+        float tmp = 2.2*plug->sample_rate;
+        float den = 2*plug->atime + tmp;
+        plug->up[0] = (2 - plug->sample_rate)*plug->atime/den;
+        plug->up[1] = tmp/den;
+        plug->up[2] = plug->sample_rate*plug->atime/den;
+    }
+    if(plug->dtime != *plug->dtime_p)
+    {
+        plug->dtime = *plug->dtime_p;
+        float tmp = 2.2*plug->sample_rate;
+        float den = 2*plug->dtime + tmp;
+        plug->dn[0] = (2 - plug->sample_rate)*plug->dtime/den;
+        plug->dn[1] = tmp/den;
+        plug->dn[2] = plug->sample_rate*plug->dtime/den;
+    }
 
-            //cleanup dead notes
-            if(note->note_dead)
+    //process data
+    for(i=0;i<nframes;i++)
+    {
+        //get values
+        plug->peak = buf[i]>0?buf[i]:-buf[i];
+        plug->sum += buf[i]*buf[i];
+        plug->rms = sqrt(plug->sum/plug->nsum++);
+
+        plug->prev = plug->current;
+        plug->current = (1 - *plug->peakrms_p)*plug->peak + *plug->peakrms_p*plug->rms;
+
+        if(plug->current >= plug->out)
+        {
+            plug->out = plug->up[0]*plug->out + plug->up[1]*plug->current + plug->up[2]*plug->prev;
+        }
+        else
+        {
+            plug->out = plug->dn[0]*plug->out + plug->dn[1]*plug->current + plug->dn[2]*plug->prev;
+        }
+
+        //now map to the midi values
+        if(plug->out <= *plug->threshold_p)
+        {
+            plug->mout = *plug->min_p;
+        }
+        else if(plug->out >= *plug->saturation_p)
+        {
+            plug->mout = *plug->max_p;
+        }
+        else
+        {
+            plug->mout = mapping*(plug->out - *plug->threshold_p) + *plug->min_p;
+        }
+
+        if(plug->mout!=plug->mprev)
+        {
+            //make event
+           /* void  forge_midimessage(MidiFilter* self,
+            uint32_t tme,
+            const uint8_t* const buffer,
+            uint32_t size)
             {
-                synth->nactive--;
-                for(k=j;k<synth->nactive;k++)
-                {
-                    synth->active[k] = synth->active[k+1];
-                }
-            }
-        }//active notes
-    }//leftovers
+            LV2_Atom midiatom;
+            midiatom.type = self->uris.midi_MidiEvent;
+            midiatom.size = size;
+
+            lv2_atom_forge_frame_time(&self->forge, tme);
+            lv2_atom_forge_raw(&self->forge, &midiatom, sizeof(LV2_Atom));
+            lv2_atom_forge_raw(&self->forge, buffer, size);
+            lv2_atom_forge_pad(&self->forge, sizeof(LV2_Atom) + size);
+            }*/
+            msg[0] = MIDI_CONTROL_CHANGE & (unsigned char)*plug->channel_p;
+            msg[1] = MIDI_DATA_MASK & (unsigned char)*plug->control_p;
+            msg[2] = MIDI_DATA_MASK & plug->mout;
+
+            midiatom.type = plug->midi_event_type;
+            midiatom.size = 3;//midi CC
+            lv2_atom_forge_frame_time(&plug->forge,i);
+            lv2_atom_forge_raw(&plug->forge,&midiatom,sizeof(LV2_Atom));
+            lv2_atom_forge_raw(&plug->forge,msg,3);
+            lv2_atom_forge_pad(&plug->forge,3+sizeof(LV2_Atom));
+
+
+
+        }
+        plug->mprev = plug->mout;
+
+        plug->output_p[i] = buf[i];
+    }
 
 }
 

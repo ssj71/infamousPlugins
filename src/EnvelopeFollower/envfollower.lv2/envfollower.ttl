@@ -11,24 +11,20 @@
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:group:auto>
+<http://sourceforge.net/projects/infamousplugins:casynth:group:audio>
 a param:ControlGroup ;
-lv2:name "Cell Automaton" ;
-lv2:symbol "Cell Automaton" .
+lv2:name "Audio Signal" ;
+lv2:symbol "Audio Signal" .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:group:env>
+<http://sourceforge.net/projects/infamousplugins:casynth:group:midi>
 a param:ControlGroup ;
-lv2:name "Envelope" ;
-lv2:symbol "Envelope" .
+lv2:name "MIDI Signal" ;
+lv2:symbol "MIDI Signal" .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:group:mod>
-a param:ControlGroup ;
-lv2:name "Modulation" ;
-lv2:symbol "Modulation" .
 
-<http://sourceforge.net/projects/infamousplugins:casynth>
-        a lv2:Plugin, lv2:InstrumentPlugin ;
-        doap:name "cellular automaton synth" ;
+<http://sourceforge.net/projects/infamousplugins:envfollower>
+        a lv2:Plugin, lv2:EnvelopePlugin ;
+        doap:name "envelope follower" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://sourceforge.net/projects/infamousplugins/> ;
@@ -37,6 +33,14 @@ lv2:symbol "Modulation" .
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
 
+        lv2:port [
+                a lv2:InputPort, lv2atom:AtomPort ;
+                lv2atom:bufferType lv2atom:Sequence ;
+                lv2atom:supports lv2midi:MidiEvent ;
+                lv2:index 0 ;
+                lv2:symbol "MIDI_IN";
+                lv2:name "MIDI In";
+        ] ;
         lv2:port [
                 a lv2:InputPort, lv2atom:AtomPort ;
                 lv2atom:bufferType lv2atom:Sequence ;

@@ -11,9 +11,10 @@ QMAKE_CFLAGS += -std=c99 \
 
 SOURCES += envfollower.c
 
-HEADERS += envfollower.h
+HEADERS += envfollower.h \
+    constants.h
 
-OTHER_FILES += envfollower.ttl \
+OTHER_FILES += \
     envfollower.lv2/manifest.ttl \
     envfollower.lv2/envfollower.ttl
 

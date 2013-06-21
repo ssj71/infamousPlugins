@@ -10,25 +10,26 @@
 #define ENVFOLLOWER_URI "http://sourceforge.net/projects/infamousplugins:envfollower"
 
 typedef struct _ENVFOLLOWER{
+    float sample_rate;
+
     float peak;
     float rms;
+    float current;
+    float prev;
+    unsigned char mout;
+    unsigned char mprev;
 
     uint64_t nsum;
     double sum;
+    float out;
+
+    float atime;
+    float up[3];
+    float dtime;
+    float dn[3];
 
     //midi stuff
     LV2_URID midi_event_type;
-    LV2_URID other_type;
-    //LV2_URID atom_Sequence;
-    LV2_URID float_type;
-    LV2_URID long_type;
-    LV2_URID time_info_type;
-    LV2_URID beatsperbar_type;
-    LV2_URID bpm_type;
-    LV2_URID speed_type;
-    LV2_URID frame_type;
-    LV2_URID framespersec_type;
-
     LV2_Atom_Forge forge;
     LV2_Atom_Forge_Frame frame;
 
