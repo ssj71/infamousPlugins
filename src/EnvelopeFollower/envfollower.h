@@ -10,10 +10,8 @@
 #define ENVFOLLOWER_URI "http://sourceforge.net/projects/infamousplugins:envfollower"
 
 typedef struct _ENVFOLLOWER{
-    float sample_rate;
+    float sample_time;
 
-    float peak;
-    float rms;
     float current;
     float prev;
     unsigned char mout;
