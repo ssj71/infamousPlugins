@@ -78,16 +78,15 @@ void start_note(NOTE*           self,
     for(i=0;i<MAX_N_HARMONICS;i++)
     {
         self->harm_gain[i] = self->velocity*harmonic_gain[i];
-        self->phase[i] = 0;
         self->harmonic[i] = harmonics&(1<<i);
     }
     //and the root
     i = MAX_N_HARMONICS;
     self->harm_gain[i] = self->velocity*harmonic_gain[i];
-    self->phase[i] = 0;
+    //self->phase[i] = 0;
 
     //envelope
-    self->env_gain = 0;
+    //self->env_gain = 0;
     self->env_state = ENV_ATTACK;
     self->note_dead = false;
     for(i=0;i<6;i++)
@@ -254,6 +253,11 @@ void play_note(NOTE *self,
         }
         if( self->note_dead )
         {
+            for(j=0;j<=*self->nharmonics;j++)
+            {
+                self->phase[j] = 0;
+            }
+            self->env_gain = 0;
             return;
         }
 

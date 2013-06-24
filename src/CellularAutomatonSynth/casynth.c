@@ -134,10 +134,6 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                 {
                     num = message[1]&MIDI_DATA_MASK;
                     val = message[2]&MIDI_DATA_MASK;
-                    if(synth->note[num].note_dead == true)
-                    {
-                        synth->active[synth->nactive++] = num;//push new note onto active stack
-                    }
                     if(firstnote)//only calculate these if there is a note in this period
                     {
                         firstnote = false;
@@ -170,6 +166,25 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                 synth->harm_gains = synth->harm_gain_tri;
                             }
                         }
+                    }
+                    if(synth->note[num].note_dead == true)
+                    {
+                        synth->active[synth->nactive++] = num;//push new note onto active stack
+                    }
+                    else //note still playing, finish the old one
+                    {
+                        play_note( &synth->note[num],
+                                   &(synth->waves),
+                                   event->time.frames - frame_no -1,//play to frame before event
+                                   &(buf[frame_no]),
+                                   synth->pitchbend,
+                                   *synth->master_gain_p,
+                                   (unsigned char)*synth->rule_p,
+                                   *synth->wave_p,
+                                   *synth->fmod_wave_p,
+                                   fstep,
+                                   *synth->amod_wave_p,
+                                   astep);
                     }
                     if(val)
                     {
