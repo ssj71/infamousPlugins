@@ -64,7 +64,8 @@ unix {
         target.path  = $${LV2DIR}/$${NAME}.lv2
         target.files = $${TARGET_LV2} \
                 $${NAME}.lv2/$${NAME}.ttl \
-                $${NAME}.lv2/manifest.ttl
+                $${NAME}.lv2/manifest.ttl \
+                $${NAME}.lv2/$${NAME}_presets.ttl
 
         QMAKE_CLEAN += $${TARGET_LV2}
 }

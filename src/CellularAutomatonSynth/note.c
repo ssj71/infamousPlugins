@@ -73,8 +73,7 @@ void start_note(NOTE*           self,
 
     //harmonics
     self->nframes_since_harm_change = 0;
-    if(harmonics)
-        self->cells = harmonics;
+    self->cells = harmonics;
     for(i=0;i<MAX_N_HARMONICS;i++)
     {
         self->harm_gain[i] = self->velocity*harmonic_gain[i];

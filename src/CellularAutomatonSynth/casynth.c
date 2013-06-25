@@ -167,27 +167,27 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             }
                         }
                     }
-                    if(synth->note[num].note_dead == true)
-                    {
-                        synth->active[synth->nactive++] = num;//push new note onto active stack
-                    }
-                    else //note still playing, finish the old one
-                    {
-                        play_note( &synth->note[num],
-                                   &(synth->waves),
-                                   event->time.frames - frame_no -1,//play to frame before event
-                                   &(buf[frame_no]),
-                                   synth->pitchbend,
-                                   *synth->master_gain_p,
-                                   (unsigned char)*synth->rule_p,
-                                   *synth->wave_p,
-                                   *synth->fmod_wave_p,
-                                   fstep,
-                                   *synth->amod_wave_p,
-                                   astep);
-                    }
                     if(val)
                     {
+                        if(synth->note[num].note_dead == true)
+                        {
+                            synth->active[synth->nactive++] = num;//push new note onto active stack
+                        }
+                        else //note still playing, finish the old one
+                        {
+                            play_note( &synth->note[num],
+                                       &(synth->waves),
+                                       event->time.frames - frame_no,//play to frame before event
+                                       &(buf[frame_no]),
+                                       synth->pitchbend,
+                                       *synth->master_gain_p,
+                                       (unsigned char)*synth->rule_p,
+                                       *synth->wave_p,
+                                       *synth->fmod_wave_p,
+                                       fstep,
+                                       *synth->amod_wave_p,
+                                       astep);//note can't be dead about to start again
+                        }
                         start_note(&(synth->note[num]),
                                    &(synth->waves),
                                    val,
@@ -288,7 +288,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                         note = &(synth->note[synth->active[j]]);
                         play_note( note,
                                    &(synth->waves),
-                                   event->time.frames - frame_no -1,//play to frame before event
+                                   event->time.frames - frame_no,//play to frame before event
                                    &(buf[frame_no]),
                                    synth->pitchbend,
                                    *synth->master_gain_p,
