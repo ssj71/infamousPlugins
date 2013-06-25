@@ -344,6 +344,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                 {
                     synth->active[k] = synth->active[k+1];
                 }
+                j--;//indexes changed
             }
         }//active notes
     }//leftovers
