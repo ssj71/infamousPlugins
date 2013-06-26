@@ -61,6 +61,15 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
             if (urid_map)
             {
                 synth->midi_event_type = urid_map->map(urid_map->handle, LV2_MIDI__MidiEvent);
+                synth->other_type = urid_map->map(urid_map->handle, LV2_ATOM__Blank);
+                synth->long_type = urid_map->map(urid_map->handle, LV2_ATOM__Long);
+                synth->float_type = urid_map->map(urid_map->handle, LV2_ATOM__Float);
+                synth->time_info_type = urid_map->map(urid_map->handle, LV2_TIME__Position);
+                synth->beatsperbar_type = urid_map->map(urid_map->handle, LV2_TIME__barBeat);
+                synth->bpm_type = urid_map->map(urid_map->handle, LV2_TIME__beatsPerMinute);
+                synth->speed_type = urid_map->map(urid_map->handle, LV2_TIME__speed);
+                synth->frame_type = urid_map->map(urid_map->handle, LV2_TIME__frame);
+                synth->framespersec_type = urid_map->map(urid_map->handle, LV2_TIME__framesPerSecond);
                 break;
             }
         }
@@ -96,6 +105,47 @@ void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
     else if(port == FMOD_GAIN)  synth->fmod_gain_p = (float*)data;
     else puts("UNKNOWN PORT YO!!");
 }
+static void
+update_position(MidiFilter* self, const LV2_Atom_Object* obj)
+{
+    const MidiFilterURIs* uris = &self->uris;
+
+    // Received new transport position/speed
+    LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
+    LV2_Atom *fps = NULL, *frame = NULL;
+    lv2_atom_object_get(obj,
+                        uris->time_barBeat, &beat,
+                        uris->time_beatsPerMinute, &bpm,
+                        uris->time_speed, &speed,
+                        uris->time_frame, &frame,
+                        uris->time_fps, &fps,
+                        NULL);
+    if (bpm && bpm->type == uris->atom_Float) {
+        // Tempo changed, update BPM
+        self->bpm = ((LV2_Atom_Float*)bpm)->body;
+        self->available_info |= NFO_BPM;
+    }
+    if (speed && speed->type == uris->atom_Float) {
+        // Speed changed, e.g. 0 (stop) to 1 (play)
+        self->speed = ((LV2_Atom_Float*)speed)->body;
+        self->available_info |= NFO_SPEED;
+    }
+    if (beat && beat->type == uris->atom_Float) {
+       const double samples_per_beat = 60.0 / self->bpm * self->samplerate;
+        self->bar_beats = ((LV2_Atom_Float*)beat)->body;
+        self->beat_beats = self->bar_beats - floor(self->bar_beats);
+        self->pos_bbt = self->beat_beats * samples_per_beat;
+        self->available_info |= NFO_BEAT;
+    }
+    if (fps && fps->type == uris->atom_Float) {
+        self->frames_per_second = ((LV2_Atom_Float*)frame)->body;
+        self->available_info |= NFO_FPS;
+    }
+    if (frame && frame->type == uris->atom_Long) {
+        self->pos_frame = ((LV2_Atom_Long*)frame)->body;
+        self->available_info |= NFO_FRAME;
+    }
+}
 
 void run_casynth( LV2_Handle handle, uint32_t nframes)
 {
@@ -124,82 +174,111 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
 
     LV2_ATOM_SEQUENCE_FOREACH(synth->midi_in_p, event)
     {
-        if (event && event->body.type == synth->midi_event_type)//make sure its a midi event
+        if (event)
         {
-            message = (unsigned char*) LV2_ATOM_BODY(&(event->body));
-            if( !(*synth->channel_p) || ((message[0]&MIDI_CHANNEL_MASK) == (*synth->channel_p)+1) )
+            if(event->body.type == synth->midi_event_type)//make sure its a midi event
             {
-                type = message[0]&MIDI_TYPE_MASK;
-                t = event->time.frames;
-
-                if(type == MIDI_NOTE_ON)
+                message = (unsigned char*) LV2_ATOM_BODY(&(event->body));
+                if( !(*synth->channel_p) || ((message[0]&MIDI_CHANNEL_MASK) == (*synth->channel_p)+1) )
                 {
-                    num = message[1]&MIDI_DATA_MASK;
-                    val = message[2]&MIDI_DATA_MASK;
-                    if(firstnote)//only calculate these if there is a note in this period
-                    {
-                        firstnote = false;
-                        //condition envelope
-                        synth->envelope[ENV_ATTACK] = 1/(float)(*synth->env_a_p*synth->sample_rate);
-                        synth->envelope[ENV_DECAY] = (*synth->env_b_p-1)/(float)(*synth->env_d_p*synth->sample_rate);
-                        synth->envelope[ENV_BREAK] = *synth->env_b_p;
-                        synth->envelope[ENV_SWELL] = (*synth->env_sus_p - *synth->env_b_p)/(float)(*synth->env_swl_p*synth->sample_rate);
-                        synth->envelope[ENV_SUSTAIN] = *synth->env_sus_p;
-                        synth->envelope[ENV_RELEASE] = -(*synth->env_sus_p)/(float)(*synth->env_r_p*synth->sample_rate);
+                    type = message[0]&MIDI_TYPE_MASK;
+                    t = event->time.frames;
 
-                        //set harmonic gains
-                        if(*synth->harmonic_mode_p != synth->harmonic_mode)
-                        {
-                            type = synth->harmonic_mode = *synth->harmonic_mode_p;
-                            if(type == HARMONIC_MODE_SINC)
-                            {
-                                synth->harm_gains = synth->harm_gain_sinc;
-                            }
-                            else if(type == HARMONIC_MODE_SAW)
-                            {
-                                synth->harm_gains = synth->harm_gain_saw;
-                            }
-                            else if(type == HARMONIC_MODE_SQR)
-                            {
-                                synth->harm_gains = synth->harm_gain_sqr;
-                            }
-                            else if(type == HARMONIC_MODE_TRI)
-                            {
-                                synth->harm_gains = synth->harm_gain_tri;
-                            }
-                        }
-                    }
-                    if(val)
+                    if(type == MIDI_NOTE_ON)
                     {
-                        if(synth->note[num].note_dead == true)
+                        num = message[1]&MIDI_DATA_MASK;
+                        val = message[2]&MIDI_DATA_MASK;
+                        if(firstnote)//only calculate these if there is a note in this period
                         {
-                            synth->active[synth->nactive++] = num;//push new note onto active stack
+                            firstnote = false;
+                            //condition envelope
+                            synth->envelope[ENV_ATTACK] = 1/(float)(*synth->env_a_p*synth->sample_rate);
+                            synth->envelope[ENV_DECAY] = (*synth->env_b_p-1)/(float)(*synth->env_d_p*synth->sample_rate);
+                            synth->envelope[ENV_BREAK] = *synth->env_b_p;
+                            synth->envelope[ENV_SWELL] = (*synth->env_sus_p - *synth->env_b_p)/(float)(*synth->env_swl_p*synth->sample_rate);
+                            synth->envelope[ENV_SUSTAIN] = *synth->env_sus_p;
+                            synth->envelope[ENV_RELEASE] = -(*synth->env_sus_p)/(float)(*synth->env_r_p*synth->sample_rate);
+
+                            //set harmonic gains
+                            if(*synth->harmonic_mode_p != synth->harmonic_mode)
+                            {
+                                type = synth->harmonic_mode = *synth->harmonic_mode_p;
+                                if(type == HARMONIC_MODE_SINC)
+                                {
+                                    synth->harm_gains = synth->harm_gain_sinc;
+                                }
+                                else if(type == HARMONIC_MODE_SAW)
+                                {
+                                    synth->harm_gains = synth->harm_gain_saw;
+                                }
+                                else if(type == HARMONIC_MODE_SQR)
+                                {
+                                    synth->harm_gains = synth->harm_gain_sqr;
+                                }
+                                else if(type == HARMONIC_MODE_TRI)
+                                {
+                                    synth->harm_gains = synth->harm_gain_tri;
+                                }
+                            }
                         }
-                        else //note still playing, finish the old one
+                        if(val)
                         {
-                            play_note( &synth->note[num],
+                            if(synth->note[num].note_dead == true)
+                            {
+                                synth->active[synth->nactive++] = num;//push new note onto active stack
+                            }
+                            else //note still playing, finish the old one
+                            {
+                                play_note( &synth->note[num],
+                                           &(synth->waves),
+                                           t - frame_no,//play to frame before event
+                                           &(buf[frame_no]),
+                                           synth->pitchbend,
+                                           *synth->master_gain_p,
+                                           (unsigned char)*synth->rule_p,
+                                           *synth->wave_p,
+                                           *synth->fmod_wave_p,
+                                           fstep,
+                                           *synth->amod_wave_p,
+                                           astep);//note can't be dead about to start again
+                            }
+                            start_note(&(synth->note[num]),
                                        &(synth->waves),
-                                       t - frame_no,//play to frame before event
-                                       &(buf[frame_no]),
-                                       synth->pitchbend,
-                                       *synth->master_gain_p,
-                                       (unsigned char)*synth->rule_p,
-                                       *synth->wave_p,
-                                       *synth->fmod_wave_p,
-                                       fstep,
-                                       *synth->amod_wave_p,
-                                       astep);//note can't be dead about to start again
+                                       val,
+                                       t,
+                                       synth->harm_gains,
+                                       *synth->init_cells_p,
+                                       synth->envelope);
                         }
-                        start_note(&(synth->note[num]),
-                                   &(synth->waves),
-                                   val,
-                                   t,
-                                   synth->harm_gains,
-                                   *synth->init_cells_p,
-                                   synth->envelope);
+                        else//velocity zero == note off
+                        {
+                            for(i=0;i<synth->nactive;i++)
+                            {
+                                if(synth->active[i] == num)
+                                {
+                                    if(synth->sus)
+                                    {
+                                        if(!synth->note[num].sus)
+                                        {
+                                            synth->note[num].sus = true;
+                                            synth->sustained[synth->nsustained++] = num;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if(t == 0)
+                                        {
+                                            t++;
+                                        }
+                                        end_note(&(synth->note[num]),t);
+                                    }
+                                }
+                            }
+                        }
                     }
-                    else//velocity zero == note off
+                    else if(type == MIDI_NOTE_OFF)
                     {
+                        num = message[1]&MIDI_DATA_MASK;
                         for(i=0;i<synth->nactive;i++)
                         {
                             if(synth->active[i] == num)
@@ -222,120 +301,140 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                 }
                             }
                         }
+
                     }
-                }
-                else if(type == MIDI_NOTE_OFF)
-                {
-                    num = message[1]&MIDI_DATA_MASK;
-                    for(i=0;i<synth->nactive;i++)
+                    else if(type == MIDI_CONTROL_CHANGE)
                     {
-                        if(synth->active[i] == num)
+                        num = message[1]&MIDI_DATA_MASK;
+                        if(num == MIDI_SUSTAIN_PEDAL)
                         {
-                            if(synth->sus)
+                            val = message[2]&MIDI_DATA_MASK;
+                            if(val < 64)
                             {
-                                if(!synth->note[num].sus)
+                                synth->sus = false;
+                                //end all sus. notes
+                                for(i=0;i<synth->nsustained;i++)
                                 {
-                                    synth->note[num].sus = true;
-                                    synth->sustained[synth->nsustained++] = num;
+                                    if(synth->note[synth->sustained[i]].sus)
+                                    {
+                                        if(t == 0)
+                                        {
+                                            t++;
+                                        }
+                                        end_note(&(synth->note[synth->sustained[i]]),t);
+                                    }
                                 }
+                                synth->nsustained = 0;
                             }
                             else
+                            {
+                                synth->sus = true;
+                            }
+                        }
+                        else if(num == MIDI_ALL_NOTES_OFF || num == MIDI_ALL_SOUND_OFF)
+                        {
+                            if(event->time.frames == 0)
+                            {
+                                event->time.frames++;
+                            }
+                            for(i=0;i<synth->nactive;i++)
                             {
                                 if(t == 0)
                                 {
                                     t++;
                                 }
+                                num = synth->active[i];
                                 end_note(&(synth->note[num]),t);
-                            }
-                        }
-                    }
 
-                }
-                else if(type == MIDI_CONTROL_CHANGE)
-                {
-                    num = message[1]&MIDI_DATA_MASK;
-                    if(num == MIDI_SUSTAIN_PEDAL)
-                    {
-                        val = message[2]&MIDI_DATA_MASK;
-                        if(val < 64)
-                        {
-                            synth->sus = false;
-                            //end all sus. notes
-                            for(i=0;i<synth->nsustained;i++)
-                            {
-                                if(synth->note[synth->sustained[i]].sus)
-                                {
-                                    if(t == 0)
-                                    {
-                                        t++;
-                                    }
-                                    end_note(&(synth->note[synth->sustained[i]]),t);
-                                }
                             }
+                            synth->nactive = 0;
                             synth->nsustained = 0;
                         }
-                        else
-                        {
-                            synth->sus = true;
-                        }
+
                     }
-                    else if(num == MIDI_ALL_NOTES_OFF || num == MIDI_ALL_SOUND_OFF)
+                    else if(type == MIDI_PITCHBEND)
                     {
-                        if(event->time.frames == 0)
+                        bend = (message[1]&MIDI_DATA_MASK) + ((message[2]&MIDI_DATA_MASK)<<7) - MIDI_PITCH_CENTER;
+                        //run and update current position because this blocks (affects all notes)
+                        //run_active_notes
+                        for(j=0;j<synth->nactive;j++)
                         {
-                            event->time.frames++;
-                        }
-                        for(i=0;i<synth->nactive;i++)
-                        {
-                            if(t == 0)
+                            note = &(synth->note[synth->active[j]]);
+                            play_note( note,
+                                       &(synth->waves),
+                                       t - frame_no,//play to frame before event
+                                       &(buf[frame_no]),
+                                       synth->pitchbend,
+                                       *synth->master_gain_p,
+                                       (unsigned char)*synth->rule_p,
+                                       *synth->wave_p,
+                                       *synth->fmod_wave_p,
+                                       fstep,
+                                       *synth->amod_wave_p,
+                                       astep);
+
+                            //cleanup dead notes
+                            if(note->note_dead)
                             {
-                                t++;
+                                synth->nactive--;
+                                for(k=j;k<synth->nactive;k++)
+                                {
+                                    synth->active[k] = synth->active[k+1];
+                                }
                             }
-                            num = synth->active[i];
-                            end_note(&(synth->note[num]),t);
-
                         }
-                        synth->nactive = 0;
-                        synth->nsustained = 0;
-                    }
+                        synth->pitchbend = myPow2(bend/49152);//49152 is 12*8192/2
+                        frame_no = event->time.frames;
+                    }//message types
+                }//correct channel
+            }//actually midi
+            else if(event->body.type == synth->other_type)
+            {
 
-                }
-                else if(type == MIDI_PITCHBEND)
+                //update_position
                 {
-                    bend = (message[1]&MIDI_DATA_MASK) + ((message[2]&MIDI_DATA_MASK)<<7) - MIDI_PITCH_CENTER;
-                    //run and update current position because this blocks (affects all notes)
-                    //run_active_notes
-                    for(j=0;j<synth->nactive;j++)
-                    {
-                        note = &(synth->note[synth->active[j]]);
-                        play_note( note,
-                                   &(synth->waves),
-                                   t - frame_no,//play to frame before event
-                                   &(buf[frame_no]),
-                                   synth->pitchbend,
-                                   *synth->master_gain_p,
-                                   (unsigned char)*synth->rule_p,
-                                   *synth->wave_p,
-                                   *synth->fmod_wave_p,
-                                   fstep,
-                                   *synth->amod_wave_p,
-                                   astep);
+                    const MidiFilterURIs* uris = &self->uris;
 
-                        //cleanup dead notes
-                        if(note->note_dead)
-                        {
-                            synth->nactive--;
-                            for(k=j;k<synth->nactive;k++)
-                            {
-                                synth->active[k] = synth->active[k+1];
-                            }
-                        }
+                    // Received new transport position/speed
+                    LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
+                    LV2_Atom *fps = NULL, *frame = NULL;
+                    lv2_atom_object_get(event,
+                                        synth->beatsperbar_type, &beat,
+                                        synth->bpm_type, &bpm,
+                                        synth->speed_type, &speed,
+                                        synth->frame_type, &frame,
+                                        synth->framespersec_type, &fps,
+                                        NULL);
+                    if (bpm && bpm->type == uris->atom_Float) {
+                        // Tempo changed, update BPM
+                        self->bpm = ((LV2_Atom_Float*)bpm)->body;
+                        self->available_info |= NFO_BPM;
                     }
-                    synth->pitchbend = myPow2(bend/49152);//49152 is 12*8192/2
-                    frame_no = event->time.frames;
-                }//message types
-            }//correct channel
-        }//actually midi
+                    if (speed && speed->type == uris->atom_Float) {
+                        // Speed changed, e.g. 0 (stop) to 1 (play)
+                        self->speed = ((LV2_Atom_Float*)speed)->body;
+                        self->available_info |= NFO_SPEED;
+                    }
+                    if (beat && beat->type == uris->atom_Float) {
+                       const double samples_per_beat = 60.0 / self->bpm * self->samplerate;
+                        self->bar_beats = ((LV2_Atom_Float*)beat)->body;
+                        self->beat_beats = self->bar_beats - floor(self->bar_beats);
+                        self->pos_bbt = self->beat_beats * samples_per_beat;
+                        self->available_info |= NFO_BEAT;
+                    }
+                    if (fps && fps->type == uris->atom_Float) {
+                        self->frames_per_second = ((LV2_Atom_Float*)frame)->body;
+                        self->available_info |= NFO_FPS;
+                    }
+                    if (frame && frame->type == uris->atom_Long) {
+                        self->pos_frame = ((LV2_Atom_Long*)frame)->body;
+                        self->available_info |= NFO_FRAME;
+                    }
+                }
+
+
+            }//time position
+        }//actually is event
     }//for each event
 
     //finish off whatever frames are left

@@ -37,7 +37,17 @@ typedef struct _CASYNTH
     float fmod_g;
 
     //lv2 stuff
-    uint32_t midi_event_type;
+    LV2_URID midi_event_type;
+    LV2_URID other_type;
+    //LV2_URID atom_Sequence;
+    LV2_URID float_type;
+    LV2_URID long_type;
+    LV2_URID time_info_type;
+    LV2_URID beatsperbar_type;
+    LV2_URID bpm_type;
+    LV2_URID speed_type;
+    LV2_URID frame_type;
+    LV2_URID framespersec_type;
 
     //ports
     LV2_Atom_Sequence* midi_in_p;
