@@ -18,3 +18,4 @@
 #define MIDI_PITCH_CENTER    0x2000
 #define MIDI_SUSTAIN_PEDAL   0x40
 #define MIDI_ALL_NOTES_OFF   123
+#define MIDI_STOP            252

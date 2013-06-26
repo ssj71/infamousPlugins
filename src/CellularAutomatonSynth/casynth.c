@@ -104,6 +104,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     float* buf = synth->output_p;
     LV2_Atom_Event event;
     uint32_t frame_no = 0;
+    uint32_t t = 0;
     unsigned char* message;
     unsigned char type;
     unsigned char num, val;
@@ -129,6 +130,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
             if( !(*synth->channel_p) || ((message[0]&MIDI_CHANNEL_MASK) == (*synth->channel_p)+1) )
             {
                 type = message[0]&MIDI_TYPE_MASK;
+                t = event->time.frames;
 
                 if(type == MIDI_NOTE_ON)
                 {
@@ -177,7 +179,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                         {
                             play_note( &synth->note[num],
                                        &(synth->waves),
-                                       event->time.frames - frame_no,//play to frame before event
+                                       t - frame_no,//play to frame before event
                                        &(buf[frame_no]),
                                        synth->pitchbend,
                                        *synth->master_gain_p,
@@ -191,7 +193,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                         start_note(&(synth->note[num]),
                                    &(synth->waves),
                                    val,
-                                   event->time.frames,
+                                   t,
                                    synth->harm_gains,
                                    *synth->init_cells_p,
                                    synth->envelope);
@@ -212,7 +214,11 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                 }
                                 else
                                 {
-                                    end_note(&(synth->note[num]),event->time.frames);
+                                    if(t == 0)
+                                    {
+                                        t++;
+                                    }
+                                    end_note(&(synth->note[num]),t);
                                 }
                             }
                         }
@@ -235,7 +241,11 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             }
                             else
                             {
-                                end_note(&(synth->note[num]),event->time.frames);
+                                if(t == 0)
+                                {
+                                    t++;
+                                }
+                                end_note(&(synth->note[num]),t);
                             }
                         }
                     }
@@ -255,7 +265,11 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             {
                                 if(synth->note[synth->sustained[i]].sus)
                                 {
-                                    end_note(&(synth->note[synth->sustained[i]]),event->time.frames);
+                                    if(t == 0)
+                                    {
+                                        t++;
+                                    }
+                                    end_note(&(synth->note[synth->sustained[i]]),t);
                                 }
                             }
                             synth->nsustained = 0;
@@ -265,12 +279,20 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             synth->sus = true;
                         }
                     }
-                    else if(num == MIDI_ALL_NOTES_OFF)
+                    else if(num == MIDI_ALL_NOTES_OFF || num == MIDI_ALL_SOUND_OFF)
                     {
+                        if(event->time.frames == 0)
+                        {
+                            event->time.frames++;
+                        }
                         for(i=0;i<synth->nactive;i++)
                         {
+                            if(t == 0)
+                            {
+                                t++;
+                            }
                             num = synth->active[i];
-                            end_note(&(synth->note[num]),event->time.frames);
+                            end_note(&(synth->note[num]),t);
 
                         }
                         synth->nactive = 0;
@@ -288,7 +310,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                         note = &(synth->note[synth->active[j]]);
                         play_note( note,
                                    &(synth->waves),
-                                   event->time.frames - frame_no,//play to frame before event
+                                   t - frame_no,//play to frame before event
                                    &(buf[frame_no]),
                                    synth->pitchbend,
                                    *synth->master_gain_p,

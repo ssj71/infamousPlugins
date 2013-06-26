@@ -245,7 +245,7 @@ void play_note(NOTE *self,
         }
         self->nframes_since_harm_change += chunk;
         start_frame = stop_frame;
-        if( start_frame == release_frame )
+        if( (start_frame == release_frame) && (release_frame != 0))
         {
             self->env_state = ENV_RELEASE;
             release_frame = self->release_frame = 0;
