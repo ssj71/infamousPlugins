@@ -351,38 +351,42 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
             else if(event->body.type == synth->other_type)
             {
                 // Received new transport position/speed
-                LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
-                LV2_Atom *fps = NULL, *frame = NULL;
-                lv2_atom_object_get(event,
-                                    synth->beatsperbar_type, &beat,
-                                    synth->bpm_type, &bpm,
-                                    synth->speed_type, &speed,
-                                    synth->frame_type, &frame,
-                                    synth->framespersec_type, &fps,
-                                    NULL);
+                LV2_Atom_Object *obj = (LV2_Atom_Object*)&event->body;
+                if(obj->body.otype == synth->time_info_type)
+                {
+                    LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
+                    LV2_Atom *fps = NULL, *frame = NULL;
+                    lv2_atom_object_get(obj,
+                                        synth->beatsperbar_type, &beat,
+                                        synth->bpm_type, &bpm,
+                                        synth->speed_type, &speed,
+                                        synth->frame_type, &frame,
+                                        synth->framespersec_type, &fps,
+                                        NULL);
 
-                if (fps && fps->type == synth->float_type) {
-                    synth->sample_rate = ((LV2_Atom_Float*)frame)->body;
-                }
-                if (bpm && bpm->type == synth->float_type) {
-                    // Tempo changed, update BPM
-                    synth->ibpm = 60/(((LV2_Atom_Float*)bpm)->body);
-                    synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p)*synth->ibpm;
-                }
-                /*if (speed && speed->type == synth->float_type) {
-                    // Speed changed, e.g. 0 (stop) to 1 (play)
-                    self->speed = ((LV2_Atom_Float*)speed)->body;
-                }//could use this to end all notes, but midi message is good enough
-                if (beat && beat->type == synth->float_type) {
-                   const double samples_per_beat = 60.0 / self->bpm * self->samplerate;
-                    self->bar_beats = ((LV2_Atom_Float*)beat)->body;
-                    self->beat_beats = self->bar_beats - floor(self->bar_beats);
-                    self->pos_bbt = self->beat_beats * samples_per_beat;
-                }*/
-                /*if (frame && frame->type == synth->long_type) {
-                    self->pos_frame = ((LV2_Atom_Long*)frame)->body;
-                }*/
-            }//time position
+                    if (fps && fps->type == synth->float_type) {
+                        synth->sample_rate = ((LV2_Atom_Float*)frame)->body;
+                    }
+                    if (bpm && bpm->type == synth->float_type) {
+                        // Tempo changed, update BPM
+                        synth->ibpm = 60/(((LV2_Atom_Float*)bpm)->body);
+                        synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p)*synth->ibpm;
+                    }
+                    /*if (speed && speed->type == synth->float_type) {
+                        // Speed changed, e.g. 0 (stop) to 1 (play)
+                        self->speed = ((LV2_Atom_Float*)speed)->body;
+                    }//could use this to end all notes, but midi message is good enough
+                    if (beat && beat->type == synth->float_type) {
+                       const double samples_per_beat = 60.0 / self->bpm * self->samplerate;
+                        self->bar_beats = ((LV2_Atom_Float*)beat)->body;
+                        self->beat_beats = self->bar_beats - floor(self->bar_beats);
+                        self->pos_bbt = self->beat_beats * samples_per_beat;
+                    }*/
+                    /*if (frame && frame->type == synth->long_type) {
+                        self->pos_frame = ((LV2_Atom_Long*)frame)->body;
+                    }*/
+                }//if time position
+            }//if blank type
         }//actually is event
     }//for each event
 
