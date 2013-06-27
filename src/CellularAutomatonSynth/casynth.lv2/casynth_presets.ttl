@@ -21,7 +21,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.25
+                pset:value 0.5
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -86,7 +86,7 @@
 		lv2:symbol "AMOD_WAV" ;
 		pset:value 0.0
 	] , [
-		lv2:symbol "CELL_LIFE" ;
+                lv2:symbol "CELL_LIFE" ;
 		pset:value 10.0
 	] , [
 		lv2:symbol "CHANNEL" ;
@@ -220,7 +220,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.25
+                pset:value 0.5
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -286,7 +286,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.1
+                pset:value 0.2
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -352,7 +352,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.15000001
+                pset:value 0.3
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -418,7 +418,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.5
+                pset:value 1.0
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -484,7 +484,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.1
+                pset:value 0.2
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -550,7 +550,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.05
+                pset:value 0.1
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -616,7 +616,7 @@
 		pset:value 1.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.15000001
+                pset:value 0.3
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -682,7 +682,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.03
+                pset:value 0.06
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -748,7 +748,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.05
+                pset:value 0.1
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -815,7 +815,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.05
+                pset:value 0.1
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -881,7 +881,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 0.005
+                pset:value 0.01
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0
@@ -947,7 +947,7 @@
 		pset:value 0.0
 	] , [
 		lv2:symbol "CELL_LIFE" ;
-		pset:value 1.0
+                pset:value 2.0
 	] , [
 		lv2:symbol "CHANNEL" ;
 		pset:value 0.0

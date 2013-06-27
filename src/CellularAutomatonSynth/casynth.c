@@ -22,6 +22,7 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
     synth->nactive = 0;
     synth->nsustained = 0;
     synth->pitchbend = 1;
+    synth->ibpm = .5;//60/120
     for(i=0;i<127;i++)
     {
         init_note(&(synth->note[i]),
@@ -105,47 +106,6 @@ void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
     else if(port == FMOD_GAIN)  synth->fmod_gain_p = (float*)data;
     else puts("UNKNOWN PORT YO!!");
 }
-static void
-update_position(MidiFilter* self, const LV2_Atom_Object* obj)
-{
-    const MidiFilterURIs* uris = &self->uris;
-
-    // Received new transport position/speed
-    LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
-    LV2_Atom *fps = NULL, *frame = NULL;
-    lv2_atom_object_get(obj,
-                        uris->time_barBeat, &beat,
-                        uris->time_beatsPerMinute, &bpm,
-                        uris->time_speed, &speed,
-                        uris->time_frame, &frame,
-                        uris->time_fps, &fps,
-                        NULL);
-    if (bpm && bpm->type == uris->atom_Float) {
-        // Tempo changed, update BPM
-        self->bpm = ((LV2_Atom_Float*)bpm)->body;
-        self->available_info |= NFO_BPM;
-    }
-    if (speed && speed->type == uris->atom_Float) {
-        // Speed changed, e.g. 0 (stop) to 1 (play)
-        self->speed = ((LV2_Atom_Float*)speed)->body;
-        self->available_info |= NFO_SPEED;
-    }
-    if (beat && beat->type == uris->atom_Float) {
-       const double samples_per_beat = 60.0 / self->bpm * self->samplerate;
-        self->bar_beats = ((LV2_Atom_Float*)beat)->body;
-        self->beat_beats = self->bar_beats - floor(self->bar_beats);
-        self->pos_bbt = self->beat_beats * samples_per_beat;
-        self->available_info |= NFO_BEAT;
-    }
-    if (fps && fps->type == uris->atom_Float) {
-        self->frames_per_second = ((LV2_Atom_Float*)frame)->body;
-        self->available_info |= NFO_FPS;
-    }
-    if (frame && frame->type == uris->atom_Long) {
-        self->pos_frame = ((LV2_Atom_Long*)frame)->body;
-        self->available_info |= NFO_FRAME;
-    }
-}
 
 void run_casynth( LV2_Handle handle, uint32_t nframes)
 {
@@ -165,7 +125,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     double fstep = synth->waves.func_domain*(*synth->fmod_freq_p)/synth->sample_rate;//need to decide where to calculate this. Probably not here.
 
     synth->ncells = *synth->nharmonics_p;
-    synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p);
+    synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p)*synth->ibpm;
     synth->amod_g = *synth->amod_gain_p;
     synth->fmod_g = *synth->fmod_gain_p;
 
@@ -390,49 +350,38 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
             }//actually midi
             else if(event->body.type == synth->other_type)
             {
+                // Received new transport position/speed
+                LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
+                LV2_Atom *fps = NULL, *frame = NULL;
+                lv2_atom_object_get(event,
+                                    synth->beatsperbar_type, &beat,
+                                    synth->bpm_type, &bpm,
+                                    synth->speed_type, &speed,
+                                    synth->frame_type, &frame,
+                                    synth->framespersec_type, &fps,
+                                    NULL);
 
-                //update_position
-                {
-                    const MidiFilterURIs* uris = &self->uris;
-
-                    // Received new transport position/speed
-                    LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
-                    LV2_Atom *fps = NULL, *frame = NULL;
-                    lv2_atom_object_get(event,
-                                        synth->beatsperbar_type, &beat,
-                                        synth->bpm_type, &bpm,
-                                        synth->speed_type, &speed,
-                                        synth->frame_type, &frame,
-                                        synth->framespersec_type, &fps,
-                                        NULL);
-                    if (bpm && bpm->type == uris->atom_Float) {
-                        // Tempo changed, update BPM
-                        self->bpm = ((LV2_Atom_Float*)bpm)->body;
-                        self->available_info |= NFO_BPM;
-                    }
-                    if (speed && speed->type == uris->atom_Float) {
-                        // Speed changed, e.g. 0 (stop) to 1 (play)
-                        self->speed = ((LV2_Atom_Float*)speed)->body;
-                        self->available_info |= NFO_SPEED;
-                    }
-                    if (beat && beat->type == uris->atom_Float) {
-                       const double samples_per_beat = 60.0 / self->bpm * self->samplerate;
-                        self->bar_beats = ((LV2_Atom_Float*)beat)->body;
-                        self->beat_beats = self->bar_beats - floor(self->bar_beats);
-                        self->pos_bbt = self->beat_beats * samples_per_beat;
-                        self->available_info |= NFO_BEAT;
-                    }
-                    if (fps && fps->type == uris->atom_Float) {
-                        self->frames_per_second = ((LV2_Atom_Float*)frame)->body;
-                        self->available_info |= NFO_FPS;
-                    }
-                    if (frame && frame->type == uris->atom_Long) {
-                        self->pos_frame = ((LV2_Atom_Long*)frame)->body;
-                        self->available_info |= NFO_FRAME;
-                    }
+                if (fps && fps->type == synth->float_type) {
+                    synth->sample_rate = ((LV2_Atom_Float*)frame)->body;
                 }
-
-
+                if (bpm && bpm->type == synth->float_type) {
+                    // Tempo changed, update BPM
+                    synth->ibpm = 60/(((LV2_Atom_Float*)bpm)->body);
+                    synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p)*synth->ibpm;
+                }
+                /*if (speed && speed->type == synth->float_type) {
+                    // Speed changed, e.g. 0 (stop) to 1 (play)
+                    self->speed = ((LV2_Atom_Float*)speed)->body;
+                }//could use this to end all notes, but midi message is good enough
+                if (beat && beat->type == synth->float_type) {
+                   const double samples_per_beat = 60.0 / self->bpm * self->samplerate;
+                    self->bar_beats = ((LV2_Atom_Float*)beat)->body;
+                    self->beat_beats = self->bar_beats - floor(self->bar_beats);
+                    self->pos_bbt = self->beat_beats * samples_per_beat;
+                }*/
+                /*if (frame && frame->type == synth->long_type) {
+                    self->pos_frame = ((LV2_Atom_Long*)frame)->body;
+                }*/
             }//time position
         }//actually is event
     }//for each event

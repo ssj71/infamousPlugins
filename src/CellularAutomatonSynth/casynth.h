@@ -4,6 +4,7 @@
 #include<lv2/lv2plug.in/ns/ext/urid/urid.h>
 #include<lv2/lv2plug.in/ns/ext/midi/midi.h>
 #include<lv2/lv2plug.in/ns/ext/atom/util.h>
+#include<lv2/lv2plug.in/ns/ext/time/time.h>
 #include<note.h>
 
 #define CASYNTH_URI "http://sourceforge.net/projects/infamousplugins:casynth"
@@ -19,6 +20,7 @@ typedef struct _CASYNTH
     bool sus;
     unsigned char sustained[127];
     unsigned char nsustained;
+    float ibpm;
 
     double pitchbend;
 
