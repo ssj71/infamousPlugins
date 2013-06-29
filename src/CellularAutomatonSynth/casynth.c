@@ -351,7 +351,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
             else if(event->body.type == synth->other_type)
             {
                 // Received new transport position/speed
-                LV2_Atom_Object *obj = (LV2_Atom_Object*)&event->body;
+                const LV2_Atom_Object *obj = (LV2_Atom_Object*)&event->body;
                 if(obj->body.otype == synth->time_info_type)
                 {
                     LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
@@ -364,10 +364,12 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                         synth->framespersec_type, &fps,
                                         NULL);
 
-                    if (fps && fps->type == synth->float_type) {
+                    if (fps && fps->type == synth->float_type)
+                    {
                         synth->sample_rate = ((LV2_Atom_Float*)frame)->body;
                     }
-                    if (bpm && bpm->type == synth->float_type) {
+                    if (bpm && bpm->type == synth->float_type)
+                    {
                         // Tempo changed, update BPM
                         synth->ibpm = 60/(((LV2_Atom_Float*)bpm)->body);
                         synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p)*synth->ibpm;
