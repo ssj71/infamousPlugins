@@ -42,16 +42,16 @@ LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate,
     {
         if (strcmp(host_features[i]->URI, LV2_URID__map) == 0)
         {
-            urid_map = (LV2_URID_Map *) host_features[i]->data;
-            if (urid_map)
+            plug->urid_map = (LV2_URID_Map *) host_features[i]->data;
+            if (plug->urid_map)
             {
-                plug->midi_event_type = urid_map->map(urid_map->handle, LV2_MIDI__MidiEvent);
+                plug->midi_event_type = plug->urid_map->map(plug->urid_map->handle, LV2_MIDI__MidiEvent);
                 break;
             }
         }
     }
 
-    lv2_atom_forge_init(&plug->forge,urid_map);
+    lv2_atom_forge_init(&plug->forge,plug->urid_map);
 
     return plug;
 }
@@ -127,7 +127,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     //process data
     for(i=0;i<nframes;i++)
     {
-        /*//get values
+        //get values
         peak = buf[i]>0?buf[i]:-buf[i];
         plug->sum += buf[i]*buf[i];
         rms = sqrt(plug->sum/plug->nsum++);
@@ -174,18 +174,18 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
 
 
         }
-        plug->mprev = plug->mout;*/
+        plug->mprev = plug->mout;
 
         plug->output_p[i] = buf[i];
     }
-    msg[0] = MIDI_CONTROL_CHANGE + (unsigned char)0;
+   /* msg[0] = MIDI_CONTROL_CHANGE + (unsigned char)0;
     msg[1] = MIDI_DATA_MASK & (unsigned char)1;
     msg[2] = MIDI_DATA_MASK & 64;
 
     lv2_atom_forge_frame_time(&plug->forge,i);
     lv2_atom_forge_raw(&plug->forge,&midiatom,sizeof(LV2_Atom));
     lv2_atom_forge_raw(&plug->forge,msg,3);
-    lv2_atom_forge_pad(&plug->forge,3+sizeof(LV2_Atom));
+    lv2_atom_forge_pad(&plug->forge,3+sizeof(LV2_Atom));*/
 
 }
 

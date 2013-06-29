@@ -26,7 +26,8 @@ typedef struct _ENVFOLLOWER{
     float dtime;
     float dn[3];
 
-    //midi stuff
+    //midi
+    LV2_URID_Map* urid_map;
     LV2_URID midi_event_type;
     LV2_Atom_Forge forge;
     LV2_Atom_Forge_Frame frame;
