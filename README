@@ -11,7 +11,7 @@ To install, make sure you have the dependencies and then just run the script ins
 This will ask for your password using sudo, so be prepaired. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
 
 Dependencies:
-    qmake
+    qmake (qt4-dev-tools package on ubuntu)
     lv2-dev
     gcc
 
