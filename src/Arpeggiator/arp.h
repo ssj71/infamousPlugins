@@ -36,18 +36,11 @@ typedef struct _ENVFOLLOWER{
     float* input_p;
     float* output_p;
     LV2_Atom_Sequence* midi_out_p;
-    float* ctl_out_p;
 
     float* channel_p;
     float* control_p;
     float* min_p;
     float* max_p;
-    float* rev_p;
-
-    float* cmin_p;
-    float* cmax_p;
-    float* crev_p;
-
     float* peakrms_p;
     float* threshold_p;
     float* saturation_p;
@@ -91,18 +84,13 @@ enum envfollower_ports
     INPUT = 0,
     OUTPUT,
     MIDI_OUT,
-    CTL_OUT,
-    PEAKRMS,
-    THRESHOLD,//5
-    SATURATION,
-    ATIME,
-    DTIME,
     CHANNEL,
-    CONTROL_NO,//10
-    MINV,
+    CONTROL_NO,
+    MINV,//5
     MAXV,
-    REVERSE,
-    CMINV,
-    CMAXV,//15
-    CREVERSE
+    PEAKRMS,
+    THRESHOLD,
+    SATURATION,
+    ATIME,//10
+    DTIME
 };
