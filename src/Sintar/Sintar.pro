@@ -17,7 +17,8 @@ HEADERS += \
     constants.h \
     note.h \
     casynth.h \
-    waves.h
+    waves.h \
+    sstring.h
 
 OTHER_FILES += \
     notes.txt \

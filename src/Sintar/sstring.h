@@ -9,6 +9,16 @@
 #define YOUNGMOD    100//N/m^2
 
 
+typedef struct _BRIDGE
+{
+    float length;
+    float dampning;
+    float spring;
+    float mass;
+    float input_force;
+
+}BRIDGE;
+
 typedef struct _STRING
 {
     float length;
@@ -65,7 +75,16 @@ float calc_string(STRING* self, float inval)
 
 }
 
+//string
 //y(x,t+dt) = g*[y(x+dx,t) + y(x-dx,t)] - a*y(x,t-dt) - Q*[y(x+2dx,t) + y(x-2dx,t) - 4y(x+dx,t) - 4y(x-dx,t) + y(x,t)]
+
+//x < xbridge
+//fstring = mstring*(vstring - vbridge)/dt;
+
+//x > bridge mstring*(vstring - vstrprev)/dt;
+
+//vbridge = (xb - xbprev)/dt;
+//x = 1/k*[ -d*vb - mb*(vb-vbprev)/dt + sum(fstrings)  ]
 calc_string_point(STRING* self, unsigned short pos)
 {
 
