@@ -5,14 +5,20 @@
 #include<lv2/lv2plug.in/ns/ext/midi/midi.h>
 #include<lv2/lv2plug.in/ns/ext/atom/util.h>
 #include<lv2/lv2plug.in/ns/ext/time/time.h>
-#include<note.h>
+#include<sstring.h>
 
-#define CASYNTH_URI "http://sourceforge.net/projects/infamousplugins:casynth"
+#define SINTAR_URI "http://sourceforge.net/projects/infamousplugins:sintar"
 
 
-typedef struct _CASYNTH
+typedef struct _SINTAR
 {
     double sample_rate;
+    STRING main[4];
+    STRING drone[3];
+    STRING sympathetic[13];
+    BRIDGE bridge;
+
+
     WAVESOURCE waves;
     NOTE note[127];
     unsigned char active[127];
@@ -80,33 +86,23 @@ typedef struct _CASYNTH
     float* fmod_gain_p;
 
 
-}CASYNTH;
+}SINTAR;
 
 
 //lv2 stuff
-LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features);
-void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data);
-void run_casynth( LV2_Handle handle, uint32_t nframes);
-void cleanup_casynth(LV2_Handle handle);
+LV2_Handle init_sintar(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features);
+void connect_sintar_ports(LV2_Handle handle, uint32_t port, void *data);
+void run_sintar( LV2_Handle handle, uint32_t nframes);
+void cleanup_sintar(LV2_Handle handle);
 
-/*LV2_Descriptor casynth_Descriptor = {
-.URI="urn:ssj71:plugins:Cellular Automation Synth",
-.instantiate=init_casynth,
-.connect_port=connect_casynth_ports,
-.activate=NULL,
-.run=run_casynth,
-.deactivate=NULL,
-.cleanup=cleanup_casynth,
-.extension_data=NULL,
-};*/
-static const LV2_Descriptor casynth_descriptor={
-    CASYNTH_URI,
-    init_casynth,
-    connect_casynth_ports,
+static const LV2_Descriptor sintar_descriptor={
+    SINTAR_URI,
+    init_sintar,
+    connect_sintar_ports,
     NULL,//activate
-    run_casynth,
+    run_sintar,
     NULL,//deactivate
-    cleanup_casynth,
+    cleanup_sintar,
     NULL//extension
 };
 
@@ -115,7 +111,7 @@ const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {
     switch (index) {
     case 0:
-        return &casynth_descriptor;
+        return &sintar_descriptor;
     default:
         return NULL;
     }

@@ -1,22 +1,53 @@
 //Spencer Jackson
 //casynth.c
-#include<casynth.h>
+#include<sintar.h>
 #include<constants.h>
 #include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
 #include<math.h>
 
+#define MIDDLEC     60
+#define MIDDLEF     65
+#define MIDDLEG     67
+#define MIDDLEB     71
+#define LOWESTNOTE  36
 
 //main functions
-LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
+LV2_Handle init_sintar(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
-    CASYNTH* synth = malloc(sizeof(CASYNTH));
+    SINTAR* synth = malloc(sizeof(SINTAR));
     unsigned char i;
 
     synth->sample_rate = sample_rate;
 
-    init_waves(&(synth->waves));
+    init_bridge(&synth->bridge,sample_rate);
+
+    //many many strings
+    init_string(synth->main[0],synth->bridge,.88, .0003,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF-12-69)/12),sample_rate,.1);//fourth
+    init_string(synth->main[1],synth->bridge,.88, .0004,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC-12-69)/12),sample_rate,.1);
+    init_string(synth->main[2],synth->bridge,.88,.00055,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG-24-69)/12),sample_rate,.1);//down to 5th
+    init_string(synth->main[3],synth->bridge,.88,.00085,2*PI*(440/sample_rate)*powf(2,(float)(LOWESTNOTE-69)/12),sample_rate,.1);//down octave
+
+    init_string(synth->drone[0],synth->bridge,.88,.00027,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG-12-69)/12),sample_rate,.1);//up 5th
+    init_string(synth->drone[1],synth->bridge,.88,.00022,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC   -69)/12),sample_rate,.1);//up octave
+    init_string(synth->drone[2],synth->bridge,.88,.00022,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+12-69)/12),sample_rate,.1);//up 2 octaves
+
+    init_string(synth->sympathetic[0], synth->bridge,.550,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC   -69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[1], synth->bridge,.531,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEB   -69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[2], synth->bridge,.510,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC   -69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[3], synth->bridge,.488,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+2 -69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[4], synth->bridge,.465,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+4 -69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[5], synth->bridge,.440,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF   -69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[6], synth->bridge,.414,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG   -69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[7], synth->bridge,.386,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG+2 -69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[8], synth->bridge,.357,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEB   -69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[9], synth->bridge,.326,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+12-69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[10],synth->bridge,.293,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+14-69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[11],synth->bridge,.258,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+16-69)/12),sample_rate,.1);
+    init_string(synth->sympathetic[12],synth->bridge,.221,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF+12-69)/12),sample_rate,.1);
+
+
 
     synth->midi_in_p = NULL;
     synth->nactive = 0;

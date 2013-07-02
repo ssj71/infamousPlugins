@@ -11,14 +11,18 @@ QMAKE_CFLAGS += -std=c99 \
 
 SOURCES += note.c \
     casynth.c \
-    waves.c
+    waves.c \
+    sstring.c \
+    bridge.c \
+    sintar.c
 
 HEADERS += \
     constants.h \
     note.h \
     casynth.h \
-    waves.h \
-    sstring.h
+    sstring.h \
+    bridge.h \
+    sintar.h
 
 OTHER_FILES += \
     notes.txt \
