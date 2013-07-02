@@ -1,5 +1,6 @@
 //Vibrating string
 #include<math.h>
+#include<stdlib.h>
 
 #define BRIDGELEN   30//mm
 #define CONSTB      .97//from paper
@@ -16,6 +17,10 @@ typedef struct _BRIDGE
     float spring;
     float mass;
     float input_force;
+    float x;
+    float xprev;
+    float v;
+    float vprev;
 
 }BRIDGE;
 
@@ -26,6 +31,8 @@ typedef struct _STRING
     float a,g,Q;
     float dx;
     float dt;
+    float mass;
+    float v;
     unsigned short output;
     unsigned short input;
     float *state;
@@ -50,28 +57,31 @@ Sadjad SIDDIQ
   */
 void init_string(STRING* self, float len, float radius, float freq, float samplerate, float in, float out)
 {
-    float area = 1000*1000*PI*radius*radius;//m^2
+    float area = PI*radius*radius;//m^2
     float den = BRONZEDEN*area;//linear density g/m
-    float tension = den*sqrt(2*freq*len);//N
+    float tension = den*sqrt(2*freq*len)/1000;//N
     float c = sqrt(tension/den);//m/s
     self->length = len;
+    self->mass = len*den/1000;//kg
     self->lbridge = BRIDGELEN;
     self->a = 2*b*d -1;
     self->g = 1-d;
     self->dt = 1/samplerate;
     self->dx = c*self->dt;
     self->Q = YOUNGMOD*area*RGYRATE*RGYRATE/(den*c*c*c*c*slef->dt*self->dt);
-    self->input = in;
+    self->input = (unsigned short)in/self->dx;
     self->output = out;
+    self->state = calloc(0,sizeof(float));
 }
 
 float calc_string(STRING* self, float inval)
 {
+    unsigned short i;
     if(inval)
     {
         self->newstate[input] = inval;
     }
-
+    for(i=0;i++)
 
 }
 
