@@ -11,24 +11,24 @@
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:group:auto>
+<http://sourceforge.net/projects/infamousplugins:sintar:group:auto>
 a param:ControlGroup ;
 lv2:name "Cell Automaton" ;
 lv2:symbol "Cell Automaton" .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:group:env>
+<http://sourceforge.net/projects/infamousplugins:sintar:group:env>
 a param:ControlGroup ;
 lv2:name "Envelope" ;
 lv2:symbol "Envelope" .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:group:mod>
+<http://sourceforge.net/projects/infamousplugins:sintar:group:mod>
 a param:ControlGroup ;
 lv2:name "Modulation" ;
 lv2:symbol "Modulation" .
 
-<http://sourceforge.net/projects/infamousplugins:casynth>
+<http://sourceforge.net/projects/infamousplugins:sintar>
         a lv2:Plugin, lv2:InstrumentPlugin ;
-        doap:name "cellular automaton synth" ;
+        doap:name "SINTAR" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://sourceforge.net/projects/infamousplugins/> ;
@@ -78,7 +78,7 @@ lv2:symbol "Modulation" .
                 lv2:default 30.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 255.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:auto> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 5 ;
@@ -89,7 +89,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.25 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 10.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:auto> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 6 ;
@@ -99,7 +99,7 @@ lv2:symbol "Modulation" .
                 lv2:default 1.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 65535.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:auto> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 7 ;
@@ -109,7 +109,7 @@ lv2:symbol "Modulation" .
                 lv2:default 12.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 16.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:auto> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 8 ;
@@ -123,7 +123,7 @@ lv2:symbol "Modulation" .
                 lv2:default 1.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 3.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:auto> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 9 ;
@@ -139,7 +139,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 5.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:auto> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 10 ;
@@ -149,7 +149,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.10 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 11 ;
@@ -159,7 +159,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.10 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 12 ;
@@ -168,7 +168,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.5 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 13 ;
@@ -178,7 +178,7 @@ lv2:symbol "Modulation" .
                 lv2:default 3.0 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 14 ;
@@ -187,7 +187,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.75 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 15 ;
@@ -197,7 +197,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.1 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 16 ;
@@ -213,7 +213,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 5.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 17 ;
@@ -223,7 +223,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 110.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 18 ;
@@ -232,7 +232,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.10 ;
                 lv2:minimum -1.00 ;
                 lv2:maximum 1.00 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 19 ;
@@ -248,7 +248,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 5.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 20 ;
@@ -258,7 +258,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 110.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 21 ;
@@ -267,95 +267,95 @@ lv2:symbol "Modulation" .
                 lv2:default 0.10 ;
                 lv2:minimum -4.00 ;
                 lv2:maximum 4.00 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:sintar:group:mod> ;
         ].
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:00Dfault>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:00Dfault>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "00 Dfault" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:01RawSaw>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:01RawSaw>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "01 RawSaw" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:02RawSqr>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:02RawSqr>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "02 RawSqr" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:03Rule30>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:03Rule30>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "03 Rule30" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:04Rule110>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:04Rule110>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "04 Rule110" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:05Chimin>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:05Chimin>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "05 Chimin" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:06Downer>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:06Downer>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "06 Downer" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:07Growe>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:07Growe>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "07 Growe" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:08HapE>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:08HapE>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "08 HapE" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:09Jangley>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:09Jangley>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "09 Jangley" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:10Phazour>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:10Phazour>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "10 Phazour" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:11Phoney>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:11Phoney>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "11 Phoney" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:12Roar>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:12Roar>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "12 Roar" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:13Shiny>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:13Shiny>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "13 Shiny" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:14Soothe>
+<http://sourceforge.net/projects/infamousplugins:sintar:preset:14Soothe>
         a pset:Preset ;
-        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+        lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:sintar> ;
         rdfs:label "14 Soothe" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+        rdfs:seeAlso <sintar_presets.ttl> .

@@ -6,6 +6,7 @@
 #include<lv2/lv2plug.in/ns/ext/atom/util.h>
 #include<lv2/lv2plug.in/ns/ext/time/time.h>
 #include<sstring.h>
+#include<stdint.h>
 
 #define SINTAR_URI "http://sourceforge.net/projects/infamousplugins:sintar"
 
@@ -28,6 +29,7 @@ typedef struct _SINTAR
     unsigned char nsustained;
     float ibpm;
 
+    uint32_t nframessince;
     double pitchbend;
 
     unsigned char harmonic_mode;

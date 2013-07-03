@@ -48,6 +48,7 @@ LV2_Handle init_sintar(const LV2_Descriptor *descriptor,double sample_rate, cons
     init_string(synth->sympathetic[12],synth->bridge,.221,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF+12-69)/12),sample_rate,.1);
 
 
+    synth->nframessince = 0;
 
     synth->midi_in_p = NULL;
     synth->nactive = 0;
@@ -140,7 +141,7 @@ void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
 
 void run_casynth( LV2_Handle handle, uint32_t nframes)
 {
-    CASYNTH* synth = (CASYNTH*)handle;
+    SINTAR* synth = (SINTAR*)handle;
     unsigned char i,j,k;
     float* buf = synth->output_p;
     LV2_Atom_Event event;

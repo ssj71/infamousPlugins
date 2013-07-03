@@ -28,7 +28,10 @@ OTHER_FILES += \
     notes.txt \
     manifest.ttl \
     README \
-    casynth.lv2/casynth_presets.ttl
+    casynth.lv2/casynth_presets.ttl \
+    sintar.lv2/sintar.ttl \
+    sintar.lv2/sintar_presets.ttl \
+    sintar.lv2/manifest.ttl
 
 
 unix {
