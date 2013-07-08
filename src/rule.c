@@ -68,7 +68,7 @@ if (argc > 1)
         {
             unsigned int a;
             sscanf(argv[2],"%x",&a);
-            cells = (unsigned long)temp;
+            cells = (unsigned short)a;
         }
         else
         {
