@@ -1,5 +1,5 @@
 //Spencer Jackson
-//casynth.h
+//sintar.h
 #include<lv2.h>
 #include<lv2/lv2plug.in/ns/ext/urid/urid.h>
 #include<lv2/lv2plug.in/ns/ext/midi/midi.h>
@@ -19,9 +19,6 @@ typedef struct _SINTAR
     STRING sympathetic[13];
     BRIDGE bridge;
 
-
-    WAVESOURCE waves;
-    NOTE note[127];
     unsigned char active[127];
     unsigned char nactive;
     bool sus;
@@ -119,7 +116,7 @@ const LV2_Descriptor* lv2_descriptor(uint32_t index)
     }
 }
 
-enum casynth_ports
+enum sintar_ports
 {
     MIDI_IN =0,
     OUTPUT,
