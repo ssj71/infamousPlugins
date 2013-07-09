@@ -1,4 +1,4 @@
-NAME = casynth
+NAME = sintar
 
 TARGET = $${NAME}_lv2
 TEMPLATE = lib
@@ -9,26 +9,21 @@ QMAKE_CFLAGS += -std=c99 \
     -g
 
 
-SOURCES += note.c \
-    casynth.c \
-    waves.c \
+SOURCES += \
+    sintar.c \
     sstring.c \
-    bridge.c \
-    sintar.c
+    bridge.c
 
 HEADERS += \
     constants.h \
-    note.h \
-    casynth.h \
+    sintar.h \
     sstring.h \
-    bridge.h \
-    sintar.h
+    bridge.h
 
 OTHER_FILES += \
     notes.txt \
     manifest.ttl \
     README \
-    casynth.lv2/casynth_presets.ttl \
     sintar.lv2/sintar.ttl \
     sintar.lv2/sintar_presets.ttl \
     sintar.lv2/manifest.ttl

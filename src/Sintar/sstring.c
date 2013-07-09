@@ -45,27 +45,35 @@ Sadjad SIDDIQ
   */
 void init_string(STRING* self, BRIDGE* bridge, float len, float radius, float freq, double samplerate, float in)
 {
+    unsigned short i;
     float area = PI*radius*radius;//m^2
     float den = BRONZEDEN*area;//linear density g/m
     float tension = den*sqrt(2*freq*len)/1000;//N
     float c = sqrt(tension/den);//m/s
+    float b = CONSTB;
+    float d = CONSTD;
     self->bridge = bridge;
     self->length = len;
     self->mass = len*den/1000;//kg
-    self->lbridge = BRIDGELEN;
     self->a = 2*b*d -1;
     self->g = 1-d;
     self->dt = 1/samplerate;
     self->dx = c*self->dt;
-    self->Q = YOUNGMOD*area*RGYRATE*RGYRATE/(den*c*c*c*c*slef->dt*self->dt);
+    self->Q = YOUNGMOD*area*RGYRATE*RGYRATE/(den*c*c*c*c*self->dt*self->dt);
     self->input = (unsigned short)in/self->dx;
-    self->output = out;
+    //self->output = out;
     self->npoints = (unsigned long)len/self->dx;
     self->nbridge = (unsigned short)bridge->length/self->dx;
 
     self->prevstate = calloc(self->npoints,sizeof(float));
     self->state = calloc(self->npoints,sizeof(float));
     self->newstate = calloc(self->npoints,sizeof(float));
+    for(i=0;i<self->npoints;i++)
+    {
+        self->prevstate[i] = 0;
+        self->state[i] = 0;
+        self->newstate[i] = 0;
+    }
 }
 
 float calc_string(STRING* self, float length)
@@ -114,18 +122,14 @@ float calc_string(STRING* self, float length)
                                        - 4*self->state[i-1] - 4*self->state[i+1]
                                        + 6*self->state[i]);
     }
-    self->newstate[i++] = self->g*(self->state[i-1] + self->state[i+1])
+    self->newstate[i] = self->g*(self->state[i-1] + self->state[i+1])
                         - self->a*self->prevstate[i]
                         - self->Q*(self->state[i-2] + 0
                                    - 4*self->state[i-1] - 4*self->state[i+1]
                                    + 6*self->state[i]);//this prevents index out of range
+    i++;
     self->newstate[i] = 0;//endpoint is fixed
 
-    //apply input
-    if(inval)
-    {
-        self->newstate[input] = inval;
-    }
 
     //apply force to bridge
     if(self->newstate[self->nbridge -1] == self->bridge->y)
@@ -134,7 +138,7 @@ float calc_string(STRING* self, float length)
     }
     else
     {
-        newv = (self->self->newstate[self->nbridge -1] - self->prevstate[self->nbridge -1])/self->dt;
+        newv = (self->newstate[self->nbridge -1] - self->prevstate[self->nbridge -1])/self->dt;
     }
     self->bridge->input_force += self->mass*(newv - self->v)/self->dt;
     self->v = newv;
@@ -144,4 +148,11 @@ float calc_string(STRING* self, float length)
     self->prevstate = self->state;
     self->state = self->newstate;
     self->newstate = arrholder;
+}
+
+void cleanup_string(STRING *self)
+{
+    free(self->prevstate);
+    free(self->state);
+    free(self->newstate);
 }

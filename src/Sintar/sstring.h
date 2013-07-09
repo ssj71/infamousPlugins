@@ -26,3 +26,4 @@ typedef struct _STRING
 
 void init_string(STRING* self, BRIDGE* bridge, float len, float radius, float freq, double samplerate, float in);
 float calc_string(STRING* self, float length);
+void cleanup_string(STRING* self);

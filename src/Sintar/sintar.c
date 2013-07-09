@@ -1,8 +1,7 @@
 //Spencer Jackson
-//casynth.c
+//sintar.c
 #include<sintar.h>
 #include<constants.h>
-#include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
 #include<math.h>
@@ -24,32 +23,32 @@ LV2_Handle init_sintar(const LV2_Descriptor *descriptor,double sample_rate, cons
     init_bridge(&synth->bridge,sample_rate);
 
     //many many strings
-    init_string(synth->main[0],synth->bridge,.88, .0003,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF-12-69)/12),sample_rate,.1);//fourth
-    init_string(synth->main[1],synth->bridge,.88, .0004,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC-12-69)/12),sample_rate,.1);
-    init_string(synth->main[2],synth->bridge,.88,.00055,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG-24-69)/12),sample_rate,.1);//down to 5th
-    init_string(synth->main[3],synth->bridge,.88,.00085,2*PI*(440/sample_rate)*powf(2,(float)(LOWESTNOTE-69)/12),sample_rate,.1);//down octave
+    init_string(&synth->main[0],&synth->bridge,.88, .0003,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF-12-69)/12),sample_rate,.1);//fourth
+    init_string(&synth->main[1],&synth->bridge,.88, .0004,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC-12-69)/12),sample_rate,.1);
+    init_string(&synth->main[2],&synth->bridge,.88,.00055,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG-24-69)/12),sample_rate,.1);//down to 5th
+    init_string(&synth->main[3],&synth->bridge,.88,.00085,2*PI*(440/sample_rate)*powf(2,(float)(LOWESTNOTE-69)/12),sample_rate,.1);//down octave
 
-    init_string(synth->drone[0],synth->bridge,.88,.00027,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG-12-69)/12),sample_rate,.1);//up 5th
-    init_string(synth->drone[1],synth->bridge,.88,.00022,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC   -69)/12),sample_rate,.1);//up octave
-    init_string(synth->drone[2],synth->bridge,.88,.00022,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+12-69)/12),sample_rate,.1);//up 2 octaves
+    init_string(&synth->drone[0],&synth->bridge,.88,.00027,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG-12-69)/12),sample_rate,.1);//up 5th
+    init_string(&synth->drone[1],&synth->bridge,.88,.00022,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC   -69)/12),sample_rate,.1);//up octave
+    init_string(&synth->drone[2],&synth->bridge,.88,.00022,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+12-69)/12),sample_rate,.1);//up 2 octaves
 
-    init_string(synth->sympathetic[0], synth->bridge,.550,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC   -69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[1], synth->bridge,.531,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEB   -69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[2], synth->bridge,.510,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC   -69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[3], synth->bridge,.488,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+2 -69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[4], synth->bridge,.465,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+4 -69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[5], synth->bridge,.440,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF   -69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[6], synth->bridge,.414,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG   -69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[7], synth->bridge,.386,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG+2 -69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[8], synth->bridge,.357,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEB   -69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[9], synth->bridge,.326,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+12-69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[10],synth->bridge,.293,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+14-69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[11],synth->bridge,.258,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+16-69)/12),sample_rate,.1);
-    init_string(synth->sympathetic[12],synth->bridge,.221,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF+12-69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[0], &synth->bridge,.550,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC   -69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[1], &synth->bridge,.531,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEB   -69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[2], &synth->bridge,.510,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC   -69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[3], &synth->bridge,.488,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+2 -69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[4], &synth->bridge,.465,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+4 -69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[5], &synth->bridge,.440,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF   -69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[6], &synth->bridge,.414,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG   -69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[7], &synth->bridge,.386,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG+2 -69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[8], &synth->bridge,.357,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEB   -69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[9], &synth->bridge,.326,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+12-69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[10],&synth->bridge,.293,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+14-69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[11],&synth->bridge,.258,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+16-69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[12],&synth->bridge,.221,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF+12-69)/12),sample_rate,.1);
 
 
     synth->nframessince = 0;
-
+/*
     synth->midi_in_p = NULL;
     synth->nactive = 0;
     synth->nsustained = 0;
@@ -107,13 +106,13 @@ LV2_Handle init_sintar(const LV2_Descriptor *descriptor,double sample_rate, cons
             }
         }
     }
-
+*/
     return synth;
 }
 
-void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
+void connect_sintar_ports(LV2_Handle handle, uint32_t port, void *data)
 {
-    CASYNTH* synth = (CASYNTH*)handle;
+    SINTAR* synth = (SINTAR*)handle;
     if(port == MIDI_IN)         synth->midi_in_p = (LV2_Atom_Sequence*)data;
     else if(port == OUTPUT)     synth->output_p = (float*)data;
     else if(port == CHANNEL)    synth->channel_p = (float*)data;
@@ -139,7 +138,7 @@ void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
     else puts("UNKNOWN PORT YO!!");
 }
 
-void run_casynth( LV2_Handle handle, uint32_t nframes)
+void run_sintar( LV2_Handle handle, uint32_t nframes)
 {
     SINTAR* synth = (SINTAR*)handle;
     unsigned char i,j,k;
@@ -152,10 +151,35 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     unsigned char num, val;
     short bend;
     bool firstnote = true;
-    NOTE* note;
-    double astep = synth->waves.func_domain*(*synth->amod_freq_p)/synth->sample_rate;
-    double fstep = synth->waves.func_domain*(*synth->fmod_freq_p)/synth->sample_rate;//need to decide where to calculate this. Probably not here.
+    //double astep = synth->waves.func_domain*(*synth->amod_freq_p)/synth->sample_rate;
+    //double fstep = synth->waves.func_domain*(*synth->fmod_freq_p)/synth->sample_rate;//need to decide where to calculate this. Probably not here.
 
+    for(t=0;t<nframes;t++)
+    {
+        for(i=0;i<13;i++)
+        {
+            calc_string(&synth->sympathetic[i],0);
+        }
+        for(i=0;i<3;i++)
+        {
+            calc_string(&synth->drone[i],0);
+        }
+        for(i=0;i<4;i++)
+        {
+            calc_string(&synth->main[i],0);
+        }
+        if(synth->nframessince++ > 44100*5)
+        {
+            synth->main[0].state[synth->main[0].input] +=.001;
+        }
+
+
+        update_bridge(&synth->bridge);
+        buf[t] = synth->bridge.y*333.333;//3mm = saturation
+
+    }
+    return;
+/*
     synth->ncells = *synth->nharmonics_p;
     synth->cell_lifetime = synth->sample_rate*(*synth->cell_life_p)*synth->ibpm;
     synth->amod_g = *synth->amod_gain_p;
@@ -418,7 +442,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                     }*/
                     /*if (frame && frame->type == synth->long_type) {
                         self->pos_frame = ((LV2_Atom_Long*)frame)->body;
-                    }*/
+                    }
                 }//if time position
             }//if blank type
         }//actually is event
@@ -456,13 +480,26 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
             }
         }//active notes
     }//leftovers
-
+*/
 }
 
 
-void cleanup_casynth(LV2_Handle handle)
+void cleanup_sintar(LV2_Handle handle)
 {
-    CASYNTH* synth = (CASYNTH*) handle;
+    SINTAR* synth = (SINTAR*) handle;
+    unsigned char i;
+    for(i=0;i<13;i++)
+    {
+        cleanup_string(&synth->sympathetic[i]);
+    }
+    for(i=0;i<3;i++)
+    {
+        cleanup_string(&synth->drone[i]);
+    }
+    for(i=0;i<4;i++)
+    {
+        cleanup_string(&synth->main[i]);
+    }
     free(synth);
 }
 

@@ -16,8 +16,8 @@ void init_bridge(BRIDGE* self, double samplerate)
     self->c2 = -BSPRING/BMASS;
     self->c3 = 1/BMASS;
     self->length = BRIDGELEN;
-    self->dampning = BDAMP;
-    self->spring = 1/BSPRING;
+    //self->dampning = BDAMP;
+    //self->spring = 1/BSPRING;
     self->input_force = 0;
     self->y = 0;
     self->v = 0;
