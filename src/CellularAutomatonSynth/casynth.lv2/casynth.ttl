@@ -10,6 +10,7 @@
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix param: <http://lv2plug.in/ns/ext/parameters#> .
 
 <http://sourceforge.net/projects/infamousplugins:casynth:group:auto>
 a param:ControlGroup ;
