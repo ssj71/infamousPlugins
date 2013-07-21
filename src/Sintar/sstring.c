@@ -45,7 +45,7 @@ Sadjad SIDDIQ
   */
 void init_string(STRING* self, BRIDGE* bridge, float len, float radius, float freq, double samplerate, float in)
 {
-    unsigned short i;
+    unsigned long i;
     float area = PI*radius*radius;//m^2
     float den = BRONZEDEN*area;//linear density g/m
     float tension = den*sqrt(2*freq*len)/1000;//N
@@ -62,8 +62,8 @@ void init_string(STRING* self, BRIDGE* bridge, float len, float radius, float fr
     self->Q = YOUNGMOD*area*RGYRATE*RGYRATE/(den*c*c*c*c*self->dt*self->dt);
     self->input = (unsigned short)in/self->dx;
     //self->output = out;
-    self->npoints = (unsigned long)len/self->dx;
-    self->nbridge = (unsigned short)bridge->length/self->dx;
+    self->npoints = len/self->dx;
+    self->nbridge = (unsigned short)(bridge->length/self->dx);
 
     self->prevstate = calloc(self->npoints,sizeof(float));
     self->state = calloc(self->npoints,sizeof(float));
@@ -78,7 +78,7 @@ void init_string(STRING* self, BRIDGE* bridge, float len, float radius, float fr
 
 float calc_string(STRING* self, float length)
 {
-    unsigned short i;
+    unsigned long i;
     float next;
     float bridgedy = self->dx*self->bridge->y/self->bridge->length;
     float* arrholder;

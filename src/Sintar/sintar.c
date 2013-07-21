@@ -24,7 +24,7 @@ LV2_Handle init_sintar(const LV2_Descriptor *descriptor,double sample_rate, cons
 
     //many many strings
     init_string(&synth->main[0],&synth->bridge,.88, .0003,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF-12-69)/12),sample_rate,.1);//fourth
-    init_string(&synth->main[1],&synth->bridge,.88, .0004,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC-12-69)/12),sample_rate,.1);
+   /* init_string(&synth->main[1],&synth->bridge,.88, .0004,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC-12-69)/12),sample_rate,.1);
     init_string(&synth->main[2],&synth->bridge,.88,.00055,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEG-24-69)/12),sample_rate,.1);//down to 5th
     init_string(&synth->main[3],&synth->bridge,.88,.00085,2*PI*(440/sample_rate)*powf(2,(float)(LOWESTNOTE-69)/12),sample_rate,.1);//down octave
 
@@ -44,7 +44,7 @@ LV2_Handle init_sintar(const LV2_Descriptor *descriptor,double sample_rate, cons
     init_string(&synth->sympathetic[9], &synth->bridge,.326,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+12-69)/12),sample_rate,.1);
     init_string(&synth->sympathetic[10],&synth->bridge,.293,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+14-69)/12),sample_rate,.1);
     init_string(&synth->sympathetic[11],&synth->bridge,.258,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEC+16-69)/12),sample_rate,.1);
-    init_string(&synth->sympathetic[12],&synth->bridge,.221,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF+12-69)/12),sample_rate,.1);
+    init_string(&synth->sympathetic[12],&synth->bridge,.221,.00013,2*PI*(440/sample_rate)*powf(2,(float)(MIDDLEF+12-69)/12),sample_rate,.1);*/
 
 
     synth->nframessince = 0;
@@ -156,7 +156,7 @@ void run_sintar( LV2_Handle handle, uint32_t nframes)
 
     for(t=0;t<nframes;t++)
     {
-        for(i=0;i<13;i++)
+       /* for(i=0;i<13;i++)
         {
             calc_string(&synth->sympathetic[i],0);
         }
@@ -167,7 +167,8 @@ void run_sintar( LV2_Handle handle, uint32_t nframes)
         for(i=0;i<4;i++)
         {
             calc_string(&synth->main[i],0);
-        }
+        }*/
+        calc_string(&synth->main[0],0);
         if(synth->nframessince++ > 44100*5)
         {
             synth->main[0].state[synth->main[0].input] +=.001;
