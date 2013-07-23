@@ -115,13 +115,13 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
     int n;
     QSize p;
 
-    for (int i = 0;i<fx.controls;i++)
+/*    for (int i = 0;i<fx.controls;i++)
     {
         ctl = fx.control[i];
         this->AddControl(ctl->type,ctl->parameter,ctl->x,ctl->y,ctl->w,ctl->h,ctl->filename[0],ctl->filename[1],ctl->filename[2],ctl->filename[3]);
     }
-
-    int l;
+*/
+    int l, theta;
     QString tmp;
     QString previousFiles[4] = {"","","",""};
     QFile file(skinfile);
@@ -165,10 +165,44 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
                 currentctl->type = word.at(0);
                 tmp = word.at(1);
                 currentctl->parameter = tmp.remove(0,1);
-                currentctl->x = word.at(2).toInt();
-                currentctl->y = word.at(3).toInt();
-                currentctl->w = word.at(4).toInt();
-                currentctl->h = word.at(5).toInt();
+                dimensions.setX(word.at(2).toInt());
+                dimensions.setY(word.at(3).toInt());
+                dimensions.setWidth(word.at(4).toInt());
+                dimensions.setHeight(word.at(5).toInt());
+                if(word.at(6).toInt() == 0 && word.at(6).toLower().endsWith(".svg"))
+                {//no theta (rotation)
+                    theta = 0;
+                    if (word.at(6).isEmpty())
+                    {
+                        for (int j=0;j<4;j++)
+                            currentctl->filename[j] = previousFiles[j];//if no files specified presume previous
+                    }
+                    else
+                    {
+                        for (int j=6;j<l;j++)
+                        {
+                            tmp = word.at(j);
+                            currentctl->filename[j-6] = previousFiles[j-6] = folder + tmp.remove(0,1);
+                        }
+                    }
+                }
+                else
+                {//theta
+                    theta = word.at(6).toInt();
+                    if (word.at(7).isEmpty())
+                    {
+                        for (int j=0;j<4;j++)
+                            currentctl->filename[j] = previousFiles[j];//if no files specified presume previous
+                    }
+                    else
+                    {
+                        for (int j=7;j<l;j++)
+                        {
+                            tmp = word.at(j);
+                            currentctl->filename[j-7] = previousFiles[j-7] = folder + tmp.remove(0,1);
+                        }
+                    }
+                }
                 if (word.at(6).isEmpty())
                 {
                     for (int j=0;j<4;j++)
@@ -182,6 +216,8 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
                         currentctl->filename[j-6] = previousFiles[j-6] = folder + tmp.remove(0,1);
                     }
                 }
+                this->AddControl(ctl->type,ctl->parameter,ctl->x,ctl->y,ctl->w,ctl->h,ctl->filename[0],ctl->filename[1],ctl->filename[2],ctl->filename[3]);
+
 
                 line = in.readLine().section(';',0,0);
                 word = line.split(",",QString::SkipEmptyParts,Qt::CaseInsensitive);
