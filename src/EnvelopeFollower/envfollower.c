@@ -141,7 +141,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
         //get values
         peak = buf[i]>0?buf[i]:-buf[i];
         plug->sum += buf[i]*buf[i];
-        rms = sqrt(plug->sum/plug->nsum++);
+        rms = sqrt(plug->sum/(double)plug->nsum++);
 
         plug->prev = plug->current;
         plug->current = (1 - *plug->peakrms_p)*peak + *plug->peakrms_p*rms;
@@ -213,6 +213,9 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
         *plug->ctl_out_p = *plug->cmax_p - *plug->ctl_out_p + *plug->cmin_p;
     }
 
+    //rms should be of partial signal, this is a poor way of doing it
+    plug->sum = rms;
+    plug->nsum = 1;
 }
 
 
