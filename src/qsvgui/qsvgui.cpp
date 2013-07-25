@@ -121,9 +121,10 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
         this->AddControl(ctl->type,ctl->parameter,ctl->x,ctl->y,ctl->w,ctl->h,ctl->filename[0],ctl->filename[1],ctl->filename[2],ctl->filename[3]);
     }
 */
-    int l, theta;
+    int l, theta, lncntr = 0;
     QString tmp;
     QString previousFiles[4] = {"","","",""};
+    QString currentFiles[4] = {"","","",""};
     QFile file(skinfile);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
              return;
@@ -137,6 +138,7 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
 
     while (!in.atEnd())// go till eof
     {
+        lncntr++;
         line = in.readLine().section(';',0,0);
         word = line.split(",",QString::SkipEmptyParts,Qt::CaseInsensitive);
         l = word.length();
@@ -155,6 +157,7 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
             mywidth = p.width();
 
 
+            lncntr++;
             line = in.readLine().section(';',0,0);
             word = line.split(",",QString::SkipEmptyParts,Qt::CaseInsensitive);
             l = word.length();
@@ -175,14 +178,14 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
                     if (word.at(6).isEmpty())
                     {
                         for (int j=0;j<4;j++)
-                            currentctl->filename[j] = previousFiles[j];//if no files specified presume previous
+                            currentFiles[j] = previousFiles[j];//if no files specified presume previous
                     }
                     else
                     {
                         for (int j=6;j<l;j++)
                         {
                             tmp = word.at(j);
-                            currentctl->filename[j-6] = previousFiles[j-6] = folder + tmp.remove(0,1);
+                            currentFiles[j-6] = previousFiles[j-6] = folder + tmp.remove(0,1);
                         }
                     }
                 }
@@ -203,20 +206,12 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
                         }
                     }
                 }
-                if (word.at(6).isEmpty())
-                {
-                    for (int j=0;j<4;j++)
-                        currentctl->filename[j] = previousFiles[j];//if no files specified presume previous
+
+                //now all the data is loaded, lets add the control
+                if(0 != this->AddControl(ctl->type,ctl->parameter,ctl->x,ctl->y,ctl->w,ctl->h,ctl->filename[0],ctl->filename[1],ctl->filename[2],ctl->filename[3]))
+                {//error
+
                 }
-                else
-                {
-                    for (int j=6;j<l;j++)
-                    {
-                        tmp = word.at(j);
-                        currentctl->filename[j-6] = previousFiles[j-6] = folder + tmp.remove(0,1);
-                    }
-                }
-                this->AddControl(ctl->type,ctl->parameter,ctl->x,ctl->y,ctl->w,ctl->h,ctl->filename[0],ctl->filename[1],ctl->filename[2],ctl->filename[3]);
 
 
                 line = in.readLine().section(';',0,0);
