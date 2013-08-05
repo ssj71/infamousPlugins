@@ -1,0 +1,536 @@
+//Spencer Jackson
+//square.c
+#include<lv2.h>
+
+#define HIP2B_URI "http://sourceforge.net/projects/infamousplugins:hip2b"
+
+#define UP      1
+#define DOWN    -1
+#define NHARMONICS 16
+#define HALF    8
+
+
+#define CIRCULATE(val) val<NHARMONICS?val:0
+
+
+typedef struct _SQUARE
+{
+    char step;
+    char state;
+    char pos;
+//    unsigned long gap;
+//    unsigned long outpos;
+    float table[HALF+1];//one quarter of a square wave
+//    unsigned char latency;
+//    float prevn[HALF];
+    
+    //new way
+    float circularbuffer[NHARMONICS];
+    unsigned char w,r,c;//read, write & check pointers
+    unsigned char headway;//distance to next transition
+    
+    float *input_p;
+    float *output_p;
+    float *latency_p;
+    float *up_p;
+    float *down_p;
+    float *ingain_p;
+    float *wetdry_p;
+}SQUARE;
+
+enum square_ports
+{
+    IN =0,
+    OUT,
+    LATENCY,
+    UPP,
+    DOWNN,
+    INGAIN,
+    WETDRY
+};
+
+//starting again.
+//just look 1 transition ahead, keep track of space to next trans.
+//circular buffer holds input*gain
+//index c (check) is always the transition or the lookahead limit
+void run_square(LV2_Handle handle, uint32_t nframes)
+{
+    SQUARE* plug = (SQUARE*)handle;
+    uint32_t i;
+    unsigned char j, w, r, c;
+    w = plug->w;
+    r = plug->r;
+    c = plug->c;
+    for(i=0;i<nframes;i++)
+    {
+        //fill buffer
+        plug->circularbuf[w++] = plug->ingain_p*plug->input_p[i];
+        CIRCULATE(w);
+        
+        //at this point, headway is known, pos is prev. value, step is current
+        //1 write buffer, 2 update pos 3. write out, 4 update headway
+        //change position
+        if(plug->headway == 0)
+        {//on the transition point, search for next one
+            plug->pos = plug->headway;
+            //update headway
+            for(j=0;j<=HALF;j++)
+            {
+                if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p)
+                {
+                    CIRCULATE(++c);
+                    plug->state = DOWN;
+                    break;
+                }   
+                else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
+                {
+                    CIRCULATE(++c);
+                    plug->state = UP;
+                    break;
+                }
+                else CIRCULATE(++c);
+            }
+            plug->headway = j;
+            plug->step = 1;
+        }
+        else if(plug->headway < plug->pos)
+        {//need to start decrementing
+            plug->pos = plug->headway;
+            //update headway
+            plug->headway--;
+        }
+        else if(plug->headway > HALF)
+        {//increment to end of table and stay, check for headway change
+            plug->pos += plug->step;
+            if(plug->pos == HALF)
+            {
+                plug->step = 0;
+            }
+            //update headway
+            if( (plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p)//c should == w-1
+               || (plug->state != UP && plug->circularbuf[c] >= *plug->up_p))
+            {
+                plug->headway = HALF;
+            }
+            CIRCULATE(++c);
+            
+        }
+        else
+        {//know headway, increment pos, dec. headway
+            plug->pos += plug->step;
+            //update headway
+            plug->headway--;
+        }
+        
+        //write out the frame
+        plug->output_p[i] = (1-plug->wetdry_p)*plug->circularbuf[r++] + plug->wetdry_p*plug->state*plug->table[plug->pos];
+        CIRCULATE(r);
+    }
+    plug->latency_p = HALF;
+    plug->w = w;
+    plug->r = r;
+    plug->c = c;
+}
+
+void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
+{
+    SQUARE* plug = malloc(sizeof(SQUARE));
+
+    unsigned char i,j;
+    char k;
+    double s = PI/NHARMONICS;
+    
+    for(i=0;i<=HALF;i++)
+    {
+        plug->table[i] = 0;
+    }
+    k=1;
+    for(i=1;i<=NHARMONICS;i+=2)//harmonics
+    {
+        for(j=0;j<=HALF;i++)//samples
+        {
+            plug->table[HALF-j] -= k/(i)*sin(PI/2 + i*j*s);
+        }
+        k = -k;
+    }
+    
+    plug->pos = 0;
+    plug->step = 0;
+    plug->state = 0;
+    plug->headway = 0;
+    
+    plug->w = HALF;
+    plug->r = 0;
+    plug->c = 0;
+    
+    for(i=0;i<NHARMONICS;i++)
+    {
+        plug->circularbuffer[i] = 0;
+    }
+}
+void connect_square_ports(LV2_Handle handle, uint32_t port, void *data)
+{
+    SQUARE* plug = (SQUARE*)handle;
+    switch(port)
+    {
+    case IN:      plug->input_p = (float*)data;break;
+    case OUT:     plug->output_p = (float*)data;break;
+    case LATENCY: plug->latency_p = (float*)data;break;
+    case UPP:     plug->up_p = (float*)data;break;
+    case DOWNN:   plug->down_p = (float*)data;break;
+    case INGAIN:  plug->ingain_p = (float*)data;break;
+    case WETDRY:  plug->wetdry_p = (float*)data;break;
+    default:      puts("UNKNOWN PORT YO!!");
+    }
+}
+
+void cleanup_square(LV2_Handle handle)
+{
+    SQUARE* plug = (SQUARE*)handle;
+    free(plug);
+}
+
+static const LV2_Descriptor hip2b_descriptor={
+    HIP2B_URI,
+    init_square,
+    connect_square_ports,
+    NULL,//activate
+    run_square,
+    NULL,//deactivate
+    cleanup_square,
+    NULL//extension
+};
+
+LV2_SYMBOL_EXPORT
+const LV2_Descriptor* lv2_descriptor(uint32_t index)
+{
+    switch (index) {
+    case 0:
+        return &hip2b_descriptor;
+    default:
+        return NULL;
+    }
+}
+
+
+/*
+//negative cutoff cuts off beginning, positive end
+int write_out(SQUARE* plug,long cutoff)
+{
+    uint32_t i, nout=0;
+    uint32_t tgap = plug->gap;
+    ntrans = tgap/2;
+    if(ntrans > plug->latency)
+    {
+        ntrans = plug->latency
+    }
+    nstat = 0;
+    if(tgap > 2*ntrans)
+    {
+        nstat = tgap - 2*ntrans;
+    }
+    i=0;
+    if(cutoff<0)
+    {
+        i= -cutoff;
+        range = tgap - offset;
+    }
+    else
+    {
+        range = tgap + offset;
+    }
+    for(;i<ntrans;i++)
+    {
+        plug->ouput_p[plug->outpos++] = plug->table[plug->pos];
+        plug->pos += plug->step;
+    }
+    plug->step = 0;
+    for(;i<ntrans+nstat;i++)
+    {
+        plug->ouput_p[plug->outpos++] = plug->table[plug->pos];
+    }
+    plug->step = -plug->step;//switch up and down
+    plug->state = -plug->state;
+    for(;i<range;i++)
+    {
+        plug->ouput_p[plug->outpos++] = plug->table[plug->pos];
+        plug->pos += plug->step;
+    }
+}
+
+//new version
+//negative cutoff cuts off beginning, positive end
+int write_out(SQUARE* plug,long cutoff)
+{
+    uint32_t i, nout=0;
+    uint32_t tgap = plug->gap;
+    uint32_t a,s,r;
+    
+    if(plug->pos > HALF)
+    {//up
+        switch(plug->step)
+        {
+            case -1:
+            case 0:
+                //going down
+                a = 0;
+                s = 0;
+                r = plug->gap;
+                plug->step = -1;
+                break;
+            case 1:
+                //going up
+                a = plug->pos - half
+                break;
+        }
+    }
+    else if(plug->pos < HALF)
+    {//up
+        
+    }
+    else
+    {
+    }
+    
+
+}
+
+
+
+
+//need to rethink this. the gap/chunk is the key I think.
+//always in a chunk, up down or zero, just need to find other end
+//slope & pos says state, finish transition (if wide enough)
+void run_square(SQUARE* plug, uint32_t nframes)
+{
+    float* in = plug->input_p;
+    float* out = plug->output_p;
+    uint32_t i, ntrans, nstat;
+    unsigned char j;
+    char state = plug->state + plug->step;
+    
+    plug->outpos = 0;
+    
+    for(i=0;i<plug->latency;i++)
+    {
+        if((plug->state != DOWN && plug->prevn[i] <= *plug->down_p) || (plug->state != DOWN && plug->prevn[i] >= *plug->up_p))
+        {
+            uint32_t tgap = plug->gap + i;
+            ntrans = tgap/2;
+            if(ntrans > plug->latency)
+            {
+                ntrans = plug->latency
+            }
+            nstat = 0;
+            if(tgap > 2*ntrans)
+            {
+                nstat = tgap - 2*ntrans;
+            }
+            //do transition 
+            for(j=plug->gap;j<ntrans;j++)
+            {
+                out[outpos++] = plug->table[plug->pos];
+                plug->pos + = plug->step;
+                if(plug->pos > NHARMONICS || plug->pos < 1)
+                {
+                    plug->step = 0;
+                }
+            }
+        }
+    }//i=transition point (if exists)
+    if(i<plug->latency)//transition in rollover
+    {
+        
+    }
+    
+    for(i=0;i<nframes-plug->latency;i++)
+    {
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    switch(state)
+    {
+        case -2://trans. down
+        case 2://trans. up
+            ntrans = (plug->gap + i)/2;
+            nstat = plug->gap + i;
+            if (ntrans > latency)
+                ntrans = latency;
+            for(j=0;j<i;j++)
+            {
+                out[outpos++] = plug->table[plug->pos];
+                plug->pos + = plug->step;
+                if(plug->pos > NHARMONICS || plug->pos < 1)
+                {
+                    plug->step = 0;
+                }
+            }
+            break;
+        case -1://down end
+            break;
+        case 0://off
+            break;
+        case 1://up end
+            break;
+            
+    }
+    
+    
+    //go through previous period samples
+    for(i=0;i<plug->latency;i++)
+    {
+        if(plug->state == UP && plug->prevn[i] <= *plug->down_p)
+        {
+             if(plug->gap < NHARMONICS)
+             {
+                //finish the partial chunk
+                for(j=0;j<i/2;j++)
+                {
+                    out[outpos++] = plug->table[plug->pos];
+                    plug->pos+=plug->step;
+                    if(plug->pos > NHARMONICS)
+                    {
+                        plug->step = 0;
+                    }
+                }
+             }
+             else
+             {
+                //finish the chunk
+                for(j=0;j<i;j++)
+                {
+                    out[outpos++] = plug->table[plug->pos];
+                    plug->pos+=plug->step;
+                    if(plug->pos > NHARMONICS)
+                    {
+                        plug->step = 0;
+                    }
+                }
+             }
+             plug->state = DOWN;
+             plug->step = DOWN;
+             plug->gap = 0;
+        }
+        else if(plug->state == DOWN && plug->prevn[i] >= *plug->up_p)
+        {
+            if(plug->gap < NHARMONICS)
+             {
+                //finish the partial chunk
+                for(j=0;j<i/2;j++)
+                {
+                    out[outpos++] = plug->table[plug->pos];
+                    plug->pos+=plug->step;
+                    if(plug->pos < 1)
+                    {
+                        plug->step = 0;
+                    }
+                }
+             }
+             else
+             {
+                //finish the chunk
+                for(j=0;j<i;j++)
+                {
+                    out[outpos++] = plug->table[plug->pos];
+                    plug->pos+=plug->step;
+                    if(plug->pos < 1)
+                    {
+                        plug->step = 0;
+                    }
+                }
+             }
+             plug->state = UP;
+             plug->step = UP;
+             plug->gap = 0;
+        }
+    }
+    for(i=0;i<nframes-plug->latency;i++)
+    {
+        plug->gap++;
+        if(plug->state == UP && in[i] <= *plug->down_p)
+        {
+             if(plug->gap < NHARMONICS)
+             {
+                //finish the partial chunk
+                for(j=0;j<i/2;j++)
+                {
+                    out[outpos++] = plug->table[plug->pos];
+                    plug->pos+=plug->step;
+                    if(plug->pos > NHARMONICS)
+                    {
+                        plug->step = 0;
+                    }
+                }
+             }
+             else
+             {
+                //finish the chunk
+                for(j=0;j<i;j++)
+                {
+                    out[outpos++] = plug->table[plug->pos];
+                    plug->pos+=plug->step;
+                    if(plug->pos > NHARMONICS)
+                    {
+                        plug->step = 0;
+                    }
+                }
+             }
+             plug->state = DOWN;
+             plug->step = DOWN;
+             plug->gap = 0;
+        }
+        else if(plug->state == DOWN && in[i] >= *plug->up_p)
+        {
+            if(plug->gap < NHARMONICS)
+             {
+                //finish the partial chunk
+                for(j=0;j<i/2;j++)
+                {
+                    out[outpos++] = plug->table[plug->pos];
+                    plug->pos+=plug->step;
+                    if(plug->pos < 1)
+                    {
+                        plug->step = 0;
+                    }
+                }
+             }
+             else
+             {
+                //finish the chunk
+                for(j=0;j<i;j++)
+                {
+                    out[outpos++] = plug->table[plug->pos];
+                    plug->pos+=plug->step;
+                    if(plug->pos < 1)
+                    {
+                        plug->step = 0;
+                    }
+                }
+             }
+             plug->state = UP;
+             plug->step = UP;
+             plug->gap = 0;
+        }        
+    }
+    
+    
+    
+    j=0;
+    for(i=nframes-plug->latency+1;i<nframes;i++)
+    {
+        plug->prevn[j++] = in[i];
+    }
+}
+
+//add latency
+*/
