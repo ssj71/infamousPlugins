@@ -2,6 +2,6 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 <http://sourceforge.net/projects/infamousplugins:hip2b>
-        a lv2:Plugin, lv2:EffectPlugin ;
+        a lv2:Plugin, lv2:DistortionPlugin ;
         lv2:binary <hip2b.so> ;
         rdfs:seeAlso <hip2b.ttl> .

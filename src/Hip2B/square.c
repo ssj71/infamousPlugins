@@ -18,11 +18,7 @@ typedef struct _SQUARE
     char step;
     char state;
     char pos;
-//    unsigned long gap;
-//    unsigned long outpos;
     float table[HALF+1];//one quarter of a square wave
-//    unsigned char latency;
-//    float prevn[HALF];
     
     //new way
     float circularbuf[NHARMONICS];
@@ -68,7 +64,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         CIRCULATE(w);
         
         //at this point, headway is known, pos is prev. value, step is current
-        //1 write buffer, 2 update pos 3. write out, 4 update headway
+        //1 write buffer, 2 update pos 3. update headway 4. write out
         //change position
         if(plug->headway == 0)
         {//on the transition point, search for next one
