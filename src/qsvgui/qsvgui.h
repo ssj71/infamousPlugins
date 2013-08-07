@@ -16,6 +16,19 @@
 #include <LCD.h>
 #include <preview.h>
 
+
+//lets make some comments
+/*
+
+  the cow is in the barn
+  this object will be implemented in the lv2 plugin's init function
+  the constructor will pass a skin file path and the plugin name
+    and load the file and add the controls
+  the lv2 ui will access the controls to get the signals and slots?
+
+
+
+  */
 class qsvgui : public QWidget
 {
     Q_OBJECT
@@ -26,13 +39,15 @@ public:
     explicit qsvgui(skin *skinfile, QWidget *parent);
     explicit qsvgui(QString boxFile, QWidget *parent = 0);
     ~qsvgui();
-    QWidget* AddControl(QString type, QString param, int x, int y, int w, int h, int theta, QString file1, QString file2, QString file3, QString file4);
+    QWidget* GetControl(QString* parametername);
+    uint16 GetNumControls();
 
 private:
     void resizeEvent(QResizeEvent *re);
     skin sk;
     int LoadSkin(skin *currentskin, int effect);
     int LoadSkin(QString skinfile, QString name);
+    QWidget* AddControl(QString type, QString param, int x, int y, int w, int h, int theta, QString file1, QString file2, QString file3, QString file4);
     QRect PedalPosition();
     float myheight;
     float mywidth;

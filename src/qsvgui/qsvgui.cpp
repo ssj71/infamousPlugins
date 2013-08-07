@@ -1,6 +1,32 @@
 #include "qsvgui.h"
 #include "math.h"
 
+
+/*
+
+  init_paramothing(paramtype param, widgettype type, Qwidget *thing)
+  {
+       switch(type)
+       {
+        case DIAL:
+
+       }
+       switch(param)
+       {
+       case GAIN:
+            //integer type
+            thing->setMinimum(-15);
+            thing->setMaximum(3);
+            thing->setValue(1);
+            thing->setToolTip("GAIN 1")
+
+       }
+
+  }
+
+  really need to make dial etc able to have better controls. Floats, logarithmic scale etc.
+  */
+
 qsvgui::qsvgui(QWidget *parent)
     : QWidget(parent)
 {
