@@ -234,12 +234,13 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
                 }
 
                 //now all the data is loaded, lets add the control
-                if(0 != this->AddControl(ctl->type,ctl->parameter,ctl->x,ctl->y,ctl->w,ctl->h,ctl->filename[0],ctl->filename[1],ctl->filename[2],ctl->filename[3]))
+                if(this->AddControl(ctl->type,ctl->parameter,ctl->x,ctl->y,ctl->w,ctl->h,ctl->filename[0],ctl->filename[1],ctl->filename[2],ctl->filename[3]) != 0)
                 {//error
 
                 }
 
 
+                lncntr++;
                 line = in.readLine().section(';',0,0);
                 word = line.split(",",QString::SkipEmptyParts,Qt::CaseInsensitive);
                 l = word.length();
