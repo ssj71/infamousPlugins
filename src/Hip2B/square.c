@@ -148,11 +148,11 @@ void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char
         plug->table[i] = 0;
     }
     k=1;
-    for(i=1;i<=NHARMONICS;i+=2)//harmonics
+    for(i=1;i<NHARMONICS;i+=2)//harmonics
     {
-        for(j=0;j<=HALF;i++)//samples
+        for(j=0;j<=HALF;j++)//samples
         {
-            plug->table[HALF-j] -= k/(i)*sin(PI/2 + i*j*s);
+            plug->table[HALF-j] -= (k/(float)i)*sin(PI/2 + (float)i*j*s);
         }
         k = -k;
     }

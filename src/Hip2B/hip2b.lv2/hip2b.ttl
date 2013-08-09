@@ -49,7 +49,7 @@
                 lv2:index 3 ;
                 lv2:symbol "UP" ;
                 lv2:name "Up" ;
-                lv2:default 0.3 ;
+                lv2:default 0.02 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
         ], [
@@ -57,7 +57,7 @@
                 lv2:index 4 ;
                 lv2:symbol "DOWN" ;
                 lv2:name "Down" ;
-                lv2:default 0.3 ;
+                lv2:default 0.02 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
         ], [
