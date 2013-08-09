@@ -1,6 +1,6 @@
 Welcome to the INFAMOUS Plugins README
 
-Things are just firing up. So far we have exactly 2 plugins. But hey, its gettin there right?
+Things are just firing up. So far we have exactly 3 plugins. But hey, its gettin there right?
 
 
 To install, make sure you have the dependencies and then just run the script install.sh:
@@ -74,3 +74,14 @@ Parameter Description:
     SATURATION - audio high value mapped to MAXV (anything greater still outputs MAXV)
     ATIME - rise time of the output
     DTIME - fall time of the output
+
+===========================================
+4. Hip2B
+
+This is a distortion plugin that is even more fun than I imagined. Inspired by effect pedals by dwarfcraft, this takes your analog signal and turns it into a square wave. It gives you a glitchy type effect. Its meant to be pretty minimal, so you probably will want a simple amplifier after it in the effect chain to turn it down, or remove DC offset. Its not limited in polyphony or anything, it is simply distorting your signal to be a bandlimited square wave. Play with the up and down threshold parameters to change the square pulse width and have some fun. Also stay away from 0.0 on those two, it gets really loud and noisy. Unless thats what you want. Be my guest. Depending on your noise floor, other low values may be problematic in the same light.
+
+Parameter Description:
+    UP - threshold that the input must cross for the square wave to rise
+    DOWN - threshold that the input must cross for the square wave to fall
+    INGAIN - input gain, also affects the output signal in the mix, use to get your signal passing the thresholds
+    WETDRY - mix of the original signal with the square signal
