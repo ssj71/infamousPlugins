@@ -25,8 +25,6 @@ typedef struct _SQUARE
     float circularbuf[NHARMONICS];
     unsigned char w,r,c;//read, write & check pointers
     unsigned char headway;//distance to next transition
-    float dcor;//dc offset remover coeff
-    float dcorin;//dc offset remover coeff
     float dcprevin;
     float dcprevout;
     
@@ -38,7 +36,6 @@ typedef struct _SQUARE
     float *ingain_p;
     float *wetdry_p;
     float *outgain_p;
-    float *dcremove_p;
 }SQUARE;
 
 enum square_ports
@@ -50,8 +47,7 @@ enum square_ports
     DOWNN,
     INGAIN,
     WETDRY,
-    OUTGAIN,
-    DCREM
+    OUTGAIN
 };
 
 //starting again.
@@ -136,15 +132,12 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         }
         
         //write out the frame
-        plug->output_p[i] = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*plug->state*plug->table[plug->pos];
+        temp = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*plug->state*plug->table[plug->pos];
         CIRCULATE(r);
-        plug->output_p[i] *= *plug->outgain_p;
+        temp *= *plug->outgain_p;
         //dc removal (hpf)
-        temp = plug->output_p[i];
-        if(*plug->dcremove_p)
-        {
-            plug->output_p[i] = plug->dcor*plug->dcprevout + plug->dcorin*temp + plug->dcorin*plug->dcprevin;
-        }
+        //plug->output_p[i] = plug->dcor*plug->dcprevout + plug->dcorin*temp - plug->dcorin*plug->dcprevin;//chevck signs & consts
+        plug->output_p[i] = .9999*plug->dcprevout + temp - plug->dcprevin;
         plug->dcprevin = temp;
         plug->dcprevout = plug->output_p[i];
     }
@@ -190,8 +183,6 @@ void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char
         plug->circularbuf[i] = 0;
     }
 
-    plug->dcor = (DC_CUTOFF*sample_rate - 2)/(DC_CUTOFF*sample_rate + 2);
-    plug->dcorin = 2/(DC_CUTOFF*sample_rate + 2);
     plug->dcprevin = 0;
     plug->dcprevout = 0;
 }
@@ -208,7 +199,6 @@ void connect_square_ports(LV2_Handle handle, uint32_t port, void *data)
     case INGAIN:  plug->ingain_p = (float*)data;break;
     case WETDRY:  plug->wetdry_p = (float*)data;break;
     case OUTGAIN: plug->outgain_p = (float*)data;break;
-    case DCREM:   plug->dcremove_p = (float*)data;break;
     default:      puts("UNKNOWN PORT YO!!");
     }
 }
