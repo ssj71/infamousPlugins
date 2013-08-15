@@ -76,4 +76,20 @@
                 lv2:default 1.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 7 ;
+                lv2:symbol "OUT_GAIN" ;
+                lv2:name "Output Gain" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 2.0 ;
+        ], [#temporary
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 8 ;
+                lv2:symbol "DC_REMOVE" ;
+                lv2:name "DC Remove" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
         ] .

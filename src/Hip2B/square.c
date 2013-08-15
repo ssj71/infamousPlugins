@@ -9,6 +9,7 @@
 #define NHARMONICS 16
 #define HALF    8
 #define PI 3.1415926535897932384626433832795
+#define DC_CUTOFF 10*2*PI //rad/s
 
 #define CIRCULATE(val) val=val<NHARMONICS?val:0
 
@@ -24,6 +25,10 @@ typedef struct _SQUARE
     float circularbuf[NHARMONICS];
     unsigned char w,r,c;//read, write & check pointers
     unsigned char headway;//distance to next transition
+    float dcor;//dc offset remover coeff
+    float dcorin;//dc offset remover coeff
+    float dcprevin;
+    float dcprevout;
     
     float *input_p;
     float *output_p;
@@ -32,6 +37,8 @@ typedef struct _SQUARE
     float *down_p;
     float *ingain_p;
     float *wetdry_p;
+    float *outgain_p;
+    float *dcremove_p;
 }SQUARE;
 
 enum square_ports
@@ -42,7 +49,9 @@ enum square_ports
     UPP,
     DOWNN,
     INGAIN,
-    WETDRY
+    WETDRY,
+    OUTGAIN,
+    DCREM
 };
 
 //starting again.
@@ -52,6 +61,7 @@ enum square_ports
 void run_square(LV2_Handle handle, uint32_t nframes)
 {
     SQUARE* plug = (SQUARE*)handle;
+    float temp;
     uint32_t i;
     unsigned char j, w, r, c;
     w = plug->w;
@@ -128,6 +138,15 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         //write out the frame
         plug->output_p[i] = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*plug->state*plug->table[plug->pos];
         CIRCULATE(r);
+        plug->output_p[i] *= *plug->outgain_p;
+        //dc removal (hpf)
+        temp = plug->output_p[i];
+        if(*plug->dcremove_p)
+        {
+            plug->output_p[i] = plug->dcor*plug->dcprevout + plug->dcorin*temp + plug->dcorin*plug->dcprevin;
+        }
+        plug->dcprevin = temp;
+        plug->dcprevout = plug->output_p[i];
     }
     *plug->latency_p = HALF;
     plug->w = w;
@@ -170,6 +189,11 @@ void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char
     {
         plug->circularbuf[i] = 0;
     }
+
+    plug->dcor = (DC_CUTOFF*sample_rate - 2)/(DC_CUTOFF*sample_rate + 2);
+    plug->dcorin = 2/(DC_CUTOFF*sample_rate + 2);
+    plug->dcprevin = 0;
+    plug->dcprevout = 0;
 }
 void connect_square_ports(LV2_Handle handle, uint32_t port, void *data)
 {
@@ -183,6 +207,8 @@ void connect_square_ports(LV2_Handle handle, uint32_t port, void *data)
     case DOWNN:   plug->down_p = (float*)data;break;
     case INGAIN:  plug->ingain_p = (float*)data;break;
     case WETDRY:  plug->wetdry_p = (float*)data;break;
+    case OUTGAIN: plug->outgain_p = (float*)data;break;
+    case DCREM:   plug->dcremove_p = (float*)data;break;
     default:      puts("UNKNOWN PORT YO!!");
     }
 }
