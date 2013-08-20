@@ -19,6 +19,7 @@ typedef struct _SQUARE
 {
     char step;
     char state;
+    char nextstate;
     char pos;
     float table[HALF+1];//one quarter of a square wave
 
@@ -76,6 +77,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         if(plug->headway == 0)
         {//on the transition point, search for next one
             plug->pos = plug->headway;
+            plug->state = plug->nextstate;
             //update headway
             for(j=0;j<=HALF;j++)
             {
@@ -83,14 +85,14 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 {
                     c++;
                     CIRCULATE(c);
-                    plug->state = DOWN;
+                    plug->nextstate = DOWN;
                     break;
                 }   
                 else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
                 {
                     c++;
                     CIRCULATE(c);
-                    plug->state = UP;
+                    plug->nextstate = UP;
                     break;
                 }
                 else
@@ -116,10 +118,15 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 plug->step = 0;
             }
             //update headway
-            if( (plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p)//c should == w-1
-               || (plug->state != UP && plug->circularbuf[c] >= *plug->up_p))
+            if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p)//c should == w-1
             {
                 plug->headway = HALF;
+                plug->nextstate = DOWN;
+            }
+            else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
+            {
+                plug->headway = HALF;
+                plug->nextstate = UP;
             }
             c++;
             CIRCULATE(c);
@@ -137,7 +144,6 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         CIRCULATE(r);
         temp *= *plug->outgain_p;
         //dc removal (hpf)
-        //plug->output_p[i] = plug->dcor*plug->dcprevout + plug->dcorin*temp - plug->dcorin*plug->dcprevin;//chevck signs & consts
         plug->output_p[i] = .9999*plug->dcprevout + temp - plug->dcprevin;
         plug->dcprevin = temp;
         plug->dcprevout = plug->output_p[i];
@@ -149,12 +155,13 @@ void run_square(LV2_Handle handle, uint32_t nframes)
 
     if(plug->dcprevout == 0  && plug->headway > HALF)
     {
-        if(plug->timeout++ > TIMEOUT)
-        {
+        //if(plug->timeout++ > TIMEOUT)
+        //{
             plug->pos = 0;
             plug->step = 0;
             plug->state = 0;
-        }
+            plug->nextstate = 0;
+        //}
     }
     else
     {
@@ -187,6 +194,7 @@ void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char
     plug->pos = 0;
     plug->step = 0;
     plug->state = 0;
+    plug->nextstate = 0;
     plug->headway = 0;
     
     plug->w = HALF;
