@@ -10,6 +10,7 @@
 #define HALF    8
 #define PI 3.1415926535897932384626433832795
 #define DC_CUTOFF 10*2*PI //rad/s
+#define TIMEOUT 5
 
 #define CIRCULATE(val) val=val<NHARMONICS?val:0
 
@@ -20,13 +21,13 @@ typedef struct _SQUARE
     char state;
     char pos;
     float table[HALF+1];//one quarter of a square wave
-    
-    //new way
+
     float circularbuf[NHARMONICS];
     unsigned char w,r,c;//read, write & check pointers
     unsigned char headway;//distance to next transition
     float dcprevin;
     float dcprevout;
+    unsigned char timeout;
     
     float *input_p;
     float *output_p;
@@ -145,6 +146,20 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     plug->w = w;
     plug->r = r;
     plug->c = c;
+
+    if(plug->dcprevout == 0  && plug->headway > HALF)
+    {
+        if(plug->timeout++ > TIMEOUT)
+        {
+            plug->pos = 0;
+            plug->step = 0;
+            plug->state = 0;
+        }
+    }
+    else
+    {
+        plug->timeout = 0;
+    }
 }
 
 void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
@@ -164,7 +179,7 @@ void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char
     {
         for(j=0;j<=HALF;j++)//samples
         {
-            plug->table[HALF-j] -= (k/(float)i)*sin(PI/2 + (float)i*j*s);
+            plug->table[HALF-j] += (k/(float)i)*sin(PI/2 + (float)i*j*s);
         }
         k = -k;
     }
