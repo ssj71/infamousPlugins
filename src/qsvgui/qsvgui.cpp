@@ -226,7 +226,7 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
 
 }
 
-QWidget* qsvgui::AddControl(QString type, QString param, int x, int y, int w, int h, int theta, QString file1, QString file2, QString file3, QString file4)
+int qsvgui::AddControl(QString type, QString param, int x, int y, int w, int h, int theta, QString file1, QString file2, QString file3, QString file4)
 {
     QWidget* control;
     if (type.toLower() == "dial")
