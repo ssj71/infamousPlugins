@@ -311,10 +311,11 @@ int qsvgui::AddControl(QString type, QString param, int x, int y, int w, int h, 
         f->show();
     }
     control->setToolTip(param);
-    ctrlPos[numControls] = QRect(x,myheight-y-h,w,h);
-    controls[numControls] = control;
-    numControls++;
-    return control;
+    //ctrlPos[numControls] = QRect(x,myheight-y-h,w,h);
+    //controls[numControls] = control;
+    //numControls++;
+    this->controls.push_back(control);
+    return 0;//control;
 }
 
 QRect qsvgui::PedalPosition()
