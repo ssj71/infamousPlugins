@@ -85,15 +85,21 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 {
                     c++;
                     CIRCULATE(c);
-                    plug->nextstate = DOWN;
-                    break;
+                    if(plug->state == UP || *plug->down_p < 0)//extra check to make sure there is input
+                    {
+                        plug->nextstate = DOWN;
+                        break;
+                    }
                 }   
                 else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
                 {
                     c++;
                     CIRCULATE(c);
-                    plug->nextstate = UP;
-                    break;
+                    if(plug->state == DOWN || *plug->up_p >= 0)
+                    {
+                        plug->nextstate = UP;
+                        break;
+                    }
                 }
                 else
                 {
@@ -190,16 +196,17 @@ void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char
         }
         k = -k;
     }
+    plug->table[0] = 0;//remove slight rounding error
     
     plug->pos = 0;
     plug->step = 0;
     plug->state = 0;
     plug->nextstate = 0;
-    plug->headway = 0;
+    plug->headway = HALF + 1;
     
     plug->w = HALF;
     plug->r = 0;
-    plug->c = 0;
+    plug->c = HALF;
     
     for(i=0;i<NHARMONICS;i++)
     {
