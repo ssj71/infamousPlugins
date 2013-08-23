@@ -15,7 +15,7 @@
 <http://sourceforge.net/projects/infamousplugins:casynth:group:auto>
 a param:ControlGroup ;
 lv2:name "Cell Automaton" ;
-lv2:symbol "Cell Automaton" .
+lv2:symbol "Cell_Automaton" .
 
 <http://sourceforge.net/projects/infamousplugins:casynth:group:env>
 a param:ControlGroup ;

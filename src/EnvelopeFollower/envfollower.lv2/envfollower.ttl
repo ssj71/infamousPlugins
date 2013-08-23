@@ -15,7 +15,7 @@
 <http://sourceforge.net/projects/infamousplugins:envfollower:group:audio>
 a param:ControlGroup ;
 lv2:name "Audio Signal" ;
-lv2:symbol "Audio Signal" .
+lv2:symbol "Audio_Signal" .
 
 <http://sourceforge.net/projects/infamousplugins:envfollower:group:midi>
 a param:ControlGroup ;
@@ -24,7 +24,7 @@ lv2:symbol "MIDI Signal" .
 <http://sourceforge.net/projects/infamousplugins:envfollower:group:ctl>
 a param:ControlGroup ;
 lv2:name "Control Signal" ;
-lv2:symbol "Control Signal" .
+lv2:symbol "Control_Signal" .
 
 
 <http://sourceforge.net/projects/infamousplugins:envfollower>
@@ -64,6 +64,8 @@ lv2:symbol "Control Signal" .
                 lv2:index 3 ;
                 lv2:symbol "CTL_OUT";
                 lv2:name "Control Out";
+                lv2:minimum -10000.0 ;
+                lv2:maximum 10000.0 ;
         ] ;
         lv2:port [
                 a lv2:InputPort, lv2:ControlPort ;
