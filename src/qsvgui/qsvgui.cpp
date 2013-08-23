@@ -252,7 +252,7 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
 
 }
 
-QWidget* qsvgui::AddControl(QString type, QString param, int x, int y, int w, int h, int theta, QString file1, QString file2, QString file3, QString file4)
+int qsvgui::AddControl(QString type, QString param, int x, int y, int w, int h, int theta, QString file1, QString file2, QString file3, QString file4)
 {
     QWidget* control;
     if (type.toLower() == "dial")
@@ -337,10 +337,11 @@ QWidget* qsvgui::AddControl(QString type, QString param, int x, int y, int w, in
         f->show();
     }
     control->setToolTip(param);
-    ctrlPos[numControls] = QRect(x,myheight-y-h,w,h);
-    controls[numControls] = control;
-    numControls++;
-    return control;
+    //ctrlPos[numControls] = QRect(x,myheight-y-h,w,h);
+    //controls[numControls] = control;
+    //numControls++;
+    this->controls.push_back(control);
+    return 0;//control;
 }
 
 QRect qsvgui::PedalPosition()

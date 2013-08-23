@@ -39,7 +39,7 @@ public:
     explicit qsvgui(skin *skinfile, QWidget *parent);
     explicit qsvgui(QString boxFile, QWidget *parent = 0);
     ~qsvgui();
-    QWidget* GetControl(QString* parametername);
+    int AddControl(QString type, QString param, int x, int y, int w, int h, int theta, QString file1, QString file2, QString file3, QString file4);
     uint16 GetNumControls();
 
 private:
