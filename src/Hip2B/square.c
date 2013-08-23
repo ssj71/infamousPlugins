@@ -10,6 +10,7 @@
 #define HALF    8
 #define PI 3.1415926535897932384626433832795
 #define DC_CUTOFF 10*2*PI //rad/s
+#define PRACTICALLYZERO .001
 #define TIMEOUT 5
 
 #define CIRCULATE(val) val=val<NHARMONICS?val:0
@@ -85,7 +86,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 {
                     c++;
                     CIRCULATE(c);
-                    if(plug->state == UP || *plug->down_p < 0)//extra check to make sure there is input
+                    //if(plug->state == UP || *plug->down_p < 0)//extra check to make sure there is input
                     {
                         plug->nextstate = DOWN;
                         break;
@@ -95,7 +96,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 {
                     c++;
                     CIRCULATE(c);
-                    if(plug->state == DOWN || *plug->up_p >= 0)
+                    //if(plug->state == DOWN || *plug->up_p >= 0)
                     {
                         plug->nextstate = UP;
                         break;
@@ -124,12 +125,12 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 plug->step = 0;
             }
             //update headway
-            if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p)//c should == w-1
+            if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p && plug->nextstate != DOWN)//c should == w-1
             {
                 plug->headway = HALF;
                 plug->nextstate = DOWN;
             }
-            else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
+            else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p && plug->nextstate != UP)
             {
                 plug->headway = HALF;
                 plug->nextstate = UP;
@@ -150,7 +151,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         CIRCULATE(r);
         temp *= *plug->outgain_p;
         //dc removal (hpf)
-        plug->output_p[i] = .9999*plug->dcprevout + temp - plug->dcprevin;
+        plug->output_p[i] = .999*plug->dcprevout + temp - plug->dcprevin;
         plug->dcprevin = temp;
         plug->dcprevout = plug->output_p[i];
     }
@@ -159,19 +160,14 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     plug->r = r;
     plug->c = c;
 
-    if(plug->dcprevout == 0  && plug->headway > HALF)
+    //this way for dc offset reset
+    if(plug->dcprevout < PRACTICALLYZERO && plug->dcprevout > -PRACTICALLYZERO  && plug->headway > HALF)
     {
-        //if(plug->timeout++ > TIMEOUT)
-        //{
-            plug->pos = 0;
-            plug->step = 0;
-            plug->state = 0;
-            plug->nextstate = 0;
-        //}
-    }
-    else
-    {
-        plug->timeout = 0;
+        plug->pos = 0;
+        plug->step = 0;
+        plug->state = 0;
+        plug->dcprevout = 0;
+        plug->dcprevin = 0;
     }
 }
 
