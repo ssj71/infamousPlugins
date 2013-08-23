@@ -86,21 +86,15 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 {
                     c++;
                     CIRCULATE(c);
-                    //if(plug->state == UP || *plug->down_p < 0)//extra check to make sure there is input
-                    {
-                        plug->nextstate = DOWN;
-                        break;
-                    }
+                    plug->nextstate = DOWN;
+                    break;
                 }   
                 else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
                 {
                     c++;
                     CIRCULATE(c);
-                    //if(plug->state == DOWN || *plug->up_p >= 0)
-                    {
-                        plug->nextstate = UP;
-                        break;
-                    }
+                    plug->nextstate = UP;
+                    break;
                 }
                 else
                 {
@@ -125,7 +119,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 plug->step = 0;
             }
             //update headway
-            if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p && plug->nextstate != DOWN)//c should == w-1
+            if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p && plug->nextstate != DOWN)
             {
                 plug->headway = HALF;
                 plug->nextstate = DOWN;
