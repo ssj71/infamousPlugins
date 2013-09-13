@@ -19,4 +19,8 @@ qmake
 make
 sudo make install
 
+cd ../cheap_distortion
+make
+sudo make install
+
 echo "install complete!"
