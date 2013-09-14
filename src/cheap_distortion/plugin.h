@@ -19,9 +19,9 @@ typedef void * LV2_Handle;
 // Port indexes
 #define INDEX_AUDIO_IN_1 0
 #define INDEX_AUDIO_OUT_1 1
-#define INDEX_INGAIN_2 2
-#define INDEX_AGGRESSION_3 3
-#define INDEX_OUTGAIN_4 4
+#define INDEX_AGGRESSION_2
+#define INDEX_INGAIN_3
+#define INDEX_OUTGAIN_4
 
 // Misc stuff for the skeleton code
 #define LV2_NUM_AUDIO_INS 1
@@ -36,8 +36,8 @@ typedef void * LV2_Handle;
 #define LV2_DEACT_OPTION 0
 
 // Indexes for accessing struct CHEAP_DISTORTION->In[] array
-#define LV2_INGAIN 0
-#define LV2_AGGRESSION 1
+#define LV2_AGGRESSION 0
+#define LV2_INGAIN 1
 #define LV2_OUTGAIN 2
 
 // Your plugin struct that the host passes to your DSP functions
