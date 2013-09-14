@@ -56,15 +56,11 @@ void pluginRun(CHEAP_DISTORTION * plugin)
 {
  	float_dissector f;
 	uint8_t index = (uint8_t)*plugin->Host.In[LV2_AGGRESSION];
-    int8_t in = (int8_t)*plugin->Host.In[LV2_INGAIN];
-    int8_t out = (int8_t)*plugin->Host.In[LV2_OUTGAIN];
 	while (plugin->Host.Begin < plugin->Host.End)
 	{
 		f.f = *(plugin->Host.AudioIn[0] + plugin->Host.Begin);
-		f.parts.value.ieee754.exponent +=in;
 		f.parts.value.num = (f.parts.value.num)>>index;
         f.parts.value.ieee754.exponent += plugin->scale[index];
-		f.parts.value.ieee754.exponent += out;
         *(plugin->Host.AudioOut[0] + plugin->Host.Begin) = f.f;
 		++plugin->Host.Begin;
 	}
