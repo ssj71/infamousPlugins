@@ -32,13 +32,56 @@
  [
   a lv2:InputPort, lv2:ControlPort ;
   lv2:index 2 ;
-  lv2:name "Aggresion" ;
+  lv2:name "Input Gain" ;
+  lv2:symbol "INGAIN" ;
+  lv2:default 0 ;
+  lv2:minimum -7 ;
+  lv2:maximum 2 ;
+  unit:unit unit:pc ;
+  lv2:portProperty lv2:enumeration ;
+  lv2:scalePoint [ rdfs:label ".78"; rdf:value -7 ],
+   [ rdfs:label "1.6"; rdf:value -6 ],
+   [ rdfs:label "3.1"; rdf:value -5 ],
+   [ rdfs:label "6.3"; rdf:value -4 ],
+   [ rdfs:label "12.5"; rdf:value -3 ],
+   [ rdfs:label "25"; rdf:value -2 ],
+   [ rdfs:label "50"; rdf:value -1 ],
+   [ rdfs:label "100"; rdf:value 0 ],
+   [ rdfs:label "200"; rdf:value 1 ],
+   [ rdfs:label "400"; rdf:value 2 ];
+ ] ,
+ [
+  a lv2:InputPort, lv2:ControlPort ;
+  lv2:index 3 ;
+  lv2:name "Aggression" ;
   lv2:symbol "AGGRESSION" ;
   lv2:default 1 ;
-  lv2:minimum 1 ;
+  lv2:minimum 0 ;
   lv2:maximum 3 ;
   lv2:portProperty lv2:enumeration ;
   lv2:scalePoint [ rdfs:label "1"; rdf:value 1 ],
    [ rdfs:label "2"; rdf:value 2 ],
-   [ rdfs:label "3"; rdf:value 3 ];
+   [ rdfs:label "3"; rdf:value 3 ],
+   [ rdfs:label "0"; rdf:value 0 ];
+ ] ,
+ [
+  a lv2:InputPort, lv2:ControlPort ;
+  lv2:index 4 ;
+  lv2:name "Output Gain" ;
+  lv2:symbol "OUTGAIN" ;
+  lv2:default 0 ;
+  lv2:minimum -7 ;
+  lv2:maximum 2 ;
+  unit:unit unit:pc ;
+  lv2:portProperty lv2:integer ;
+  lv2:scalePoint [ rdfs:label ".78"; rdf:value -7 ],
+   [ rdfs:label "1.6"; rdf:value -6 ],
+   [ rdfs:label "3.1"; rdf:value -5 ],
+   [ rdfs:label "6.3"; rdf:value -4 ],
+   [ rdfs:label "12.5"; rdf:value -3 ],
+   [ rdfs:label "25"; rdf:value -2 ],
+   [ rdfs:label "50"; rdf:value -1 ],
+   [ rdfs:label "100"; rdf:value 0 ],
+   [ rdfs:label "200"; rdf:value 1 ],
+   [ rdfs:label "400"; rdf:value 2 ];
  ].
