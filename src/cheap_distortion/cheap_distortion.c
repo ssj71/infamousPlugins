@@ -61,11 +61,16 @@ void pluginRun(CHEAP_DISTORTION * plugin)
 	while (plugin->Host.Begin < plugin->Host.End)
 	{
 		f.f = *(plugin->Host.AudioIn[0] + plugin->Host.Begin);
-		f.parts.value.ieee754.exponent +=in;
-		f.parts.value.num = (f.parts.value.num)>>index;
-        f.parts.value.ieee754.exponent += plugin->scale[index];
-		f.parts.value.ieee754.exponent += out;
-        *(plugin->Host.AudioOut[0] + plugin->Host.Begin) = f.f;
+        if(f.parts.value.ieee754.exponent!=0)
+        {
+            f.parts.value.ieee754.exponent +=in;
+            f.parts.value.num = (f.parts.value.num)>>index;
+            f.parts.value.ieee754.exponent += plugin->scale[index];
+            f.parts.value.ieee754.exponent += out;
+            *(plugin->Host.AudioOut[0] + plugin->Host.Begin) = f.f;
+        }
+        else
+            *(plugin->Host.AudioOut[0] + plugin->Host.Begin) = 0;
 		++plugin->Host.Begin;
 	}
 }
