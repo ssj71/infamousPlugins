@@ -10,11 +10,12 @@
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix param: <http://lv2plug.in/ns/ext/parameters#> .
 
 <http://sourceforge.net/projects/infamousplugins:casynth:group:auto>
 a param:ControlGroup ;
 lv2:name "Cell Automaton" ;
-lv2:symbol "Cell Automaton" .
+lv2:symbol "Cell_Automaton" .
 
 <http://sourceforge.net/projects/infamousplugins:casynth:group:env>
 a param:ControlGroup ;
@@ -116,6 +117,7 @@ lv2:symbol "Modulation" .
                 lv2:symbol "HARM_MODE" ;
                 lv2:name "Harmonic Gain Mode" ;
                 lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:enumeration ;
                 lv2:scalePoint [ rdfs:label "Sinc"; rdf:value 0 ] ;
                 lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Square"; rdf:value 2 ] ;
@@ -130,6 +132,7 @@ lv2:symbol "Modulation" .
                 lv2:symbol "WAVE" ;
                 lv2:name "Waveform" ;
                 lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:enumeration ;
                 lv2:scalePoint [ rdfs:label "Sine"; rdf:value 0 ] ;
                 lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Square"; rdf:value 2 ] ;
@@ -204,6 +207,7 @@ lv2:symbol "Modulation" .
                 lv2:symbol "AMOD_WAV" ;
                 lv2:name "AM Waveform" ;
                 lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:enumeration ;
                 lv2:scalePoint [ rdfs:label "Sine"; rdf:value 0 ] ;
                 lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Square"; rdf:value 2 ] ;
@@ -239,6 +243,7 @@ lv2:symbol "Modulation" .
                 lv2:symbol "FMOD_WAV" ;
                 lv2:name "FM Waveform" ;
                 lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:enumeration ;
                 lv2:scalePoint [ rdfs:label "Sine"; rdf:value 0 ] ;
                 lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Square"; rdf:value 2 ] ;

@@ -1,6 +1,6 @@
 Welcome to the INFAMOUS Plugins README
 
-Things are just firing up. So far we have exactly 2 plugins. But hey, its gettin there right?
+Things are just firing up. So far we have exactly 3 plugins. But hey, its gettin there right?
 
 
 To install, make sure you have the dependencies and then just run the script install.sh:
@@ -74,3 +74,22 @@ Parameter Description:
     SATURATION - audio high value mapped to MAXV (anything greater still outputs MAXV)
     ATIME - rise time of the output
     DTIME - fall time of the output
+
+===========================================
+4. Hip2B
+
+This is a distortion plugin that is even more fun than I imagined. Inspired by effect pedals by dwarfcraft, this takes your analog signal and turns it into a square wave. It gives you a glitchy type effect. Its meant to be pretty minimal, so you probably will want a simple amplifier after it in the effect chain to turn it down, or remove DC offset. Its not limited in polyphony or anything, it is simply distorting your signal to be a bandlimited square wave. Play with the up and down threshold parameters to change the square pulse width and have some fun. Also stay away from 0.0 on those two, it gets really loud and noisy. Unless thats what you want. Be my guest. Depending on your noise floor, other low values may be problematic in the same light.
+
+Parameter Description:
+    UP - threshold that the input must cross for the square wave to rise
+    DOWN - threshold that the input must cross for the square wave to fall
+    INGAIN - input gain, also affects the output signal in the mix, use to get your signal passing the thresholds
+    WETDRY - mix of the original signal with the square signal
+
+===========================================
+4. cheap distortion
+
+Another distortion plugin, but this one I wanted to getit as light as possible. I haven't benchmarked it, but using some hackery on the bits I accomplished a pretty nice saturation function waveshaper using only a bitshift and an integer add. Thats right not a single floating point operation! However this cheapness and hackery comes at a cost that its using undefined behavior and breaks some rules or at least is highly not reccommended. It works when compiled with GCC on x86 systems. Go ahead and try it, the worst that happens is that it sounds awful. On machines with different endianness it will fail for sure. If you experience this I can easily make one for the other endian machines. Just let me know. Becuase the goal was super cheap computation, there is no input or output gains, so make use of your simple amplifier plugins. All in all though it worked out better than I dreamed. And its so cheap. It even has 3 different waveshapes of increasing "aggression". On 2 & 3 settings, you'll probably want a gate, because it has really high gain for values near zero.
+
+Parameter Description:
+    AGGRESSION - wave shape, higher basically means more gain

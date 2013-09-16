@@ -10,11 +10,12 @@
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix param: <http://lv2plug.in/ns/ext/parameters#> .
 
 <http://sourceforge.net/projects/infamousplugins:envfollower:group:audio>
 a param:ControlGroup ;
 lv2:name "Audio Signal" ;
-lv2:symbol "Audio Signal" .
+lv2:symbol "Audio_Signal" .
 
 <http://sourceforge.net/projects/infamousplugins:envfollower:group:midi>
 a param:ControlGroup ;
@@ -23,7 +24,7 @@ lv2:symbol "MIDI Signal" .
 <http://sourceforge.net/projects/infamousplugins:envfollower:group:ctl>
 a param:ControlGroup ;
 lv2:name "Control Signal" ;
-lv2:symbol "Control Signal" .
+lv2:symbol "Control_Signal" .
 
 
 <http://sourceforge.net/projects/infamousplugins:envfollower>
@@ -63,6 +64,8 @@ lv2:symbol "Control Signal" .
                 lv2:index 3 ;
                 lv2:symbol "CTL_OUT";
                 lv2:name "Control Out";
+                lv2:minimum -10000.0 ;
+                lv2:maximum 10000.0 ;
         ] ;
         lv2:port [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -97,7 +100,7 @@ lv2:symbol "Control Signal" .
                 lv2:symbol "ATIME" ;
                 lv2:name "Attack Time" ;
                 lv2:portProperty lv2:logarithmic ;
-                lv2:default 0.10 ;
+                lv2:default 0.01 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
                 pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:audio> ;
@@ -107,9 +110,9 @@ lv2:symbol "Control Signal" .
                 lv2:symbol "DTIME" ;
                 lv2:name "Decay Time" ;
                 lv2:portProperty lv2:logarithmic ;
-                lv2:default 0.10 ;
+                lv2:default 10.0 ;
                 lv2:minimum 0.001 ;
-                lv2:maximum 15.0 ;
+                lv2:maximum 30.0 ;
                 pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
