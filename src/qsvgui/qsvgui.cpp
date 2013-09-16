@@ -157,7 +157,7 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
     folder = skinfile.remove(".skn",Qt::CaseInsensitive)+"/";
 
     QTextStream in(&file);
-    QString line;
+    QString line, type, param;
     QStringList word;
     QRect dimensions;
 
@@ -190,10 +190,9 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
 
             for(int i=0; l>0; i++)//read until blank line
             {
-                currentctl = currentfx->addControl();
-                currentctl->type = word.at(0);
+                type = word.at(0);
                 tmp = word.at(1);
-                currentctl->parameter = tmp.remove(0,1);
+                param = tmp.remove(0,1);
                 dimensions.setX(word.at(2).toInt());
                 dimensions.setY(word.at(3).toInt());
                 dimensions.setWidth(word.at(4).toInt());
@@ -234,7 +233,7 @@ int qsvgui::LoadSkin(QString skinfile, QString name)
                 }
 
                 //now all the data is loaded, lets add the control
-                if(this->AddControl(ctl->type,ctl->parameter,ctl->x,ctl->y,ctl->w,ctl->h,ctl->filename[0],ctl->filename[1],ctl->filename[2],ctl->filename[3]) != 0)
+                if(this->AddControl(type,param,dimensions.x,dimensions.y,dimensions.w,dimensions.h,theta,ctl->filename[0],ctl->filename[1],ctl->filename[2],ctl->filename[3]) != 0)
                 {//error
 
                 }
