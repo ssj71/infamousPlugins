@@ -30,6 +30,25 @@ void s2z(float res, float ims, float Ts, float* rez, float* imz)
 	polar2cart(magz,angz,rez,imz);
 }
 
+void convolve(float* f, uint8_t nf, float* g, uint8_t ng, float* h)
+{
+	//good ol' fasioned convolution by the definition
+	uint16_t t, tau;
+	uint8_t ubound, lbound;
+	for(t=0;t<ng+nf-1;t++)
+	{
+		h[t] = 0;
+		lbound = (((long)t-ng+1)<0)?0:(t-ng+1);
+		ubound = (t<(nf-1))?t:(nf-1);
+		for(tau=lbound;tau<ubound;tau++)
+		{
+			h[t] += f[tau]*g[t-tau];
+			printf("%i %i;",tau, t-tau);
+		}
+		printf("\n");
+	{
+}
+
 void zpuf2filter(float* zeros, uint8_t nzeros, float* poles, uint8_t npoles, float unityfreq, float* Ts,  float* filternum, float* filterden)
 {
 	//gameplan is to convert zeros and poles to z plane, create residuals, convolve the polynomial coefficients, then set the gain to unity at the specified frequency
@@ -38,4 +57,14 @@ void zpuf2filter(float* zeros, uint8_t nzeros, float* poles, uint8_t npoles, flo
 	{
 		//s2z()
 	}
+}
+
+//for testing
+void main()
+{
+	float a[] = {0,0,0,0};
+	float b[] = {0,0,0};
+	float c[6];
+	convolve(a,4,b,3,c);
+	
 }
