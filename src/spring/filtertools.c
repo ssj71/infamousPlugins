@@ -1,6 +1,6 @@
 #include<stdint.h>
 #include<math.h>
-
+#include<stdio.h>
 
 
 void cart2polar(float re, float im, float* mag, float* ang)
@@ -42,11 +42,11 @@ void convolve(float* f, uint8_t nf, float* g, uint8_t ng, float* h)
 		ubound = (t<(nf-1))?t:(nf-1);
 		for(tau=lbound;tau<ubound;tau++)
 		{
-			h[t] += f[tau]*g[t-tau];
-			printf("%i %i;",tau, t-tau);
+			h[t] += f[tau]*g[t-tau-1];
+			printf("%i %i;",tau, t-tau-1);
 		}
 		printf("\n");
-	{
+	}
 }
 
 void zpuf2filter(float* zeros, uint8_t nzeros, float* poles, uint8_t npoles, float unityfreq, float* Ts,  float* filternum, float* filterden)
