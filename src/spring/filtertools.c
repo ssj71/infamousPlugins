@@ -38,14 +38,15 @@ void convolve(float* f, uint8_t nf, float* g, uint8_t ng, float* h)
 	for(t=0;t<ng+nf-1;t++)
 	{
 		h[t] = 0;
-		lbound = (((long)t-ng+1)<0)?0:(t-ng+1);
+		lbound = ((1+(long)t-ng)<=0)?0:(t-ng+1);
 		ubound = (t<(nf-1))?t:(nf-1);
-		for(tau=lbound;tau<ubound;tau++)
+		//printf("%i %i %i, ",t,lbound,ubound);
+		for(tau=lbound;tau<=ubound;tau++)
 		{
-			h[t] += f[tau]*g[t-tau-1];
-			printf("%i %i;",tau, t-tau-1);
+			h[t] += f[tau]*g[t-tau];
+			//printf("%i %i;",tau, t-tau);
 		}
-		printf("\n");
+		//printf("\n");
 	}
 }
 
@@ -62,9 +63,9 @@ void zpuf2filter(float* zeros, uint8_t nzeros, float* poles, uint8_t npoles, flo
 //for testing
 void main()
 {
-	float a[] = {0,0,0,0};
-	float b[] = {0,0,0};
-	float c[6];
-	convolve(a,4,b,3,c);
+	float a[] = {1,1,1,1,1,1,1,1};
+	float b[] = {1,1,1,1,1,1,1};
+	float c[20];
+	convolve(a,8,b,7,c);
 	
 }
