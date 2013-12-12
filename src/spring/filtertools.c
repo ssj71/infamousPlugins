@@ -50,13 +50,28 @@ void convolve(float* f, uint8_t nf, float* g, uint8_t ng, float* h)
 	}
 }
 
-void zpuf2filter(float* zeros, uint8_t nzeros, float* poles, uint8_t npoles, float unityfreq, float* Ts,  float* filternum, float* filterden)
+void zpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* filternum, float* filterden)
 {
 	//gameplan is to convert zeros and poles to z plane, create residuals, convolve the polynomial coefficients, then set the gain to unity at the specified frequency
 	uint8_t i;
+	float a,b,c;
+	float poly[3];
+	float re, im;
 	for(i=0;i<nzeros;i++)
 	{
-		//s2z()
+		s2z(rezeros[i],imzeros[i],Ts,&re,&im);
+		if(imzeros[i])
+		{//complex, adds pair
+			poly[0] = 1;
+			poly[1] = -2*re;
+			poly[2] = re*re + im*im;
+		}
+		else
+		{//real, single zero
+			poly[0] = 0;
+			poly[1] = 1;
+			poly[2] = -re;
+		}
 	}
 }
 
