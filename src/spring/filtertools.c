@@ -50,6 +50,36 @@ void convolve(float* f, uint8_t nf, float* g, uint8_t ng, float* h)
 	}
 }
 
+//this recursive function stores the values in tmp until all calculations
+//are complete and then writes them into g[]
+//naturally this requires g[] to be of sufficient size
+void _cip(float* f, uint8_t nf, float* g, uint8_t ng, uint8_t t)
+{
+	float tmp = 0;
+	uint16_t tau;
+	uint8_t ubound, lbound;
+	lbound = ((1+(long)t-ng)<=0)?0:(t-ng+1);
+	ubound = (t<(nf-1))?t:(nf-1);
+	for(tau=lbound;tau<=ubound;tau++)
+	{
+		tmp += f[tau]*g[t-tau];
+		//printf("%i %i;",tau, t-tau);
+	}
+	//printf("\n");
+	if(t<ng+nf-1)
+	{
+		_cip(f,nf,g,ng,t+1);
+	}
+	g[t] = tmp;
+}
+
+//in this version the result will be stored into g[];
+void convolve_in_place(float* f, uint8_t nf, float* g, uint8_t ng)
+{
+	_cip(f,nf,g,ng,0);
+}
+
+
 void zpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* filternum, float* filterden)
 {
 	//gameplan is to convert zeros and poles to z plane, create residuals, convolve the polynomial coefficients, then set the gain to unity at the specified frequency
@@ -79,8 +109,17 @@ void zpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles,
 void main()
 {
 	float a[] = {1,1,1,1,1,1,1,1};
-	float b[] = {1,1,1,1,1,1,1};
+	float b[20];
 	float c[20];
-	convolve(a,8,b,7,c);
+	uint8_t i;
+	for(i=0;i<7;i++)
+	{
+		b[i] = 1;
+	}
+	for(;i<20;i++);
+	{	
+		b[i] = 0;
+	}
+	convolve_in_place(a,8,b,7);
 	
 }
