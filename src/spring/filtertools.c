@@ -80,13 +80,36 @@ void convolve_in_place(float* f, uint8_t nf, float* g, uint8_t ng)
 }
 
 
+float magnitude(float* f, uint8_t nf, float Ts, float freq_hz)
+{
+	uint8_t i;
+	float re, im, retmp, imtmp, ang;
+	//z^-1 = e^(-jwT);
+	//mag =  ||f[0] + f[1]e^(-jwT) + f[1]e^(-jw2T) +... f[n-1]e^(-jw(n-1)T)||
+	re = f[0];
+	im = 0;
+	ang = 2*PI*freq_hz*Ts;
+	for(i=1;i<nf;i++)
+	{
+		polar2cart(f[i], ang*i, &retmp, &imtmp);
+		re += retmp;
+		im += imtmp;
+	}
+	cart2polar(re,im,&retmp,&imtmp);
+	return retmp;
+}
+
 void zpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* filternum, float* filterden)
 {
 	//gameplan is to convert zeros and poles to z plane, create residuals, convolve the polynomial coefficients, then set the gain to unity at the specified frequency
-	uint8_t i;
+	uint8_t i,n;
 	float a,b,c;
 	float poly[3];
 	float re, im;
+
+	n=1;
+	filternum[0] = 1;//start with a 1 so that polynomial starts building
+	//might need to worry about prewarp someday w' = 2/T *tan(wT/2)
 	for(i=0;i<nzeros;i++)
 	{
 		s2z(rezeros[i],imzeros[i],Ts,&re,&im);
@@ -95,14 +118,46 @@ void zpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles,
 			poly[0] = 1;
 			poly[1] = -2*re;
 			poly[2] = re*re + im*im;
+			
+			convolve_in_place(poly,3,filternum,n);
+			n+=3;
 		}
 		else
 		{//real, single zero
-			poly[0] = 0;
-			poly[1] = 1;
-			poly[2] = -re;
+			poly[0] = 1;
+			poly[1] = -re;
+			
+			convolve_in_place(poly,2,filternum,n);
+			n+=2;
 		}
 	}
+
+	n=1;
+	filterden[0] = 1;//start with a 1 so that polynomial starts building
+	//might need to worry about prewarp someday w' = 2/T *tan(wT/2)
+	for(i=0;i<npoles;i++)
+	{
+		s2z(repoles[i],impoles[i],Ts,&re,&im);
+		if(impoles[i])
+		{//complex, adds pair
+			poly[0] = 1;
+			poly[1] = -2*re;
+			poly[2] = re*re + im*im;
+			
+			convolve_in_place(poly,3,filterden,n);
+			n+=3;
+		}
+		else
+		{//real, single zero
+			poly[0] = 1;
+			poly[1] = -re;
+			
+			convolve_in_place(poly,2,filterden,n);
+			n+=2;
+		}
+	}
+
+
 }
 
 //for testing
