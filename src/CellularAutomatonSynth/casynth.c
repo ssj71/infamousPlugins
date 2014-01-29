@@ -369,7 +369,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
 
                     if (fps && fps->type == synth->float_type)
                     {
-                        synth->sample_rate = ((LV2_Atom_Float*)frame)->body;
+                        synth->sample_rate = ((LV2_Atom_Float*)fps)->body;
                     }
                     if (bpm && bpm->type == synth->float_type)
                     {
