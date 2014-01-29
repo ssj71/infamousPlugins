@@ -93,7 +93,90 @@ float magnitude(float* f, uint8_t nf, float Ts, float freq_hz)
 	return retmp;
 }
 
-void zpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* filternum, float* filterden)
+void resample_zero(float rezero, float imzero, float oldTs, float newTs, float* re, float* im)
+{
+	float ang, mag;
+	cart2polar(rezero,imzero,*ang,*mag);
+	*ang *= newTs/oldTs;
+	polar2cart(mag,ang,re,im);
+}
+
+void dzpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float zpTs, float filterTs,  float* filternum, float* filterden)
+{
+	//this function is the one I'll use, we'll "resample" the zeros/poles in the digital domain
+	uint16_t i,nn,nd;
+	float a,b,c;
+	float poly[3];
+	float re, im;
+
+	nn=1;
+	filternum[0] = 1;//start with a 1 so that polynomial starts building
+	//might need to worry about prewarp someday w' = 2/T *tan(wT/2)
+	for(i=0;i<nzeros;i++)
+	{
+		resample_zero(rezeros[i],imzeros[i],zpTs,filterTs,&re,&im);
+		if(imzeros[i])
+		{//complex, adds pair
+			poly[0] = 1;
+			poly[1] = -2*re;
+			poly[2] = re*re + im*im;
+			
+			convolve_in_place(poly,3,filternum,nn);
+			nn+=2;
+			//printf("zero is %f %fi, poly is %f %f %f \n",rezeros[i],imzeros[i],poly[0],poly[1],poly[2]);
+		}
+		else
+		{//real, single zero
+			poly[0] = 1;
+			poly[1] = -re;
+			
+			convolve_in_place(poly,2,filternum,nn);
+			nn+=1;
+			//printf("zero is %f %fi, poly is %f %f \n",rezeros[i],imzeros[i],poly[0],poly[1]);
+		}
+	}
+
+	nd=1;
+	filterden[0] = 1;//start with a 1 so that polynomial starts building
+	//might need to worry about prewarp someday w' = 2/T *tan(wT/2)
+	for(i=0;i<npoles;i++)
+	{
+		resample_zero(repoles[i],impoles[i],zpTs,filterTs,&re,&im);
+		if(impoles[i])
+		{//complex, adds pair
+			poly[0] = 1;
+			poly[1] = -2*re;
+			poly[2] = re*re + im*im;
+			
+			convolve_in_place(poly,3,filterden,nd);
+			nd+=2;
+			//printf("pole is %f %fi, poly is %f %f %f \n",repoles[i],impoles[i],poly[0],poly[1],poly[2]);
+		}
+		else
+		{//real, single zero
+			poly[0] = 1;
+			poly[1] = -re;
+			
+			convolve_in_place(poly,2,filterden,nd);
+			nd+=1;
+			//printf("pole is %f %fi, poly is %f %f\n",repoles[i],impoles[i],poly[0],poly[1]);
+		}
+	}
+
+	b = magnitude(filternum,nn,Ts,unityfreq);
+	a = magnitude(filterden,nd,Ts,unityfreq);
+	c = a/b;//inverse of magnitude
+	//printf("%f %i %i\n",c,nn,nd);
+//printf("%f %fz^-1 %fz^-2 %fz^-3 \n-----------------------------------------------\n%f %fz^-1 %fz^-2 %fz^-3\n\n",filternum[0], filternum[1],filternum[2],filternum[3],filterden[0],filterden[1],filterden[2],filterden[3]);
+
+	for(i=0;i<nn;i++)
+	{
+		filternum[i]*=c;
+//printf("%f %fz^-1 %fz^-2 %fz^-3 \n-----------------------------------------------\n%f %fz^-1 %fz^-2 %fz^-3\n\n",filternum[0], filternum[1],filternum[2],filternum[3],filterden[0],filterden[1],filterden[2],filterden[3]);
+	}
+}
+
+void azpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* filternum, float* filterden)
 {
 	//gameplan is to convert zeros and poles to z plane, create residuals, convolve the polynomial coefficients, then set the gain to unity at the specified frequency
 	uint8_t i,nn,nd;
