@@ -102,7 +102,7 @@ Hap = (tf([al al*a2 zeros(1,ki-2) a2 1],[1 a2 zeros(1,ki-2) al*a2 al],Ts));%eixt
 a = [al al*a2 zeros(1,ki-2) a2 1];
 b = [1 a2 zeros(1,ki-2) al*a2 al];
 
-break
+%break
 
 	%so for 3 springs (k al M Fcfreq) 
 	%1 17 -.6 23 2594hz
@@ -316,8 +316,11 @@ disp "Starting over"
 k=2; al=-.7; M=16; D=63;
 z = roots([al zeros(1,k-1) 1]);
 p = roots([1 zeros(1,k-1) al]);
-b = poly(z);
-a = poly(p);
+b = poly(repmat(z',1,M));
+a = poly(repmat(p',1,M));
 
-Hap = (tf([al zeros(1,k-1) 1],[1 zeros(1,k-1) al],Ts))^M;%old way
+
+Hap = (tf(b,a,Ts*4));
+[y t] = impulse(Hap,.06);
+specgram(y,64,Fs/4,hanning(64),64-8)
 
