@@ -77,7 +77,7 @@ Nyquist = Fs/2;
 %first lets work on the low frequency chirp section
 %allpass
 Fc =  2800;%4300;% 3700, 2800;
-k = 2.56%Fs/Fc;%stretch factor this affects Fc. %k=10=4.4khz ,11=4k, 12=3.6k,17=2.6k, 18=2.4k, 9=5k
+k = 2.56;%Fs/Fc;%stretch factor this affects Fc. %k=10=4.4khz ,11=4k, 12=3.6k,17=2.6k, 18=2.4k, 9=5k
 Fc = Fs/k/4;
 d = k-floor(k);%larger d makes more stable
 ki = floor(k);
@@ -306,21 +306,41 @@ Hap = (tf([al zeros(1,k-1) 1],[1 zeros(1,k-1) al],Ts))^M;%old way
 disp "Starting over"
 
 %new design decimate x4
-%5500hz k=2; al=-.7; M=16; D=63ms
+%5500hz k=2; al=-.7; M=19; D=56ms
 %5500hz k=2; al=-.5; M=24; D=88ms
-%5500hz k=2; al=-.3; M=33; D=56ms
-%3700hz k=3; al=-3.6;M=42; D=56.2ms
-%2800hz k=4; al=-.6; M=22; D=56.15ms
+%5500hz k=2; al=-.3; M=21; D=63ms
+%3700hz k=3; al=-3.6;M=42; D=63.2ms
+%2800hz k=4; al=-.6; M=22; D=63.15ms
+nspring = 5;
+ks = [2 2 2 3 4];
+als = [.7 .5 .3 3.6 .6];
 
-
-k=2; al=-.7; M=16; D=63;
+%low side
+k=3; al=-.36; M=42; D=.063;
 z = roots([al zeros(1,k-1) 1]);
 p = roots([1 zeros(1,k-1) al]);
 b = poly(repmat(z',1,M));
 a = poly(repmat(p',1,M));
-
-
-Hap = (tf(b,a,Ts*4));
+Hap = zpk(repmat(z,M,1),repmat(p,M,1),1,Ts*4);
+%Hap = (tf(b,a,Ts*4));%*tf([1],[1 zeros(1,D*Fs/4)],Ts*4);%delay
+Hap2 = (tf([al zeros(1,k-1) 1],[1 zeros(1,k-1) al],Ts*4))^M;%old way 
 [y t] = impulse(Hap,.06);
 specgram(y,64,Fs/4,hanning(64),64-8)
+
+
+k=2; al=-.7; M=19; D=.056;
+z = roots([al zeros(1,k-1) 1]);
+p = roots([1 zeros(1,k-1) al]);
+b = poly(repmat(z',1,M));
+a = poly(repmat(p',1,M));
+%Hap2 = (tf(b,a,Ts*4))*tf([1],[1 zeros(1,D*Fs/4)],Ts*4);
+
+figure(2)
+[y2 t] = impulse(Hap2,.10);
+specgram(y2,64,Fs/4,hanning(64),64-8)
+figure(1)
+%Hap.den{1} - Hap2.den{1}
+%max(Hap.den{1} - Hap2.den{1})
+
+%high side
 
