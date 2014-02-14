@@ -1,6 +1,9 @@
 //Spencer Jackson
 //square.c
 #include<lv2.h>
+#include<stdlib.h>
+#include<stdio.h>
+#include<math.h>
 
 #define HIP2B_URI "http://sourceforge.net/projects/infamousplugins:hip2b"
 
