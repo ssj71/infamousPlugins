@@ -24,7 +24,7 @@ typedef struct _SQUARE
     char step;
     char state;
     char nextstate;
-    char pos;
+    unsigned char pos;
     float table[HALF+1];//one quarter of a square wave
 
     float circularbuf[NHARMONICS];
@@ -80,7 +80,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         //change position
         if(plug->headway == 0)
         {//on the transition point, search for next one
-            plug->pos = plug->headway;
+            plug->pos = (unsigned char)plug->headway;
             plug->state = plug->nextstate;
             //update headway
             for(j=0;j<=HALF;j++)
@@ -110,7 +110,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         }
         else if(plug->headway < plug->pos)
         {//need to start decrementing
-            plug->pos = plug->headway;
+            plug->pos = (unsigned char)plug->headway;
             //update headway
             plug->headway--;
         }
@@ -163,8 +163,8 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         plug->pos = 0;
         plug->step = 0;
         plug->state = 0;
-        plug->dcprevout = 0;
-        plug->dcprevin = 0;
+//        plug->dcprevout = 0;
+//        plug->dcprevin = 0;
     }
 }
 
