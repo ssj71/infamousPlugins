@@ -277,6 +277,8 @@ void play_note(NOTE *self,
 
 void end_note(NOTE *self, uint32_t release_frame)
 {
+    if(release_frame == 0)
+        release_frame = 1;
     self->release_frame = release_frame;
 }
 
