@@ -41,6 +41,7 @@ typedef struct _ENVFOLLOWER{
 
     float* channel_p;
     float* control_p; 
+    float* cv_p;
     float* min_p;
     float* max_p;
     float* rev_p;
