@@ -63,6 +63,7 @@ void connect_envfollower_ports(LV2_Handle handle, uint32_t port, void *data)
     else if(port == OUTPUT)     plug->output_p = (float*)data;
     else if(port == MIDI_OUT)   plug->midi_out_p = (LV2_Atom_Sequence*)data;
     else if(port == CTL_OUT)     plug->ctl_out_p = (float*)data;
+    else if(port == CV_OUT)     plug->cv_out_p = (float*)data;
     else if(port == CHANNEL)    plug->channel_p = (float*)data;
     else if(port == CONTROL_NO) plug->control_p = (float*)data;
     else if(port == MINV)       plug->min_p = (float*)data;
@@ -186,27 +187,44 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
             lv2_atom_forge_frame_time(&plug->forge,i);
             lv2_atom_forge_raw(&plug->forge,&midiatom,sizeof(LV2_Atom));
             lv2_atom_forge_raw(&plug->forge,msg,3);
-            lv2_atom_forge_pad(&plug->forge,3+sizeof(LV2_Atom));
-
-
+            lv2_atom_forge_pad(&plug->forge,3+sizeof(LV2_Atom)); 
         }
         plug->mprev = plug->mout;
 
+	//now handle the Control Voltage port
+        if(plug->out <= *plug->threshold_p)
+        {
+            plug->cv_out_p[i] = *plug->cmin_p;
+        }
+        else if(plug->out >= *plug->saturation_p)
+        {
+            plug->cv_out_p[i] = *plug->cmax_p;
+        }
+        else
+        {
+             plug->cv_out_p[i] = cmapping*(plug->out - *plug->threshold_p) + *plug->cmin_p;
+        }
+        if(*plug->crev_p)
+        {
+            plug->cv_out_p[i] = *plug->cmax_p - plug->cv_out_p[i] + *plug->cmin_p;
+        }
+
+        //finally copy the intput to the output
         plug->output_p[i] = buf[i];
     }
 
     //do last value to output ctl port, should maybe do average but meh...
     if(plug->out <= *plug->threshold_p)
     {
-        *plug->ctl_out_p = *plug->cmin_p;
+        *plug->ctl_out_p = *plug->threshold_p;
     }
     else if(plug->out >= *plug->saturation_p)
     {
-        *plug->ctl_out_p = *plug->cmax_p;
+        *plug->ctl_out_p = *plug->saturation_p;
     }
     else
     {
-        *plug->ctl_out_p = cmapping*(plug->out - *plug->threshold_p) + *plug->cmin_p;
+        *plug->ctl_out_p = plug->out;
     }
     if(*plug->crev_p)
     {
