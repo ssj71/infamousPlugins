@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-O -std=c99
-INSTALL_DIR = /usr/local/lib/lv2
+INSTALL_DIR = /usr/lib/lv2
 ifndef ARCHNAME
 OEXT=.o
 SOEXT=.so
