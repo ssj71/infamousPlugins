@@ -15,6 +15,8 @@ Dependencies:
     lv2-dev
     gcc
 
+Note that on ArchLinux, they do not have qmake in /usr/bin, so a special install script was created. Use ./installARCHLINUX.sh instead.
+
 Now lets talk about what you're installing:
 
 ==========================================
