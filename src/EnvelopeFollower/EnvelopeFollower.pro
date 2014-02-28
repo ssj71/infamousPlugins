@@ -31,13 +31,8 @@ unix {
 
         contains(PREFIX, $$system(echo $HOME)) {
                 LV2DIR = $${PREFIX}/.lv2
-        } else {
-                ARCH = $$system(uname -m)
-                contains(ARCH, x86_64) {
-                        LV2DIR = $${PREFIX}/lib64/lv2
-                } else {
-                        LV2DIR = $${PREFIX}/lib/lv2
-                }
+        } else { 
+                LV2DIR = $${PREFIX}/lib/lv2
         }
 
         isEmpty(QMAKE_EXTENSION_SHLIB) {
