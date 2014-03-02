@@ -62,7 +62,8 @@ void start_note(NOTE*           self,
                 unsigned char   velocity,
                 uint32_t        start_frame,
                 float           harmonic_gain[],
-                unsigned short  harmonics,
+                unsigned short  harmonics, 
+                float           width,
                 float           envelope[])
 {
     unsigned char i;
@@ -78,6 +79,7 @@ void start_note(NOTE*           self,
     {
         self->harm_gain[i] = self->velocity*harmonic_gain[i];
         self->harmonic[i] = harmonics&(1<<i);
+        self->fwidth[i] = powf(2,width*white(waves,0,0)); 
     }
     //and the root
     i = MAX_N_HARMONICS;
@@ -206,8 +208,7 @@ void play_note(NOTE *self,
             self->amod_phase += amod_step;
             if(self->amod_phase >= waves->func_max)
             {
-                self->amod_phase -= waves->func_domain;
-            }
+                self->amod_phase -= waves->func_domain; }
 
             self->env_gain += env_slope;
             total_gain = gain*self->env_gain*amod_coeff;
@@ -218,7 +219,7 @@ void play_note(NOTE *self,
                 if(self->harmonic[j])//if cell is alive
                 {
                     buffer[i] += (total_gain*self->harm_gain[j]) * (waves->wave_func[base_wave](waves, &(self->hyst[j]), self->phase[j]));
-                    self->phase[j] += fmod_coeff*self->step[j];
+                    self->phase[j] += self->fwidth[j]*fmod_coeff*self->step[j];
                     if(self->phase[j] >= waves->func_max)
                     {
                         self->phase[j] -= waves->func_domain;
@@ -227,7 +228,7 @@ void play_note(NOTE *self,
                 else if(self->phase[j] != 0 )
                 {
                     buffer[i] += (total_gain*self->harm_gain[j]) * (waves->wave_func[base_wave](waves, &(self->hyst[j]), self->phase[j]));
-                    self->phase[j] += fmod_coeff*self->step[j];
+                    self->phase[j] += self->fwidth[j]*fmod_coeff*self->step[j];
                     if(self->phase[j] >= waves->func_max)
                     {
                         self->phase[j] = 0;

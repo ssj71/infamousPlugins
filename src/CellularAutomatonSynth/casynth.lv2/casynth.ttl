@@ -129,6 +129,15 @@ lv2:symbol "Modulation" .
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 9 ;
+                lv2:symbol "HARM_WIDTH" ;
+                lv2:name "Harmonic Width" ;
+                lv2:default 0.0 ;
+                lv2:minimum 0.000 ;
+                lv2:maximum 1.0 ;
+                pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:auto> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 10 ;
                 lv2:symbol "WAVE" ;
                 lv2:name "Waveform" ;
                 lv2:portProperty lv2:integer ;
@@ -145,7 +154,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
+                lv2:index 11 ;
                 lv2:symbol "ENV_A" ;
                 lv2:name "Attack" ;
                 lv2:portProperty lv2:logarithmic ;
@@ -155,7 +164,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
+                lv2:index 12 ;
                 lv2:symbol "ENV_D" ;
                 lv2:name "Decay" ;
                 lv2:portProperty lv2:logarithmic ;
@@ -165,7 +174,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 12 ;
+                lv2:index 13 ;
                 lv2:symbol "ENV_B" ;
                 lv2:name "Break Point" ;
                 lv2:default 0.5 ;
@@ -174,7 +183,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 13 ;
+                lv2:index 14 ;
                 lv2:symbol "ENV_SWL" ;
                 lv2:name "Swell" ;
                 lv2:portProperty lv2:logarithmic ;
@@ -184,7 +193,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 14 ;
+                lv2:index 15 ;
                 lv2:symbol "ENV_SUS" ;
                 lv2:name "Sustain" ;
                 lv2:default 0.75 ;
@@ -193,7 +202,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 15 ;
+                lv2:index 16 ;
                 lv2:symbol "ENV_R" ;
                 lv2:name "Release" ;
                 lv2:portProperty lv2:logarithmic ;
@@ -203,7 +212,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 16 ;
+                lv2:index 17 ;
                 lv2:symbol "AMOD_WAV" ;
                 lv2:name "AM Waveform" ;
                 lv2:portProperty lv2:integer ;
@@ -220,7 +229,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 17 ;
+                lv2:index 18 ;
                 lv2:symbol "AMOD_FREQ" ;
                 lv2:name "AM Frequency" ;
                 lv2:portProperty lv2:logarithmic ;
@@ -230,7 +239,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 18 ;
+                lv2:index 19 ;
                 lv2:symbol "AMOD_GAIN" ;
                 lv2:name "AM Gain" ;
                 lv2:default 0.10 ;
@@ -239,7 +248,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 19 ;
+                lv2:index 20 ;
                 lv2:symbol "FMOD_WAV" ;
                 lv2:name "FM Waveform" ;
                 lv2:portProperty lv2:integer ;
@@ -256,7 +265,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 20 ;
+                lv2:index 21 ;
                 lv2:symbol "FMOD_FREQ" ;
                 lv2:name "FM Frequency" ;
                 lv2:portProperty lv2:logarithmic ;
@@ -266,7 +275,7 @@ lv2:symbol "Modulation" .
                 pg:group <http://sourceforge.net/projects/infamousplugins:casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 21 ;
+                lv2:index 22 ;
                 lv2:symbol "FMOD_GAIN" ;
                 lv2:name "FM Gain" ;
                 lv2:default 0.10 ;

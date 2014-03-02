@@ -48,8 +48,8 @@ void init_waves(WAVESOURCE* self)
     }
 
     //white and random
-    srandom ((unsigned int) time (NULL));
-    self->V = 2*random() / (float)RAND_MAX - 1;
+    srand ((unsigned int) time (NULL));
+    self->V = 2*rand() / (float)RAND_MAX - 1;
     self->V2 = self->V*self->V;
 
     //pointers
@@ -75,7 +75,7 @@ void init_waves(WAVESOURCE* self)
 
 void init_hysteresis(HYSTERESIS *self)
 {
-    self->prev_val = 2*random() / (float)RAND_MAX - 1;
+    self->prev_val = 2*rand() / (float)RAND_MAX - 1;
     self->prev_phase = 0;
 }
 
@@ -138,16 +138,16 @@ double triangle(WAVESOURCE* self, HYSTERESIS *mem, double phase)
 //normal distribution approximation calculated by a modified Marsaglia polar method
 double white(WAVESOURCE* self, HYSTERESIS *mem, double phase)
 {
-    float U = 2.0* random() / (float)RAND_MAX - 1;//rand E(-1,1)
+    float U = 2.0* rand() / (float)RAND_MAX - 1;//rand E(-1,1)
     float S = U*U + self->V2;//map 2 random vars to unit circle
 
    if(S>=1)//repull RV if outside unit circle
    {
-       U = 2.0* random() / (float)RAND_MAX - 1;
+       U = 2.0* rand() / (float)RAND_MAX - 1;
        S = U*U + self->V2;
        if(S>=1)
        {
-           U = 2.0* random() / (float)RAND_MAX - 1;
+           U = 2.0* rand() / (float)RAND_MAX - 1;
            S = U*U + self->V2;
            if(S>=1)
            {//guarantee an exit, value will be unchanged
@@ -175,7 +175,7 @@ double randomsnh(WAVESOURCE* self, HYSTERESIS* mem, double phase)
 {
     if(phase < mem->prev_phase)
     {
-        mem->prev_val = 2*random() / (float)RAND_MAX - 1;
+        mem->prev_val = 2*rand() / (float)RAND_MAX - 1;
     }
     mem->prev_phase = phase;
     return mem->prev_val;

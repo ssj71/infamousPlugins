@@ -63,6 +63,7 @@ typedef struct _CASYNTH
     float* init_cells_p;
     float* nharmonics_p;
     float* harmonic_mode_p;
+    float* harmonic_width_p;
     float* wave_p;
 
     float* env_a_p;
@@ -132,17 +133,18 @@ enum casynth_ports
     INIT_CELLS,
     NHARMONICS,
     HARM_MODE,
+    HARM_WIDTH,
     WAVE,
-    ENV_A,//10
+    ENV_A,//11
     ENV_D,
     ENV_B,
     ENV_SWL,
     ENV_SUS,
-    ENV_R,//15
+    ENV_R,//16
     AMOD_WAV,
     AMOD_FREQ,
     AMOD_GAIN,
     FMOD_WAV,
-    FMOD_FREQ,//20
+    FMOD_FREQ,//21
     FMOD_GAIN
 };

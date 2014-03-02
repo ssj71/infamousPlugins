@@ -56,6 +56,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -122,6 +125,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 0.0
 	] , [
@@ -187,6 +193,9 @@
 	] , [
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
+	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
 	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 0.0
@@ -255,6 +264,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -320,6 +332,9 @@
 	] , [
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
+	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
 	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
@@ -387,6 +402,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -452,6 +470,9 @@
 	] , [
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
+	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
 	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
@@ -519,6 +540,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -584,6 +608,9 @@
 	] , [
 		lv2:symbol "HARM_MODE" ;
 		pset:value 2.0
+	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
 	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
@@ -651,6 +678,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 256.0
 	] , [
@@ -717,6 +747,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 15.0
 	] , [
@@ -782,6 +815,9 @@
 	] , [
 		lv2:symbol "HARM_MODE" ;
 		pset:value 2.0
+	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
 	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 65280.0
@@ -850,6 +886,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -916,6 +955,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -980,6 +1022,9 @@
 		pset:value 5.0
 	] , [
 		lv2:symbol "HARM_MODE" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "HARM_WIDTH" ;
 		pset:value 0.0
 	] , [
 		lv2:symbol "INIT_CELLS" ;

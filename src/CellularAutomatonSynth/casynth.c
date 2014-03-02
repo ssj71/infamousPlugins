@@ -93,6 +93,7 @@ void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
     case INIT_CELLS:    synth->init_cells_p = (float*)data;break;
     case NHARMONICS:    synth->nharmonics_p = (float*)data;break;
     case HARM_MODE:     synth->harmonic_mode_p = (float*)data;break;
+    case HARM_WIDTH:    synth->harmonic_width_p = (float*)data;break;
     case WAVE:          synth->wave_p = (float*)data;break;
     case ENV_A:         synth->env_a_p = (float*)data;break;
     case ENV_D:         synth->env_d_p = (float*)data;break;
@@ -211,6 +212,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                        t,
                                        synth->harm_gains,
                                        *synth->init_cells_p,
+                                       *synth->harmonic_width_p,
                                        synth->envelope);
                         }
                         else//velocity zero == note off
