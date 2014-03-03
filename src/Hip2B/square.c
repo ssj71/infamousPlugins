@@ -150,8 +150,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         CIRCULATE(r);
         temp *= *plug->outgain_p;
 
-        //dc removal (hpf)
-	plug->output_p[i] = temp;
+        //dc removal (hpf) 
         plug->output_p[i] = .999*plug->dcprevout + temp - plug->dcprevin;
         plug->dcprevin = temp;
         plug->dcprevout = plug->output_p[i];
@@ -162,15 +161,15 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     plug->c = c;
 
     //this way for dc offset reset
-    if(plug->dcprevout < PRACTICALLYZERO && plug->dcprevout > -PRACTICALLYZERO  && plug->headway > HALF)
+/*    if(plug->dcprevout < PRACTICALLYZERO && plug->dcprevout > -PRACTICALLYZERO  && plug->headway > HALF)
     {
         plug->pos = 0;
         plug->step = 0;
         plug->state = 0;
 	plug->nextstate = 0;
-//        plug->dcprevout = 0;
-//        plug->dcprevin = 0;
-    }
+        plug->dcprevout = 0;
+        plug->dcprevin = 0;
+    }*/
 }
 
 LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
