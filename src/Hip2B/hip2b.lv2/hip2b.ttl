@@ -13,12 +13,12 @@
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
 @prefix param: <http://lv2plug.in/ns/ext/parameters#> .
 
-<http://sourceforge.net/projects/infamousplugins:hip2b>
+<http://infamousplugins.sourceforge.net/plugs.html#hip2b>
         a lv2:Plugin, lv2:DistortionPlugin ;
         doap:name "Hip2B" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
-                foaf:homepage <http://sourceforge.net/projects/infamousplugins/> ;
+                foaf:homepage <http://infamousplugins.sourceforge.net> ;
                 foaf:mbox <ssjackson71@gmail.com> ;
         ] ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;

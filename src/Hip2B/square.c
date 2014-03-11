@@ -2,7 +2,7 @@
 //square.c
 #include<lv2.h>
 
-#define HIP2B_URI "http://sourceforge.net/projects/infamousplugins:hip2b"
+#define HIP2B_URI "http://infamousplugins.sourceforge.net/plugs.html#hip2b"
 
 #define UP      1
 #define DOWN    -1

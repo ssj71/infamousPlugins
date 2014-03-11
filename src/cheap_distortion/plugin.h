@@ -13,7 +13,7 @@ typedef void * LV2_Handle;
 #include <lv2/lv2plug.in/ns/lv2core/lv2.h>
 
 // URI strings
-#define URI_STRING "http://sourceforge.net/projects/infamousplugins:cheapdist"
+#define URI_STRING "http://infamousplugins.sourceforge.net/plugs.html#cheapdist"
 #endif
 
 // Port indexes

@@ -7,7 +7,7 @@
 #include "lv2/lv2plug.in/ns/ext/time/time.h"
 #include "lv2/lv2plug.in/ns/ext/atom/forge.h"
 
-#define ENVFOLLOWER_URI "http://sourceforge.net/projects/infamousplugins:envfollower"
+#define ENVFOLLOWER_URI "http://infamousplugins.sourceforge.net/plugs.html#envfollower"
 
 typedef struct _ENVFOLLOWER{
     float sample_time;
