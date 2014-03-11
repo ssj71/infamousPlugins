@@ -1,13 +1,17 @@
 //Spencer Jackson
 //square.c
 #include<lv2.h>
+#include<stdlib.h>
+#include<stdio.h>
+#include<math.h>
 
 #define HIP2B_URI "http://infamousplugins.sourceforge.net/plugs.html#hip2b"
 
 #define UP      1
 #define DOWN    -1
-#define NHARMONICS 16
-#define HALF    8
+#define NHARMONICS 128
+#define HALF    64
+#define HALFPLUS 65
 #define PI 3.1415926535897932384626433832795
 #define DC_CUTOFF 10*2*PI //rad/s
 #define PRACTICALLYZERO .001
@@ -21,16 +25,15 @@ typedef struct _SQUARE
     char step;
     char state;
     char nextstate;
-    char pos;
-    float table[HALF+1];//one quarter of a square wave
+    unsigned char pos;
+    float table[HALFPLUS];//one quarter of a square wave
 
     float circularbuf[NHARMONICS];
     unsigned char w,r,c;//read, write & check pointers
     unsigned char headway;//distance to next transition
     float dcprevin;
     float dcprevout;
-    unsigned char timeout;
-    
+
     float *input_p;
     float *output_p;
     float *latency_p;
@@ -77,7 +80,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         //change position
         if(plug->headway == 0)
         {//on the transition point, search for next one
-            plug->pos = plug->headway;
+            plug->pos = 0;//(unsigned char)plug->headway;
             plug->state = plug->nextstate;
             //update headway
             for(j=0;j<=HALF;j++)
@@ -103,11 +106,11 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 }
             }
             plug->headway = j;
-            plug->step = 1;
+            plug->step = 1;//start moving up the table
         }
         else if(plug->headway < plug->pos)
         {//need to start decrementing
-            plug->pos = plug->headway;
+            plug->pos = (unsigned char)plug->headway;
             //update headway
             plug->headway--;
         }
@@ -135,16 +138,19 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         }
         else
         {//know headway, increment pos, dec. headway
+	    if(plug->pos == plug->headway)
+		plug->step = 0;
             plug->pos += plug->step;
             //update headway
             plug->headway--;
         }
         
-        //write out the frame
+        //write out the frame 
         temp = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*plug->state*plug->table[plug->pos];
         CIRCULATE(r);
         temp *= *plug->outgain_p;
-        //dc removal (hpf)
+
+        //dc removal (hpf) 
         plug->output_p[i] = .999*plug->dcprevout + temp - plug->dcprevin;
         plug->dcprevin = temp;
         plug->dcprevout = plug->output_p[i];
@@ -155,17 +161,18 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     plug->c = c;
 
     //this way for dc offset reset
-    if(plug->dcprevout < PRACTICALLYZERO && plug->dcprevout > -PRACTICALLYZERO  && plug->headway > HALF)
+/*    if(plug->dcprevout < PRACTICALLYZERO && plug->dcprevout > -PRACTICALLYZERO  && plug->headway > HALF)
     {
         plug->pos = 0;
         plug->step = 0;
         plug->state = 0;
+	plug->nextstate = 0;
         plug->dcprevout = 0;
         plug->dcprevin = 0;
-    }
+    }*/
 }
 
-void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
+LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     SQUARE* plug = malloc(sizeof(SQUARE));
 
@@ -183,11 +190,13 @@ void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char
         for(j=0;j<=HALF;j++)//samples
         {
             plug->table[HALF-j] += (k/(float)i)*sin(PI/2 + (float)i*j*s);
-        }
+     	}
         k = -k;
     }
-    plug->table[0] = 0;//remove slight rounding error
-    
+    //for(i=0;i<=HALF;i++)
+    //{
+    //  printf("%f ",plug->table[i]);
+    //}
     plug->pos = 0;
     plug->step = 0;
     plug->state = 0;
@@ -205,7 +214,10 @@ void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char
 
     plug->dcprevin = 0;
     plug->dcprevout = 0;
+  
+    return plug;
 }
+
 void connect_square_ports(LV2_Handle handle, uint32_t port, void *data)
 {
     SQUARE* plug = (SQUARE*)handle;

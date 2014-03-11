@@ -231,10 +231,6 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                     }
                                     else
                                     {
-                                        if(t == 0)
-                                        {
-                                            t++;
-                                        }
                                         end_note(&(synth->note[num]),t);
                                     }
                                 }
@@ -258,10 +254,6 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                 }
                                 else
                                 {
-                                    if(t == 0)
-                                    {
-                                        t++;
-                                    }
                                     end_note(&(synth->note[num]),t);
                                 }
                             }
@@ -282,10 +274,6 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                 {
                                     if(synth->note[synth->sustained[i]].sus)
                                     {
-                                        if(t == 0)
-                                        {
-                                            t++;
-                                        }
                                         end_note(&(synth->note[synth->sustained[i]]),t);
                                     }
                                 }
@@ -304,10 +292,6 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             }
                             for(i=0;i<synth->nactive;i++)
                             {
-                                if(t == 0)
-                                {
-                                    t++;
-                                }
                                 num = synth->active[i];
                                 end_note(&(synth->note[num]),t);
 
@@ -371,7 +355,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
 
                     if (fps && fps->type == synth->float_type)
                     {
-                        synth->sample_rate = ((LV2_Atom_Float*)frame)->body;
+                        synth->sample_rate = ((LV2_Atom_Float*)fps)->body;
                     }
                     if (bpm && bpm->type == synth->float_type)
                     {
