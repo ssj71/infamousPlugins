@@ -86,13 +86,17 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         if(plug->headway == 0)
         {//on the transition point, search for next one
             plug->pos = 0;//(unsigned char)plug->headway;
-            if(plug->skip++>nskip)
+            if(plug->skip++>=nskip)
             { 
                 plug->skip = 1;
-               plug->outstate = plug->nextstate;
-            }
-
-            plug->state = plug->outstate; 
+                plug->outstate = (!plug->outstate)*plug->nextstate - plug->outstate;
+		//this implements the following table (necessary for octaves)
+		//    \out
+		// next\ _dn_|_0__|_up_
+		//   dn | up | dn | dn
+		//   up | up | up | dn
+            } 
+            plug->state = plug->nextstate;
             //update headway
             for(j=0;j<=HALF;j++)
             {
@@ -100,16 +104,14 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 {
                     c++;
                     CIRCULATE(c);
-                    plug->nextstate = DOWN;
-                    plug->skip = 1;
+                    plug->nextstate = DOWN; 
                     break; 
                 }   
                 else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
                 {
                     c++;
                     CIRCULATE(c); 
-                    plug->nextstate = UP;
-                    plug->skip = 1;
+                    plug->nextstate = UP; 
                     break; 
                 }
                 else
@@ -141,7 +143,6 @@ void run_square(LV2_Handle handle, uint32_t nframes)
             {
                 plug->headway = HALF;
                 plug->nextstate = DOWN;
-                plug->skip = 1;
             }
             else if (plug->state != UP 
                      && plug->circularbuf[c] >= *plug->up_p 
@@ -149,7 +150,6 @@ void run_square(LV2_Handle handle, uint32_t nframes)
             {
                 plug->headway = HALF;
                 plug->nextstate = UP;
-                plug->skip = 1;
             }
             c++;
             CIRCULATE(c);
