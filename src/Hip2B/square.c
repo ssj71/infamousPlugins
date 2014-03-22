@@ -86,14 +86,13 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         if(plug->headway == 0)
         {//on the transition point, search for next one
             plug->pos = 0;//(unsigned char)plug->headway;
-            if(plug->skip++>1<<*plug->octave)A
+            if(plug->skip++>nskip)
             { 
                 plug->skip = 1;
                plug->outstate = plug->nextstate;
             }
 
-            plug->state = plug->outstate;
-            plug->nextstate;
+            plug->state = plug->outstate; 
             //update headway
             for(j=0;j<=HALF;j++)
             {
