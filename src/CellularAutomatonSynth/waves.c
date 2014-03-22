@@ -79,23 +79,15 @@ void init_hysteresis(HYSTERESIS *self)
     self->prev_phase = 0;
 }
 
-//based on an algorithm by Martin Ankerl
+//8th order series approximation of pow(2,x) suggested by benjamin guihaire
 double myPow2(double x)
 {
-    char i = (char)x;
-    union {
-      double d;
-      long a[2];
-    }u;
-    u.a[1] = (long)((x-i)*1109377 + 1072632447);
-    u.a[0] = 0;
-    //need to calculate 2^i
-    if(x<0)
-        return u.d/(double)(1<<-i);
-    else if(x>0)
-        return u.d*(double)(1<<i);
-    else
-        return 1;
+    double p;  
+    if(x>=0) p = (1+x *0.00270760617406228636491106297445); //LN2/256 = 0.00270760617406228636491106297445
+    else p = 1/(1-x*0.00270760617406228636491106297445); 
+    p *=p;p *=p;p *=p;p *=p;
+    p *=p;p *=p;p *=p;
+    return p*p; 
 }
 
 //based on an algorithm by Nicolas Capens

@@ -24,6 +24,7 @@ typedef struct _SQUARE
 {
     char step;
     char state;
+    char outstate;
     char nextstate;
     unsigned char pos;
     float table[HALFPLUS];//one quarter of a square wave
@@ -31,6 +32,7 @@ typedef struct _SQUARE
     float circularbuf[NHARMONICS];
     unsigned char w,r,c;//read, write & check pointers
     unsigned char headway;//distance to next transition
+    unsigned char skip;
     float dcprevin;
     float dcprevout;
 
@@ -39,6 +41,7 @@ typedef struct _SQUARE
     float *latency_p;
     float *up_p;
     float *down_p;
+    float *octave_p;
     float *ingain_p;
     float *wetdry_p;
     float *outgain_p;
@@ -51,6 +54,7 @@ enum square_ports
     LATENCY,
     UPP,
     DOWNN,
+    OCTAVE,
     INGAIN,
     WETDRY,
     OUTGAIN
@@ -66,6 +70,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     float temp;
     uint32_t i;
     unsigned char j, w, r, c;
+    unsigned char nskip = 1<<-(int)*plug->octave_p;
     w = plug->w;
     r = plug->r;
     c = plug->c;
@@ -81,7 +86,14 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         if(plug->headway == 0)
         {//on the transition point, search for next one
             plug->pos = 0;//(unsigned char)plug->headway;
-            plug->state = plug->nextstate;
+            if(plug->skip++>1<<*plug->octave)A
+            { 
+                plug->skip = 1;
+               plug->outstate = plug->nextstate;
+            }
+
+            plug->state = plug->outstate;
+            plug->nextstate;
             //update headway
             for(j=0;j<=HALF;j++)
             {
@@ -90,14 +102,16 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                     c++;
                     CIRCULATE(c);
                     plug->nextstate = DOWN;
-                    break;
+                    plug->skip = 1;
+                    break; 
                 }   
                 else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
                 {
                     c++;
-                    CIRCULATE(c);
+                    CIRCULATE(c); 
                     plug->nextstate = UP;
-                    break;
+                    plug->skip = 1;
+                    break; 
                 }
                 else
                 {
@@ -122,15 +136,21 @@ void run_square(LV2_Handle handle, uint32_t nframes)
                 plug->step = 0;
             }
             //update headway
-            if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p && plug->nextstate != DOWN)
+            if(plug->state != DOWN 
+               && plug->circularbuf[c] <= *plug->down_p 
+               && plug->nextstate != DOWN)
             {
                 plug->headway = HALF;
                 plug->nextstate = DOWN;
+                plug->skip = 1;
             }
-            else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p && plug->nextstate != UP)
+            else if (plug->state != UP 
+                     && plug->circularbuf[c] >= *plug->up_p 
+                     && plug->nextstate != UP)
             {
                 plug->headway = HALF;
                 plug->nextstate = UP;
+                plug->skip = 1;
             }
             c++;
             CIRCULATE(c);
@@ -146,7 +166,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         }
         
         //write out the frame 
-        temp = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*plug->state*plug->table[plug->pos];
+        temp = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*plug->outstate*plug->table[plug->pos];
         CIRCULATE(r);
         temp *= *plug->outgain_p;
 
@@ -200,8 +220,10 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
     plug->pos = 0;
     plug->step = 0;
     plug->state = 0;
+    plug->outstate = 0;
     plug->nextstate = 0;
     plug->headway = HALF + 1;
+    plug->skip = 1;
     
     plug->w = HALF;
     plug->r = 0;
@@ -228,6 +250,7 @@ void connect_square_ports(LV2_Handle handle, uint32_t port, void *data)
     case LATENCY: plug->latency_p = (float*)data;break;
     case UPP:     plug->up_p = (float*)data;break;
     case DOWNN:   plug->down_p = (float*)data;break;
+    case OCTAVE:  plug->octave_p = (float*)data;break;
     case INGAIN:  plug->ingain_p = (float*)data;break;
     case WETDRY:  plug->wetdry_p = (float*)data;break;
     case OUTGAIN: plug->outgain_p = (float*)data;break;
