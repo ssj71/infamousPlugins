@@ -212,7 +212,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                        t,
                                        synth->harm_gains,
                                        *synth->init_cells_p,
-                                       *synth->harmonic_width_p,
+                                       *synth->harmonic_width_p/1200,
                                        synth->envelope);
                         }
                         else//velocity zero == note off

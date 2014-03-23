@@ -79,7 +79,7 @@ void start_note(NOTE*           self,
     {
         self->harm_gain[i] = self->velocity*harmonic_gain[i];
         self->harmonic[i] = harmonics&(1<<i);
-        self->fwidth[i] = powf(2,width*white(waves,0,0)); 
+        self->fwidth[i] = myPow2(width*white(waves,0,0)); 
     }
     //and the root
     i = MAX_N_HARMONICS;

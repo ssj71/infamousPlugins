@@ -11,6 +11,7 @@
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
 @prefix param: <http://lv2plug.in/ns/ext/parameters#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
 
 <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:auto>
 a param:ControlGroup ;
@@ -70,6 +71,7 @@ lv2:symbol "Modulation" .
                 lv2:default 1.0 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 2.0 ;
+		units:unit units:coeff ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 4 ;
@@ -90,6 +92,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.25 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 10.0 ;
+		units:unit units:s ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -133,7 +136,8 @@ lv2:symbol "Modulation" .
                 lv2:name "Harmonic Width" ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.000 ;
-                lv2:maximum 1.0 ;
+                lv2:maximum 50.0 ;
+		units:unit units:cent ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -161,6 +165,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.10 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
+		units:unit units:s ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -171,6 +176,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.10 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
+		units:unit units:s ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -180,6 +186,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.5 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
+		units:unit units:coeff ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -190,6 +197,7 @@ lv2:symbol "Modulation" .
                 lv2:default 3.0 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
+		units:unit units:s ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -199,6 +207,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.75 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
+		units:unit units:coeff ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -209,6 +218,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.1 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
+		units:unit units:s ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -236,6 +246,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 110.0 ;
+		units:unit units:hz ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -245,6 +256,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.10 ;
                 lv2:minimum -1.00 ;
                 lv2:maximum 1.00 ;
+		units:unit units:coeff ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -272,6 +284,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 110.0 ;
+		units:unit units:hz ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -281,6 +294,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.10 ;
                 lv2:minimum -4.00 ;
                 lv2:maximum 4.00 ;
+		units:unit units:semitone12TET ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:mod> ;
         ].
 
@@ -372,4 +386,10 @@ lv2:symbol "Modulation" .
         a pset:Preset ;
         lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "14 Soothe" ;
+        rdfs:seeAlso <casynth_presets.ttl> .
+	
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:15ClarkKentSaw>
+        a pset:Preset ;
+        lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+        rdfs:label "15 ClarkKentSaw" ;
         rdfs:seeAlso <casynth_presets.ttl> .

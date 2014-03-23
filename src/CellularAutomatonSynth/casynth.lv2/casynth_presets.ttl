@@ -1042,3 +1042,72 @@
 		lv2:symbol "WAVE" ;
 		pset:value 2.04109597
 	] .
+
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:15ClarkKentSaw>
+	a pset:Preset ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+        rdfs:label "15 ClarkKentSaw" ;
+	lv2:port [
+		lv2:symbol "AMOD_FREQ" ;
+		pset:value 0.30000001
+	] , [
+		lv2:symbol "AMOD_GAIN" ;
+		pset:value 0.00001781
+	] , [
+		lv2:symbol "AMOD_WAV" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "CELL_LIFE" ;
+                pset:value 10.0
+	] , [
+		lv2:symbol "CHANNEL" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "ENV_A" ;
+		pset:value 0.0831863
+	] , [
+		lv2:symbol "ENV_B" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "ENV_D" ;
+		pset:value 0.0831863
+	] , [
+		lv2:symbol "ENV_R" ;
+		pset:value 0.1
+	] , [
+		lv2:symbol "ENV_SUS" ;
+		pset:value 0.5
+	] , [
+		lv2:symbol "ENV_SWL" ;
+		pset:value 0.5
+	] , [
+		lv2:symbol "FMOD_FREQ" ;
+		pset:value 00.11369858
+	] , [
+		lv2:symbol "FMOD_GAIN" ;
+		pset:value 0.11023288
+	] , [
+		lv2:symbol "FMOD_WAV" ;
+		pset:value 4.0
+	] , [
+		lv2:symbol "HARM_MODE" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 4.0
+	] , [
+		lv2:symbol "INIT_CELLS" ;
+		pset:value 32905.0
+	] , [
+		lv2:symbol "MASTER_GAIN" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "NHARMONICS" ;
+		pset:value 16.0
+	] , [
+		lv2:symbol "RULE" ;
+		pset:value 204.0
+	] , [
+		lv2:symbol "WAVE" ;
+		pset:value 1.04109597
+	] .
