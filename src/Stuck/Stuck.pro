@@ -1,4 +1,4 @@
-NAME = hip2b
+NAME = stuck
 
 TARGET = $${NAME}_lv2
 TEMPLATE = lib
@@ -9,11 +9,11 @@ QMAKE_CFLAGS += -std=c99 \
     -g
 
 
-SOURCES += square.c
+SOURCES += stuck.c
 
 OTHER_FILES += \
-    hip2b.lv2/manifest.ttl \
-    hip2b.lv2/hip2b.ttl
+    stuck.lv2/manifest.ttl \
+    stuck.lv2/stuck.ttl
 
 
 unix {
@@ -23,18 +23,13 @@ unix {
         UI_DIR      = .ui_lv2
 
         isEmpty(PREFIX) {
-                PREFIX = /usr/local
+                PREFIX = /usr
         }
 
         contains(PREFIX, $$system(echo $HOME)) {
                 LV2DIR = $${PREFIX}/.lv2
-        } else {
-                ARCH = $$system(uname -m)
-                contains(ARCH, x86_64) {
-                        LV2DIR = $${PREFIX}/lib64/lv2
-                } else {
-                        LV2DIR = $${PREFIX}/lib/lv2
-                }
+        } else { 
+                LV2DIR = $${PREFIX}/lib/lv2
         }
 
         isEmpty(QMAKE_EXTENSION_SHLIB) {

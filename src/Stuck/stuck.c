@@ -1,242 +1,130 @@
 //Spencer Jackson
 //square.c
 #include<lv2.h>
+#include<stdlib.h>
+#include<stdio.h>
+#include<math.h>
 
-#define HIP2B_URI "http://sourceforge.net/projects/infamousplugins:hip2b"
+#define STUCK_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck"
 
-#define UP      1
-#define DOWN    -1
-#define NHARMONICS 16
-#define HALF    8
-#define PI 3.1415926535897932384626433832795
-#define DC_CUTOFF 10*2*PI //rad/s
-#define PRACTICALLYZERO .001
-#define TIMEOUT 5
-
-#define CIRCULATE(val) val=val<NHARMONICS?val:0
-
-
-typedef struct _SQUARE
+enum states
 {
-    char step;
-    char state;
-    char nextstate;
-    char pos;
-    float table[HALF+1];//one quarter of a square wave
+    INACTIVE,
+    LOADING,
+    LOADING_XFADE,
+    PLAYING,
+    RELEASING
+}
 
-    float circularbuf[NHARMONICS];
-    unsigned char w,r,c;//read, write & check pointers
-    unsigned char headway;//distance to next transition
-    float dcprevin;
-    float dcprevout;
-    unsigned char timeout;
+typedef struct _STUCK
+{
+    unsigned short indx;
+    unsigned short bufmask; 
+    unsigned short xfade_size;
+    unsigned char state;
+    double sample_rate;
     
+    float *buf;
+    float gain;
+
     float *input_p;
     float *output_p;
-    float *latency_p;
-    float *up_p;
-    float *down_p;
-    float *ingain_p;
-    float *wetdry_p;
-    float *outgain_p;
-}SQUARE;
+    float *trigger_p;
+    float *stick_it_p;
+    float *drone_gain_p;
+    float *release_p;
+}STUCK;
 
-enum square_ports
+enum stuck_ports
 {
     IN =0,
     OUT,
-    LATENCY,
-    UPP,
-    DOWNN,
-    INGAIN,
-    WETDRY,
-    OUTGAIN
+    TRIGGER,
+    STICKIT,
+    DRONEGAIN,
+    RELEASE
 };
 
-//starting again.
-//just look 1 transition ahead, keep track of space to next trans.
-//circular buffer holds input*gain
-//index c (check) is always the transition or the lookahead limit
-void run_square(LV2_Handle handle, uint32_t nframes)
+void run_stuck(LV2_Handle handle, uint32_t nframes)
 {
-    SQUARE* plug = (SQUARE*)handle;
-    float temp;
+    STUCK* plug = (STUCK*)handle;
     uint32_t i;
-    unsigned char j, w, r, c;
-    w = plug->w;
-    r = plug->r;
-    c = plug->c;
-    for(i=0;i<nframes;i++)
-    {
-        //fill buffer
-        plug->circularbuf[w++] = *plug->ingain_p*plug->input_p[i];
-        CIRCULATE(w);
-        
-        //at this point, headway is known, pos is prev. value, step is current
-        //1 write buffer, 2 update pos 3. update headway 4. write out
-        //change position
-        if(plug->headway == 0)
-        {//on the transition point, search for next one
-            plug->pos = plug->headway;
-            plug->state = plug->nextstate;
-            //update headway
-            for(j=0;j<=HALF;j++)
-            {
-                if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p)
-                {
-                    c++;
-                    CIRCULATE(c);
-                    plug->nextstate = DOWN;
-                    break;
-                }   
-                else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
-                {
-                    c++;
-                    CIRCULATE(c);
-                    plug->nextstate = UP;
-                    break;
-                }
-                else
-                {
-                    c++;
-                    CIRCULATE(c);
-                }
-            }
-            plug->headway = j;
-            plug->step = 1;
-        }
-        else if(plug->headway < plug->pos)
-        {//need to start decrementing
-            plug->pos = plug->headway;
-            //update headway
-            plug->headway--;
-        }
-        else if(plug->headway > HALF)
-        {//increment to end of table and stay, check for headway change
-            plug->pos += plug->step;
-            if(plug->pos == HALF)
-            {
-                plug->step = 0;
-            }
-            //update headway
-            if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p && plug->nextstate != DOWN)
-            {
-                plug->headway = HALF;
-                plug->nextstate = DOWN;
-            }
-            else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p && plug->nextstate != UP)
-            {
-                plug->headway = HALF;
-                plug->nextstate = UP;
-            }
-            c++;
-            CIRCULATE(c);
-            
-        }
-        else
-        {//know headway, increment pos, dec. headway
-            plug->pos += plug->step;
-            //update headway
-            plug->headway--;
-        }
-        
-        //write out the frame
-        temp = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*plug->state*plug->table[plug->pos];
-        CIRCULATE(r);
-        temp *= *plug->outgain_p;
-        //dc removal (hpf)
-        plug->output_p[i] = .999*plug->dcprevout + temp - plug->dcprevin;
-        plug->dcprevin = temp;
-        plug->dcprevout = plug->output_p[i];
-    }
-    *plug->latency_p = HALF;
-    plug->w = w;
-    plug->r = r;
-    plug->c = c;
 
-    //this way for dc offset reset
-    if(plug->dcprevout < PRACTICALLYZERO && plug->dcprevout > -PRACTICALLYZERO  && plug->headway > HALF)
+    memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
+    if(plug->state == INACTIVE)
+    {//decide if triggered
+        if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
+           plug->state = LOADING;
+        else return;
+    }
+    for(i=0;i<nfames;)
     {
-        plug->pos = 0;
-        plug->step = 0;
-        plug->state = 0;
-        plug->dcprevout = 0;
-        plug->dcprevin = 0;
+        if(plug->state == LOADING)
+	{//decidee if xfade will start in this period
+	}
+	if(plug->state == LOADING_XFADE)
+	{//decide if xfade ends in this period
+        }
+        if(plug->state == PLAYING)
+	{//decide if released
+	}
+	if(plug->state == RELEASING)
+	{
+        }
     }
 }
 
-void init_square(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
+LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
-    SQUARE* plug = malloc(sizeof(SQUARE));
+    STUCK* plug = malloc(sizeof(STUCK));
 
-    unsigned char i,j;
-    char k;
-    double s = PI/NHARMONICS;
-    
-    for(i=0;i<=HALF;i++)
-    {
-        plug->table[i] = 0;
-    }
-    k=1;
-    for(i=1;i<NHARMONICS;i+=2)//harmonics
-    {
-        for(j=0;j<=HALF;j++)//samples
-        {
-            plug->table[HALF-j] += (k/(float)i)*sin(PI/2 + (float)i*j*s);
-        }
-        k = -k;
-    }
-    plug->table[0] = 0;//remove slight rounding error
-    
-    plug->pos = 0;
-    plug->step = 0;
-    plug->state = 0;
-    plug->nextstate = 0;
-    plug->headway = HALF + 1;
-    
-    plug->w = HALF;
-    plug->r = 0;
-    plug->c = HALF;
-    
-    for(i=0;i<NHARMONICS;i++)
-    {
-        plug->circularbuf[i] = 0;
-    }
+    unsigned char i;
+    unsigned short tmp;
+    plug->stample_rate = sample_rate; 
+    tmp = 16384;
+    if(sample_rate<100000)
+        tmp = tmp>>1;
+    if(sample_rate<50000)
+        tmp = tmp>>1;
+    plug->buf = malloc(tmp*sizeof(float));
+    plug->bufmask = tmp-1;
+    plug->xfade_size = tmp>>2;
+    plug->indx = 0;
+    plug->state = INACTIVE;
 
-    plug->dcprevin = 0;
-    plug->dcprevout = 0;
+    return plug;
 }
-void connect_square_ports(LV2_Handle handle, uint32_t port, void *data)
+
+void connect_stuck_ports(LV2_Handle handle, uint32_t port, void *data)
 {
-    SQUARE* plug = (SQUARE*)handle;
+    STUCK* plug = (STUCK*)handle;
     switch(port)
     {
-    case IN:      plug->input_p = (float*)data;break;
-    case OUT:     plug->output_p = (float*)data;break;
-    case LATENCY: plug->latency_p = (float*)data;break;
-    case UPP:     plug->up_p = (float*)data;break;
-    case DOWNN:   plug->down_p = (float*)data;break;
-    case INGAIN:  plug->ingain_p = (float*)data;break;
-    case WETDRY:  plug->wetdry_p = (float*)data;break;
-    case OUTGAIN: plug->outgain_p = (float*)data;break;
-    default:      puts("UNKNOWN PORT YO!!");
+    case IN:         plug->input_p = (float*)data;break;
+    case OUT:        plug->output_p = (float*)data;break;
+    case TRIGGER:    plug->trigger_p = (float*)data;break;
+    case STICKIT:    plug->stick_it_p = (float*)data;break;
+    case DRONEGAIN:  plug->drone_gain_p = (float*)data;break;
+    case RELEASE:    plug->release_p = (float*)data;break; 
+    default:         puts("UNKNOWN PORT YO!!");
     }
 }
 
-void cleanup_square(LV2_Handle handle)
+void cleanup_stuck(LV2_Handle handle)
 {
-    SQUARE* plug = (SQUARE*)handle;
+    STUCK* plug = (STUCK*)handle;
+    free(plug->buf);
     free(plug);
 }
 
-static const LV2_Descriptor hip2b_descriptor={
-    HIP2B_URI,
-    init_square,
-    connect_square_ports,
+static const LV2_Descriptor stuck_descriptor={
+    STUCK_URI,
+    init_stuck,
+    connect_stuck_ports,
     0,//activate
-    run_square,
+    run_stuck,
     0,//deactivate
-    cleanup_square,
+    cleanup_stuck,
     0//extension
 };
 
@@ -245,7 +133,7 @@ const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {
     switch (index) {
     case 0:
-        return &hip2b_descriptor;
+        return &stuck_descriptor;
     default:
         return 0;
     }
