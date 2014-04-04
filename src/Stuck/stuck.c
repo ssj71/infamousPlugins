@@ -12,8 +12,10 @@ enum states
     INACTIVE,
     LOADING,
     LOADING_XFADE,
+    FADE_IN,
     PLAYING,
-    RELEASING
+    RELEASING,
+    QUICK_RELEASING
 }
 
 typedef struct _STUCK
@@ -48,27 +50,67 @@ enum stuck_ports
 void run_stuck(LV2_Handle handle, uint32_t nframes)
 {
     STUCK* plug = (STUCK*)handle;
-    uint32_t i;
+    uint32_t i,j,chunk;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
+    
     if(plug->state == INACTIVE)
     {//decide if triggered
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
-           plug->state = LOADING;
+        {
+	    plug->state = LOADING;
+	    plug->indx = 0;
+	}
         else return;
     }
+    else if(plug->state == RELEASING)
+    {//decide if new trigger has been sent before release is complete
+        if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
+            plug->state = QUICK_RELEASING; 
+    }
+    else if(plug->state < FADE_IN)
+    {//decide if trigger is already released, so should abort
+        if(*plug->stick_it_p < 1 && plug->trigger_p[nframes -1] < 1)
+	{
+	    plug->state = INACTIVE;
+	    plug->indx = 0;
+	    return
+	}
+    }
+
     for(i=0;i<nfames;)
-    {
+    {    
+        chunk = nframes - i -1;
         if(plug->state == LOADING)
-	{//decidee if xfade will start in this period
+	{   
+	    //decide if xfade will start in this period
+            if(plug->indx+chunk > ~plug->bufmask - plug->xfade_size)
+	    {
+	        chunk = ~plug->bufmask - plug->xfade_size - plug->indx;
+		plug->state = LOADING_XFADE;
+	    }
+	    //load buffer
+	    for(j=0;j<=chunk;j++)
+	    {
+	        plug->buf[plug->indx++] = plug->input_p[i++];
+	    }
 	}
 	if(plug->state == LOADING_XFADE)
-	{//decide if xfade ends in this period
+	{
+	    //decide if xfade ends in this period
+            if(plug->indx+chunk > ~plug->bufmask)
+	    {
+	        chunk = ~plug->bufmask - plug->indx;
+		plug->state = FADE_IN;
+	    }
         }
         if(plug->state == PLAYING)
 	{//decide if released
 	}
 	if(plug->state == RELEASING)
+	{
+        }
+	if(plug->state == QUICK_RELEASING)
 	{
         }
     }
