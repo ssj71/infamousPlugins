@@ -17,6 +17,13 @@ If you do not have sudo, there is now an alternative install procedure involving
     exit
 
 
+If you do not have sudo, there is now an alternative install procedure involving 2 scripts, one of which must be run with root permissions (i.e. you use su). To use this procedure issue the commands:
+    ./install_no_sudo.sh
+    su
+    ./install_no_sudo_part2_run_as_root.sh
+    exit
+
+
 Dependencies:
     qmake (qt4-dev-tools package on ubuntu)
     lv2-dev
