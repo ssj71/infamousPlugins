@@ -33,7 +33,7 @@ lv2:symbol "Control_Signal" .
         doap:name "envelope follower" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
-                foaf:homepage <http://infamounsplugins.sourceforge.net>
+                foaf:homepage <http://infamounsplugins.sourceforge.net> ;
                 foaf:mbox <ssjackson71@gmail.com> ;
         ] ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
