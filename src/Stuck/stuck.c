@@ -10,9 +10,9 @@
 enum states
 {
     INACTIVE,
-    LOADING,
-    LOADING_XFADE,
     FADE_IN,
+    LOADING,
+    LOADING_XFADE, 
     PLAYING,
     RELEASING,
     QUICK_RELEASING
@@ -50,7 +50,8 @@ enum stuck_ports
 void run_stuck(LV2_Handle handle, uint32_t nframes)
 {
     STUCK* plug = (STUCK*)handle;
-    uint32_t i,j,chunk;
+    uint32_t i,j,chunk=0;
+    double slope;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
     
@@ -68,44 +69,68 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
             plug->state = QUICK_RELEASING; 
     }
-    else if(plug->state < FADE_IN)
-    {//decide if trigger is already released, so should abort
-        if(*plug->stick_it_p < 1 && plug->trigger_p[nframes -1] < 1)
-	{
-	    plug->state = INACTIVE;
-	    plug->indx = 0;
-	    return
-	}
-    }
 
     for(i=0;i<nfames;)
     {    
         chunk = nframes - i -1;
-        if(plug->state == LOADING)
-	{   
-	    //decide if xfade will start in this period
-            if(plug->indx+chunk > ~plug->bufmask - plug->xfade_size)
+	if(plug->state == FADE_IN)
+	{
+	    slope = *plug->drone_gain_p/(double)plug->xfade_size;
+	    //decide if done with fade in in this period
+	    if(plug->gain+chunk*slope > *plug->drone_gain_p)
 	    {
-	        chunk = ~plug->bufmask - plug->xfade_size - plug->indx;
+	        chunk = (*plug->drone_gain_p - plug->gain)/slope;
+		plug->state = LOADING
+	    }
+	    //load buffer and fade in
+	    for(j=0;j<=chunk;j++)
+	    { 
+	        plug->buf[plug->indx] = plug->input_p[i];
+		plug->output_p[i++] += plug->gain*plug->buf[indx++]
+		plug->gain += slope;
+	    }
+	}
+        else if(plug->state == LOADING)
+	{   
+	    slope = *plug->drone_gain_p/(double)chunk;
+	    //decide if xfade will start in this period
+            if(plug->indx+chunk > plug->bufmask - plug->xfade_size)
+	    {
+	        chunk = plug->bufmask - plug->xfade_size - plug->indx;
 		plug->state = LOADING_XFADE;
 	    }
 	    //load buffer
 	    for(j=0;j<=chunk;j++)
 	    {
-	        plug->buf[plug->indx++] = plug->input_p[i++];
+	        plug->buf[plug->indx] = plug->input_p[i];
+		plug->output_p[i++] += plug->gain*plug->buf[indx++];
+		plug->gain += slope;
 	    }
 	}
-	if(plug->state == LOADING_XFADE)
+	else if(plug->state == LOADING_XFADE)
 	{
+	    slope = *plug->drone_gain_p/(double)chunk;
 	    //decide if xfade ends in this period
             if(plug->indx+chunk > ~plug->bufmask)
 	    {
 	        chunk = ~plug->bufmask - plug->indx;
-		plug->state = FADE_IN;
+		plug->state = PLAYING;
+	    }
+	    //load buffer with xfade
+	    double g = 0;
+	    for(j=0;j<chunk;j++)
+	    {
+	        g = j/(double)(plug->xfade_size);
+	        plug->buf[plug->indx] = (1.0-g)*plug->input_p[i] +g*plug->buf[j];
+		plug->output_p[i++] += plug->gain*plug->buf[indx++];
+		plug->gain += slope;
 	    }
         }
         if(plug->state == PLAYING)
-	{//decide if released
+	{
+	    slope = *plug->drone_gain_p/(double)chunk;
+	    //decide if released
+	    
 	}
 	if(plug->state == RELEASING)
 	{
@@ -123,11 +148,11 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_rate, const
     unsigned char i;
     unsigned short tmp;
     plug->stample_rate = sample_rate; 
-    tmp = 16384;
-    if(sample_rate<100000)
-        tmp = tmp>>1;
-    if(sample_rate<50000)
-        tmp = tmp>>1;
+    tmp = 0x4000;//16384;14 bits
+    if(sample_rate<100000)//88.1 or 96.1kHz
+        tmp = tmp>>1;//13 bits
+    if(sample_rate<50000)//44.1 or 48kHz
+        tmp = tmp>>1;//12 bits
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufmask = tmp-1;
     plug->xfade_size = tmp>>2;
