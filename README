@@ -8,7 +8,21 @@ To install, make sure you have the dependencies and then just run the script ins
     ./install.sh
     
     
-This will ask for your password using sudo, so be prepaired. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
+This will ask for your password using sudo, so be prepared. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
+
+If you do not have sudo, there is now an alternative install procedure involving 2 scripts, one of which must be run with root permissions (i.e. you use su). To use this procedure issue the commands:
+    ./install_no_sudo.sh
+    su
+    ./install_no_sudo_part2_run_as_root.sh
+    exit
+
+
+If you do not have sudo, there is now an alternative install procedure involving 2 scripts, one of which must be run with root permissions (i.e. you use su). To use this procedure issue the commands:
+    ./install_no_sudo.sh
+    su
+    ./install_no_sudo_part2_run_as_root.sh
+    exit
+
 
 Dependencies:
     qmake (qt4-dev-tools package on ubuntu)
@@ -34,6 +48,7 @@ Parameter Description:
     INIT_CELLS - initial condition of cells when a note is played
     NHARMONICS - number of harmonics added in
     HARM_MODE - determines gains of the harmonics 
+    HARM_WIDTH - std. deviation of random detuning of harmonics in cents
     WAVE - basic Waveform of the harmonics
     ENV_A - attack time
     ENV_D - decay time
@@ -66,32 +81,38 @@ The least significant digit corresponds to the first harmonic
 
 This is a fully featured envelope follower plugin. It can be used for pumping the gain with the bass or all sorts of other things that I don't really know about. Someone just wanted it so I made it. It sends a midi control value according to the amplitude of the input audio.
 
-Parameter Description:
-    CHANNEL - Midi channel to send output over
-    CONTROL_NO - Midi control # to change
-    MINV - minimum midi value to send
-    MAXV - maximum midi value to send
+Parameter Description: 
     PEAKRMS - blend of peak and/or rms value for amplitude
     THRESHOLD - audio low value mapped MINV
     SATURATION - audio high value mapped to MAXV (anything greater still outputs MAXV)
     ATIME - rise time of the output
     DTIME - fall time of the output
+    CHANNEL - Midi channel to send output over
+    CONTROL_NO - Midi control # to change
+    MINV - minimum midi value to send
+    MAXV - maximum midi value to send
+    REVERSE - switches direction of the midi output (larger input amplitude -> smaller midi value)
+    CMINV - minimum CV to send
+    CMAXV - maximum CV to send
+    CREVERSE - switches direction of the CV output
 
 ===========================================
 4. Hip2B
 
-This is a distortion plugin that is even more fun than I imagined. Inspired by effect pedals by dwarfcraft, this takes your analog signal and turns it into a square wave. It gives you a glitchy type effect. Its meant to be pretty minimal, so you probably will want a simple amplifier after it in the effect chain to turn it down, or remove DC offset. Its not limited in polyphony or anything, it is simply distorting your signal to be a bandlimited square wave. Play with the up and down threshold parameters to change the square pulse width and have some fun. Also stay away from 0.0 on those two, it gets really loud and noisy. Unless thats what you want. Be my guest. Depending on your noise floor, other low values may be problematic in the same light.
+This is a distortion plugin that is even more fun than I imagined. Inspired by effect pedals by dwarfcraft, this takes your analog signal and turns it into a square wave. It gives you a glitchy type effect. It was originally meant to be pretty minimal, but I decided there wasn't a good reason to be so a simple amplifier was added to turn it down, and some basic DC offset removal was added. Its not limited in polyphony or anything, it is simply distorting your signal to be a bandlimited square wave. Basically its a switching function with hysteresis. Play with the up and down threshold parameters to change the square wave pulse width and have some fun. You'll find lower values give more sustain, but stay away from 0.0 on those two, it gets really loud and noisy. Unless thats what you want. Be my guest. Depending on your noise floor, other low values may be problematic in the same light.
 
-Parameter Description:
+Parameter Description: 
     UP - threshold that the input must cross for the square wave to rise
     DOWN - threshold that the input must cross for the square wave to fall
+    OCTAVE - change the octave of the square wave output (down to -2)
     INGAIN - input gain, also affects the output signal in the mix, use to get your signal passing the thresholds
     WETDRY - mix of the original signal with the square signal
+    OUTGAIN - output gain
 
 ===========================================
 4. cheap distortion
 
-Another distortion plugin, but this one I wanted to getit as light as possible. I haven't benchmarked it, but using some hackery on the bits I accomplished a pretty nice saturation function waveshaper using only a bitshift and an integer add. Thats right not a single floating point operation! However this cheapness and hackery comes at a cost that its using undefined behavior and breaks some rules or at least is highly not reccommended. It works when compiled with GCC on x86 systems. Go ahead and try it, the worst that happens is that it sounds awful. On machines with different endianness it will fail for sure. If you experience this I can easily make one for the other endian machines. Just let me know. Becuase the goal was super cheap computation, there is no input or output gains, so make use of your simple amplifier plugins. All in all though it worked out better than I dreamed. And its so cheap. It even has 3 different waveshapes of increasing "aggression". On 2 & 3 settings, you'll probably want a gate, because it has really high gain for values near zero.
+Another distortion plugin, but this one I wanted to getit as light as possible. I haven't benchmarked it, but using some hackery on the bits I accomplished a pretty nice saturation function waveshaper using only a bitshift and an integer add. Thats right not a single floating point operation! However this cheapness and hackery comes at a cost that its using undefined behavior and breaks some rules or at least is highly not reccommended. It works when compiled with GCC on x86 systems. Go ahead and try it, the worst that happens is that it sounds awful. On machines with different endianness it will fail for sure. If you experience this I can easily make one for the other endian machines. Just let me know. Becuase the goal was super cheap computation, there is no input or output gains, so make use of your simple amplifier plugins. All in all though it worked out better than I dreamed. It even has 3 different waveshapes of increasing "aggression". On 2 & 3 settings, you'll probably want a gate, because it has really high gain for values near zero.
 
 Parameter Description:
     AGGRESSION - wave shape, higher basically means more gain
