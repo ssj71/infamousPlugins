@@ -24,7 +24,7 @@ typedef struct _STUCK
     unsigned short bufmask; 
     unsigned short xfade_size;
     unsigned char state;
-    double sample_rate;
+    double sample_freq;
     
     float *buf;
     float gain;
@@ -64,6 +64,15 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	}
         else return;
     }
+    else if(plug->state < RELEASING) 
+    {//decide if released 
+        if(*plug->stick_it_p < 1 || plug->trigger_p[nframes-1] < 1)
+        {
+	    plug->state = RELEASING;
+	    plug->indx = 0;
+	}
+        else return;
+    }
     else if(plug->state == RELEASING)
     {//decide if new trigger has been sent before release is complete
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
@@ -72,18 +81,18 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 
     for(i=0;i<nfames;)
     {    
-        chunk = nframes - i -1;
+        chunk = nframes - i;
 	if(plug->state == FADE_IN)
 	{
 	    slope = *plug->drone_gain_p/(double)plug->xfade_size;
 	    //decide if done with fade in in this period
-	    if(plug->gain+chunk*slope > *plug->drone_gain_p)
+	    if(plug->gain+chunk*slope >= *plug->drone_gain_p)
 	    {
 	        chunk = (*plug->drone_gain_p - plug->gain)/slope;
 		plug->state = LOADING
 	    }
 	    //load buffer and fade in
-	    for(j=0;j<=chunk;j++)
+	    for(j=0;j<chunk;j++)
 	    { 
 	        plug->buf[plug->indx] = plug->input_p[i];
 		plug->output_p[i++] += plug->gain*plug->buf[indx++]
@@ -94,13 +103,13 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{   
 	    slope = *plug->drone_gain_p/(double)chunk;
 	    //decide if xfade will start in this period
-            if(plug->indx+chunk > plug->bufmask - plug->xfade_size)
+            if(plug->indx+chunk >= plug->bufmask - plug->xfade_size)
 	    {
 	        chunk = plug->bufmask - plug->xfade_size - plug->indx;
 		plug->state = LOADING_XFADE;
 	    }
 	    //load buffer
-	    for(j=0;j<=chunk;j++)
+	    for(j=0;j<chunk;j++)
 	    {
 	        plug->buf[plug->indx] = plug->input_p[i];
 		plug->output_p[i++] += plug->gain*plug->buf[indx++];
@@ -111,7 +120,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{
 	    slope = *plug->drone_gain_p/(double)chunk;
 	    //decide if xfade ends in this period
-            if(plug->indx+chunk > ~plug->bufmask)
+            if(plug->indx+chunk >= ~plug->bufmask)
 	    {
 	        chunk = ~plug->bufmask - plug->indx;
 		plug->state = PLAYING;
@@ -128,30 +137,60 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         }
         if(plug->state == PLAYING)
 	{
-	    slope = *plug->drone_gain_p/(double)chunk;
-	    //decide if released
-	    
+	    slope = *plug->drone_gain_p/(double)chunk; 
+	    for(j=0;j<chunk;j++)
+	    {
+	        plug->buf[plug->indx] = plug->input_p[i];
+		plug->output_p[i++] += plug->gain*plug->buf[indx++];
+		plug->gain += slope;
+	    }
 	}
 	if(plug->state == RELEASING)
 	{
+	    slope = *plug->release_p*plug->sample_freq;
+	    //decide if released in this period
+	    if(plug->gain + chunk*slope <= 0)
+	    {
+	        chunk = plug->gain/slope;
+		plug->state = INACTIVE;
+	    }
+	    for(j=0;j<chunk;j++)
+	    {
+	        plug->buf[plug->indx] = plug->input_p[i];
+		plug->output_p[i++] += plug->gain*plug->buf[indx++];
+		plug->gain += slope;
+	    }
         }
 	if(plug->state == QUICK_RELEASING)
 	{
+	    slope = -*plug->drone_gain_p/(double)plug->xfade_size;
+	    //decide if released in this period
+	    if(plug->gain + chunk*slope <= 0)
+	    {
+	        chunk = plug->gain/slope;
+		plug->state = LOADING;
+	    }
+	    for(j=0;j<chunk;j++)
+	    {
+	        plug->buf[plug->indx] = plug->input_p[i];
+		plug->output_p[i++] += plug->gain*plug->buf[indx++];
+		plug->gain += slope;
+	    }
         }
     }
 }
 
-LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
+LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     STUCK* plug = malloc(sizeof(STUCK));
 
     unsigned char i;
     unsigned short tmp;
-    plug->stample_rate = sample_rate; 
+    plug->sample_freq = sample_freq; 
     tmp = 0x4000;//16384;14 bits
-    if(sample_rate<100000)//88.1 or 96.1kHz
+    if(sample_freq<100000)//88.1 or 96.1kHz
         tmp = tmp>>1;//13 bits
-    if(sample_rate<50000)//44.1 or 48kHz
+    if(sample_freq<50000)//44.1 or 48kHz
         tmp = tmp>>1;//12 bits
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufmask = tmp-1;
