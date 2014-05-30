@@ -1,6 +1,6 @@
 Welcome to the INFAMOUS Plugins README
 
-Things are just firing up. So far we have exactly 3 plugins. But hey, its gettin there right?
+Things are just firing up. So far we have exactly 5 plugins. But hey, its gettin there right?
 
 
 To install, make sure you have the dependencies and then just run the script install.sh:
@@ -30,6 +30,9 @@ Dependencies:
     gcc
 
 Note that on ArchLinux, they do not have qmake in /usr/bin, so a special install script was created. Use ./installARCHLINUX.sh instead.
+
+A NOTE ABOUT CV PORTS!:
+I have commented out all the cv ports (envfollower and stuck) because almost no lv2 hosts are implementing that at this time. They appear as audio ports. If you wish to re-apply the CV port label, open the *.ttl file for that plugin and find the line with "lv2:AudioPort ; #CvPort ;" and remove "AudioPort ; #" which will cause the port to be declared as Cv rather than audio.
 
 Now lets talk about what you're installing:
 
@@ -116,3 +119,13 @@ Another distortion plugin, but this one I wanted to getit as light as possible. 
 
 Parameter Description:
     AGGRESSION - wave shape, higher basically means more gain
+
+=============================================
+5. stuck
+
+This is a clone of the electro-harmonix freeze. It drones the note being played when the "Stick It!" port is set to 1 (or the CV port input goes above 1), causing the note to be "stuck". Once the port falls below 1 the drone is released with a decay set in seconds. The drone is added to the dry signal (so original signal is passed through at all times un-processed). This plugin is pretty useless except in live situations, though I'd love someone to creatively prove me wrong.
+
+    STICKIT - control the drone being on (>=1) or off (<1)
+    DRONEGAIN - gain of drone
+    RELEASE - time of drone decay in seconds
+
