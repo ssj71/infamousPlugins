@@ -69,7 +69,7 @@ lv2:symbol "Control_Signal" .
                 lv2:maximum 1.0 ;
         ] ;
         lv2:port [
-                a lv2:OutputPort, lv2:CVPort ;
+                a lv2:OutputPort, lv2:AudioPort ; #CVPort ;
                 lv2:index 4 ;
                 lv2:symbol "CV_OUT";
                 lv2:name "CV Out";

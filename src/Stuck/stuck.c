@@ -3,6 +3,7 @@
 #include<lv2.h>
 #include<stdlib.h>
 #include<stdio.h>
+#include<string.h>
 #include<math.h>
 
 #define STUCK_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck"
@@ -16,7 +17,7 @@ enum states
     PLAYING,
     RELEASING,
     QUICK_RELEASING
-}
+};
 
 typedef struct _STUCK
 {
@@ -79,7 +80,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             plug->state = QUICK_RELEASING; 
     }
 
-    for(i=0;i<nfames;)
+    for(i=0;i<nframes;)
     {    
         chunk = nframes - i;
 	if(plug->state == FADE_IN)
@@ -89,13 +90,13 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    if(plug->gain+chunk*slope >= *plug->drone_gain_p)
 	    {
 	        chunk = (*plug->drone_gain_p - plug->gain)/slope;
-		plug->state = LOADING
+		plug->state = LOADING;
 	    }
 	    //load buffer and fade in
 	    for(j=0;j<chunk;j++)
 	    { 
 	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain*plug->buf[indx++]
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
 	}
@@ -112,7 +113,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    for(j=0;j<chunk;j++)
 	    {
 	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain*plug->buf[indx++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
 	}
@@ -131,18 +132,19 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 	        g = j/(double)(plug->xfade_size);
 	        plug->buf[plug->indx] = (1.0-g)*plug->input_p[i] +g*plug->buf[j];
-		plug->output_p[i++] += plug->gain*plug->buf[indx++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
+		plug->indx &= plug->bufmask;
 	    }
         }
         if(plug->state == PLAYING)
 	{
 	    slope = *plug->drone_gain_p/(double)chunk; 
 	    for(j=0;j<chunk;j++)
-	    {
-	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain*plug->buf[indx++];
+	    { 
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
+		plug->indx &= plug->bufmask;
 	    }
 	}
 	if(plug->state == RELEASING)
@@ -152,13 +154,17 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    if(plug->gain + chunk*slope <= 0)
 	    {
 	        chunk = plug->gain/slope;
-		plug->state = INACTIVE;
+		plug->state = INACTIVE; 
 	    }
 	    for(j=0;j<chunk;j++)
+	    { 
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		plug->gain += slope; 
+		plug->indx &= plug->bufmask;
+	    }
+	    if(plug->gain <=0)
 	    {
-	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain*plug->buf[indx++];
-		plug->gain += slope;
+	        plug->indx = 0;
 	    }
         }
 	if(plug->state == QUICK_RELEASING)
@@ -168,13 +174,17 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    if(plug->gain + chunk*slope <= 0)
 	    {
 	        chunk = plug->gain/slope;
-		plug->state = LOADING;
+		plug->state = LOADING; 
 	    }
 	    for(j=0;j<chunk;j++)
-	    {
-	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain*plug->buf[indx++];
+	    { 
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
+		plug->indx &= plug->bufmask;
+	    }
+	    if(plug->gain <=0)
+	    {
+	        plug->indx = 0;
 	    }
         }
     }
@@ -184,7 +194,6 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
 {
     STUCK* plug = malloc(sizeof(STUCK));
 
-    unsigned char i;
     unsigned short tmp;
     plug->sample_freq = sample_freq; 
     tmp = 0x4000;//16384;14 bits
