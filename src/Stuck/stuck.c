@@ -59,6 +59,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
     //memset(plug->output_p,0,nframes*sizeof(float));
     
+*plug->dbg_p = (float)plug->state;
     if(plug->state == INACTIVE)
     {//decide if triggered
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
@@ -71,7 +72,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     }
     else if(plug->state < RELEASING) 
     {//decide if released 
-        if(*plug->stick_it_p < 1 || plug->trigger_p[nframes-1] < 1)
+        if(*plug->stick_it_p < 1 && plug->trigger_p[nframes-1] < 1)
         {
 	    plug->state = RELEASING; 
 	} 
@@ -101,14 +102,14 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
-	}
+	} 
         else if(plug->state == LOADING)
 	{   
 	    slope = (plug->gain - *plug->drone_gain_p)/(double)nframes;
 	    //decide if xfade will start in this period
-            if(plug->indx+chunk >= plug->bufmask - plug->xfade_size)
+            if(plug->indx+chunk >= plug->bufmask+1 - plug->xfade_size)
 	    {
-	        chunk = plug->bufmask - plug->xfade_size - plug->indx;
+	        chunk = plug->bufmask+1 - plug->xfade_size - plug->indx;
 		plug->state = LOADING_XFADE;
 	    }
 	    //load buffer
@@ -132,7 +133,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    double g = 0;
 	    for(j=0;j<chunk;j++)
 	    {
-	        g = j/(double)(plug->xfade_size);
+	        g = (plug->xfade_size + plug->indx - plug->bufmask+1)/(double)(plug->xfade_size);
 	        plug->buf[plug->indx] = (1.0-g)*plug->input_p[i] +g*plug->buf[j];
 		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
 		plug->gain += slope;
@@ -191,6 +192,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         }
     }
 *plug->dbg_p = (float)plug->state;
+return;
 }
 
 LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
