@@ -63,7 +63,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     {//decide if triggered
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
         {
-	    plug->state = LOADING;
+	    plug->state = FADE_IN;
 	    plug->indx = 0;
             plug->gain = 0;
 	}
@@ -98,13 +98,13 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    for(j=0;j<chunk;j++)
 	    { 
 	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
 	}
         else if(plug->state == LOADING)
 	{   
-	    slope = *plug->drone_gain_p/(double)chunk;
+	    slope = (plug->gain - *plug->drone_gain_p)/(double)nframes;
 	    //decide if xfade will start in this period
             if(plug->indx+chunk >= plug->bufmask - plug->xfade_size)
 	    {
@@ -115,17 +115,17 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    for(j=0;j<chunk;j++)
 	    {
 	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
 	}
 	else if(plug->state == LOADING_XFADE)
 	{
-	    slope = *plug->drone_gain_p/(double)chunk;
+	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    //decide if xfade ends in this period
-            if(plug->indx+chunk >= ~plug->bufmask)
+            if(plug->indx+chunk >= plug->bufmask+1)
 	    {
-	        chunk = ~plug->bufmask - plug->indx;
+	        chunk = plug->bufmask+1 - plug->indx;
 		plug->state = PLAYING;
 	    }
 	    //load buffer with xfade
@@ -134,17 +134,17 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 	        g = j/(double)(plug->xfade_size);
 	        plug->buf[plug->indx] = (1.0-g)*plug->input_p[i] +g*plug->buf[j];
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
 		plug->gain += slope;
 		plug->indx &= plug->bufmask;
 	    }
         }
         else if(plug->state == PLAYING)
 	{
-	    slope = *plug->drone_gain_p/(double)chunk; 
+	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
 		plug->gain += slope;
 		plug->indx &= plug->bufmask;
 	    }
@@ -160,7 +160,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
 		plug->gain += slope; 
 		plug->indx &= plug->bufmask;
 	    }
@@ -180,7 +180,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
 		plug->gain += slope;
 		plug->indx &= plug->bufmask;
 	    }
@@ -190,7 +190,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
         }
     }
-*plug->dbg_p = 3.0;//(float)plug->gain;//plug->state;
+*plug->dbg_p = (float)plug->state;
 }
 
 LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
