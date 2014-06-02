@@ -62,4 +62,11 @@
                 lv2:minimum 0.01 ;
                 lv2:maximum 3.0 ; 
 		units:unit units:s ;
+        ], [
+                a lv2:OutputPort, lv2:ControlPort ;
+                lv2:index 6 ;
+                lv2:symbol "DBG" ;
+                lv2:name "Debug" ; 
+                lv2:minimum -10.00 ;
+                lv2:maximum 10.0 ; 
         ] .

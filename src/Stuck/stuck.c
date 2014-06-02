@@ -10,7 +10,7 @@
 
 enum states
 {
-    INACTIVE,
+    INACTIVE = 0,
     FADE_IN,
     LOADING,
     LOADING_XFADE, 
@@ -36,6 +36,7 @@ typedef struct _STUCK
     float *stick_it_p;
     float *drone_gain_p;
     float *release_p;
+    float *dbg_p;
 }STUCK;
 
 enum stuck_ports
@@ -45,7 +46,8 @@ enum stuck_ports
     TRIGGER,
     STICKIT,
     DRONEGAIN,
-    RELEASE
+    RELEASE,
+    DBG
 };
 
 void run_stuck(LV2_Handle handle, uint32_t nframes)
@@ -55,6 +57,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     double slope;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
+    //memset(plug->output_p,0,nframes*sizeof(float));
     
     if(plug->state == INACTIVE)
     {//decide if triggered
@@ -62,6 +65,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         {
 	    plug->state = LOADING;
 	    plug->indx = 0;
+            plug->gain = 0;
 	}
         else return;
     }
@@ -69,10 +73,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     {//decide if released 
         if(*plug->stick_it_p < 1 || plug->trigger_p[nframes-1] < 1)
         {
-	    plug->state = RELEASING;
-	    plug->indx = 0;
-	}
-        else return;
+	    plug->state = RELEASING; 
+	} 
     }
     else if(plug->state == RELEASING)
     {//decide if new trigger has been sent before release is complete
@@ -137,7 +139,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->indx &= plug->bufmask;
 	    }
         }
-        if(plug->state == PLAYING)
+        else if(plug->state == PLAYING)
 	{
 	    slope = *plug->drone_gain_p/(double)chunk; 
 	    for(j=0;j<chunk;j++)
@@ -147,11 +149,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->indx &= plug->bufmask;
 	    }
 	}
-	if(plug->state == RELEASING)
+	else if(plug->state == RELEASING)
 	{
-	    slope = *plug->release_p*plug->sample_freq;
+	    slope = -*plug->release_p*plug->sample_freq;
 	    //decide if released in this period
-	    if(plug->gain + chunk*slope <= 0)
+	    if(plug->gain + chunk*slope < slope)
 	    {
 	        chunk = plug->gain/slope;
 		plug->state = INACTIVE; 
@@ -162,16 +164,16 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->gain += slope; 
 		plug->indx &= plug->bufmask;
 	    }
-	    if(plug->gain <=0)
+	    if(plug->gain <= slope)
 	    {
 	        plug->indx = 0;
 	    }
         }
-	if(plug->state == QUICK_RELEASING)
+	else if(plug->state == QUICK_RELEASING)
 	{
 	    slope = -*plug->drone_gain_p/(double)plug->xfade_size;
 	    //decide if released in this period
-	    if(plug->gain + chunk*slope <= 0)
+	    if(plug->gain + chunk*slope < slope)
 	    {
 	        chunk = plug->gain/slope;
 		plug->state = LOADING; 
@@ -182,12 +184,13 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->gain += slope;
 		plug->indx &= plug->bufmask;
 	    }
-	    if(plug->gain <=0)
+	    if(plug->gain <= slope)
 	    {
 	        plug->indx = 0;
 	    }
         }
     }
+*plug->dbg_p = 3.0;//(float)plug->gain;//plug->state;
 }
 
 LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
@@ -206,6 +209,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->xfade_size = tmp>>2;
     plug->indx = 0;
     plug->state = INACTIVE;
+    plug->gain = 0;
 
     return plug;
 }
@@ -221,6 +225,7 @@ void connect_stuck_ports(LV2_Handle handle, uint32_t port, void *data)
     case STICKIT:    plug->stick_it_p = (float*)data;break;
     case DRONEGAIN:  plug->drone_gain_p = (float*)data;break;
     case RELEASE:    plug->release_p = (float*)data;break; 
+    case DBG:        plug->dbg_p = (float*)data;break; 
     default:         puts("UNKNOWN PORT YO!!");
     }
 }
