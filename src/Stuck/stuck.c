@@ -54,12 +54,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 {
     STUCK* plug = (STUCK*)handle;
     uint32_t i,j,chunk=0;
-    double slope;
+    double slope = 0;
 
-    memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
-    //memset(plug->output_p,0,nframes*sizeof(float));
+    memcpy(plug->output_p,plug->input_p,nframes*sizeof(float)); 
     
-*plug->dbg_p = (float)plug->state;
     if(plug->state == INACTIVE)
     {//decide if triggered
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
@@ -99,7 +97,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    for(j=0;j<chunk;j++)
 	    { 
 	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
 	} 
@@ -116,7 +114,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    for(j=0;j<chunk;j++)
 	    {
 	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
 	}
@@ -135,7 +133,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 	        g = (plug->xfade_size + plug->indx - plug->bufmask+1)/(double)(plug->xfade_size);
 	        plug->buf[plug->indx] = (1.0-g)*plug->input_p[i] +g*plug->buf[j];
-		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 		plug->indx &= plug->bufmask;
 	    }
@@ -145,29 +143,33 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 		plug->indx &= plug->bufmask;
 	    }
 	}
 	else if(plug->state == RELEASING)
 	{
-	    slope = -*plug->release_p*plug->sample_freq;
+	    slope = -*plug->drone_gain_p/(*plug->release_p*plug->sample_freq);
 	    //decide if released in this period
 	    if(plug->gain + chunk*slope < slope)
 	    {
-	        chunk = plug->gain/slope;
+	        chunk = -plug->gain/slope;
+		//if(chunk>=nframes)chunk = 0;//overflow condition
 		plug->state = INACTIVE; 
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
 		plug->indx &= plug->bufmask;
 	    }
-	    if(plug->gain <= slope)
+	    if(plug->gain <= -slope)
 	    {
 	        plug->indx = 0;
+		plug->state = INACTIVE; 
+		plug->gain = 0;
+		return;
 	    }
         }
 	else if(plug->state == QUICK_RELEASING)
@@ -176,22 +178,22 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    //decide if released in this period
 	    if(plug->gain + chunk*slope < slope)
 	    {
-	        chunk = plug->gain/slope;
+	        chunk = -plug->gain/slope; 
 		plug->state = LOADING; 
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] += plug->gain;//*plug->buf[plug->indx++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 		plug->indx &= plug->bufmask;
 	    }
-	    if(plug->gain <= slope)
+	    if(plug->gain <= -slope)
 	    {
 	        plug->indx = 0;
+		plug->state = LOADING; 
 	    }
         }
     }
-*plug->dbg_p = (float)plug->state;
 return;
 }
 
