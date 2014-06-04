@@ -7,6 +7,7 @@
 #include<math.h>
 
 #define STUCK_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck"
+#define PI 3.1415926535897932384626433832795
 
 enum states
 {
@@ -24,6 +25,7 @@ typedef struct _STUCK
     unsigned short indx;
     unsigned short bufmask; 
     unsigned short xfade_size;
+    unsigned short xf_start;
     unsigned char state;
     double sample_freq;
     
@@ -105,9 +107,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{   
 	    slope = (plug->gain - *plug->drone_gain_p)/(double)nframes;
 	    //decide if xfade will start in this period
-            if(plug->indx+chunk >= plug->bufmask+1 - plug->xfade_size)
+            if(plug->indx+chunk >= plug->bufmask+1)
 	    {
-	        chunk = plug->bufmask+1 - plug->xfade_size - plug->indx;
+	        chunk = plug->bufmask+1 - plug->indx;
 		plug->state = LOADING_XFADE;
 	    }
 	    //load buffer
@@ -117,25 +119,25 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
+            plug->indx &= plug->bufmask;
 	}
 	else if(plug->state == LOADING_XFADE)
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    //decide if xfade ends in this period
-            if(plug->indx+chunk >= plug->bufmask+1)
+            if(plug->indx+chunk >= plug->xfade_size)
 	    {
-	        chunk = plug->bufmask+1 - plug->indx;
+	        chunk = plug->xfade_size - plug->indx;
 		plug->state = PLAYING;
 	    }
 	    //load buffer with xfade
-	    double g = 0;
+	    double phi = 0; 
 	    for(j=0;j<chunk;j++)
 	    {
-	        g = (plug->xfade_size + plug->indx - plug->bufmask+1)/(double)(plug->xfade_size);
-	        plug->buf[plug->indx] = (1.0-g)*plug->input_p[i] +g*plug->buf[j];
+	        phi = PI*plug->indx/(double)(2*plug->xfade_size);
+	        plug->buf[plug->indx] = cos(phi)*plug->input_p[i] + sin(phi)*plug->buf[plug->indx];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
-		plug->gain += slope;
-		plug->indx &= plug->bufmask;
+		plug->gain += slope; 
 	    }
         }
         else if(plug->state == PLAYING)
@@ -211,6 +213,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufmask = tmp-1;
     plug->xfade_size = tmp>>2;
+    plug->xf_start = 3*tmp>>2;
     plug->indx = 0;
     plug->state = INACTIVE;
     plug->gain = 0;
