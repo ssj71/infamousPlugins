@@ -134,7 +134,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    double phi = 0; 
 	    for(j=0;j<chunk;j++)
 	    {
-	        phi = plug->indx/(double)(plug->xfade_size);
+	        phi = .5*(1-cos(PI*plug->indx/(double)(plug->xfade_size)));
 	        plug->buf[plug->indx] = (1.0-phi)*plug->input_p[i] + phi*plug->buf[plug->indx];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
