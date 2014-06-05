@@ -25,11 +25,14 @@ typedef struct _STUCK
     unsigned short indx;
     unsigned short bufmask; 
     unsigned short xfade_size;
+    unsigned short fade_size;
     unsigned char state;
     double sample_freq;
     
     float *buf;
     float gain; 
+    float dc_rm_in;
+    float dc_rm_out;
 
     float *input_p;
     float *output_p;
@@ -87,7 +90,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         chunk = nframes - i;
 	if(plug->state == FADE_IN)
 	{
-	    slope = *plug->drone_gain_p/(double)plug->xfade_size;
+	    slope = *plug->drone_gain_p/(double)plug->fade_size;
 	    //decide if done with fade in in this period
 	    if(plug->gain+chunk*slope >= *plug->drone_gain_p)
 	    {
@@ -177,7 +180,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         }
 	else if(plug->state == QUICK_RELEASING)
 	{
-	    slope = -*plug->drone_gain_p/(double)plug->xfade_size;
+	    slope = -*plug->drone_gain_p/(double)plug->fade_size;
 	    //decide if released in this period
 	    if(plug->gain + chunk*slope < slope)
 	    {
@@ -206,14 +209,15 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
 
     unsigned short tmp;
     plug->sample_freq = sample_freq; 
-    tmp = 0x8000;//16384;15 bits
+    tmp = 0x4000;//16384;15 bits
     if(sample_freq<100000)//88.1 or 96.1kHz
         tmp = tmp>>1;//14 bits
     if(sample_freq<50000)//44.1 or 48kHz
         tmp = tmp>>1;//13 bits
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufmask = tmp-1;
-    plug->xfade_size = tmp-1;
+    plug->xfade_size = 100;
+    plug->fade_size = tmp>>2;
     plug->indx = 0;
     plug->state = INACTIVE;
     plug->gain = 0;
