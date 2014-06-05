@@ -25,12 +25,13 @@ typedef struct _STUCK
     unsigned short indx;
     unsigned short bufmask; 
     unsigned short xfade_size;
-    unsigned short xf_start;
     unsigned char state;
     double sample_freq;
     
     float *buf;
     float gain;
+    float dc_rm_in;
+    float dc_rm_out;
 
     float *input_p;
     float *output_p;
@@ -98,7 +99,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    //load buffer and fade in
 	    for(j=0;j<chunk;j++)
 	    { 
-	        plug->buf[plug->indx] = plug->input_p[i];
+	        plug->buf[plug->indx] = .99999*plug->dc_rm_out + plug->input_p[i] - plug->dc_rm_in;
+		plug->dc_rm_in = plug->input_p[i];
+		plug->dc_rm_out = plug->buf[plug->indx];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
@@ -115,7 +118,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    //load buffer
 	    for(j=0;j<chunk;j++)
 	    {
-	        plug->buf[plug->indx] = plug->input_p[i];
+	        plug->buf[plug->indx] = .99999*plug->dc_rm_out + plug->input_p[i] - plug->dc_rm_in;
+		plug->dc_rm_in = plug->input_p[i];
+		plug->dc_rm_out = plug->buf[plug->indx];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
@@ -132,13 +137,19 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
 	    //load buffer with xfade
 	    double phi = 0; 
+	    float tmp = 0;
 	    for(j=0;j<chunk;j++)
 	    {
-	        phi = .5*(1-cos(PI*plug->indx/(double)(plug->xfade_size)));
-	        plug->buf[plug->indx] = (1.0-phi)*plug->input_p[i] + phi*plug->buf[plug->indx];
+	        phi = .5*(1-cos(PI*plug->indx/(double)(plug->xfade_size)));//raised cosine
+		//phi = plug->indx/(double)plug->xfade_size;//linear
+	        tmp = .99999*plug->dc_rm_out + plug->input_p[i] - plug->dc_rm_in;
+		plug->dc_rm_in = plug->input_p[i];
+		plug->dc_rm_out = tmp;
+	        plug->buf[plug->indx] = (1.0-phi)*tmp + phi*plug->buf[plug->indx];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
 	    }
+            plug->indx &= plug->bufmask;
         }
         else if(plug->state == PLAYING)
 	{
@@ -171,6 +182,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	        plug->indx = 0;
 		plug->state = INACTIVE; 
 		plug->gain = 0;
+		plug->dc_rm_in  = 0;
+		plug->dc_rm_out = 0;
 		return;
 	    }
         }
@@ -193,6 +206,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 	        plug->indx = 0;
 		plug->state = LOADING; 
+		plug->dc_rm_in  = 0;
+		plug->dc_rm_out = 0;
 	    }
         }
     }
@@ -205,18 +220,19 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
 
     unsigned short tmp;
     plug->sample_freq = sample_freq; 
-    tmp = 0x4000;//16384;14 bits
+    tmp = 0x8000;//16384;15 bits
     if(sample_freq<100000)//88.1 or 96.1kHz
-        tmp = tmp>>1;//13 bits
+        tmp = tmp>>1;//14 bits
     if(sample_freq<50000)//44.1 or 48kHz
-        tmp = tmp>>1;//12 bits
+        tmp = tmp>>1;//13 bits
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufmask = tmp-1;
-    plug->xfade_size = tmp>>2;
-    plug->xf_start = 3*tmp>>2;
+    plug->xfade_size = tmp-1;
     plug->indx = 0;
     plug->state = INACTIVE;
     plug->gain = 0;
+    plug->dc_rm_in = 0;
+    plug->dc_rm_out = 0;
 
     return plug;
 }
