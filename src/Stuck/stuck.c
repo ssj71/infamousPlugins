@@ -29,9 +29,7 @@ typedef struct _STUCK
     double sample_freq;
     
     float *buf;
-    float gain;
-    float dc_rm_in;
-    float dc_rm_out;
+    float gain; 
 
     float *input_p;
     float *output_p;
@@ -99,9 +97,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    //load buffer and fade in
 	    for(j=0;j<chunk;j++)
 	    { 
-	        plug->buf[plug->indx] = .99999*plug->dc_rm_out + plug->input_p[i] - plug->dc_rm_in;
-		plug->dc_rm_in = plug->input_p[i];
-		plug->dc_rm_out = plug->buf[plug->indx];
+	        plug->buf[plug->indx] = plug->input_p[i];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
@@ -118,9 +114,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    //load buffer
 	    for(j=0;j<chunk;j++)
 	    {
-	        plug->buf[plug->indx] = .99999*plug->dc_rm_out + plug->input_p[i] - plug->dc_rm_in;
-		plug->dc_rm_in = plug->input_p[i];
-		plug->dc_rm_out = plug->buf[plug->indx];
+	        plug->buf[plug->indx] = plug->input_p[i]; 
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 	    }
@@ -136,16 +130,12 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->state = PLAYING;
 	    }
 	    //load buffer with xfade
-	    double phi = 0; 
-	    float tmp = 0;
+	    double phi = 0;
 	    for(j=0;j<chunk;j++)
 	    {
-	        phi = .5*(1-cos(PI*plug->indx/(double)(plug->xfade_size)));//raised cosine
-		//phi = plug->indx/(double)plug->xfade_size;//linear
-	        tmp = .99999*plug->dc_rm_out + plug->input_p[i] - plug->dc_rm_in;
-		plug->dc_rm_in = plug->input_p[i];
-		plug->dc_rm_out = tmp;
-	        plug->buf[plug->indx] = (1.0-phi)*tmp + phi*plug->buf[plug->indx];
+	        //phi = .5*(1-cos(PI*plug->indx/(double)(plug->xfade_size)));//raised cosine
+		phi = plug->indx/(double)plug->xfade_size;//linear
+	        plug->buf[plug->indx] = (1.0-phi)*plug->input_p[i] + phi*plug->buf[plug->indx];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
 	    }
@@ -181,9 +171,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 	        plug->indx = 0;
 		plug->state = INACTIVE; 
-		plug->gain = 0;
-		plug->dc_rm_in  = 0;
-		plug->dc_rm_out = 0;
+		plug->gain = 0; 
 		return;
 	    }
         }
@@ -206,8 +194,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 	        plug->indx = 0;
 		plug->state = LOADING; 
-		plug->dc_rm_in  = 0;
-		plug->dc_rm_out = 0;
 	    }
         }
     }
@@ -231,8 +217,6 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->indx = 0;
     plug->state = INACTIVE;
     plug->gain = 0;
-    plug->dc_rm_in = 0;
-    plug->dc_rm_out = 0;
 
     return plug;
 }
