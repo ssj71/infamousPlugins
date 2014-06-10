@@ -11,10 +11,9 @@
 
 enum states
 {
-    INACTIVE = 0,
-    FIND_0,
-    FADE_IN,
+    INACTIVE = 0, 
     LOADING,
+    CALC_THRESH,
     MATCHING,
     LOADING_XFADE, 
     PLAYING,
@@ -69,7 +68,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     {//decide if triggered
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
         {
-	    plug->state = FIND_0;
+	    plug->state = LOADING;
 	    plug->indx = 0;
             plug->gain = 0;
 	}
@@ -91,43 +90,13 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     for(i=0;i<nframes;)
     {    
         chunk = nframes - i;
-	if(plug->state == FIND_0)
-	{
-	    //find first zero crossing
-	    float polarity = plug->input_p[i]<0?-1:1;
-	    for(;i<chunk && polarity*plug->input_p[i]>0; i++)
-	    {
-                0;	        
-	    }
-	    if(i < chunk)
-	    {
-	        plug->state = FADE_IN;
-	    }
-	}
-	else if(plug->state == FADE_IN)
-	{
-	    slope = *plug->drone_gain_p/(double)plug->fade_size;
-	    //decide if done with fade in in this period
-	    if(plug->gain+chunk*slope >= *plug->drone_gain_p)
-	    {
-	        chunk = (*plug->drone_gain_p - plug->gain)/slope;
-		plug->state = LOADING;
-	    }
-	    //load buffer and fade in
-	    for(j=0;j<chunk;j++)
-	    { 
-	        plug->buf[plug->indx] = plug->input_p[i];
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
-		plug->gain += slope;
-	    }
-	} 
-        else if(plug->state == LOADING)
+        if(plug->state == LOADING)
 	{   
 	    slope = (plug->gain - *plug->drone_gain_p)/(double)nframes;
 	    //decide if reaching minimum length in this period
-            if(plug->indx+chunk >= plug->wavesize)
+            if(plug->indx+chunk >= plug->xfade_size)
 	    {
-	        chunk = plug->wavesize - plug->indx;
+	        chunk = plug->xfade_size - plug->indx;
 		plug->state = MATCHING;
 	    }
 	    //load buffer
@@ -136,8 +105,18 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	        plug->buf[plug->indx] = plug->input_p[i]; 
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
+	    } 
+	}
+	else if(plug->state == CALC_THRESH)//find autocorrelation of 1 frame away as threshold
+	{ 
+	    uint32_t k = 0, t=0;
+	    float tmp, score;
+	    plug->buf[plug->indx] = plug->input_p[i]; 
+    	    for(k=i;k<100 && k<nframes;k++)
+	    {
+	        tmp = plug->input_p[k] - plug->buf[t++];
+	        score += tmp*tmp;
 	    }
-            plug->indx &= plug->bufmask;
 	}
 	else if(plug->state == MATCHING)
 	{
@@ -152,17 +131,27 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    //find good correlated piece 
 	    uint32_t k = 0, t=0;
 	    float tmp, score = 10; 
-	    for(j=0;j<chunk && score>.001;j++)
+	    for(j=0;j<chunk;j++)
 	    {
 	        plug->buf[plug->indx] = plug->input_p[i]; 
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
-		plug->gain += slope;
-	        t=0;
-		score = 0;
-		for(k=i;k<10 && k<nframes;k++)
+		for(k=i;k<100 && k<nframes;k++)
 		{
-		   tmp = plug->input_p[k] - plug->buf[t++];
-		   score += tmp*tmp;
+		    tmp = plug->input_p[k] - plug->buf[t++];
+		    score += tmp*tmp;
+		}
+		if(score<.20)
+		{
+		    j=chunk;
+		    plug->wavesize = i;
+		    plug->state = LOADING_XFADE;
+		    plug->indx = 0;
+		}
+		else
+		{
+		    plug->output_p[i++] += plug->gain*plug->buf[plug->indx++]; 
+		    plug->gain += slope;
+	            t=0;
+		    score = 0;
 		}
 	    }
             plug->indx = plug->indx>plug->bufsize?0:plug->index; 
@@ -187,6 +176,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->gain += slope; 
 	    }
             plug->indx &= plug->bufmask;
+		i = i>plug->wavesize?0:i;
         }
         else if(plug->state == PLAYING)
 	{
@@ -204,15 +194,14 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    //decide if released in this period
 	    if(plug->gain + chunk*slope < slope)
 	    {
-	        chunk = -plug->gain/slope;
-		//if(chunk>=nframes)chunk = 0;//overflow condition
+	        chunk = -plug->gain/slope; 
 		plug->state = INACTIVE; 
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
-		plug->indx &= plug->bufmask;
+		i = i>plug->wavesize?0:i;
 	    }
 	    if(plug->gain <= -slope)
 	    {
@@ -237,6 +226,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
 		plug->indx &= plug->bufmask;
+		i = i>plug->wavesize?0:i;
 	    }
 	    if(plug->gain <= -slope)
 	    {
@@ -262,8 +252,8 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
         tmp = tmp>>1;//13 bits
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
-    plug->wavesize = tmp>>1;//set to min length
-    plug->xfade_size = tmp>>2;
+    plug->wavesize = tmp;
+    plug->xfade_size = tmp>>4;
     plug->fade_size = tmp>>2;
     plug->indx = 0;
     plug->state = INACTIVE;
