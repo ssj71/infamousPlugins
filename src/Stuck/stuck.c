@@ -76,6 +76,18 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	}
         else return;
     }
+    else if(plug->state < LOADING_XFADE)
+    {//decide if need to abort
+        if(*plug->stick_it_p < 1 && plug->trigger_p[nframes-1] < 1)
+        {
+	    plug->indx = 0;
+            plug->indx2 = plug->xfade_size;
+	    plug->state = INACTIVE; 
+	    plug->gain = 0; 
+	    plug->wavesize = plug->bufsize;
+	    return; 
+	} 
+    }
     else if(plug->state < RELEASING) 
     {//decide if released 
         if(*plug->stick_it_p < 1 && plug->trigger_p[nframes-1] < 1)
@@ -86,7 +98,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     else if(plug->state == RELEASING)
     {//decide if new trigger has been sent before release is complete
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
+	{
             plug->state = QUICK_RELEASING; 
+	{
     }
 
     for(i=0;i<nframes;)
