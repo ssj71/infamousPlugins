@@ -15,6 +15,7 @@ enum states
     LOADING,
     CALC_THRESH,
     MATCHING,
+    MINIMIZING,
     LOADING_XFADE, 
     PLAYING,
     RELEASING,
@@ -24,17 +25,18 @@ enum states
 typedef struct _STUCK
 {
     unsigned short indx;//current place of buffer
+    unsigned short indx2;
     unsigned short bufsize;//size of buffer 
     unsigned short wavesize;//size of waveform
-    unsigned short xfade_size;//size of crossfade
+    unsigned short xfade_size;//size of crossfade 
     unsigned short fade_size;//size of fade in/out
     unsigned char state;
     double sample_freq;
     
     float *buf;
     float gain; 
-    float dc_rm_in;
-    float dc_rm_out;
+    float thresh;
+    float score;
 
     float *input_p;
     float *output_p;
@@ -59,7 +61,7 @@ enum stuck_ports
 void run_stuck(LV2_Handle handle, uint32_t nframes)
 {
     STUCK* plug = (STUCK*)handle;
-    uint32_t i,j,chunk=0;
+    uint32_t i,j,k,t,chunk=0;
     double slope = 0;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float)); 
@@ -90,73 +92,108 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     for(i=0;i<nframes;)
     {    
         chunk = nframes - i;
-        if(plug->state == LOADING)
+        if(plug->state == LOADING)//load enough frames to start calculating the autocorrelation
 	{   
-	    slope = (plug->gain - *plug->drone_gain_p)/(double)nframes;
 	    //decide if reaching minimum length in this period
-            if(plug->indx+chunk >= plug->xfade_size)
+            if(plug->indx+chunk >= plug->xfade_size*2)
 	    {
 	        chunk = plug->xfade_size - plug->indx;
-		plug->state = MATCHING;
+		plug->state = CALC_THRESH;
 	    }
 	    //load buffer
 	    for(j=0;j<chunk;j++)
 	    {
-	        plug->buf[plug->indx] = plug->input_p[i]; 
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
-		plug->gain += slope;
+	        plug->buf[plug->indx++] = plug->input_p[i++]; 
 	    } 
 	}
 	else if(plug->state == CALC_THRESH)//find autocorrelation of 1 frame away as threshold
 	{ 
-	    uint32_t k = 0, t=0;
-	    float tmp, score;
-	    plug->buf[plug->indx] = plug->input_p[i]; 
-    	    for(k=i;k<100 && k<nframes;k++)
+	    float tmp;
+	    //plug->buf[plug->indx++] = plug->input_p[i++]; 
+	    plug->score = 0;
+	    t = 1;
+    	    for(k=0;k<plug->xfade_size;k++)
 	    {
-	        tmp = plug->input_p[k] - plug->buf[t++];
-	        score += tmp*tmp;
+	        tmp = plug->buf[t++] - plug->buf[k];
+	        plug->score += tmp*tmp;
 	    }
+	    plug->thresh = .2*plug->score*plug->xfade_size;//scale threshold based on result
+	    plug->state = MATCHING;
 	}
-	else if(plug->state == MATCHING)
+	else if(plug->state == MATCHING)//find autocorrelation thats in the ballpark
 	{
-	    slope = (plug->gain - *plug->drone_gain_p)/(double)nframes;
 	    //decide if reaching maximum length in this period
             if(plug->indx+chunk >= plug->bufsize)
 	    {
 	        chunk = plug->bufsize - plug->indx;
-		plug->wavesize = plug->bufsize;
 		plug->state = LOADING_XFADE;
 	    }
 	    //find good correlated piece 
-	    uint32_t k = 0, t=0;
-	    float tmp, score = 10; 
+	    float tmp;
 	    for(j=0;j<chunk;j++)
-	    {
-	        plug->buf[plug->indx] = plug->input_p[i]; 
-		for(k=i;k<100 && k<nframes;k++)
+	    { 
+		plug->score = 0;
+		t=0;
+		for(k=plug->indx2;k<plug->xfade_size;k++)
 		{
 		    tmp = plug->input_p[k] - plug->buf[t++];
 		    score += tmp*tmp;
 		}
-		if(score<.20)
+		plug->indx2++;
+
+		if(plug->score<plug->thresh)
 		{
 		    j=chunk;
-		    plug->wavesize = i;
-		    plug->state = LOADING_XFADE;
-		    plug->indx = 0;
+		    plug->state = MINIMIZING;
 		}
 		else
-		{
-		    plug->output_p[i++] += plug->gain*plug->buf[plug->indx++]; 
-		    plug->gain += slope;
+		{ 
 	            t=0;
 		    score = 0;
 		}
+		plug->buf[plug->indx++] = plug->input_p[i++]; 
 	    }
-            plug->indx = plug->indx>plug->bufsize?0:plug->index; 
+            plug->indx = plug->indx<plug->bufsize?plug->index:0; 
 	}
-	else if(plug->state == LOADING_XFADE)
+	else if(plug->state == MINIMIZING)//find next local minimum, assume thats the fundamental period or some multiple of it
+	{
+            if(plug->indx+chunk >= plug->bufsize)
+	    {
+	        chunk = plug->bufsize - plug->indx;
+		plug->state = LOADING_XFADE;
+	    }
+	    //find good correlated piece 
+	    float tmp,score;
+	    for(j=0;j<chunk;j++)
+	    { 
+		score = 0;
+		t=0;
+		for(k=plug->indx2;k<plug->xfade_size;k++)
+		{
+		    tmp = plug->input_p[k] - plug->buf[t++];
+		    score += tmp*tmp;
+		}
+		plug->indx2++;
+
+                plug->buf[plug->indx++] = plug->input_p[i++]; 
+		if(score>plug->score)
+		{
+		    j=chunk;
+		    plug->state = LOADING_XFADE;
+		    plug->indx = 0;
+		    plug->indx2 -= 2;//subtract 1 because we incremented already and 1 because the minimum was previous calculation
+		    plug->wavsize = plug->indx2;
+		}
+		else
+		{ 
+	            t=0;
+		    plug->score = score;
+		    score = 0;
+		}
+	    }
+            plug->indx = plug->indx<plug->bufsize?plug->index:0; 
+	}
+	else if(plug->state == LOADING_XFADE)//xfade end of buffer with start (loop it) and fade in drone
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    //decide if xfade ends in this period
@@ -171,12 +208,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 	        //phi = .5*(1-cos(PI*plug->indx/(double)(plug->xfade_size)));//raised cosine
 		phi = plug->indx/(double)plug->xfade_size;//linear
-	        plug->buf[plug->indx] = (1.0-phi)*plug->input_p[i] + phi*plug->buf[plug->indx];
+	        plug->buf[plug->indx] = (1.0-phi)*plug->buf[plug->indx2++] + phi*plug->buf[plug->indx];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
 	    }
-            plug->indx &= plug->bufmask;
-		i = i>plug->wavesize?0:i;
+            plug->indx = plug->indx<plug->wavesize?plug->index:0; 
         }
         else if(plug->state == PLAYING)
 	{
@@ -185,7 +221,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    { 
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
-		plug->indx &= plug->bufsize;
+                plug->indx = plug->indx<plug->wavesize?plug->index:0; 
 	    }
 	}
 	else if(plug->state == RELEASING)
@@ -201,20 +237,21 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    { 
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
-		i = i>plug->wavesize?0:i;
+                plug->indx = plug->indx<plug->wavesize?plug->index:0; 
 	    }
 	    if(plug->gain <= -slope)
 	    {
 	        plug->indx = 0;
+                plug->indx2 = plug->xfade_size;
 		plug->state = INACTIVE; 
 		plug->gain = 0; 
-		plug->wavesize = plug->bufsize>>1;
+		plug->wavesize = plug->bufsize;
 		return;
 	    }
         }
 	else if(plug->state == QUICK_RELEASING)
 	{
-	    slope = -*plug->drone_gain_p/(double)plug->fade_size;
+	    slope = -*plug->drone_gain_p/(double)plug->xfade_size;
 	    //decide if released in this period
 	    if(plug->gain + chunk*slope < slope)
 	    {
@@ -231,8 +268,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    if(plug->gain <= -slope)
 	    {
 	        plug->indx = 0;
+                plug->indx2 = plug->xfade_size;
 		plug->state = LOADING; 
-		plug->wavesize = plug->bufsize>>1;
+		plug->wavesize = plug->bufsize;
 	    }
         }
     }
@@ -253,9 +291,9 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
     plug->wavesize = tmp;
-    plug->xfade_size = tmp>>4;
-    plug->fade_size = tmp>>2;
+    plug->xfade_size = tmp>>4; 
     plug->indx = 0;
+    plug->indx2 = plug->xfade_size;
     plug->state = INACTIVE;
     plug->gain = 0;
 
