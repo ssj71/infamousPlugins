@@ -100,7 +100,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
 	{
             plug->state = QUICK_RELEASING; 
-	{
+	}
     }
 
     for(i=0;i<nframes;)
@@ -131,7 +131,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	        tmp = plug->buf[t++] - plug->buf[k];
 	        plug->score += tmp*tmp;
 	    }
-	    plug->thresh = .2*plug->score*plug->xfade_size;//scale threshold based on result
+	    plug->thresh = .1*plug->score*plug->xfade_size;//scale threshold based on result
 	    plug->state = MATCHING;
 	}
 	else if(plug->state == MATCHING)//find autocorrelation thats in the ballpark
@@ -148,7 +148,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    { 
 		plug->score = 0;
 		t=0;
-		for(k=plug->indx2;k<plug->xfade_size;k++)
+		for(k=plug->indx2;k<plug->indx2+plug->xfade_size;k++)
 		{
 		    tmp = plug->input_p[k] - plug->buf[t++];
 		    plug->score += tmp*tmp;
@@ -180,7 +180,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    { 
 		score = 0;
 		t=0;
-		for(k=plug->indx2;k<plug->xfade_size;k++)
+		for(k=plug->indx2;k<plug->indx2+plug->xfade_size;k++)
 		{
 		    tmp = plug->input_p[k] - plug->buf[t++];
 		    score += tmp*tmp;
