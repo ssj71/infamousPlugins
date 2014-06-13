@@ -151,23 +151,21 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		for(k=plug->indx2;k<plug->xfade_size;k++)
 		{
 		    tmp = plug->input_p[k] - plug->buf[t++];
-		    score += tmp*tmp;
+		    plug->score += tmp*tmp;
 		}
 		plug->indx2++;
 
+		//load buffer for next autorcorr calculation
+		plug->buf[plug->indx++] = plug->input_p[i++]; 
+
+		//move on if below threshold
 		if(plug->score<plug->thresh)
 		{
 		    j=chunk;
 		    plug->state = MINIMIZING;
 		}
-		else
-		{ 
-	            t=0;
-		    score = 0;
-		}
-		plug->buf[plug->indx++] = plug->input_p[i++]; 
 	    }
-            plug->indx = plug->indx<plug->bufsize?plug->index:0; 
+            plug->indx = plug->indx<plug->bufsize?plug->indx:0; 
 	}
 	else if(plug->state == MINIMIZING)//find next local minimum, assume thats the fundamental period or some multiple of it
 	{
@@ -176,7 +174,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	        chunk = plug->bufsize - plug->indx;
 		plug->state = LOADING_XFADE;
 	    }
-	    //find good correlated piece 
+	    //follow correlation down until it starts to rise
 	    float tmp,score;
 	    for(j=0;j<chunk;j++)
 	    { 
@@ -190,22 +188,22 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->indx2++;
 
                 plug->buf[plug->indx++] = plug->input_p[i++]; 
+
+		//move on if score is higher than last (found local minimum)
 		if(score>plug->score)
 		{
 		    j=chunk;
 		    plug->state = LOADING_XFADE;
 		    plug->indx = 0;
 		    plug->indx2 -= 2;//subtract 1 because we incremented already and 1 because the minimum was previous calculation
-		    plug->wavsize = plug->indx2;
+		    plug->wavesize = plug->indx2;
 		}
 		else
 		{ 
-	            t=0;
 		    plug->score = score;
-		    score = 0;
 		}
 	    }
-            plug->indx = plug->indx<plug->bufsize?plug->index:0; 
+            plug->indx = plug->indx<plug->bufsize?plug->indx:0; 
 	}
 	else if(plug->state == LOADING_XFADE)//xfade end of buffer with start (loop it) and fade in drone
 	{
@@ -226,7 +224,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
 	    }
-            plug->indx = plug->indx<plug->wavesize?plug->index:0; 
+            plug->indx = plug->indx<plug->wavesize?plug->indx:0; 
         }
         else if(plug->state == PLAYING)
 	{
@@ -235,7 +233,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    { 
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
-                plug->indx = plug->indx<plug->wavesize?plug->index:0; 
+                plug->indx = plug->indx<plug->wavesize?plug->indx:0; 
 	    }
 	}
 	else if(plug->state == RELEASING)
@@ -251,7 +249,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    { 
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
-                plug->indx = plug->indx<plug->wavesize?plug->index:0; 
+                plug->indx = plug->indx<plug->wavesize?plug->indx:0; 
 	    }
 	    if(plug->gain <= -slope)
 	    {
@@ -276,8 +274,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    { 
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
-		plug->indx &= plug->bufmask;
-		i = i>plug->wavesize?0:i;
+                plug->indx = plug->indx<plug->wavesize?plug->indx:0; 
 	    }
 	    if(plug->gain <= -slope)
 	    {
