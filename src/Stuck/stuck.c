@@ -13,9 +13,7 @@ enum states
 {
     INACTIVE = 0, 
     LOADING,
-    CALC_THRESH,
     MATCHING,
-    MINIMIZING,
     LOADING_XFADE, 
     PLAYING,
     RELEASING,
@@ -71,8 +69,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
         {
 	    plug->state = LOADING;
-	    plug->indx = 0;
-            plug->gain = 0;
 	}
         else return;
     }
@@ -80,11 +76,13 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     {//decide if need to abort
         if(*plug->stick_it_p < 1 && plug->trigger_p[nframes-1] < 1)
         {
+	    //reinit
 	    plug->indx = 0;
             plug->indx2 = plug->xfade_size;
 	    plug->state = INACTIVE; 
 	    plug->gain = 0; 
-	    plug->wavesize = plug->bufsize;
+	    plug->wavesize = plug->bufsize-plug->xfade_size;
+	    plug->score = 1;
 	    return; 
 	} 
     }
@@ -112,7 +110,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             if(plug->indx+chunk >= plug->xfade_size*2)
 	    {
 	        chunk = plug->xfade_size*2 - plug->indx;
-		plug->state = CALC_THRESH;
+		plug->state = MATCHING;
 	    }
 	    //load buffer
 	    for(j=0;j<chunk;j++)
@@ -120,90 +118,45 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	        plug->buf[plug->indx++] = plug->input_p[i++]; 
 	    } 
 	}
-	else if(plug->state == CALC_THRESH)//find autocorrelation of 1 frame away as threshold
-	{ 
-	    float tmp;
-	    //plug->buf[plug->indx++] = plug->input_p[i++]; 
-	    plug->score = 0;
-	    t = 1;
-    	    for(k=0;k<plug->xfade_size;k++)
-	    {
-	        tmp = plug->buf[t++] - plug->buf[k];
-	        plug->score += tmp*tmp;
-	    }
-	    plug->thresh = .1*plug->score*plug->xfade_size;//scale threshold based on result
-	    plug->state = MATCHING;
-	}
-	else if(plug->state == MATCHING)//find autocorrelation thats in the ballpark
-	{
-	    //decide if reaching maximum length in this period
-            if(plug->indx+chunk >= plug->bufsize)
-	    {
-	        chunk = plug->bufsize - plug->indx;
-		plug->state = LOADING_XFADE;
-	    }
-	    //find good correlated piece 
-	    float tmp;
-	    for(j=0;j<chunk;j++)
-	    { 
-		plug->score = 0;
-		t=0;
-		for(k=plug->indx2;k<plug->indx2+plug->xfade_size;k++)
-		{
-		    tmp = plug->input_p[k] - plug->buf[t++];
-		    plug->score += tmp*tmp;
-		}
-		plug->indx2++;
-
-		//load buffer for next autorcorr calculation
-		plug->buf[plug->indx++] = plug->input_p[i++]; 
-
-		//move on if below threshold
-		if(plug->score<plug->thresh)
-		{
-		    j=chunk;
-		    plug->state = MINIMIZING;
-		}
-	    }
-            plug->indx = plug->indx<plug->bufsize?plug->indx:0; 
-	}
-	else if(plug->state == MINIMIZING)//find next local minimum, assume thats the fundamental period or some multiple of it
+	else if(plug->state == MATCHING)//find autocorrelation
 	{
             if(plug->indx+chunk >= plug->bufsize)
 	    {
 	        chunk = plug->bufsize - plug->indx;
 		plug->state = LOADING_XFADE;
 	    }
-	    //follow correlation down until it starts to rise
+	    // calculate autocorrelation of sample in buffer, save the minimum
 	    float tmp,score;
 	    for(j=0;j<chunk;j++)
 	    { 
 		score = 0;
 		t=0;
+		
 		for(k=plug->indx2;k<plug->indx2+plug->xfade_size;k++)
 		{
-		    tmp = plug->input_p[k] - plug->buf[t++];
+		    tmp = plug->input_p[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
 		    score += tmp*tmp;
 		}
 		plug->indx2++;
 
                 plug->buf[plug->indx++] = plug->input_p[i++]; 
 
-		//move on if score is higher than last (found local minimum)
-		if(score>plug->score)
+		//save place if score is lower than last minimum
+		if(score<plug->score)
 		{
-		    j=chunk;
-		    plug->state = LOADING_XFADE;
-		    plug->indx = 0;
-		    plug->indx2 -= 2;//subtract 1 because we incremented already and 1 because the minimum was previous calculation
-		    plug->wavesize = plug->indx2;
-		}
-		else
-		{ 
+		    plug->wavesize = plug->indx2 -1;//subtract 1 because we incremented already
 		    plug->score = score;
 		}
 	    }
-            plug->indx = plug->indx<plug->bufsize?plug->indx:0; 
+            if(plug->indx>=plug->bufsize) 
+	    {
+	        plug->indx = 0;
+		plug->indx2 = plug->wavesize;//set indx2 back to minimum autocorrelation
+	    }
+	    else if(plug->indx2>=plug->bufsize)
+	    {
+	        plug->indx2 = plug->wavesize;
+	    }
 	}
 	else if(plug->state == LOADING_XFADE)//xfade end of buffer with start (loop it) and fade in drone
 	{
@@ -257,7 +210,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->indx2 = plug->xfade_size;
 		plug->state = INACTIVE; 
 		plug->gain = 0; 
-		plug->wavesize = plug->bufsize;
+		plug->wavesize = plug->bufsize-plug->xfade_size;
+		plug->score = 1;
 		return;
 	    }
         }
@@ -281,7 +235,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	        plug->indx = 0;
                 plug->indx2 = plug->xfade_size;
 		plug->state = LOADING; 
-		plug->wavesize = plug->bufsize;
+		plug->wavesize = plug->bufsize-plug->xfade_size;
+		plug->score = 1;
 	    }
         }
     }
@@ -301,8 +256,8 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
         tmp = tmp>>1;//13 bits
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
-    plug->wavesize = tmp;
-    plug->xfade_size = tmp>>4; 
+    plug->xfade_size = tmp>>3; 
+    plug->wavesize = tmp-plug->xfade_size;
     plug->indx = 0;
     plug->indx2 = plug->xfade_size;
     plug->state = INACTIVE;
