@@ -111,7 +111,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    //decide if reaching minimum length in this period
             if(plug->indx+chunk >= plug->xfade_size*2)
 	    {
-	        chunk = plug->xfade_size - plug->indx;
+	        chunk = plug->xfade_size*2 - plug->indx;
 		plug->state = CALC_THRESH;
 	    }
 	    //load buffer
