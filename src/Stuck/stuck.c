@@ -64,7 +64,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     double slope = 0;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float)); 
-    //memset(plug->output_p,0,nframes*sizeof(float)); 
     
     if(plug->state == INACTIVE)
     {//decide if triggered
@@ -134,18 +133,17 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		score = 0;
 		t=0;
 		
-		for(k=plug->indx2;k<plug->indx2+plug->acorr_size;k++)
+		for(k=plug->indx2;k<plug->indx2+plug->acorr_size && score<=plug->score;k++)
 		{
 		    tmp = plug->buf[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
 		    score += tmp*tmp;
-		    if(score>plug->score) continue;
 		}
 		plug->indx2++;
 
                 plug->buf[plug->indx++] = plug->input_p[i++]; 
 
 		//save place if score is lower than last minimum
-		if(score<plug->score)
+		if(score<=plug->score)
 		{
 		    plug->wavesize = plug->indx2 -1;//subtract 1 because we incremented already
 		    plug->score = score;
@@ -156,7 +154,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	        plug->indx = 0;
 		plug->indx2 = plug->wavesize;//set indx2 back to minimum autocorrelation
 	    }
-	    else if(plug->indx2>=plug->bufsize)
+	    else if(plug->indx2>=plug->bufsize)//this is just in case
 	    {
 	        plug->indx2 = plug->wavesize;
 	    }
@@ -174,7 +172,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    double phi = 0;
 	    for(j=0;j<chunk;j++)
 	    {
-	        //phi = .5*(1-cos(PI*plug->indx/(double)(plug->xfade_size)));//raised cosine
 		phi = plug->indx/(double)plug->xfade_size;//linear
 	        plug->buf[plug->indx] = (1.0-phi)*plug->buf[plug->indx2++] + phi*plug->buf[plug->indx];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
@@ -182,7 +179,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
             plug->indx = plug->indx<plug->wavesize?plug->indx:0; 
         }
-        else if(plug->state == PLAYING)
+        else if(plug->state == PLAYING)//just loop buffer and track gain changes
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    for(j=0;j<chunk;j++)
