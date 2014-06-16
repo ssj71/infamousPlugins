@@ -26,7 +26,8 @@ typedef struct _STUCK
     unsigned short indx2;
     unsigned short bufsize;//size of buffer 
     unsigned short wavesize;//size of waveform
-    unsigned short xfade_size;//size of crossfade 
+    unsigned short acorr_size;//size of crossfade 
+    unsigned short xfade_size;
     unsigned short fade_size;//size of fade in/out
     unsigned char state;
     double sample_freq;
@@ -63,6 +64,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     double slope = 0;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float)); 
+    //memset(plug->output_p,0,nframes*sizeof(float)); 
     
     if(plug->state == INACTIVE)
     {//decide if triggered
@@ -78,10 +80,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         {
 	    //reinit
 	    plug->indx = 0;
-            plug->indx2 = plug->xfade_size;
+            plug->indx2 = plug->acorr_size;
 	    plug->state = INACTIVE; 
 	    plug->gain = 0; 
-	    plug->wavesize = plug->bufsize-plug->xfade_size;
+	    plug->wavesize = plug->bufsize-plug->acorr_size;
 	    plug->score = 1;
 	    return; 
 	} 
@@ -107,9 +109,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         if(plug->state == LOADING)//load enough frames to start calculating the autocorrelation
 	{   
 	    //decide if reaching minimum length in this period
-            if(plug->indx+chunk >= plug->xfade_size*2)
+            if(plug->indx+chunk >= plug->acorr_size*2)
 	    {
-	        chunk = plug->xfade_size*2 - plug->indx;
+	        chunk = plug->acorr_size*2 - plug->indx;
 		plug->state = MATCHING;
 	    }
 	    //load buffer
@@ -132,10 +134,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		score = 0;
 		t=0;
 		
-		for(k=plug->indx2;k<plug->indx2+plug->xfade_size;k++)
+		for(k=plug->indx2;k<plug->indx2+plug->acorr_size;k++)
 		{
-		    tmp = plug->input_p[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
+		    tmp = plug->buf[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
 		    score += tmp*tmp;
+		    if(score>plug->score) continue;
 		}
 		plug->indx2++;
 
@@ -207,17 +210,17 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    if(plug->gain <= -slope)
 	    {
 	        plug->indx = 0;
-                plug->indx2 = plug->xfade_size;
+                plug->indx2 = plug->acorr_size;
 		plug->state = INACTIVE; 
 		plug->gain = 0; 
-		plug->wavesize = plug->bufsize-plug->xfade_size;
+		plug->wavesize = plug->bufsize-plug->acorr_size;
 		plug->score = 1;
 		return;
 	    }
         }
 	else if(plug->state == QUICK_RELEASING)
 	{
-	    slope = -*plug->drone_gain_p/(double)plug->xfade_size;
+	    slope = -*plug->drone_gain_p/(double)plug->acorr_size;
 	    //decide if released in this period
 	    if(plug->gain + chunk*slope < slope)
 	    {
@@ -233,9 +236,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    if(plug->gain <= -slope)
 	    {
 	        plug->indx = 0;
-                plug->indx2 = plug->xfade_size;
+                plug->indx2 = plug->acorr_size;
 		plug->state = LOADING; 
-		plug->wavesize = plug->bufsize-plug->xfade_size;
+		plug->wavesize = plug->bufsize-plug->acorr_size;
 		plug->score = 1;
 	    }
         }
@@ -256,10 +259,11 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
         tmp = tmp>>1;//13 bits
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
-    plug->xfade_size = tmp>>3; 
-    plug->wavesize = tmp-plug->xfade_size;
+    plug->acorr_size = tmp>>3; 
+    plug->xfade_size = plug->acorr_size;
+    plug->wavesize = tmp-plug->acorr_size;
     plug->indx = 0;
-    plug->indx2 = plug->xfade_size;
+    plug->indx2 = plug->acorr_size;
     plug->state = INACTIVE;
     plug->gain = 0;
 
