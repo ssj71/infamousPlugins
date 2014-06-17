@@ -107,7 +107,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         chunk = nframes - i;
         if(plug->state == LOADING)//load enough frames to start calculating the autocorrelation
 	{   
-	    //decide if reaching minimum length in this period
+	    //decide if reaching minimum length in this period this should be xfadfe size + greater of accor or xfade size
             if(plug->indx+chunk >= plug->xfade_size+plug->acorr_size)
 	    {
 	        chunk = plug->xfade_size + plug->acorr_size - plug->indx;
