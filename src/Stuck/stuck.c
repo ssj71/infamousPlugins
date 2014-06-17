@@ -79,7 +79,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         {
 	    //reinit
 	    plug->indx = 0;
-            plug->indx2 = plug->acorr_size;
+            plug->indx2 = plug->xfade_size;
 	    plug->state = INACTIVE; 
 	    plug->gain = 0; 
 	    plug->wavesize = plug->bufsize-plug->acorr_size;
@@ -108,9 +108,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         if(plug->state == LOADING)//load enough frames to start calculating the autocorrelation
 	{   
 	    //decide if reaching minimum length in this period
-            if(plug->indx+chunk >= plug->acorr_size*2)
+            if(plug->indx+chunk >= plug->xfade_size+plug->acorr_size)
 	    {
-	        chunk = plug->acorr_size*2 - plug->indx;
+	        chunk = plug->xfade_size + plug->acorr_size - plug->indx;
 		plug->state = MATCHING;
 	    }
 	    //load buffer
@@ -207,7 +207,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    if(plug->gain <= -slope)
 	    {
 	        plug->indx = 0;
-                plug->indx2 = plug->acorr_size;
+                plug->indx2 = plug->xfade_size;
 		plug->state = INACTIVE; 
 		plug->gain = 0; 
 		plug->wavesize = plug->bufsize-plug->acorr_size;
@@ -233,7 +233,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    if(plug->gain <= -slope)
 	    {
 	        plug->indx = 0;
-                plug->indx2 = plug->acorr_size;
+                plug->indx2 = plug->xfade_size;
 		plug->state = LOADING; 
 		plug->wavesize = plug->bufsize-plug->acorr_size;
 		plug->score = 1;
@@ -257,10 +257,10 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
     plug->acorr_size = tmp>>3; 
-    plug->xfade_size = plug->acorr_size;
-    plug->wavesize = tmp-plug->acorr_size;
+    plug->xfade_size = tmp>>3;
+    plug->wavesize = tmp-plug->xfade_size;
     plug->indx = 0;
-    plug->indx2 = plug->acorr_size;
+    plug->indx2 = plug->xfade_size;
     plug->state = INACTIVE;
     plug->gain = 0;
 
