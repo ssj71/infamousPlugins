@@ -1,0 +1,77 @@
+//spencer jackson
+//rms_calc.c - an rms calculation library thing.
+#include<math.c>
+#include"rms_calc.h"
+
+void rms_init(RMS_CALC* calc, unsigned short size)
+{
+    calc->buf = malloc(sizeof(float)*size);
+    calc->size = size;
+    calc->indx = 0;
+    calc->sum = 0;
+    calc->rms = 0;
+}
+
+float rms_shift(RMS_CALC* calc, float x)
+{
+    calc->sum -= calc->buf[calc->indx];
+    calc->buf[calc->indx] = x*x;
+    calc->sum += calc->buf[indx++];
+    calc->indx = calc->indx<calc->size?calc->indx:0;
+    return rms = sqrt(calc->sum/(float)calc->size);
+}
+
+void rms_shift_no_out(RMS_CALC* calc, float x)
+{
+    calc->sum -= calc->buf[calc->indx];
+    calc->buf[calc->indx] = x*x;
+    calc->sum += calc->buf[indx++];
+    calc->indx = calc->indx<calc->size?calc->indx:0;
+}
+
+float rms_calculate(RMS_CALC* calc)
+{
+    return rms = sqrt(calc->sum/(float)calc->size);
+}
+
+/* DO NOT USE! problem is its not squared
+float rms_block_fill(RMS_CALC* calc, float x[], unsigned short nframes)
+{  
+    unsigned short i = calc->size - calc->indx;
+    unsigned short j;
+    if(nframes>=calc->size)
+    {
+        memcpy(calc->buf,&x[nframes-calc->size],sizeof(float)*calc->size);
+        calc->sum = 0;
+        for(j=0;j<calc->size;j++)
+        {
+            calc->sum += calc->buf[j] = calc->buf[j]*calc->buf[j];
+        }
+        calc->indx = 0;
+    }
+    else if(calc->indx+nframes >= calc->size)
+    { 
+        memcpy(&calc->buf[calc->indx],x,sizeof(float)*(i);
+        memcpy(calc->buf,&x[i],sizeof(float)*(nframes-i);
+        for(j=0;j<nframes-i;j++)
+        {
+        }
+        for(;j<calc->indx;j++)
+        {
+        }
+        for(;j<calc->size;j++)
+        {
+        }
+        calc->indx = nframes - i;
+    }
+    else
+    {
+        memcpy(&calc->buf[calc->indx],x,sizeof(float)*(nframes);
+        calc->indx += nframes;
+    }
+    for(i=0;i<calc->size;i++)
+    {
+        calc->sum += 2
+    }
+}
+*/
