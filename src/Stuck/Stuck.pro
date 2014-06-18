@@ -9,7 +9,10 @@ QMAKE_CFLAGS += -std=c99 \
     -g
 
 
-SOURCES += stuck.c
+SOURCES += stuck.c \
+    rms_calc.c  
+    
+HEADERS += rms_calc.h
 
 OTHER_FILES += \
     stuck.lv2/manifest.ttl \

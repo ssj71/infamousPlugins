@@ -12,13 +12,18 @@ void rms_init(RMS_CALC* calc, unsigned short size)
     calc->rms = 0;
 }
 
+void rms_deinit(RMS_CALC* calc)
+{
+    free(calc->buf);
+}
+
 float rms_shift(RMS_CALC* calc, float x)
 {
     calc->sum -= calc->buf[calc->indx];
     calc->buf[calc->indx] = x*x;
     calc->sum += calc->buf[indx++];
     calc->indx = calc->indx<calc->size?calc->indx:0;
-    return rms = sqrt(calc->sum/(float)calc->size);
+    return calc->rms = sqrt(calc->sum/(float)calc->size);
 }
 
 void rms_shift_no_out(RMS_CALC* calc, float x)
@@ -31,10 +36,9 @@ void rms_shift_no_out(RMS_CALC* calc, float x)
 
 float rms_calculate(RMS_CALC* calc)
 {
-    return rms = sqrt(calc->sum/(float)calc->size);
+    return calc->rms = sqrt(calc->sum/(float)calc->size);
 }
 
-/* DO NOT USE! problem is its not squared
 float rms_block_fill(RMS_CALC* calc, float x[], unsigned short nframes)
 {  
     unsigned short i = calc->size - calc->indx;
@@ -54,24 +58,31 @@ float rms_block_fill(RMS_CALC* calc, float x[], unsigned short nframes)
         memcpy(&calc->buf[calc->indx],x,sizeof(float)*(i);
         memcpy(calc->buf,&x[i],sizeof(float)*(nframes-i);
         for(j=0;j<nframes-i;j++)
-        {
+        { 
+            calc->sum += calc->buf[j] = calc->buf[j]*calc->buf[j];
         }
         for(;j<calc->indx;j++)
         {
+            calc->sum += calc->buf[j];
         }
         for(;j<calc->size;j++)
         {
+            calc->sum += calc->buf[j] = calc->buf[j]*calc->buf[j];
         }
         calc->indx = nframes - i;
     }
     else
     {
         memcpy(&calc->buf[calc->indx],x,sizeof(float)*(nframes);
+        for(j=0;j<calc->indx;j++)
+        {
+            calc->sum += calc->buf[j];
+        }
+        for(;j<calc->size;j++)
+        {
+            calc->sum += calc->buf[j] = calc->buf[j]*calc->buf[j];
+        }
         calc->indx += nframes;
     }
-    for(i=0;i<calc->size;i++)
-    {
-        calc->sum += 2
-    }
-}
-*/
+    return calc->rms = sqrt(calc->sum/(float)calc->size);
+} 

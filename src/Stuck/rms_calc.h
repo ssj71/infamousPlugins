@@ -12,6 +12,7 @@ typedef struct _RMS_CALC
 }RMS_CALC;
 
 void rms_init(RMS_CALC* calc, unsigned short size); 
+void rms_deinit(RMS_CALC *calc);
 float rms_shift(RMS_CALC* calc, float x); 
 void rms_shift_no_out(RMS_CALC* calc, float x); 
 float rms_calculate(RMS_CALC* calc);

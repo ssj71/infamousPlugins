@@ -5,6 +5,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<math.h>
+#include"rms_calc.h"
 
 #define STUCK_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck"
 #define PI 3.1415926535897932384626433832795
