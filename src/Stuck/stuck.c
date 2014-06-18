@@ -38,6 +38,8 @@ typedef struct _STUCK
     float thresh;
     float score;
 
+    RMS_CALC rms_calc;
+
     float *input_p;
     float *output_p;
     float *trigger_p;
@@ -72,7 +74,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         {
 	    plug->state = LOADING;
 	}
-        else return;
+        else
+	{
+            rms_block_fill(plug->rms_calc, plug->input_p,nframes);
+	    return;
+	}
     }
     else if(plug->state < LOADING_XFADE)
     {//decide if need to abort
@@ -101,6 +107,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{
             plug->state = QUICK_RELEASING; 
 	}
+        rms_block_fill(plug->rms_calc, plug->input_p,nframes);
+    }
+    else//quick releasing
+    {
+        rms_block_fill(plug->rms_calc, plug->input_p,nframes); 
     }
 
     for(i=0;i<nframes;)
@@ -264,6 +275,8 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->indx2 = plug->xfade_size;
     plug->state = INACTIVE;
     plug->gain = 0;
+
+    rms_init(&plug->rms_calc,tmp>>6);
 
     return plug;
 }
