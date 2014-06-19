@@ -178,16 +178,16 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    //decide if xfade ends in this period
-            if(plug->indx+chunk >= plug->xfade_size)
+            if(plug->indx+chunk >= plug->wavesize)
 	    {
-	        chunk = plug->xfade_size - plug->indx;
+	        chunk = plug->wavesize - plug->indx;
 		plug->state = PLAYING;
 	    }
 	    //load buffer with xfade
 	    double phi = 0;
 	    for(j=0;j<chunk;j++)
 	    {
-		phi = plug->indx/(double)plug->xfade_size;//linear
+		phi = plug->indx/(double)plug->wavesize;//linear
 	        plug->buf[plug->indx] = (1.0-phi)*plug->buf[plug->indx2++] + phi*plug->buf[plug->indx];
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
@@ -232,7 +232,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         }
 	else if(plug->state == QUICK_RELEASING)
 	{
-	    slope = -*plug->drone_gain_p/(double)plug->xfade_size;
+	    slope = -*plug->drone_gain_p/(double)plug->acorr_size;
 	    //decide if released in this period
 	    if(plug->gain + chunk*slope < slope)
 	    {
@@ -274,7 +274,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->buf = malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
     plug->acorr_size = tmp>>3; 
-    plug->xfade_size = tmp>>3;
+    plug->xfade_size = tmp>>1;
     plug->wavesize = tmp-plug->xfade_size;
     plug->indx = 0;
     plug->indx2 = plug->xfade_size;
@@ -282,7 +282,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->gain = 0;
     plug->env = 0;
 
-    rms_init(&plug->rms_calc,tmp>>5);
+    rms_init(&plug->rms_calc,tmp>>3);
 
     return plug;
 }

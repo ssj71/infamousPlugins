@@ -58,7 +58,7 @@ float rms_block_fill(RMS_CALC* calc, float x[], unsigned short nframes)
     else if(calc->indx+nframes >= calc->size)
     { 
         memcpy(&calc->buf[calc->indx],x,sizeof(float)*(i));
-        memcpy(calc->buf,&x[i],sizeof(float)*(nframes-i));
+        memcpy(calc->buf,&x[i-1],sizeof(float)*(nframes-i));
         for(j=0;j<nframes-i;j++)
         { 
             calc->sum += calc->buf[j] = calc->buf[j]*calc->buf[j];
