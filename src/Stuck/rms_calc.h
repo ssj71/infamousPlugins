@@ -6,7 +6,7 @@ typedef struct _RMS_CALC
 {
     unsigned short size;
     unsigned short indx;
-    float buf[];
+    float* buf;
     float sum;
     float rms;
 }RMS_CALC;

@@ -35,6 +35,7 @@ typedef struct _STUCK
     
     float *buf;
     float gain; 
+    float env;//envelope gain to normalize compression to
     float thresh;
     float score;
 
@@ -73,10 +74,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
         {
 	    plug->state = LOADING;
+	    plug->env = plug->rms_calc.rms;
 	}
         else
 	{
-            rms_block_fill(plug->rms_calc, plug->input_p,nframes);
+            rms_block_fill(&plug->rms_calc, plug->input_p,nframes);
 	    return;
 	}
     }
@@ -107,11 +109,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{
             plug->state = QUICK_RELEASING; 
 	}
-        rms_block_fill(plug->rms_calc, plug->input_p,nframes);
-    }
-    else//quick releasing
-    {
-        rms_block_fill(plug->rms_calc, plug->input_p,nframes); 
+	else
+	{
+            rms_block_fill(&plug->rms_calc, plug->input_p,nframes);
+	}
     }
 
     for(i=0;i<nframes;)
@@ -119,16 +120,17 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         chunk = nframes - i;
         if(plug->state == LOADING)//load enough frames to start calculating the autocorrelation
 	{   
-	    //decide if reaching minimum length in this period this should be xfadfe size + greater of accor or xfade size
+	    //decide if reaching minimum length in this period this should be xfade size + greater of accor or xfade size
             if(plug->indx+chunk >= plug->xfade_size+plug->acorr_size)
 	    {
 	        chunk = plug->xfade_size + plug->acorr_size - plug->indx;
 		plug->state = MATCHING;
 	    }
-	    //load buffer
+	    //load buffer with compressed signal
 	    for(j=0;j<chunk;j++)
 	    {
-	        plug->buf[plug->indx++] = plug->input_p[i++]; 
+	        plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
+		i++;
 	    } 
 	}
 	else if(plug->state == MATCHING)//find autocorrelation
@@ -152,7 +154,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		}
 		plug->indx2++;
 
-                plug->buf[plug->indx++] = plug->input_p[i++]; 
+	        plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
+		i++;
 
 		//save place if score is lower than last minimum
 		if(score<=plug->score)
@@ -229,7 +232,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         }
 	else if(plug->state == QUICK_RELEASING)
 	{
-	    slope = -*plug->drone_gain_p/(double)plug->acorr_size;
+	    slope = -*plug->drone_gain_p/(double)plug->xfade_size;
 	    //decide if released in this period
 	    if(plug->gain + chunk*slope < slope)
 	    {
@@ -241,7 +244,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
                 plug->indx = plug->indx<plug->wavesize?plug->indx:0; 
-	    }
+	    } 
+            rms_block_fill(&plug->rms_calc, plug->input_p,chunk);
 	    if(plug->gain <= -slope)
 	    {
 	        plug->indx = 0;
@@ -249,6 +253,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->state = LOADING; 
 		plug->wavesize = plug->bufsize-plug->acorr_size;
 		plug->score = 1;
+		plug->env = plug->rms_calc.rms;
 	    }
         }
     }
@@ -275,8 +280,9 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->indx2 = plug->xfade_size;
     plug->state = INACTIVE;
     plug->gain = 0;
+    plug->env = 0;
 
-    rms_init(&plug->rms_calc,tmp>>6);
+    rms_init(&plug->rms_calc,tmp>>5);
 
     return plug;
 }
