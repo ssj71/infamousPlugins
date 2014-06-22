@@ -1,5 +1,5 @@
 //Spencer Jackson
-//square.c
+//stuck.c
 #include<lv2.h>
 #include<stdlib.h>
 #include<stdio.h>
@@ -68,10 +68,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     double slope = 0;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float)); 
+    //for(i=0;i<nframes;i++) plug->output_p[i] = 0;	
+    
     
     if(plug->state == INACTIVE)
-    {//decide if triggered
-	memset(plug->output_p,0,nframes*sizeof(float));
+    {//decide if triggered 
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
         {
 	    plug->state = LOADING;
@@ -131,7 +132,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    for(j=0;j<chunk;j++)
 	    {
 	        plug->buf[plug->indx++] = plug->input_p[i];//*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
-	        //plug->output_p[i] = plug->input_p[i];//*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
+	        plug->output_p[i] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
+	        //plug->output_p[i] = plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
+		//plug->output_p[i] = .2;
+		//plug->output_p[i] = plug->input_p[i];//plug->buf[plug->indx-1];
 		i++;
 	    } 
 	}
@@ -158,6 +162,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 
 	        //plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
 	        plug->buf[plug->indx++] = plug->input_p[i];//*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
+	        plug->output_p[i] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
+	        //plug->output_p[i] = plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
+		//plug->output_p[i] = plug->input_p[i];//plug->buf[plug->indx-1];
 		i++;
 
 		//save place if score is lower than last minimum
@@ -192,7 +199,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 		phi = plug->indx/(double)plug->wavesize;//linear
 	        plug->buf[plug->indx] = (1.0-phi)*plug->buf[plug->indx2++] + phi*plug->buf[plug->indx];
-		plug->output_p[i++] = plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] = .5;//plug->buf[plug->indx++];
 		//plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
 	    }
@@ -203,7 +210,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] = plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] = .7;//plug->gain*plug->buf[plug->indx++];
 		//plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
                 plug->indx = plug->indx<plug->wavesize?plug->indx:0; 
@@ -221,7 +228,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    for(j=0;j<chunk;j++)
 	    { 
 		//plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
-		plug->output_p[i++] = plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] = .3;//plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
                 plug->indx = plug->indx<plug->wavesize?plug->indx:0; 
 	    }
@@ -247,7 +254,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		//plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		plug->output_p[i++] = .9;//plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope;
                 plug->indx = plug->indx<plug->wavesize?plug->indx:0; 
 	    } 
