@@ -7,11 +7,14 @@
 
 void rms_init(RMS_CALC* calc, unsigned short size)
 {
+    unsigned short i;
     calc->buf = (float*)malloc(sizeof(float)*size);
     calc->size = size;
     calc->indx = 0;
     calc->sum = 0;
     calc->rms = 0;
+    for(i=0;i<size;i++)
+        calc->buf[i] = 0;
 }
 
 void rms_deinit(RMS_CALC* calc)
@@ -43,8 +46,15 @@ float rms_calculate(RMS_CALC* calc)
 
 float rms_block_fill(RMS_CALC* calc, float x[], unsigned short nframes)
 {  
-    unsigned short i = calc->size - calc->indx;
-    unsigned short j;
+    //unsigned short i = calc->size - calc->indx;
+    //unsigned short j;
+    unsigned short i;
+    for(i=0;i<nframes-1;i++)
+    {
+        rms_shift_no_out(calc,x[i]);
+    }
+    return rms_shift(calc,x[i]);
+    /*
     if(nframes>=calc->size)
     {
         memcpy(calc->buf,&(x[nframes-calc->size]),sizeof(float)*calc->size);
@@ -87,4 +97,5 @@ float rms_block_fill(RMS_CALC* calc, float x[], unsigned short nframes)
         calc->indx += nframes;
     }
     return calc->rms = sqrt(calc->sum/(float)calc->size);
+    */
 } 

@@ -134,20 +134,17 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    for(j=0;j<chunk;j++)
 	    {
 	        plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
-	        //plug->output_p[i] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
-	        //plug->output_p[i] = plug->buf[plug->indx++];
-		//plug->output_p[i] = .2;
-		//plug->output_p[i] = plug->input_p[i];//plug->buf[plug->indx-1];
+		//plug->output_p[i] = plug->input_p[i]*plug->env/plug->rms_calc.rms;
 		i++;
 	    } 
 	}
 	else if(plug->state == MATCHING)//find autocorrelation
 	{
-            if(plug->indx2+chunk >= plug->xfade_max+plug->acorr_size)
+            if(plug->indx2+chunk >= plug->xfade_max)
 	    {
-	        chunk = plug->xfade_max+plug->acorr_size - plug->indx2;
+	        chunk = plug->xfade_max - plug->indx2;
 		plug->state = LOADING_XFADE;
-		//plug->state = PLAYING;
+		plug->state = PLAYING;
 	    }
 	    // calculate autocorrelation of sample in buffer, save the minimum
 	    float tmp,score;
@@ -164,10 +161,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		plug->indx2++;
 
 	        plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
-	        //plug->buf[plug->indx++] = plug->input_p[i];//*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
-	        //plug->output_p[i] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
-	        //plug->output_p[i] = .4;//plug->buf[plug->indx++];
-		//plug->output_p[i] = plug->input_p[i];//plug->buf[plug->indx-1];
 		i++;
 
 		//save place if score is lower than last minimum
@@ -180,7 +173,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             if(plug->indx2>=plug->xfade_max)
 	    { 
 		plug->indx2 = 0;//reset indx2
-		//plug->buf[plug->wavesize] = 1;
 	    }
 	}
 	else if(plug->state == LOADING_XFADE)//xfade end of buffer with start (loop it) over an entire wave and fade in drone
@@ -204,9 +196,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 		phi = plug->indx2/(double)plug->wavesize;//linear
 	        plug->buf[plug->indx2] = (1.0-phi)*plug->buf[plug->indx2+plug->wavesize] + phi*plug->buf[plug->indx2];
+		//still loading end of buffer
 		plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
 		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
-		//plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
 	    }
         }
@@ -226,7 +218,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		phi = plug->indx2/(double)plug->wavesize;//linear
 	        plug->buf[plug->indx2] = (1.0-phi)*plug->buf[plug->indx2+plug->wavesize] + phi*plug->buf[plug->indx2];
 		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
-		//plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->gain += slope; 
 	    }
             plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
@@ -234,12 +225,14 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == PLAYING)//just loop buffer and track gain changes
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)plug->xfade_min;
+	    plug->buf[plug->wavesize] = 1;
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
-		//plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
+		//plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
+		plug->output_p[i++] = plug->buf[plug->indx2++];
 		plug->gain += slope;
-                plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
+                //plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
+                plug->indx2 = plug->indx2<plug->xfade_max?plug->indx2:0; 
 	    }
 	}
 	else if(plug->state == RELEASING)
@@ -253,7 +246,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
-		//plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
 		plug->gain += slope; 
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
@@ -280,7 +272,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
-		//plug->output_p[i++] += plug->gain*plug->buf[plug->indx++];
 		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
 		plug->gain += slope;
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
@@ -313,7 +304,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
         tmp = tmp>>1;//13 bits
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
-    plug->acorr_size = tmp>>4; 
+    plug->acorr_size = tmp>>2; 
     plug->xfade_max = tmp>>1;
     plug->xfade_min = tmp>>6;
     plug->wavesize = plug->xfade_max;
@@ -321,9 +312,10 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->indx2 = plug->xfade_min;
     plug->state = INACTIVE;
     plug->gain = 0;
+    plug->score = 1;
     plug->env = 0;
 
-    rms_init(&plug->rms_calc,tmp>>6);
+    rms_init(&plug->rms_calc,tmp>>3);
 
     return plug;
 }
