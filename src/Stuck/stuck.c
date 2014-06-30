@@ -144,7 +144,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    {
 	        chunk = plug->xfade_max - plug->indx2;
 		plug->state = LOADING_XFADE;
-		plug->state = PLAYING;
+		//plug->state = PLAYING;
 	    }
 	    // calculate autocorrelation of sample in buffer, save the minimum
 	    float tmp,score;
@@ -179,9 +179,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)plug->xfade_min;
 	    //decide if xfade ends in this period
-            if(plug->indx2+chunk >= 2*plug->wavesize)
+            //if(plug->indx2+chunk >= 2*plug->wavesize)
+            if(plug->indx2+chunk >= 10)
 	    {
-	        chunk = 2*plug->wavesize - plug->indx2;
+		//chunk = 2*plug->wavesize - plug->indx2;
+	        chunk = 10 - plug->indx2;
 		plug->state = PLAYING;
 	    }
 	    //decide if going to overflow
@@ -194,7 +196,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    double phi = 0;
 	    for(j=0;j<chunk;j++)
 	    {
-		phi = plug->indx2/(double)plug->wavesize;//linear
+		//phi = plug->indx2/(double)plug->wavesize;//linear
+		phi = plug->indx2/(double)10.0;//linear
 	        plug->buf[plug->indx2] = (1.0-phi)*plug->buf[plug->indx2+plug->wavesize] + phi*plug->buf[plug->indx2];
 		//still loading end of buffer
 		plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
@@ -225,14 +228,14 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == PLAYING)//just loop buffer and track gain changes
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)plug->xfade_min;
-	    plug->buf[plug->wavesize] = 1;
+	    //plug->buf[plug->wavesize] = 1;
 	    for(j=0;j<chunk;j++)
 	    { 
 		//plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
 		plug->output_p[i++] = plug->buf[plug->indx2++];
 		plug->gain += slope;
-                //plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
-                plug->indx2 = plug->indx2<plug->xfade_max?plug->indx2:0; 
+                plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
+                //plug->indx2 = plug->indx2<plug->xfade_max?plug->indx2:0; 
 	    }
 	}
 	else if(plug->state == RELEASING)
