@@ -179,11 +179,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    //decide if xfade ends in this period
-            //if(plug->indx2+chunk >= plug->wavesize)
-            if(plug->indx2+chunk >= 10)
+            if(plug->indx2+chunk >= plug->wavesize)
+            //if(plug->indx2+chunk >= 10)
 	    {
-		//chunk = plug->wavesize - plug->indx2;
-	        chunk = 10 - plug->indx2;
+		chunk = plug->wavesize - plug->indx2;
+	        //chunk = 10 - plug->indx2;
 		plug->state = PLAYING;
 	    }
 	    //decide if going to overflow
@@ -197,8 +197,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    for(j=0;j<chunk;j++)
 	    {
 		//phi = plug->indx2/(double)plug->wavesize;//linear
-		phi = plug->indx2/(double)10.0;//linear
-	        plug->buf[plug->indx2] = (1.0-phi)*plug->buf[plug->indx2+plug->wavesize] + phi*plug->buf[plug->indx2];
+		//phi = plug->indx2/(double)10.0;//linear
+		//phi = .5;
+	        //plug->buf[plug->indx2] = (1.0-phi)*plug->buf[plug->indx2+plug->wavesize] + phi*plug->buf[plug->indx2];
+	        plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
 		//still loading end of buffer
 		plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
 		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
@@ -218,8 +220,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    double phi = 0;
 	    for(j=0;j<chunk;j++)
 	    {
-		phi = plug->indx2/(double)plug->wavesize;//linear
-	        plug->buf[plug->indx2] = (1.0-phi)*plug->buf[plug->indx2+plug->wavesize] + phi*plug->buf[plug->indx2];
+		//phi = plug->indx2/(double)plug->wavesize;//linear
+		//phi = .5;
+	        //plug->buf[plug->indx2] = (1.0-phi)*plug->buf[plug->indx2+plug->wavesize] + phi*plug->buf[plug->indx2];
+	        plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
 		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
 		plug->gain += slope; 
 	    }
@@ -318,7 +322,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->score = 1;
     plug->env = 0;
 
-    rms_init(&plug->rms_calc,tmp>>6);
+    rms_init(&plug->rms_calc,tmp>>3);
 
     return plug;
 }
