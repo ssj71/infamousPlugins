@@ -179,10 +179,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    //decide if xfade ends in this period
-            //if(plug->indx2+chunk >= 2*plug->wavesize)
+            //if(plug->indx2+chunk >= plug->wavesize)
             if(plug->indx2+chunk >= 10)
 	    {
-		//chunk = 2*plug->wavesize - plug->indx2;
+		//chunk = plug->wavesize - plug->indx2;
 	        chunk = 10 - plug->indx2;
 		plug->state = PLAYING;
 	    }
@@ -209,9 +209,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	{
 	    slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
 	    //decide if xfade ends in this period
-            if(plug->indx2+chunk >= 2*plug->wavesize)
+            if(plug->indx2+chunk >= plug->wavesize)
 	    {
-	        chunk = 2*plug->wavesize - plug->indx2;
+	        chunk = plug->wavesize - plug->indx2;
 		plug->state = PLAYING;
 	    }
 	    //xfade buffer
@@ -307,7 +307,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
         tmp = tmp>>1;//13 bits
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
-    plug->acorr_size = tmp>>2; 
+    plug->acorr_size = tmp>>3; 
     plug->xfade_max = tmp>>1;
     plug->xfade_min = tmp>>6;
     plug->wavesize = plug->xfade_max;
@@ -318,7 +318,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->score = 1;
     plug->env = 0;
 
-    rms_init(&plug->rms_calc,tmp>>3);
+    rms_init(&plug->rms_calc,tmp>>6);
 
     return plug;
 }
