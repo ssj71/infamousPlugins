@@ -32,7 +32,8 @@ Dependencies:
 Note that on ArchLinux, they do not have qmake in /usr/bin, so a special install script was created. Use ./installARCHLINUX.sh instead.
 
 A NOTE ABOUT CV PORTS!:
-I have commented out all the cv ports (envfollower and stuck) because almost no lv2 hosts are implementing that at this time. They appear as audio ports. If you wish to re-apply the CV port label, open the *.ttl file for that plugin and find the line with "lv2:AudioPort ; #CvPort ;" and remove "AudioPort ; #" which will cause the port to be declared as Cv rather than audio.
+I have commented out all the cv ports (envfollower and stuck) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they we frequently interpreted as second port of a stereo pair.
+If you want to re-enable the ports, in envfollower.c and stuck.c uncomment the line "//#define CV_PORTS" (remove the "//") and in the respective .ttl files, uncomment the blocks at the bottom. If you wish to use the CV ports as audio ports (required for any host but ingen at the time of writing), open the *.ttl file for that plugin and find the line with "lv2:AudioPort ; #CvPort ;" and remove "AudioPort ; #" which will cause the port to be declared as Cv rather than audio.
 
 Now lets talk about what you're installing:
 
