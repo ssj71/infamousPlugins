@@ -203,7 +203,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	        plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
 		//still loading end of buffer
 		plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]); 
-		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
 		plug->gain += slope; 
 	    }
         }
@@ -224,7 +224,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 		//phi = .5;
 	        //plug->buf[plug->indx2] = (1.0-phi)*plug->buf[plug->indx2+plug->wavesize] + phi*plug->buf[plug->indx2];
 	        plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
-		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
 		plug->gain += slope; 
 	    }
             plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
@@ -235,7 +235,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    //plug->buf[plug->wavesize] = 1;
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
 		//plug->output_p[i++] = plug->buf[plug->indx2++];
 		plug->gain += slope;
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
@@ -253,7 +253,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
 		plug->gain += slope; 
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
 	    }
@@ -279,7 +279,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 	    }
 	    for(j=0;j<chunk;j++)
 	    { 
-		plug->output_p[i++] = plug->gain*plug->buf[plug->indx2++];
+		plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
 		plug->gain += slope;
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0; 
 	    } 
