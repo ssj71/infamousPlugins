@@ -7,6 +7,7 @@
 #include<stdio.h>
 #include<math.h>
 
+//#define CV_PORTS
 
 //main functions
 LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
@@ -192,6 +193,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
         plug->mprev = plug->mout;
 
 	//now handle the Control Voltage port
+#ifdef CV_PORT
         if(plug->out <= *plug->threshold_p)
         {
             plug->cv_out_p[i] = *plug->cmin_p;
@@ -208,6 +210,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
         {
             plug->cv_out_p[i] = *plug->cmax_p - plug->cv_out_p[i] + *plug->cmin_p;
         }
+#endif
 
         //finally copy the intput to the output
         plug->output_p[i] = buf[i];

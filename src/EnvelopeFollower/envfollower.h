@@ -94,18 +94,18 @@ enum envfollower_ports
     OUTPUT,
     MIDI_OUT,
     CTL_OUT,
-    CV_OUT,
     PEAKRMS,
-    THRESHOLD,//6
+    THRESHOLD,//5
     SATURATION,
     ATIME,
     DTIME,
     CHANNEL,
-    CONTROL_NO,//11
+    CONTROL_NO,//10
     MINV,
     MAXV,
     REVERSE,
     CMINV,
-    CMAXV,//16
-    CREVERSE
+    CMAXV,//15
+    CREVERSE,
+    CV_OUT
 };

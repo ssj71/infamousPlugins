@@ -8,7 +8,7 @@
 #include"rms_calc.h"
 
 #define STUCK_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck"
-#define PI 3.1415926535897932384626433832795
+//#define CV_PORTS
 
 enum states
 {
@@ -55,10 +55,10 @@ enum stuck_ports
 {
     IN =0,
     OUT,
-    TRIGGER,
     STICKIT,
     DRONEGAIN,
     RELEASE,
+    TRIGGER,
     DBG
 };
 
@@ -74,7 +74,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     
     if(plug->state == INACTIVE)
     {//decide if triggered 
+#ifdef CV_PORTS
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
+#else
+        if(*plug->stick_it_p >= 1)
+#endif
         {
 	    plug->state = LOADING;
 	    plug->env = plug->rms_calc.rms;
@@ -87,7 +91,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     }
     else if(plug->state < LOADING_XFADE)
     {//decide if need to abort
-        if(*plug->stick_it_p < 1 && plug->trigger_p[nframes-1] < 1)
+#ifdef CV_PORTS
+        if(*plug->stick_it_p < 1 && plug->trigger_p[nframes-1] < 1) 
+#else
+        if(*plug->stick_it_p < 1)
+#endif
         {
 	    //reinit
 	    plug->indx = 0;
@@ -102,14 +110,22 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     }
     else if(plug->state < RELEASING) 
     {//decide if released 
-        if(*plug->stick_it_p < 1 && plug->trigger_p[nframes-1] < 1)
+#ifdef CV_PORTS
+        if(*plug->stick_it_p < 1 && plug->trigger_p[nframes-1] < 1) 
+#else
+        if(*plug->stick_it_p < 1) 
+#endif
         {
 	    plug->state = RELEASING; 
 	} 
     }
     else if(plug->state == RELEASING)
     {//decide if new trigger has been sent before release is complete
+#ifdef CV_PORTS
         if(*plug->stick_it_p >= 1 || plug->trigger_p[nframes-1] >= 1)
+#else
+        if(*plug->stick_it_p >= 1)
+#endif
 	{
             plug->state = QUICK_RELEASING; 
 	}
