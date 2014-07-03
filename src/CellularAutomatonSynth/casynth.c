@@ -133,8 +133,11 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     synth->amod_g = *synth->amod_gain_p;
     synth->fmod_g = *synth->fmod_gain_p;
 
-
-    memset(buf,0, sizeof(float)*nframes);//start by filling buffer with 0s, we'll add to this
+    for(t=0;t<nframes;t++)//start by filling buffer with 0s, we'll add to this
+    {
+        buf[t] = 0;
+    }
+    t=0;
 
     LV2_ATOM_SEQUENCE_FOREACH(synth->midi_in_p, event)
     {
