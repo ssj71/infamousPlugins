@@ -7,7 +7,7 @@
 
 <http://infamousplugins.sourceforge.net/plugs.html#cheapdist>
  a lv2:Plugin, lv2:WaveshaperPlugin ;
- doap:name "cheap distortion" ;
+ doap:name "the infamous cheap distortion" ;
  doap:maintainer [ foaf:name "Spencer Jackson" ] ;
 
  lv2:optionalFeature lv2:hardRTCapable ;

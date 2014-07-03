@@ -19,6 +19,11 @@ qmake-qt4
 make
 sudo make install
 
+cd ../Stuck
+qmake-qt4
+make
+sudo make install
+
 cd ../cheap_distortion
 make
 sudo make install

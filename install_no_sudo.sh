@@ -16,6 +16,10 @@ cd ../Hip2B
 qmake
 make
 
+cd ../Stuck
+qmake
+make
+
 cd ../cheap_distortion
 make
 

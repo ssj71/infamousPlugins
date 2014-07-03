@@ -30,7 +30,7 @@ lv2:symbol "Modulation" .
 
 <http://infamousplugins.sourceforge.net/plugs.html#casynth>
         a lv2:Plugin, lv2:InstrumentPlugin ;
-        doap:name "cellular automaton synth" ;
+        doap:name "the infamous cellular automaton synth" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://infamousplugins.sourceforge.net> ;

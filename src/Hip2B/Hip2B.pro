@@ -6,7 +6,10 @@ CONFIG += shared plugin
 CONFIG -= qt
 
 QMAKE_CFLAGS += -std=c99 \
-    -g
+    -g \
+    -msse2 \
+    -mfpmath=sse \
+    -ffast-math
 
 
 SOURCES += square.c

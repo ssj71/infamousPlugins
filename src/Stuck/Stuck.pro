@@ -5,8 +5,10 @@ TEMPLATE = lib
 CONFIG += shared plugin
 CONFIG -= qt
 
-QMAKE_CFLAGS += -std=c99 \
-    -g
+QMAKE_CFLAGS += -g \
+    -msse2 \
+    -mfpmath=sse \
+    -ffast-math
 
 
 SOURCES += stuck.c \

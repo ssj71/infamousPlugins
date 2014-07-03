@@ -9,6 +9,9 @@ make install
 cd ../Hip2B
 make install
 
+cd ../Stuck
+make install
+
 cd ../cheap_distortion
 make install
 

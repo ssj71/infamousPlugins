@@ -30,7 +30,7 @@ lv2:symbol "Control_Signal" .
 
 <http://infamousplugins.sourceforge.net/plugs.html#envfollower>
         a lv2:Plugin, lv2:EnvelopePlugin ;
-        doap:name "envelope follower" ;
+        doap:name "the infamous envelope follower" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://infamounsplugins.sourceforge.net> ;

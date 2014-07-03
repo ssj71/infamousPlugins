@@ -19,6 +19,11 @@ qmake
 make
 sudo make install
 
+cd ../Stuck
+qmake
+make
+sudo make install
+
 cd ../cheap_distortion
 make
 sudo make install
