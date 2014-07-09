@@ -71,7 +71,7 @@ Parameter Description:
 
 
 ==========================================
-2. rule
+1b. rule
 
 This visulizes cell automata on a torus. Run it by opening a terminal, navigating to the utils folder and run 
 
@@ -81,7 +81,7 @@ The least significant digit corresponds to the first harmonic
 
 
 ==========================================
-3. Envelope Follower
+2. Envelope Follower
 
 This is a fully featured envelope follower plugin. It can be used for pumping the gain with the bass or all sorts of other things that I don't really know about. Someone just wanted it so I made it. It sends a midi control value according to the amplitude of the input audio.
 
@@ -101,7 +101,7 @@ Parameter Description:
     CREVERSE - switches direction of the CV output
 
 ===========================================
-4. Hip2B
+3. Hip2B
 
 This is a distortion plugin that is even more fun than I imagined. Inspired by effect pedals by dwarfcraft, this takes your analog signal and turns it into a square wave. It gives you a glitchy type effect. It was originally meant to be pretty minimal, but I decided there wasn't a good reason to be so a simple amplifier was added to turn it down, and some basic DC offset removal was added. Its not limited in polyphony or anything, it is simply distorting your signal to be a bandlimited square wave. Basically its a switching function with hysteresis. Play with the up and down threshold parameters to change the square wave pulse width and have some fun. You'll find lower values give more sustain, but stay away from 0.0 on those two, it gets really loud and noisy. Unless thats what you want. Be my guest. Depending on your noise floor, other low values may be problematic in the same light.
 
@@ -131,7 +131,7 @@ This is a clone of the electro-harmonix freeze. It drones the note being played 
     RELEASE - time of drone decay in seconds
 
 =============================================
-5. power cut
+6. power cut
 
 This plugin is commonly called tape stop. Another one I might not actually use, but the DSP was fun anyway. It just copies the audio through until the "Pull the Plug!" port is toggled to 1 (or the CV trigger port goes above 1). Then it slows the audio down gradually to a complete stop and outputs silence until the trigger is released, much like unplugging the power chord of a record player or maybe tape player. I've never heard this happen to a tape player. A turntable actually has enough inertia. Anyway, you can adjust the length of the decay and the curve. Its pretty fun. With some automation this can make some crazy glitch type effects.
     PULL THE PLUG - start the decay (>=1) or turn it off/reset it(<1)
