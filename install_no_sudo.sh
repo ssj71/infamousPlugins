@@ -20,6 +20,10 @@ cd ../Stuck
 qmake
 make
 
+cd ../PowerCut
+qmake
+make
+
 cd ../cheap_distortion
 make
 

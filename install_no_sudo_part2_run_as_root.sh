@@ -12,6 +12,9 @@ make install
 cd ../Stuck
 make install
 
+cd ../PowerCut
+make install
+
 cd ../cheap_distortion
 make install
 

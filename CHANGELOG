@@ -4,3 +4,4 @@
 0.0.03 fixed clicking in hip2b whenever not 100%wet
 0.0.10 added harmonic width to casynth, cv port in envfollower, octave in hip2b, changed all urids to actual webpages
 0.0.15 removed all cv ports, added stuck, removed memset from casynth
+0.0.20 added powercut, fixed rms in envfollower and a few more tweaks

@@ -24,6 +24,11 @@ qmake
 make
 sudo make install
 
+cd ../PowerCut
+qmake
+make
+sudo make install
+
 cd ../cheap_distortion
 make
 sudo make install
