@@ -6,6 +6,7 @@
 #include<lv2/lv2plug.in/ns/ext/atom/util.h>
 #include "lv2/lv2plug.in/ns/ext/time/time.h"
 #include "lv2/lv2plug.in/ns/ext/atom/forge.h"
+#include "rms_calc.h"
 
 #define ENVFOLLOWER_URI "http://infamousplugins.sourceforge.net/plugs.html#envfollower"
 
@@ -26,6 +27,8 @@ typedef struct _ENVFOLLOWER{
     float dtime;
     float dn[3];
 
+    RMS_CALC rms_calc;
+
     //midi
     LV2_URID_Map* urid_map;
     LV2_URID midi_event_type;
@@ -37,6 +40,7 @@ typedef struct _ENVFOLLOWER{
     float* output_p;
     float* cv_out_p;
     LV2_Atom_Sequence* midi_out_p;
+    float* ctl_in_p;
     float* ctl_out_p;
 
     float* channel_p;
@@ -55,8 +59,6 @@ typedef struct _ENVFOLLOWER{
     float* saturation_p;
     float* atime_p;
     float* dtime_p;
-
-
 }ENVFOLLOWER;
 
 
@@ -93,19 +95,20 @@ enum envfollower_ports
     INPUT = 0,
     OUTPUT,
     MIDI_OUT,
+    CTL_IN,
     CTL_OUT,
     PEAKRMS,
-    THRESHOLD,//5
+    THRESHOLD,//6
     SATURATION,
     ATIME,
     DTIME,
     CHANNEL,
-    CONTROL_NO,//10
+    CONTROL_NO,//11
     MINV,
     MAXV,
     REVERSE,
     CMINV,
-    CMAXV,//15
+    CMAXV,//16
     CREVERSE,
     CV_OUT
 };

@@ -63,14 +63,24 @@ lv2:symbol "Control_Signal" .
         lv2:port [
                 a lv2:OutputPort, lv2:ControlPort ;
                 lv2:index 3 ;
+                lv2:symbol "CTL_IN";
+                lv2:name "Input Level";
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+        ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:ControlPort ;
+                lv2:index 4 ;
                 lv2:symbol "CTL_OUT";
                 lv2:name "Control Out";
+		lv2:scalePoint [ rdfs:label "Min"; rdf:value 0 ] ;
+		lv2:scalePoint [ rdfs:label "Max"; rdf:value 1 ] ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
         ] ;
         lv2:port [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 4 ;
+                lv2:index 5 ;
                 lv2:symbol "PEAKRMS" ;
                 lv2:name "Peak/RMS" ;
                 lv2:default 0.0 ;
@@ -79,7 +89,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 5 ;
+                lv2:index 6 ;
                 lv2:symbol "THRESHOLD" ;
                 lv2:name "Threshold" ;
                 lv2:default 0.0 ;
@@ -88,7 +98,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 6 ;
+                lv2:index 7 ;
                 lv2:symbol "SATURATION" ;
                 lv2:name "Saturation" ;
                 lv2:default 1.0 ;
@@ -97,7 +107,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 7 ;
+                lv2:index 8 ;
                 lv2:symbol "ATIME" ;
                 lv2:name "Attack Time" ;
                 lv2:portProperty lv2:logarithmic ;
@@ -107,7 +117,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 8 ;
+                lv2:index 9 ;
                 lv2:symbol "DTIME" ;
                 lv2:name "Decay Time" ;
                 lv2:portProperty lv2:logarithmic ;
@@ -117,7 +127,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index  9 ;
+                lv2:index  10 ;
                 lv2:symbol "CHANNEL" ;
                 lv2:name "MIDI Channel" ;
                 lv2:portProperty lv2:integer ;
@@ -127,7 +137,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
+                lv2:index 11 ;
                 lv2:symbol "CONTROL_NO" ;
                 lv2:name "MIDI Control Number" ;
                 lv2:portProperty lv2:integer ;
@@ -137,7 +147,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
+                lv2:index 12 ;
                 lv2:symbol "MMINV" ;
                 lv2:name "MIDI Minimum Value" ;
                 lv2:portProperty lv2:integer ;
@@ -147,7 +157,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 12 ;
+                lv2:index 13 ;
                 lv2:symbol "MMAXV" ;
                 lv2:name "MIDI Maximum Value" ;
                 lv2:portProperty lv2:integer ;
@@ -157,7 +167,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 13 ;
+                lv2:index 14 ;
                 lv2:symbol "MDIRECTION" ;
                 lv2:name "MIDI Direction" ;
                 lv2:portProperty lv2:integer ;
@@ -169,7 +179,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 14 ;
+                lv2:index 15 ;
                 lv2:symbol "CMINV" ;
                 lv2:name "CV Port Minimum Value" ;
                 lv2:default 0.0 ;
@@ -178,7 +188,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 15 ;
+                lv2:index 16 ;
                 lv2:symbol "CMAXV" ;
                 lv2:name "CV Port Maximum Value" ;
                 lv2:default 1.0 ;
@@ -187,7 +197,7 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 16 ;
+                lv2:index 17 ;
                 lv2:symbol "CDIRECTION" ;
                 lv2:name "CV Port Direction" ;
                 lv2:portProperty lv2:integer ;
@@ -200,7 +210,7 @@ lv2:symbol "Control_Signal" .
         ] ;
         #lv2:port [
         #        a lv2:OutputPort, lv2:AudioPort ; #CVPort ;
-        #        lv2:index 17 ;
+        #        lv2:index 18 ;
         #        lv2:symbol "CV_OUT";
         #        lv2:name "CV Out";
         #        lv2:minimum -10000.0 ;

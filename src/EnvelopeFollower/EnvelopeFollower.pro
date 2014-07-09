@@ -12,10 +12,12 @@ QMAKE_CFLAGS += -std=c99 \
     -ffast-math
 
 
-SOURCES += envfollower.c
+SOURCES += envfollower.c \
+    rms_calc.c
 
 HEADERS += envfollower.h \
-    constants.h
+    constants.h \
+    rms_calc.h
 
 OTHER_FILES += \
     envfollower.lv2/manifest.ttl \

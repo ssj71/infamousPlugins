@@ -21,8 +21,6 @@ LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate,
     plug->prev = 0;
     plug->mout = 0;
     plug->mprev = 0;
-    plug->nsum = 1;
-    plug->sum = 0;
     plug->out = 0;
 
     plug->atime = .1;
@@ -37,6 +35,8 @@ LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate,
     plug->dn[0] = (2 - plug->sample_time)*plug->dtime/den;
     plug->dn[1] = tmp/den;
     plug->dn[2] = plug->sample_time*plug->dtime/den;
+
+    rms_init(&plug->rms_calc,64);
 
     //get urid map value for midi events
     for (int i = 0; host_features[i]; i++)
@@ -63,13 +63,14 @@ void connect_envfollower_ports(LV2_Handle handle, uint32_t port, void *data)
     if(port == INPUT)           plug->input_p = (float*)data;
     else if(port == OUTPUT)     plug->output_p = (float*)data;
     else if(port == MIDI_OUT)   plug->midi_out_p = (LV2_Atom_Sequence*)data;
-    else if(port == CTL_OUT)     plug->ctl_out_p = (float*)data;
+    else if(port == CTL_IN)	plug->ctl_in_p = (float*)data;
+    else if(port == CTL_OUT)    plug->ctl_out_p = (float*)data;
     else if(port == CV_OUT)     plug->cv_out_p = (float*)data;
     else if(port == CHANNEL)    plug->channel_p = (float*)data;
     else if(port == CONTROL_NO) plug->control_p = (float*)data;
     else if(port == MINV)       plug->min_p = (float*)data;
     else if(port == MAXV)       plug->max_p = (float*)data;
-    else if(port == REVERSE)      plug->rev_p = (float*)data;
+    else if(port == REVERSE)    plug->rev_p = (float*)data;
     else if(port == PEAKRMS)    plug->peakrms_p = (float*)data;
     else if(port == THRESHOLD)  plug->threshold_p = (float*)data;
     else if(port == SATURATION) plug->saturation_p = (float*)data;
@@ -77,7 +78,7 @@ void connect_envfollower_ports(LV2_Handle handle, uint32_t port, void *data)
     else if(port == DTIME)      plug->dtime_p = (float*)data;
     else if(port == CMINV)      plug->cmin_p = (float*)data;
     else if(port == CMAXV)      plug->cmax_p = (float*)data;
-    else if(port == CREVERSE)      plug->crev_p = (float*)data;
+    else if(port == CREVERSE)   plug->crev_p = (float*)data;
     else puts("UNKNOWN PORT YO!!");
 }
 
@@ -142,8 +143,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     {
         //get values
         peak = buf[i]>0?buf[i]:-buf[i];
-        plug->sum += buf[i]*buf[i];
-        rms = sqrt(plug->sum/(double)plug->nsum++);
+	rms = rms_shift(&plug->rms_calc,buf[i]);
 
         plug->prev = plug->current;
         plug->current = (1 - *plug->peakrms_p)*peak + *plug->peakrms_p*rms;
@@ -219,30 +219,28 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     //do last value to output ctl port, should maybe do average but meh...
     if(plug->out <= *plug->threshold_p)
     {
-        *plug->ctl_out_p = *plug->threshold_p;
+	*plug->ctl_out_p = 0;
     }
     else if(plug->out >= *plug->saturation_p)
     {
-        *plug->ctl_out_p = *plug->saturation_p;
+        *plug->ctl_out_p = 1;
     }
     else
     {
-        *plug->ctl_out_p = plug->out;
+        *plug->ctl_out_p = (plug->out - *plug->threshold_p)/(*plug->saturation_p  - *plug->threshold_p);
     }
     if(*plug->crev_p)
     {
-        *plug->ctl_out_p = *plug->cmax_p - *plug->ctl_out_p + *plug->cmin_p;
+        *plug->ctl_out_p = 1 - *plug->ctl_out_p;
     }
-
-    //rms should be of partial signal, this is a poor way of doing it
-    plug->sum = rms;
-    plug->nsum = 1;
+    *plug->ctl_in_p = plug->out;
 }
 
 
 void cleanup_envfollower(LV2_Handle handle)
 {
     ENVFOLLOWER* plug = (ENVFOLLOWER*) handle;
+    rms_deinit(&plug->rms_calc);
     free(plug);
 }
 
