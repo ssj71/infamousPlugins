@@ -69,7 +69,7 @@ function sys = thiran2(D, Ts)
 	end
 end
 
-Fs = 44100;%48000; 44100
+Fs = 44100/4;%48000; 44100
 Ts = 1/Fs;
 Nyquist = Fs/2;
 
@@ -77,7 +77,7 @@ Nyquist = Fs/2;
 %first lets work on the low frequency chirp section
 %allpass
 Fc =  2800;%4300;% 3700, 2800;
-k = 2.56;%Fs/Fc;%stretch factor this affects Fc. %k=10=4.4khz ,11=4k, 12=3.6k,17=2.6k, 18=2.4k, 9=5k
+k = 3.56;%Fs/Fc;%stretch factor this affects Fc. %k=10=4.4khz ,11=4k, 12=3.6k,17=2.6k, 18=2.4k, 9=5k
 Fc = Fs/k/4;
 d = k-floor(k);%larger d makes more stable
 ki = floor(k);
@@ -85,8 +85,8 @@ ki = floor(k);
 %then allpass (single stage) is 
 %H = (a1 + a1a2z^-1 + a2z^-k + z^-k-1 )/ (1 + a2z^-1 + a1a2z^-k + a1z^-k-1)
 
-al = -.3;%allpass filter coeff (negative due to changes), this stretches the delay curve
-M = 33;% Number of allpass stages (50?) 23 stable limit for al = -.6
+al = -.2;%allpass filter coeff (negative due to changes), this stretches the delay curve
+M = 34;% Number of allpass stages (50?) 23 stable limit for al = -.6
 	%k=17;al=-.6;M=23;%2700hz spring
 	%k=12;al=-.36;M=35;3600hz
 	%k=10;al=-.3;M=40;4300hz
@@ -97,7 +97,7 @@ a2 = 0;
 if(d)
 	a2 = (1-d)/(d+1);
 end
-Hap = (tf([al al*a2 zeros(1,ki-2) a2 1],[1 a2 zeros(1,ki-2) al*a2 al],Ts));%eixt^M;
+Hap = (tf([al al*a2 zeros(1,ki-2) a2 1],[1 a2 zeros(1,ki-2) al*a2 al],Ts))^M;
 
 a = [al al*a2 zeros(1,ki-2) a2 1];
 b = [1 a2 zeros(1,ki-2) al*a2 al];
@@ -120,13 +120,14 @@ b = [1 a2 zeros(1,ki-2) al*a2 al];
 
 %stretching factor (k) is inversely proportional to Fc
 %Fc = Fs/k;%"cutoff" for a spring, where the maximum dispersion occurs
-if(0)
+if(1)
 	[y t] = impulse(Hap,.06);
 	specgram(y,64,Fs,hanning(64),64-8)
 	%specgram(y,256,Fs,hanning(256),256-32)
-	break;
+	break
 	%pause;
 end
+break
 
 if(0)
 	k=2.56;al=-.7;M=16;%this way works for any rate
@@ -215,9 +216,9 @@ end
 
 %8th order linkwitz riley x-over, used for chirp straightening
 [b a] = butter(4,Fc/2/Nyquist);
-Hxl = tf(b,a,Ts);
+Hxl = tf(conv(b,b),conv(a,a),Ts);
 [b a] = butter(4,Fc/2/Nyquist,'high');
-Hxh = tf(b,a,Ts);
+Hxh = tf(conv(b,b),conv(a,a),Ts);
 
 %anti-aliasing filter 
 %[b a] = ellip(10,1.5,80,Fc/Nyquist);%this needs to cutoff at Fc for each spring 
@@ -243,7 +244,7 @@ astrt = (-Dad*cos(wxo) + sqrt(1-Dad^2+Dad^2*cos(wxo)^2))/(1+Dad); %fractional de
 Hstrt = tf([astrt 1],[1 astrt zeros(1,floor(Da)-1)],Ts);%tf([astrt 1],[1 astrt zeros(1,k*M)],Ts);
 
 if(0)
-	[y t] = impulse(Haa,.06);David Gilmore "Numerology"
+	[y t] = impulse(Haa,.06);
 	[yh t] = lsim(Hxh,y,t);
 	[yh t] = lsim(Hap,yh,t);
 	[yl t] = lsim(Hxl,y,t);

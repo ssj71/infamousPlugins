@@ -85,6 +85,10 @@ void run_powercut(LV2_Handle handle, uint32_t nframes)
 	    if(*plug->decay_curve_p == LOG_CURVE)
 	    {
 		plug->indx += .1*log2(1024-1023*plug->t/decay_length);
+		//if change to a curvature gradient
+		//convex
+		//tmp = exp2(*plug->decay_curve_p);
+		//plug->indx += 1/c*log2(tmp - (tmp-1)*plug->t/decay_length);
 	    }
 	    else if(*plug->decay_curve_p == LIN_CURVE)
 	    {
@@ -93,6 +97,10 @@ void run_powercut(LV2_Handle handle, uint32_t nframes)
 	    else//EXP_CURVE
 	    {
 		plug->indx += exp2(-10.0*plug->t/decay_length);
+		//if change to curvature gradient
+		//concave
+		//tmp = exp2(-*plug->decay_curve_p);
+		//plug->indx += (tmp*exp2(plug->t**plug->decay_curve_p/decay_length) - 1)/(tmp - 1);
 	    }
 	    if(plug->r < (unsigned long)plug->indx)
 	    {

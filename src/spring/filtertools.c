@@ -2,6 +2,7 @@
 #include<math.h>
 #include<stdio.h>
 
+#define TEST
 
 #define PI 3.1415926535897932384626433832795
 
@@ -73,7 +74,7 @@ void convolve_in_place(float* f, uint8_t nf, float* g, uint8_t ng)
 	_cip(f,nf,g,ng,0);
 }
 
-
+//return magnitude of filter at freq_hz
 float magnitude(float* f, uint8_t nf, float Ts, float freq_hz)
 {
 	uint8_t i;
@@ -93,6 +94,7 @@ float magnitude(float* f, uint8_t nf, float Ts, float freq_hz)
 	return retmp;
 }
 
+//shift zero for new sampling frequency
 void resample_zero(float rezero, float imzero, float oldTs, float newTs, float* re, float* im)
 {
 	float ang, mag;
@@ -101,6 +103,7 @@ void resample_zero(float rezero, float imzero, float oldTs, float newTs, float* 
 	polar2cart(mag,ang,re,im);
 }
 
+//discrete (z-plane) zero pole unity-frequency to filter coefficients conversion
 void dzpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float zpTs, float filterTs,  float* filternum, float* filterden)
 {
 	//this function is the one I'll use, we'll "resample" the zeros/poles in the digital domain
@@ -176,6 +179,7 @@ void dzpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles
 	}
 }
 
+//analog(continuous or s-plane) zero pole unity-frequency to filter coefficient conversion
 void azpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* filternum, float* filterden)
 {
 	//gameplan is to convert zeros and poles to z plane, create residuals, convolve the polynomial coefficients, then set the gain to unity at the specified frequency
@@ -251,7 +255,14 @@ void azpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles
 	}
 }
 
+//cheby
+
+//butter
+
+
+
 //for testing
+#ifdef TEST
 void main()
 {
 /*
@@ -269,7 +280,8 @@ void main()
 	float impoles[] = {3.8233e+04,2.0143e+04};
  
 	float b[5], a[5];//5 coeff == 4 roots!
-	zpuf2filter(rezeros,imzeros,2,repoles,impoles,2,20000,1.0/44100,b,a);
+	azpuf2filter(rezeros,imzeros,2,repoles,impoles,2,20000,1.0/44100,b,a);
 	printf("  %f %fz^-1 %fz^-2 %fz^-3 %fz^-4 \n------------------------------------------------------------------\n  %f %fz^-1 %fz^-2 %fz^-3 %fz^-4\n",b[0], b[1],b[2],b[3],b[4],a[0],a[1],a[2],a[3],a[4]);
 
 }
+#endif
