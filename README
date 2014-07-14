@@ -136,4 +136,4 @@ This is a clone of the electro-harmonix freeze. It drones the note being played 
 This plugin is commonly called tape stop. Another one I might not actually use, but the DSP was fun anyway. It just copies the audio through until the "Pull the Plug!" port is toggled to 1 (or the CV trigger port goes above 1). Then it slows the audio down gradually to a complete stop and outputs silence until the trigger is released, much like unplugging the power chord of a record player or maybe tape player. I've never heard this happen to a tape player. A turntable actually has enough inertia. Anyway, you can adjust the length of the decay and the curve. Its pretty fun. With some automation this can make some crazy glitch type effects.
     PULL THE PLUG - start the decay (>=1) or turn it off/reset it(<1)
     DECAY TIME - length of decay in seconds
-    DECAY CURVE - log, linear or exponential curves, Try them all.
+    DECAY CURVE - the shape of the decay, concave (logarithmic) slows more and more with time, convex (exponential) slows less and less with time
