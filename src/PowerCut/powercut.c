@@ -63,11 +63,13 @@ void run_powercut(LV2_Handle handle, uint32_t nframes)
     {
         //triggered, start cow face
 	//unsigned long a,b,c,d;
-	float a,b,c,d,x,tmp;
+	float a,b,c,d,x,tmp,exp_decay;
         a = plug->buf[(plug->r-1)&plug->bufmask];//need to ensure plug->r starts at indx
 	b = plug->buf[plug->r&plug->bufmask];
 	c = plug->buf[(plug->r+1)&plug->bufmask];
 	d = plug->buf[(plug->r+2)&plug->bufmask];
+	exp_decay = exp2(*plug->decay_curve_p>0?*plug->decay_curve_p:-*plug->decay_curve_p);
+
 	//preload buffer for interpolation
 	if(plug->w - plug->r < plug->bufmask)
         {
@@ -82,25 +84,19 @@ void run_powercut(LV2_Handle handle, uint32_t nframes)
 		 plug->buf[plug->w++&plug->bufmask] = plug->input_p[i+2];
 	    }
 	    //increment indx the amount for current (decaying) sample rate
-	    if(*plug->decay_curve_p == LOG_CURVE)
+	    if(*plug->decay_curve_p > 0)//logarithmic (convex)
 	    {
-		plug->indx += .1*log2(1024-1023*plug->t/decay_length);
-		//if change to a curvature gradient
-		//convex
-		//tmp = exp2(*plug->decay_curve_p);
-		//plug->indx += 1/c*log2(tmp - (tmp-1)*plug->t/decay_length);
+		//plug->indx += .1*log2(1024-1023*plug->t/decay_length);
+		plug->indx += 1/(*plug->decay_curve_p)*log2(exp_decay - (exp_decay-1)*plug->t/decay_length);
 	    }
-	    else if(*plug->decay_curve_p == LIN_CURVE)
+	    else if(*plug->decay_curve_p == 0)//linear
 	    {
 		plug->indx += 1-plug->t/decay_length;
 	    }
-	    else//EXP_CURVE
+	    else//exponential (concave)
 	    {
-		plug->indx += exp2(-10.0*plug->t/decay_length);
-		//if change to curvature gradient
-		//concave
-		//tmp = exp2(-*plug->decay_curve_p);
-		//plug->indx += (tmp*exp2(plug->t**plug->decay_curve_p/decay_length) - 1)/(tmp - 1);
+		//plug->indx += exp2(-10.0*plug->t/decay_length);
+		plug->indx += (exp_decay*exp2(plug->t**plug->decay_curve_p/decay_length) - 1)/(exp_decay - 1);
 	    }
 	    if(plug->r < (unsigned long)plug->indx)
 	    {
@@ -165,11 +161,11 @@ LV2_Handle init_powercut(const LV2_Descriptor *descriptor,double sample_freq, co
 
     unsigned long tmp;
     plug->sample_freq = sample_freq; 
-    tmp = 0x20000;//18 bits
+    tmp = 0x40000;//19 bits
     if(sample_freq<100000)//88.2 or 96kHz
-        tmp = tmp>>1;//17 bits
+        tmp = tmp>>1;//18 bits
     if(sample_freq<50000)//44.1 or 48kHz
-        tmp = tmp>>1;//16 bits
+        tmp = tmp>>1;//17 bits
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->bufmask = tmp - 1;
     plug->buf[0] = 0;
