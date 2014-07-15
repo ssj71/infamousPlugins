@@ -23,9 +23,9 @@ void init_waves(WAVESOURCE* self)
     {
         self->saw_table[i] = 0;
         k=1;
-        for(j=0;j<MAX_N_HARMONICS;j++)
+        for(j=1;j<=MAX_N_HARMONICS;j++)
         {
-            self->saw_table[i] += k*sin(j*phase)/(j+1);
+            self->saw_table[i] += k*sin(j*phase)/(j);
             k = -k;
         }
         phase += self->saw_step;
@@ -36,12 +36,12 @@ void init_waves(WAVESOURCE* self)
     {
         self->tri_table[i] = 0;
         k=7;
-        for(j=0;j<MAX_N_HARMONICS;j++)
+        for(j=1;j<MAX_N_HARMONICS;j++)
         {
             even = !even;
             if(even)
                 continue;
-            self->tri_table[i] += k*sin(j*phase)/((j+1)*(j+1));
+            self->tri_table[i] += k*sin(j*phase)/(j*j);
             k = -k;
         }
         phase += self->saw_step;
