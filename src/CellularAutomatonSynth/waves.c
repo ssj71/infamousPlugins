@@ -11,7 +11,6 @@ void init_waves(WAVESOURCE* self)
     unsigned short i =0;
     unsigned char j;
     char k=0;
-    bool even = false;
     double phase = 0;
     self->half_phase = PI;
     self->saw_step = 2*PI/TABLE_LENGTH;
@@ -29,22 +28,21 @@ void init_waves(WAVESOURCE* self)
             k = -k;
         }
         phase += self->saw_step;
+	self->saw_table[i] *=.56694;
     }
 
     //tri
     for(i=0;i<TABLE_LENGTH;i++)
     {
         self->tri_table[i] = 0;
-        k=7;
-        for(j=1;j<MAX_N_HARMONICS;j++)
+        k=1;
+        for(j=1;j<=MAX_N_HARMONICS;j+=2)
         {
-            even = !even;
-            if(even)
-                continue;
             self->tri_table[i] += k*sin(j*phase)/(j*j);
             k = -k;
         }
         phase += self->saw_step;
+	self->tri_table[i] *= .82922;
     }
 
     //white and random
