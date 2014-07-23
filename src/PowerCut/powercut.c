@@ -62,12 +62,7 @@ void run_powercut(LV2_Handle handle, uint32_t nframes)
 #endif
     {
         //triggered, start cow face
-	//unsigned long a,b,c,d;
 	float a,b,c,d,x,tmp,exp_decay;
-        a = plug->buf[(plug->r-1)&plug->bufmask];//need to ensure plug->r starts at indx
-	b = plug->buf[plug->r&plug->bufmask];
-	c = plug->buf[(plug->r+1)&plug->bufmask];
-	d = plug->buf[(plug->r+2)&plug->bufmask];
 	exp_decay = exp2(*plug->decay_curve_p>0?*plug->decay_curve_p:-*plug->decay_curve_p);
 
 	//preload buffer for interpolation
@@ -76,6 +71,11 @@ void run_powercut(LV2_Handle handle, uint32_t nframes)
 	    plug->buf[plug->w++&plug->bufmask] = plug->input_p[0];
             plug->buf[plug->w++&plug->bufmask] = plug->input_p[1];
 	}
+        a = plug->buf[(plug->r-1)&plug->bufmask];//need to ensure plug->r starts at indx
+	b = plug->buf[plug->r&plug->bufmask];
+	c = plug->buf[(plug->r+1)&plug->bufmask];
+	d = plug->buf[(plug->r+2)&plug->bufmask];
+
 	for(i=0;i<nframes && plug->t<=decay_length;i++)
 	{
 	    //if not about to overwrite necesary data (w<r)
