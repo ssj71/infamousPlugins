@@ -8,20 +8,7 @@ To install, make sure you have the dependencies and then just run the script ins
     ./install.sh
     
     
-This will ask for your password using sudo, so be prepared. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
-
-If you do not have sudo, there is now an alternative install procedure involving 2 scripts, one of which must be run with root permissions (i.e. you use su). To use this procedure issue the commands:
-    ./install_no_sudo.sh
-    su
-    ./install_no_sudo_part2_run_as_root.sh
-    exit
-
-
-If you do not have sudo, there is now an alternative install procedure involving 2 scripts, one of which must be run with root permissions (i.e. you use su). To use this procedure issue the commands:
-    ./install_no_sudo.sh
-    su
-    ./install_no_sudo_part2_run_as_root.sh
-    exit
+This will ask for your password using su or sudo, so be prepared. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
 
 
 Dependencies:
@@ -29,7 +16,6 @@ Dependencies:
     lv2-dev
     gcc
 
-Note that on ArchLinux, they do not have qmake in /usr/bin, so a special install script was created. Use ./installARCHLINUX.sh instead.
 
 A NOTE ABOUT CV PORTS!:
 I have commented out all the cv ports (envfollower and stuck) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they we frequently interpreted as second port of a stereo pair.
