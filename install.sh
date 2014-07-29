@@ -1,18 +1,21 @@
 #!/bin/bash
 
-cd src/CellularAutomatonSynth
-qmake 
-make
-sudo make install
+which sudo && run_as_root="sudo" || run_as_root="su -l root -c"
+which qmake && qmake_bin="qmake" || qmake_bin="qmake-qt4"
 
-cd ..
-mkdir -p ../utils
-gcc rule.c -o ../utils/rule
+plugins="CellularAutomatonSynth EnvelopeFollower Hip2B Stuck PowerCut"
 
-cd EnvelopeFollower
-qmake 
-make
-sudo make install
+for plugin in $plugins
+do
+  $qmake_bin -o src/$plugin/Makefile src/$plugin/$plugin.pro
+  make -C src/$plugin
+  $run_as_root make -C src/$plugin install
+done
 
+gcc src/rule.c -o src/infamous-rule
+$run_as_root install -m 755 src/infamous-rule /usr/bin
+
+make -C src/cheap_distortion
+$run_as_root make -C src/cheap_distortion install
 
 echo "install complete!"

@@ -6,9 +6,9 @@
 @prefix state: <http://lv2plug.in/ns/ext/state#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:00Dfault>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:00Dfault>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "00 Dfault" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -56,6 +56,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -72,9 +75,9 @@
 		pset:value 0.0
 	] .
 
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:01RawSaw>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:01RawSaw>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "01 RawSaw" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -122,6 +125,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 0.0
 	] , [
@@ -138,9 +144,9 @@
 		pset:value 1.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:02RawSqr>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:02RawSqr>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "02 RawSqr" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -188,6 +194,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 0.0
 	] , [
@@ -205,9 +214,9 @@
 	] .
 	
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:03Rule30>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:03Rule30>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "03 Rule30" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -255,6 +264,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -271,9 +283,9 @@
 		pset:value 3.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:04Rule110>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:04Rule110>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "04 Rule110" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -321,6 +333,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -337,9 +352,9 @@
 		pset:value 3.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:05Chimin>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:05Chimin>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "05 Chimin" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -387,6 +402,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -403,9 +421,9 @@
 		pset:value 2.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:06Downer>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:06Downer>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "06 Downer" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -453,6 +471,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -469,9 +490,9 @@
 		pset:value 3.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:07Growe>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:07Growe>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "07 Growe" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -519,6 +540,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -535,9 +559,9 @@
 		pset:value 0.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:08HapE>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:08HapE>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "08 HapE" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -585,6 +609,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 2.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -601,9 +628,9 @@
 		pset:value 3.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:09Jangley>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:09Jangley>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "09 Jangley" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -651,6 +678,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 256.0
 	] , [
@@ -667,9 +697,9 @@
 		pset:value 1.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:10Phazour>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:10Phazour>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "10 Phazour" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -717,6 +747,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 15.0
 	] , [
@@ -733,9 +766,9 @@
 		pset:value 3.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:11Phoney>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:11Phoney>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "11 Phoney" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -783,6 +816,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 2.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 65280.0
 	] , [
@@ -800,9 +836,9 @@
 	] .
 	
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:12Roar>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:12Roar>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "12 Roar" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -850,6 +886,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -866,9 +905,9 @@
 		pset:value 5.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:13Shiny>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:13Shiny>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "13 Shiny" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -916,6 +955,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 1.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -932,9 +974,9 @@
 		pset:value 1.0
 	] .
 	
-<http://sourceforge.net/projects/infamousplugins:casynth:preset:14Soothe>
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:14Soothe>
 	a pset:Preset ;
-	lv2:appliesTo <http://sourceforge.net/projects/infamousplugins:casynth> ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
         rdfs:label "14 Soothe" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -982,6 +1024,9 @@
 		lv2:symbol "HARM_MODE" ;
 		pset:value 0.0
 	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 0.0
+	] , [
 		lv2:symbol "INIT_CELLS" ;
 		pset:value 1.0
 	] , [
@@ -996,4 +1041,73 @@
 	] , [
 		lv2:symbol "WAVE" ;
 		pset:value 2.04109597
+	] .
+
+<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:15ClarkKentSaw>
+	a pset:Preset ;
+	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+        rdfs:label "15 ClarkKentSaw" ;
+	lv2:port [
+		lv2:symbol "AMOD_FREQ" ;
+		pset:value 0.30000001
+	] , [
+		lv2:symbol "AMOD_GAIN" ;
+		pset:value 0.00001781
+	] , [
+		lv2:symbol "AMOD_WAV" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "CELL_LIFE" ;
+                pset:value 10.0
+	] , [
+		lv2:symbol "CHANNEL" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "ENV_A" ;
+		pset:value 0.0831863
+	] , [
+		lv2:symbol "ENV_B" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "ENV_D" ;
+		pset:value 0.0831863
+	] , [
+		lv2:symbol "ENV_R" ;
+		pset:value 0.1
+	] , [
+		lv2:symbol "ENV_SUS" ;
+		pset:value 0.5
+	] , [
+		lv2:symbol "ENV_SWL" ;
+		pset:value 0.5
+	] , [
+		lv2:symbol "FMOD_FREQ" ;
+		pset:value 00.11369858
+	] , [
+		lv2:symbol "FMOD_GAIN" ;
+		pset:value 0.11023288
+	] , [
+		lv2:symbol "FMOD_WAV" ;
+		pset:value 4.0
+	] , [
+		lv2:symbol "HARM_MODE" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "HARM_WIDTH" ;
+		pset:value 4.0
+	] , [
+		lv2:symbol "INIT_CELLS" ;
+		pset:value 32905.0
+	] , [
+		lv2:symbol "MASTER_GAIN" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "NHARMONICS" ;
+		pset:value 16.0
+	] , [
+		lv2:symbol "RULE" ;
+		pset:value 204.0
+	] , [
+		lv2:symbol "WAVE" ;
+		pset:value 1.04109597
 	] .

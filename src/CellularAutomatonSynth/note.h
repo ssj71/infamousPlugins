@@ -21,6 +21,7 @@ typedef struct _NOTE
     bool harmonic[MAX_N_HARMONICS];
     uint32_t nframes_since_harm_change;
     float harm_gain[MAX_N_HARMONICS+1];
+    float fwidth[MAX_N_HARMONICS]; //frequency error/width of harmonics
 
     double step[MAX_N_HARMONICS+1];//step size between frames
     double phase[MAX_N_HARMONICS+1];//phase of all waves + fundamental
@@ -57,7 +58,7 @@ typedef struct _NOTE
 }NOTE;
 
 void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, unsigned char value, unsigned char* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain);
-void start_note(NOTE *self, WAVESOURCE* waves, unsigned char velocity, uint32_t start_frame, float harmonic_gain[], unsigned short harmonics, float envelope[]);
+void start_note(NOTE *self, WAVESOURCE* waves, unsigned char velocity, uint32_t start_frame, float harmonic_gain[], unsigned short harmonics, float width, float envelope[]);
 void play_note(NOTE *self, WAVESOURCE* waves, uint32_t nframes, float buffer[], double pitchbend, float gain, unsigned short rule, unsigned char base_wave, unsigned char fmod_wave, double fmod_step, unsigned char amod_wave, double amod_step);
 void end_note(NOTE *self, uint32_t release_frame);
 void release(NOTE *self, unsigned short harmonics);

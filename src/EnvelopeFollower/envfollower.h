@@ -6,8 +6,9 @@
 #include<lv2/lv2plug.in/ns/ext/atom/util.h>
 #include "lv2/lv2plug.in/ns/ext/time/time.h"
 #include "lv2/lv2plug.in/ns/ext/atom/forge.h"
+#include "rms_calc.h"
 
-#define ENVFOLLOWER_URI "http://sourceforge.net/projects/infamousplugins:envfollower"
+#define ENVFOLLOWER_URI "http://infamousplugins.sourceforge.net/plugs.html#envfollower"
 
 typedef struct _ENVFOLLOWER{
     float sample_time;
@@ -26,6 +27,8 @@ typedef struct _ENVFOLLOWER{
     float dtime;
     float dn[3];
 
+    RMS_CALC rms_calc;
+
     //midi
     LV2_URID_Map* urid_map;
     LV2_URID midi_event_type;
@@ -35,19 +38,27 @@ typedef struct _ENVFOLLOWER{
     //ports
     float* input_p;
     float* output_p;
+    float* cv_out_p;
     LV2_Atom_Sequence* midi_out_p;
+    float* ctl_in_p;
+    float* ctl_out_p;
 
     float* channel_p;
-    float* control_p;
+    float* control_p; 
+    float* cv_p;
     float* min_p;
     float* max_p;
+    float* rev_p;
+
+    float* cmin_p;
+    float* cmax_p;
+    float* crev_p;
+
     float* peakrms_p;
     float* threshold_p;
     float* saturation_p;
     float* atime_p;
     float* dtime_p;
-
-
 }ENVFOLLOWER;
 
 
@@ -84,13 +95,20 @@ enum envfollower_ports
     INPUT = 0,
     OUTPUT,
     MIDI_OUT,
-    CHANNEL,
-    CONTROL_NO,
-    MINV,//5
-    MAXV,
+    CTL_IN,
+    CTL_OUT,
     PEAKRMS,
-    THRESHOLD,
+    THRESHOLD,//6
     SATURATION,
-    ATIME,//10
-    DTIME
+    ATIME,
+    DTIME,
+    CHANNEL,
+    CONTROL_NO,//11
+    MINV,
+    MAXV,
+    REVERSE,
+    CMINV,
+    CMAXV,//16
+    CREVERSE,
+    CV_OUT
 };

@@ -10,24 +10,30 @@
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix param: <http://lv2plug.in/ns/ext/parameters#> .
 
-<http://sourceforge.net/projects/infamousplugins:envfollower:group:audio>
+<http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio>
 a param:ControlGroup ;
 lv2:name "Audio Signal" ;
-lv2:symbol "Audio Signal" .
+lv2:symbol "Audio_Signal" .
 
-<http://sourceforge.net/projects/infamousplugins:envfollower:group:midi>
+<http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi>
 a param:ControlGroup ;
 lv2:name "MIDI Signal" ;
 lv2:symbol "MIDI Signal" .
 
+<http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl>
+a param:ControlGroup ;
+lv2:name "Control Signal" ;
+lv2:symbol "Control_Signal" .
 
-<http://sourceforge.net/projects/infamousplugins:envfollower>
+
+<http://infamousplugins.sourceforge.net/plugs.html#envfollower>
         a lv2:Plugin, lv2:EnvelopePlugin ;
-        doap:name "envelope follower" ;
+        doap:name "the infamous envelope follower" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
-                foaf:homepage <http://sourceforge.net/projects/infamousplugins/> ;
+                foaf:homepage <http://infamounsplugins.sourceforge.net> ;
                 foaf:mbox <ssjackson71@gmail.com> ;
         ] ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
@@ -55,90 +61,159 @@ lv2:symbol "MIDI Signal" .
                 lv2:name "MIDI Out";
         ] ;
         lv2:port [
+                a lv2:OutputPort, lv2:ControlPort ;
+                lv2:index 3 ;
+                lv2:symbol "CTL_IN";
+                lv2:name "Input Level";
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+        ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:ControlPort ;
+                lv2:index 4 ;
+                lv2:symbol "CTL_OUT";
+                lv2:name "Control Out";
+		lv2:scalePoint [ rdfs:label "Min"; rdf:value 0 ] ;
+		lv2:scalePoint [ rdfs:label "Max"; rdf:value 1 ] ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+        ] ;
+        lv2:port [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index  3 ;
+                lv2:index 5 ;
+                lv2:symbol "PEAKRMS" ;
+                lv2:name "Peak/RMS" ;
+                lv2:default 0.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 6 ;
+                lv2:symbol "THRESHOLD" ;
+                lv2:name "Threshold" ;
+                lv2:default 0.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 7 ;
+                lv2:symbol "SATURATION" ;
+                lv2:name "Saturation" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 2.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 8 ;
+                lv2:symbol "ATIME" ;
+                lv2:name "Attack Time" ;
+                lv2:portProperty lv2:logarithmic ;
+                lv2:default 0.01 ;
+                lv2:minimum 0.001 ;
+                lv2:maximum 15.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 9 ;
+                lv2:symbol "DTIME" ;
+                lv2:name "Decay Time" ;
+                lv2:portProperty lv2:logarithmic ;
+                lv2:default 10.0 ;
+                lv2:minimum 0.001 ;
+                lv2:maximum 30.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index  10 ;
                 lv2:symbol "CHANNEL" ;
                 lv2:name "MIDI Channel" ;
                 lv2:portProperty lv2:integer ;
                 lv2:default 1.0 ;
                 lv2:minimum 1.0 ;
                 lv2:maximum 16.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:midi> ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 4 ;
+                lv2:index 11 ;
                 lv2:symbol "CONTROL_NO" ;
-                lv2:name "Control Number" ;
+                lv2:name "MIDI Control Number" ;
                 lv2:portProperty lv2:integer ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 127.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:midi> ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 5 ;
-                lv2:symbol "MINV" ;
-                lv2:name "Minimum Value" ;
+                lv2:index 12 ;
+                lv2:symbol "MMINV" ;
+                lv2:name "MIDI Minimum Value" ;
                 lv2:portProperty lv2:integer ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 127.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:midi> ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 6 ;
-                lv2:symbol "MAXV" ;
-                lv2:name "Maximum Value" ;
+                lv2:index 13 ;
+                lv2:symbol "MMAXV" ;
+                lv2:name "MIDI Maximum Value" ;
                 lv2:portProperty lv2:integer ;
                 lv2:default 127.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 127.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:midi> ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 7 ;
-                lv2:symbol "PEAKRMS" ;
-                lv2:name "Peak/RMS" ;
+                lv2:index 14 ;
+                lv2:symbol "MDIRECTION" ;
+                lv2:name "MIDI Direction" ;
+                lv2:portProperty lv2:integer ;
+                lv2:scalePoint [ rdfs:label "Normal"; rdf:value 0 ] ;
+                lv2:scalePoint [ rdfs:label "Reverse"; rdf:value 1 ] ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:audio> ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 8 ;
-                lv2:symbol "THRESHOLD" ;
-                lv2:name "Threshold" ;
+                lv2:index 15 ;
+                lv2:symbol "CMINV" ;
+                lv2:name "CV Port Minimum Value" ;
                 lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 1.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:audio> ;
+                lv2:minimum -10000.0 ;
+                lv2:maximum 10000.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 9 ;
-                lv2:symbol "SATURATION" ;
-                lv2:name "Saturation" ;
+                lv2:index 16 ;
+                lv2:symbol "CMAXV" ;
+                lv2:name "CV Port Maximum Value" ;
                 lv2:default 1.0 ;
+                lv2:minimum -10000.0 ;
+                lv2:maximum 10000.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 17 ;
+                lv2:symbol "CDIRECTION" ;
+                lv2:name "CV Port Direction" ;
+                lv2:portProperty lv2:integer ;
+                lv2:scalePoint [ rdfs:label "Normal"; rdf:value 0 ] ;
+                lv2:scalePoint [ rdfs:label "Reverse"; rdf:value 1 ] ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
-                lv2:maximum 2.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:audio> ;
-        ], [
-                a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
-                lv2:symbol "ATIME" ;
-                lv2:name "Attack Time" ;
-                lv2:portProperty lv2:logarithmic ;
-                lv2:default 0.10 ;
-                lv2:minimum 0.001 ;
-                lv2:maximum 15.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:audio> ;
-        ], [
-                a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
-                lv2:symbol "DTIME" ;
-                lv2:name "Decay Time" ;
-                lv2:portProperty lv2:logarithmic ;
-                lv2:default 0.10 ;
-                lv2:minimum 0.001 ;
-                lv2:maximum 15.0 ;
-                pg:group <http://sourceforge.net/projects/infamousplugins:envfollower:group:audio> ;
-        ] .
+                lv2:maximum 1.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl> ;
+        ] ;
+        #lv2:port [
+        #        a lv2:OutputPort, lv2:AudioPort ; #CVPort ;
+        #        lv2:index 18 ;
+        #        lv2:symbol "CV_OUT";
+        #        lv2:name "CV Out";
+        #        lv2:minimum -10000.0 ;
+        #        lv2:maximum 10000.0 ;
+        #] ;
+	.

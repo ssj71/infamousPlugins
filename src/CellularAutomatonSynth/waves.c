@@ -11,7 +11,6 @@ void init_waves(WAVESOURCE* self)
     unsigned short i =0;
     unsigned char j;
     char k=0;
-    bool even = false;
     double phase = 0;
     self->half_phase = PI;
     self->saw_step = 2*PI/TABLE_LENGTH;
@@ -23,33 +22,32 @@ void init_waves(WAVESOURCE* self)
     {
         self->saw_table[i] = 0;
         k=1;
-        for(j=0;j<MAX_N_HARMONICS;j++)
+        for(j=1;j<=MAX_N_HARMONICS;j++)
         {
-            self->saw_table[i] += k*sin(j*phase)/(j+1);
+            self->saw_table[i] += k*sin(j*phase)/(j);
             k = -k;
         }
         phase += self->saw_step;
+	self->saw_table[i] *=.56694;
     }
 
     //tri
     for(i=0;i<TABLE_LENGTH;i++)
     {
         self->tri_table[i] = 0;
-        k=7;
-        for(j=0;j<MAX_N_HARMONICS;j++)
+        k=1;
+        for(j=1;j<=MAX_N_HARMONICS;j+=2)
         {
-            even = !even;
-            if(even)
-                continue;
-            self->tri_table[i] += k*sin(j*phase)/((j+1)*(j+1));
+            self->tri_table[i] += k*sin(j*phase)/(j*j);
             k = -k;
         }
         phase += self->saw_step;
+	self->tri_table[i] *= .82922;
     }
 
     //white and random
-    srandom ((unsigned int) time (NULL));
-    self->V = 2*random() / (float)RAND_MAX - 1;
+    srand ((unsigned int) time (NULL));
+    self->V = 2*rand() / (float)RAND_MAX - 1;
     self->V2 = self->V*self->V;
 
     //pointers
@@ -75,27 +73,19 @@ void init_waves(WAVESOURCE* self)
 
 void init_hysteresis(HYSTERESIS *self)
 {
-    self->prev_val = 2*random() / (float)RAND_MAX - 1;
+    self->prev_val = 2*rand() / (float)RAND_MAX - 1;
     self->prev_phase = 0;
 }
 
-//based on an algorithm by Martin Ankerl
+//8th order series approximation of pow(2,x) suggested by benjamin guihaire
 double myPow2(double x)
 {
-    char i = (char)x;
-    union {
-      double d;
-      long a[2];
-    }u;
-    u.a[1] = (long)((x-i)*1109377 + 1072632447);
-    u.a[0] = 0;
-    //need to calculate 2^i
-    if(x<0)
-        return u.d/(double)(1<<-i);
-    else if(x>0)
-        return u.d*(double)(1<<i);
-    else
-        return 1;
+    double p;  
+    if(x>=0) p = (1+x *0.00270760617406228636491106297445); //LN2/256 = 0.00270760617406228636491106297445
+    else p = 1/(1-x*0.00270760617406228636491106297445); 
+    p *=p;p *=p;p *=p;p *=p;
+    p *=p;p *=p;p *=p;
+    return p*p; 
 }
 
 //based on an algorithm by Nicolas Capens
@@ -138,16 +128,16 @@ double triangle(WAVESOURCE* self, HYSTERESIS *mem, double phase)
 //normal distribution approximation calculated by a modified Marsaglia polar method
 double white(WAVESOURCE* self, HYSTERESIS *mem, double phase)
 {
-    float U = 2.0* random() / (float)RAND_MAX - 1;//rand E(-1,1)
+    float U = 2.0* rand() / (float)RAND_MAX - 1;//rand E(-1,1)
     float S = U*U + self->V2;//map 2 random vars to unit circle
 
    if(S>=1)//repull RV if outside unit circle
    {
-       U = 2.0* random() / (float)RAND_MAX - 1;
+       U = 2.0* rand() / (float)RAND_MAX - 1;
        S = U*U + self->V2;
        if(S>=1)
        {
-           U = 2.0* random() / (float)RAND_MAX - 1;
+           U = 2.0* rand() / (float)RAND_MAX - 1;
            S = U*U + self->V2;
            if(S>=1)
            {//guarantee an exit, value will be unchanged
@@ -175,7 +165,7 @@ double randomsnh(WAVESOURCE* self, HYSTERESIS* mem, double phase)
 {
     if(phase < mem->prev_phase)
     {
-        mem->prev_val = 2*random() / (float)RAND_MAX - 1;
+        mem->prev_val = 2*rand() / (float)RAND_MAX - 1;
     }
     mem->prev_phase = phase;
     return mem->prev_val;

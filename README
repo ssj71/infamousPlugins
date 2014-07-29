@@ -1,6 +1,6 @@
 Welcome to the INFAMOUS Plugins README
 
-Things are just firing up. So far we have exactly 2 plugins. But hey, its gettin there right?
+Things are just firing up. So far we have exactly 6 plugins. But hey, its gettin there right?
 
 
 To install, make sure you have the dependencies and then just run the script install.sh:
@@ -8,12 +8,18 @@ To install, make sure you have the dependencies and then just run the script ins
     ./install.sh
     
     
-This will ask for your password using sudo, so be prepaired. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
+This will ask for your password using su or sudo, so be prepared. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
+
 
 Dependencies:
     qmake (qt4-dev-tools package on ubuntu)
     lv2-dev
     gcc
+
+
+A NOTE ABOUT CV PORTS!:
+I have commented out all the cv ports (envfollower and stuck) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they we frequently interpreted as second port of a stereo pair.
+If you want to re-enable the ports, in envfollower.c and stuck.c uncomment the line "//#define CV_PORTS" (remove the "//") and in the respective .ttl files, uncomment the blocks at the bottom. If you wish to use the CV ports as audio ports (required for any host but ingen at the time of writing), open the *.ttl file for that plugin and find the line with "lv2:AudioPort ; #CvPort ;" and remove "AudioPort ; #" which will cause the port to be declared as Cv rather than audio.
 
 Now lets talk about what you're installing:
 
@@ -32,6 +38,7 @@ Parameter Description:
     INIT_CELLS - initial condition of cells when a note is played
     NHARMONICS - number of harmonics added in
     HARM_MODE - determines gains of the harmonics 
+    HARM_WIDTH - std. deviation of random detuning of harmonics in cents
     WAVE - basic Waveform of the harmonics
     ENV_A - attack time
     ENV_D - decay time
@@ -50,7 +57,7 @@ Parameter Description:
 
 
 ==========================================
-2. rule
+1b. rule
 
 This visulizes cell automata on a torus. Run it by opening a terminal, navigating to the utils folder and run 
 
@@ -60,17 +67,59 @@ The least significant digit corresponds to the first harmonic
 
 
 ==========================================
-3. Envelope Follower
+2. Envelope Follower
 
 This is a fully featured envelope follower plugin. It can be used for pumping the gain with the bass or all sorts of other things that I don't really know about. Someone just wanted it so I made it. It sends a midi control value according to the amplitude of the input audio.
 
-Parameter Description:
-    CHANNEL - Midi channel to send output over
-    CONTROL_NO - Midi control # to change
-    MINV - minimum midi value to send
-    MAXV - maximum midi value to send
+Parameter Description: 
     PEAKRMS - blend of peak and/or rms value for amplitude
     THRESHOLD - audio low value mapped MINV
     SATURATION - audio high value mapped to MAXV (anything greater still outputs MAXV)
     ATIME - rise time of the output
     DTIME - fall time of the output
+    CHANNEL - Midi channel to send output over
+    CONTROL_NO - Midi control # to change
+    MINV - minimum midi value to send
+    MAXV - maximum midi value to send
+    REVERSE - switches direction of the midi output (larger input amplitude -> smaller midi value)
+    CMINV - minimum CV to send
+    CMAXV - maximum CV to send
+    CREVERSE - switches direction of the CV output
+
+===========================================
+3. Hip2B
+
+This is a distortion plugin that is even more fun than I imagined. Inspired by effect pedals by dwarfcraft, this takes your analog signal and turns it into a square wave. It gives you a glitchy type effect. It was originally meant to be pretty minimal, but I decided there wasn't a good reason to be so a simple amplifier was added to turn it down, and some basic DC offset removal was added. Its not limited in polyphony or anything, it is simply distorting your signal to be a bandlimited square wave. Basically its a switching function with hysteresis. Play with the up and down threshold parameters to change the square wave pulse width and have some fun. You'll find lower values give more sustain, but stay away from 0.0 on those two, it gets really loud and noisy. Unless thats what you want. Be my guest. Depending on your noise floor, other low values may be problematic in the same light.
+
+Parameter Description: 
+    UP - threshold that the input must cross for the square wave to rise
+    DOWN - threshold that the input must cross for the square wave to fall
+    OCTAVE - change the octave of the square wave output (down to -2)
+    INGAIN - input gain, also affects the output signal in the mix, use to get your signal passing the thresholds
+    WETDRY - mix of the original signal with the square signal
+    OUTGAIN - output gain
+
+===========================================
+4. cheap distortion
+
+Another distortion plugin, but this one I wanted to getit as light as possible. I haven't benchmarked it, but using some hackery on the bits I accomplished a pretty nice saturation function waveshaper using only a bitshift and an integer add. Thats right not a single floating point operation! However this cheapness and hackery comes at a cost that its using undefined behavior and breaks some rules or at least is highly not reccommended. It works when compiled with GCC on x86 systems. Go ahead and try it, the worst that happens is that it sounds awful. On machines with different endianness it will fail for sure. If you experience this I can easily make one for the other endian machines. Just let me know. Becuase the goal was super cheap computation, there is no input or output gains, so make use of your simple amplifier plugins. All in all though it worked out better than I dreamed. It even has 3 different waveshapes of increasing "aggression". On 2 & 3 settings, you'll probably want a gate, because it has really high gain for values near zero.
+
+Parameter Description:
+    AGGRESSION - wave shape, higher basically means more gain
+
+=============================================
+5. stuck
+
+This is a clone of the electro-harmonix freeze. It drones the note being played when the "Stick It!" port is set to 1 (or the CV port input goes above 1), causing the note to be "stuck". Once the port falls below 1 the drone is released with a decay set in seconds. The drone is added to the dry signal (so original signal is passed through at all times un-processed). This plugin is pretty useless except in live situations, though I'd love someone to creatively prove me wrong.
+
+    STICKIT - control the drone being on (>=1) or off (<1)
+    DRONEGAIN - gain of drone
+    RELEASE - time of drone decay in seconds
+
+=============================================
+6. power cut
+
+This plugin is commonly called tape stop. Another one I might not actually use, but the DSP was fun anyway. It just copies the audio through until the "Pull the Plug!" port is toggled to 1 (or the CV trigger port goes above 1). Then it slows the audio down gradually to a complete stop and outputs silence until the trigger is released, much like unplugging the power chord of a record player or maybe tape player. I've never heard this happen to a tape player. A turntable actually has enough inertia. Anyway, you can adjust the length of the decay and the curve. Its pretty fun. With some automation this can make some crazy glitch type effects.
+    PULL THE PLUG - start the decay (>=1) or turn it off/reset it(<1)
+    DECAY TIME - length of decay in seconds
+    DECAY CURVE - the shape of the decay, concave (logarithmic) slows more and more with time, convex (exponential) slows less and less with time
