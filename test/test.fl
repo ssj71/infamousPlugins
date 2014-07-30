@@ -1,0 +1,22 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {.h} 
+code_name {.cxx}
+class FancyUI {open
+} {
+  Function {make_window()} {open
+  } {
+    Fl_Window {} {open
+      xywh {1069 18 529 861} type Double
+      code0 {o->show();} visible
+    } {
+      Fl_Dial {} {
+        label Fancyness selected
+        xywh {50 20 130 70}
+        code0 {\#include "ffffltk.h"}
+        code1 {o->drawing_h = cairo_code_draw_vintagedial_get_height(); o->drawing_w = cairo_code_draw_vintagedial_get_width(); o->drawing_f = &cairo_code_draw_vintagedial_render;}
+        class {ffffltk::Dial}
+      }
+    }
+  }
+} 
