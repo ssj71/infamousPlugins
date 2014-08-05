@@ -9,13 +9,6 @@
 #define POWERCUT_URI "http://infamousplugins.sourceforge.net/plugs.html#powercut"
 //#define CV_PORTS
 
-enum _CURVES
-{
-    LOG_CURVE = 0, 
-    LIN_CURVE,
-    EXP_CURVE
-};
-
 typedef struct _POWERCUT
 {
     unsigned long w;//current write point in buffer
@@ -113,6 +106,7 @@ void run_powercut(LV2_Handle handle, uint32_t nframes)
 		}
 	    }
 	    x = plug->indx - plug->r;
+	    //cubic interpolation and dc rm filter
 	    tmp = b + 0.5 * x*(c - a + x*(2.0*a - 5.0*b + 4.0*c - d + x*(3.0*(b - c) + d - a)));
 	    plug->output_p[i] = .999*plug->dcprevout + tmp - plug->dcprevin;
 	    plug->dcprevin = tmp;
