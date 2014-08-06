@@ -62,7 +62,7 @@
         ] ;
 	lv2:port [
 	        a lv2:OutputPort, lv2:ControlPort ;
-		lv2:index 5 l
+		lv2:index 5 ;
 		lv2:symbol "LATENCY" ;
 		lv2:name "Latency" ;
 		lv2:portProperty lv2:reportsLatency, lv2:integer, pprops:notOnGUI ;

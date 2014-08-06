@@ -15,7 +15,7 @@ typedef struct _POWERUP
     unsigned long r;//current read point in buffer
     unsigned long t;//nframes processed after trigger
     unsigned long bufmask;//size of buffer 
-    unsigned long max_latency;
+    unsigned long latency;
     double sample_freq;
     
     float *buf;
@@ -29,7 +29,7 @@ typedef struct _POWERUP
     float *input_p;
     float *output_p;
     float *trigger_p;
-    float *pull_the_plug_p;
+    float *fire_it_up_p;
     float *startup_time_p;
     float *startup_curve_p;
     float *latency_p;
@@ -40,11 +40,11 @@ enum _POWERUP_PORTS
 {
     IN =0,
     OUT,
-    PULL_THE_PLUG,
-    DECAY_TIME,
-    DECAY_CURVE,
-    TRIGGER,
+    FIRE_IT_UP,
+    STARTUP_TIME,
+    STARTUP_CURVE,
     LATENCY,
+    TRIGGER,
     DBG
 };
 
@@ -52,60 +52,77 @@ void run_powerup(LV2_Handle handle, uint32_t nframes)
 {
     POWERUP* plug = (POWERUP*)handle;
     uint32_t i=0;
-    float startup_length = (float)(*plug->startup_time*plug->sample_freq);
+    float startup_length = (float)(plug->startup_time*plug->sample_freq);
     
 #ifdef CV_PORTS
-    if(*plug->pull_the_plug_p >= 1 || plug->trigger_p[nframes-1] >= 1)
+    if(*plug->fire_it_up_p >= 1 || plug->trigger_p[nframes-1] >= 1)
 #else
-    if(*plug->pull_the_plug_p>= 1)
+    if(*plug->fire_it_up_p>= 1)
 #endif
     {
         //triggered, start cow face
-	if(!dcprevout)
+	float a,b,c,d,x,tmp,exp_curve;
+	if(!plug->dcprevout)
 	{
-	    //just starting, lock in values 
+	    //just starting powerup, lock in values 
 	    plug->startup_time = *plug->startup_time_p;
 	    plug->startup_curve = *plug->startup_curve_p;
-            startup_length = (float)(*plug->startup_time*plug->sample_freq);
-	    //calculate start position
-	    if(*plug->startup_curve > 0)//logarithmic (convex)
+
+	    //initialize other vars
+            startup_length = (float)(plug->startup_time*plug->sample_freq);
+	    exp_curve = exp2(plug->startup_curve)-1;
+	    plug->r = plug->w + startup_length - plug->latency;//final read position
+		
+	    //calculate number samples to be read and subtract from read position
+	    if(plug->startup_curve > 0)//logarithmic (convex)
 	    {
-		//plug->indx += .1*log2(1024-1023*plug->t/startup_length);
-		plug->indx += 1/(*plug->startup_curve_p)*log2(exp_startup - (exp_startup-1)*plug->t/startup_length);
+		tmp = 1;
 		for(i=0;i<startup_length;i++);
 		{
-		    //add
+		    tmp *= exp_curve*i/startup_length + 1;//if you can figure out a closed form for this series email me!
 		}
+		plug->indx = plug->r - 1/plug->startup_curve*log2(tmp);
 	    }
-	    else if(*plug->startup_curve == 0)//linear
+	    else if(plug->startup_curve == 0)//linear
 	    {
-		plug->indx = (plug->w - (startup_length - (startup_length+1)/2))&plug->bufmask;
+		plug->indx = plug->r - (startup_length - (startup_length+1)/2);
 	    }
 	    else//exponential (concave)
 	    {
-		//plug->indx += exp2(-10.0*plug->t/startup_length);
-		plug->indx += (exp_startup*exp2(plug->t**plug->startup_curve_p/startup_length) - 1)/(exp_startup - 1);
+		float tmp2 = exp2(plug->startup_curve/startup_length);
+		tmp = 1;
+		plug->indx = 0;
+		for(i=0;i<startup_length;i++);
+		{
+		    plug->indx += tmp;//same here!
+		    tmp *= tmp2;
+		}
+		plug->indx = plug->r - (plug->indx- startup_length)/exp_curve;
 	    }
-	    plug->indx = 1.5;//not really
-	    plug->r = ((unsigned long)plug->indx)&plug->bufmask;
-	    dcprevin = plug->buf[plug->r];
+
+	    //now figure the real starting read position (wrap to within buffer size)
+	    plug->r = (unsigned long)plug->indx;
+	    tmp = plug->indx - plug->r;
+	    plug->r &= plug->bufmask;
+	    plug->indx = plug->r + tmp; //from here on out w, r, & indx will grow until startup completes (no wrapping)
+	    plug->dcprevin = plug->buf[plug->r];
 	}
 
-	float a,b,c,d,x,tmp,exp_startup;
-	exp_startup = exp2(*plug->startup_curve>0?*plug->startup_curve:-*plug->startup_curve);
-
+	//now business as usual
+	exp_curve = exp2(plug->startup_curve>0?plug->startup_curve:-plug->startup_curve);
         a = plug->buf[(plug->r-1)&plug->bufmask];
 	b = plug->buf[plug->r&plug->bufmask];
 	c = plug->buf[(plug->r+1)&plug->bufmask];
 	d = plug->buf[(plug->r+2)&plug->bufmask];
 
-	for(i=0;i<nframes && plug->t<=startup_length;i++)
+	for(i=0;i<nframes && (plug->r+plug->latency)<plug->w;i++)
 	{
+	    //write input
+	    plug->buf[plug->w++&plug->bufmask] = plug->input_p[i];
 	    //increment indx the amount for current (starting up) sample rate
 	    if(*plug->startup_curve_p > 0)//logarithmic (convex)
 	    {
-		//plug->indx += .1*log2(1024-1023*plug->t/startup_length);
-		plug->indx += 1 - 1/(*plug->startup_curve_p)*log2(exp_startup - (exp_startup-1)*plug->t/startup_length);
+		plug->indx += 1/(*plug->startup_curve_p)*log2((exp_curve-1)*plug->t/startup_length + 1);
 	    }
 	    else if(*plug->startup_curve_p == 0)//linear
 	    {
@@ -113,8 +130,7 @@ void run_powerup(LV2_Handle handle, uint32_t nframes)
 	    }
 	    else//exponential (concave)
 	    {
-		//plug->indx += exp2(-10.0*plug->t/startup_length);
-		plug->indx += 1 - (exp_startup*exp2(plug->t**plug->startup_curve_p/startup_length) - 1)/(exp_startup - 1);
+		plug->indx += (exp2(-*plug->startup_curve_p*plug->t/startup_length) - 1)/(exp_curve - 1);
 	    }
 	    if(plug->r < (unsigned long)plug->indx)
 	    {
@@ -137,12 +153,12 @@ void run_powerup(LV2_Handle handle, uint32_t nframes)
 	    plug->dcprevout = plug->output_p[i];
 	    plug->t++;
 	}
-	if(plug->t>startup_length)
+	if(plug->r+plug->latency == plug->w)
 	{
 	    for(;i<nframes;i++)
 	    {
-	        plug->output_p[i] = plug->buf[plug->r++];
-	        plug->r &= plug->bufmask;
+	        plug->buf[plug->w++&plug->bufmask] = plug->input_p[i];
+	        plug->output_p[i] = plug->buf[plug->r++&plug->bufmask];//might get anomolies from switching out dc rm filter
 	    }
 	}
     }
@@ -172,6 +188,7 @@ void run_powerup(LV2_Handle handle, uint32_t nframes)
 	plug->dcprevin = 0;
 	plug->dcprevout = 0;
     }
+    *plug->latency_p = plug->latency;
     return;
 }
 
@@ -181,11 +198,11 @@ LV2_Handle init_powerup(const LV2_Descriptor *descriptor,double sample_freq, con
 
     unsigned long tmp;
     plug->sample_freq = sample_freq; 
-    tmp = 0x40000;//19 bits
+    tmp = 0x200000;//21 bits
     if(sample_freq<100000)//88.2 or 96kHz
-        tmp = tmp>>1;//18 bits
+        tmp = tmp>>1;//20 bits
     if(sample_freq<50000)//44.1 or 48kHz
-        tmp = tmp>>1;//17 bits
+        tmp = tmp>>1;//19 bits
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->bufmask = tmp - 1;
     plug->buf[0] = 0;
@@ -196,7 +213,7 @@ LV2_Handle init_powerup(const LV2_Descriptor *descriptor,double sample_freq, con
     plug->t = 0;
     plug->dcprevin = 0;
     plug->dcprevout = 0;
-    plug->max_latency = 100;//FIXME!
+    plug->latency = tmp-(tmp>>3);
 
     return plug;
 }
@@ -209,9 +226,9 @@ void connect_powerup_ports(LV2_Handle handle, uint32_t port, void *data)
     case IN:         	plug->input_p = (float*)data;break;
     case OUT:        	plug->output_p = (float*)data;break;
     case TRIGGER:    	plug->trigger_p = (float*)data;break;
-    case PULL_THE_PLUG: plug->pull_the_plug_p = (float*)data;break;
-    case DECAY_TIME:  	plug->startup_time_p = (float*)data;break;
-    case DECAY_CURVE:   plug->startup_curve_p = (float*)data;break; 
+    case FIRE_IT_UP:    plug->fire_it_up_p= (float*)data;break;
+    case STARTUP_TIME:  	plug->startup_time_p = (float*)data;break;
+    case STARTUP_CURVE:   plug->startup_curve_p = (float*)data;break; 
     case LATENCY:       plug->latency_p = (float*)data;break; 
     case DBG:           plug->dbg_p = (float*)data;break; 
     default:         puts("UNKNOWN PORT YO!!");
