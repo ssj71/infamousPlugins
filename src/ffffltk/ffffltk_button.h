@@ -25,7 +25,7 @@
 
 #include <FL/Fl_Button.H>
 
-static void default_drawing(cairo_t *cr, int val)
+static void default_bg_drawing(cairo_t *cr, int val)
 {
     cairo_rectangle( cr, 1, 1, 98, 98 );
    cairo_set_source_rgb( cr,28 / 255.f,  28 / 255.f ,  28 / 255.f  );
@@ -51,7 +51,7 @@ namespace ffffltk
 class Button : public Fl_Button
 {
   public:
-    Button(int _x, int _y, int _w, int _h, const char *_label):
+    Button(int _x, int _y, int _w, int _h, const char *_label=""):
         Fl_Button(_x, _y, _w, _h, _label)
     {
       x = _x;
@@ -61,7 +61,7 @@ class Button : public Fl_Button
       
       drawing_w = 100;
       drawing_h = 100;
-      drawing_f = &default_drawing;
+      drawing_f = &default_bg_drawing;
 
       label = _label;
       
@@ -105,7 +105,7 @@ class Button : public Fl_Button
         cairo_scale(cr,scale,scale);
         //call the draw function
         if(drawing_f) drawing_f(cr,value());
-        else default_drawing(cr,value());
+        else default_bg_drawing(cr,value());
        
         cairo_restore( cr );
         
@@ -123,7 +123,7 @@ class Button : public Fl_Button
       redraw();
     }
     
-    int handle(int event)
+/*    int handle(int event)
     {
       switch(event) {
         case FL_PUSH:
@@ -164,7 +164,9 @@ class Button : public Fl_Button
           return Fl_Widget::handle(event);
       }
     }
+    */
 };
+
 
 } // ffffltk
 

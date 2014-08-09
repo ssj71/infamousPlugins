@@ -20,8 +20,8 @@
  */
 
 
-#ifndef FFF_BACKGROUND_H
-#define FFF_BACKGROUND_H
+#ifndef FFF_ASPECT_GROUP_H
+#define FFF_ASPECT_GROUP_H
 
 
 #include <FL/Fl_Widget.H>
@@ -29,7 +29,7 @@
 #include <string>
 
 //avtk drawing method (adapted)
-static void default_bg_drawing(cairo_t *cr)
+static void default_ag_drawing(cairo_t *cr)
 {
     cairo_set_line_width(cr, 1.5);
         
@@ -90,8 +90,8 @@ namespace ffffltk
 class Background : public Fl_Widget
 {
   public:
-    Background(int _x, int _y, int _w, int _h, const char *_label = ""):
-        Fl_Widget(_x, _y, _w, _h, _label)
+    Aspect_Group(int _x, int _y, int _w, int _h, const char *_label = ""):
+        Fl_Group(_x, _y, _w, _h, _label)
     {
       x = _x;
       y = _y;
@@ -102,9 +102,8 @@ class Background : public Fl_Widget
 
       drawing_w = 100;
       drawing_h = 100;
-      drawing_f = &default_bg_drawing;
-      stretch = true;
-      
+      drawing_f = &default_ag_drawing;
+
       highlight = false;
     }
     bool highlight;
@@ -114,11 +113,10 @@ class Background : public Fl_Widget
     int drawing_w;
     int drawing_h;
     void (*drawing_f)(cairo_t*);//pointer to draw function
-    bool stretch;
     
     void draw()
     {
-      if (damage() & FL_DAMAGE_ALL)
+      if (damage() & ~FL_DAMAGE_CHILD)
       {
         cairo_t *cr = Fl::cairo_cc();
         
@@ -131,18 +129,15 @@ class Background : public Fl_Widget
 	shifty=0;
 	scalex = w/(double)drawing_w;
 	scaley = h/(double)drawing_h;
-	if(!stretch)
+	if(scalex > scaley)
 	{
-	    if(scalex > scaley)
-	    {
-	        scalex = scaley;
-	        shiftx = (w - scalex*drawing_w)/2.f;
-	    }
-	    else
-	    {
-		scaley = scalex;
-	        shifty = h - scaley*drawing_h;
-	    }
+	    scalex = scaley;
+	    shiftx = (w - scalex*drawing_w)/2.f;
+	}
+	else
+	{
+            scaley = scalex;
+	    shifty = (h - scaley*drawing_h)/2.f;
 	}
 	//label behind value
 	draw_label();
@@ -152,20 +147,34 @@ class Background : public Fl_Widget
 	cairo_scale(cr,scalex,scaley);
 	//call the draw function
 	if(drawing_f) drawing_f(cr);
-	else default_bg_drawing(cr);
+	else default_ag_drawing(cr);
 
         cairo_restore( cr );
       }
+      draw_children();
     }
     
     void resize(int X, int Y, int W, int H)
     {
-      Fl_Widget::resize(X,Y,W,H);
+      //Fl_Widget::resize(X,Y,W,H);
+      w = W;
+      h = H;
+      if( W/(float)H < drawing_w/(float)drawing_h)
+      {
+	  H = W*drawing_h/(float)drawing_w;
+	  Y += (h-H)/2.f;
+	  //need to shift Y to center?
+      }
+      else if( W/(float)H > drawing_w/(float)drawing_h)
+      {
+          W = H*drawing_w/(float)drawing_h;
+	  X += (w-W)/2.f;
+      }
       x = X;
       y = Y;
       w = W;
       h = H;
-      redraw();
+      Fl_Group::resize(X,Y,W,H);
     }
     
     int handle(int event)

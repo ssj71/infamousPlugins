@@ -27,7 +27,7 @@
 #include <FL/Fl_Slider.H>
 
 //avtk drawing method (adapted)
-static void default_drawing(cairo_t *cr, float val)
+static void default_bg_drawing(cairo_t *cr, float val)
 {
     
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_ROUND);
@@ -75,7 +75,7 @@ class Dial : public Fl_Slider
       
       drawing_w = 100;
       drawing_h = 100;
-      drawing_f = &default_drawing;
+      drawing_f = &default_bg_drawing;
       
       mouseClickedY = 0;
       mouseClicked = false;
@@ -126,7 +126,7 @@ class Dial : public Fl_Slider
 	cairo_scale(cr,scale,scale);
 	//call the draw function
 	if(drawing_f) drawing_f(cr,value());
-	else default_drawing(cr,value());
+	else default_bg_drawing(cr,value());
         
         cairo_restore( cr );
         
