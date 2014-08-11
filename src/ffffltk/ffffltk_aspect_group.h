@@ -87,7 +87,7 @@ static void default_ag_drawing(cairo_t *cr)
 namespace ffffltk
 {
 
-class Background : public Fl_Widget
+class Aspect_Group: public Fl_Group
 {
   public:
     Aspect_Group(int _x, int _y, int _w, int _h, const char *_label = ""):
@@ -177,7 +177,7 @@ class Background : public Fl_Widget
       Fl_Group::resize(X,Y,W,H);
     }
     
-    int handle(int event)
+/*    int handle(int event)
     {
       return 0;
       
@@ -211,7 +211,7 @@ class Background : public Fl_Widget
         default:
           return Fl_Widget::handle(event);
       }
-    }
+    }*/
 };
 
 } // ffffltk
