@@ -1,6 +1,6 @@
 Welcome to the INFAMOUS Plugins README
 
-Things are just firing up. So far we have exactly 6 plugins. But hey, its gettin there right?
+Things are just firing up. So far we have exactly 7 plugins. But hey, its gettin there right?
 
 
 To install, make sure you have the dependencies and then just run the script install.sh:
@@ -123,3 +123,11 @@ This plugin is commonly called tape stop. Another one I might not actually use, 
     PULL THE PLUG - start the decay (>=1) or turn it off/reset it(<1)
     DECAY TIME - length of decay in seconds
     DECAY CURVE - the shape of the decay, concave (logarithmic) slows more and more with time, convex (exponential) slows less and less with time
+
+=============================================
+6. power up
+
+This is the opposite of the power cut. It "winds up" rather than down, or goes from silence when off, to slowly speeding up to full speed in the amount of time set by the control. NOTE THIS PLUGIN IS ABSOLUTELY NOT USEABLE LIVE! It introduces nearly 10 seconds of latency. But in a recording context your mmodern DAW will compensate. I wasn't even going to do this because of the non-causal DSP but then the math was challenging and I couldn't back down. The latency could be dynamic but I have no idea how well hosts would cope with that, so I chose to leave it static.
+    FIRE IT UP - start the startup (>=1) or turn it off/reset it(<1)
+    STARTUP TIME - length of startup in seconds
+    STARTUP CURVE - the shape of the startup, concave (logarithmic) starts quickly then changes less and less with time, convex (exponential) takes a while to get started then quickly approaches normal speed. 

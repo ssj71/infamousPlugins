@@ -1,0 +1,76 @@
+@prefix doap:  <http://usefulinc.com/ns/doap#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
+
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+
+<http://infamousplugins.sourceforge.net/plugs.html#powerup>
+        a lv2:Plugin, lv2:ModulationPlugin ;
+        doap:name "the infamous power up" ;
+        doap:maintainer [
+                foaf:name "Spencer Jackson" ;
+                foaf:homepage <http://infamousplugins.sourceforge.net> ;
+                foaf:mbox <ssjackson71@gmail.com> ;
+        ] ;
+        lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
+        lv2:optionalFeature lv2:hardRTCapable ;
+
+
+        lv2:port [
+                a lv2:InputPort, lv2:AudioPort ;
+                lv2:index 0 ;
+                lv2:symbol "INPUT" ;
+                lv2:name "Audio In" ;
+        ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:AudioPort ;
+                lv2:index 1 ;
+                lv2:symbol "OUTPUT" ;
+                lv2:name "Audio Out" ;
+        ] ;
+        lv2:port [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 2 ;
+                lv2:symbol "FIRE_IT_UP" ;
+                lv2:name "Fire it Up!" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+		lv2:portProperty lv2:integer ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 3 ;
+                lv2:symbol "TIME" ;
+                lv2:name "Startup Time" ;
+                lv2:default 0.50 ;
+                lv2:minimum 0.01 ;
+                lv2:maximum 10.0 ;
+		units:unit units:s ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 4 ;
+                lv2:symbol "CURVE" ;
+                lv2:name "Startup Curve" ;
+		lv2:scalePoint [ rdfs:label "Concave" ; rdf:value -10.0 ] ;
+		lv2:scalePoint [ rdfs:label "Linear" ; rdf:value 0.0 ] ;
+		lv2:scalePoint [ rdfs:label "Convex" ; rdf:value 10 ] ;
+                lv2:default 0 ;
+                lv2:minimum -10.0 ;
+                lv2:maximum 10.0 ; 
+        ] ;
+	lv2:port [
+	        a lv2:OutputPort, lv2:ControlPort ;
+		lv2:index 5 ;
+		lv2:symbol "LATENCY" ;
+		lv2:name "Latency" ;
+		lv2:portProperty lv2:reportsLatency, lv2:integer, pprops:notOnGUI ;
+	] ;
+        #lv2:port [
+        #        a lv2:InputPort, lv2:AudioPort ;#CVPort ;
+        #        lv2:index 5 ;
+        #        lv2:symbol "TRIGGER" ;
+        #        lv2:name "Trigger" ;
+        #] ;
+	.

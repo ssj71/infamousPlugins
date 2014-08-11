@@ -3,7 +3,7 @@
 which sudo && run_as_root="sudo" || run_as_root="su -l root -c"
 which qmake && qmake_bin="qmake" || qmake_bin="qmake-qt4"
 
-plugins="CellularAutomatonSynth EnvelopeFollower Hip2B Stuck PowerCut"
+plugins="CellularAutomatonSynth EnvelopeFollower Hip2B Stuck PowerCut PowerUp"
 
 for plugin in $plugins
 do
