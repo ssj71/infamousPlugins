@@ -25,6 +25,7 @@
 
 #include <FL/Fl_Dial.H>
 #include <FL/Fl_Slider.H>
+#include <FL/fl_ask.H>
 
 //avtk drawing method (adapted)
 static void default_bg_drawing(cairo_t *cr, float val)
@@ -80,11 +81,11 @@ class Dial : public Fl_Slider
       mouseClickedY = 0;
       mouseClicked = false;
       
-      highlight = false;
+//      highlight = false;
       label = _label;
     }
     
-    bool highlight;
+ //   bool highlight;
     int x, y, w, h;
     const char* label;
     bool drawLab;
@@ -152,8 +153,22 @@ class Dial : public Fl_Slider
       
       switch(event) {
         case FL_PUSH:
-          highlight = 1;
-          redraw();
+          //highlight = 1;
+	  if(Fl::event_button() == FL_MIDDLE_MOUSE)
+	  {
+	   // Fl_Window tmp* = new Fl_Window(Fl::event_x(),Fl::event_y(),100,200,"Enter Value");
+	    char n[20];
+	    float val=0;
+	    sprintf(n,"%f",value());
+	    if(sscanf(fl_input("Enter Value:",n),"%f",&val))
+	    {
+              if ( val > maximum() ) val = maximum();
+              if ( val < minimum() ) val = minimum();
+	      set_value(val);
+	    }
+            redraw();
+	    do_callback();
+	  }
           return 1;
         case FL_DRAG:
           {
@@ -166,28 +181,40 @@ class Dial : public Fl_Slider
               }
               
               float deltaY = mouseClickedY - Fl::event_y();
+	      char lable[20];
               
               float val = value();
-              val += deltaY / 100.f;
+	      if(step())
+	      {
+                  val += deltaY *step();/// 100.f*(maximum()-minimum());
+	      }
+	      else
+	      {
+	          val += deltaY/100.f;
+	      }
+
               
-              if ( val > 1.0 ) val = 1.0;
-              if ( val < 0.0 ) val = 0.0;
+              if ( val > maximum() ) val = maximum();
+              if ( val < minimum() ) val = minimum();
               
               set_value( val );
               
               mouseClickedY = Fl::event_y();
+	      sprintf(lable,"%1.4f",val);
+	      Fl_Widget::copy_label(lable);
               redraw();
               do_callback(); // makes FLTK call "extra" code entered in FLUID
             }
           }
           return 1;
         case FL_RELEASE:
-          if (highlight) {
-            highlight = 0;
+          //if (highlight) {
+           // highlight = 0;
+	    Fl_Widget::copy_label("");
             redraw();
             // never do anything after a callback, as the callback
             // may delete the widget!
-          }
+          //}
           mouseClicked = false;
           return 1;
         default:
