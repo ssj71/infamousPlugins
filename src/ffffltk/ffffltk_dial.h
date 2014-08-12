@@ -126,8 +126,9 @@ class Dial : public Fl_Slider
 	//scale the drawing
 	cairo_scale(cr,scale,scale);
 	//call the draw function
-	if(drawing_f) drawing_f(cr,value());
-	else default_bg_drawing(cr,value());
+	float val = (value()-minimum())/(maximum()-minimum());
+	if(drawing_f) drawing_f(cr,val);
+	else default_bg_drawing(cr,val);
         
         cairo_restore( cr );
         
@@ -160,7 +161,10 @@ class Dial : public Fl_Slider
 	    char n[20];
 	    float val=0;
 	    sprintf(n,"%f",value());
-	    if(sscanf(fl_input("Enter Value:",n),"%f",&val))
+	    //currently crashes if user presses cancel :(
+	    //if(sscanf(fl_input("Enter Value:",n),"%f",&val))
+	    const char *r = fl_input("Enter Value:",n);
+	    if(r!=NULL && sscanf(r,"%f",&val))
 	    {
               if ( val > maximum() ) val = maximum();
               if ( val < minimum() ) val = minimum();
