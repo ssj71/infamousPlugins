@@ -62,6 +62,7 @@ class Button : public Fl_Button
       drawing_w = 100;
       drawing_h = 100;
       drawing_f = &default_bg_drawing;
+      floatvalue = value();
 
       label = _label;
       
@@ -77,6 +78,7 @@ class Button : public Fl_Button
     int drawing_w;
     int drawing_h;
     void (*drawing_f)(cairo_t*,int);
+    float floatvalue;
 
     void draw()
     {
@@ -165,6 +167,12 @@ class Button : public Fl_Button
       }
     }
     */
+    int handle(int event)
+    {
+        int rtn = Fl_Button::handle(event);
+	floatvalue = value();
+	return rtn;
+    }
 };
 
 

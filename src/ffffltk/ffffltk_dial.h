@@ -77,6 +77,7 @@ class Dial : public Fl_Slider
       drawing_w = 100;
       drawing_h = 100;
       drawing_f = &default_bg_drawing;
+      floatvalue = value();
       
       mouseClickedY = 0;
       mouseClicked = false;
@@ -98,6 +99,7 @@ class Dial : public Fl_Slider
     int drawing_w;
     int drawing_h;
     void (*drawing_f)(cairo_t*,float);//function pointer to draw function
+    float floatvalue;
 
     void draw()
     {
@@ -169,6 +171,7 @@ class Dial : public Fl_Slider
               if ( val > maximum() ) val = maximum();
               if ( val < minimum() ) val = minimum();
 	      set_value(val);
+	      floatvalue = val;
 	    }
             redraw();
 	    do_callback();
@@ -202,6 +205,7 @@ class Dial : public Fl_Slider
               if ( val < minimum() ) val = minimum();
               
               set_value( val );
+	      floatvalue = val;
               
               mouseClickedY = Fl::event_y();
 	      sprintf(lable,"%1.4f",val);
@@ -216,6 +220,7 @@ class Dial : public Fl_Slider
            // highlight = 0;
 	    Fl_Widget::copy_label("");
             redraw();
+	    floatvalue = value();
             // never do anything after a callback, as the callback
             // may delete the widget!
           //}
