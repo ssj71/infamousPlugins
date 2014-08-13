@@ -14,7 +14,8 @@ QMAKE_CFLAGS += -g \
 SOURCES += stuck.c \
     rms_calc.c  
     
-HEADERS += rms_calc.h
+HEADERS += stuck.h \
+    rms_calc.h
 
 OTHER_FILES += \
     stuck.lv2/manifest.ttl \
