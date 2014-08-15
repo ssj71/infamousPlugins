@@ -21,7 +21,8 @@ pkg_check_modules(LV2 REQUIRED lv2>=.0.1.0)
 include_directories (${LV2_INCLUDE_DIRS} ${NTK_INCLUDE_DIRS} ${CAIRO_INCLUDE_DIRS} ../ffffltk ../draw ../Stuck)
 link_directories (${LV2_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS} ${CAIRO_LIBRARY_DIRS})
 
-#fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
+find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
+fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
 
 # config libraries
 
@@ -35,9 +36,9 @@ add_library(${PLUGIN} SHARED
 add_library(${PLUGIN}_ui SHARED
   stuck.h
   stuck_ui_main.cxx
-  stuck_ui.h
-  stuck_ui.cxx
-#  ${${PLUGIN}_ui_FLTK_UI_SRCS}
+  #stuck_ui.h
+  #stuck_ui.cxx
+  ${${PLUGIN}_ui_FLTK_UI_SRCS}
 )
 
 set_target_properties(${PLUGIN} PROPERTIES PREFIX "")

@@ -24,19 +24,32 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
 
     StuckUI* self = new StuckUI();
     if(!self) return 0;
+    LV2UI_Resize* resize = NULL;
 
     self->controller = controller;
     self->write_function = write_function;
 
     void* parentXwindow = 0;
-    for (int i = 0; features[i]; ++i) {
+    for (int i = 0; features[i]; ++i)
+    {
         if (!strcmp(features[i]->URI, LV2_UI__parent)) 
 	{
            parentXwindow = features[i]->data;
         }
+	else if (!strcmp(features[i]->URI, LV2_UI__resize)) 
+	{
+           resize = (LV2UI_Resize*)features[i]->data;
+        }
+
     }
 
+    self->ui = self->show();
     fl_open_display();
+    // set host to change size of the window
+    if (resize)
+    {
+      resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());
+    }
     fl_embed( self->ui,(Window)parentXwindow);
 
     return (LV2UI_Handle)self;
