@@ -5,15 +5,11 @@ cmake_minimum_required(VERSION 2.6)
 set(PLUGIN "stuck")
 project (${PLUGIN})
 
-#set(LV2_INSTALL_DIR /lib/lv2/${PLUGIN}.lv2 CACHE PATH "Specifies where the LV2 libraries should be installed")
 set(LV2_INSTALL_DIR /usr/lib/lv2/${PLUGIN}.lv2 CACHE PATH "Specifies where the LV2 libraries should be installed")
-#set(CMAKE_INSTALL_PREFIX /usr/lib/lv2/${PLUGIN}.lv2 CACHE PATH "Specifies where the LV2 libraries should be installed")
 set(CMAKE_C_FLAGS "-Wall -g -msse2 -mfpmath=sse -ffast-math")
-#set(CMAKE_INSTALL_RPATH ${LV2_INSTALL_DIR}) #"/usr/lib/lv2/${PLUGIN}.lv2")
 
 # check for our various libraries
 find_package(PkgConfig)
-#find_package(FLTK)
 pkg_check_modules(CAIRO cairo)
 pkg_check_modules(NTK ntk)
 pkg_check_modules(LV2 REQUIRED lv2>=.0.1.0)
@@ -36,8 +32,6 @@ add_library(${PLUGIN} SHARED
 add_library(${PLUGIN}_ui SHARED
   stuck.h
   stuck_ui_main.cxx
-  #stuck_ui.h
-  #stuck_ui.cxx
   ${${PLUGIN}_ui_FLTK_UI_SRCS}
 )
 
@@ -46,8 +40,6 @@ set_target_properties(${PLUGIN}_ui PROPERTIES PREFIX "")
 
 set_target_properties(${PLUGIN} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE)
 set_target_properties(${PLUGIN}_ui PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE)
-#set_target_properties(${PLUGIN} PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
-#set_target_properties(${PLUGIN}_ui PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 target_link_libraries(${PLUGIN} ${LV2_LIBRARIES} m)
 target_link_libraries(${PLUGIN}_ui ${LV2_LIBRARIES} ${NTK_LIBRARIES} ${CAIRO_LIBRARIES} m)
@@ -55,13 +47,9 @@ target_link_libraries(${PLUGIN}_ui ${LV2_LIBRARIES} ${NTK_LIBRARIES} ${CAIRO_LIB
 # config install
 install(TARGETS ${PLUGIN} ${PLUGIN}_ui
   LIBRARY
-  #DESTINATION ${CMAKE_INSTALL_PREFIX}/${LV2_INSTALL_DIR}
-  #DESTINATION ${CMAKE_INSTALL_PREFIX}
   DESTINATION ${LV2_INSTALL_DIR}
 )
 
 install (FILES ${PLUGIN}.lv2/manifest.ttl ${PLUGIN}.lv2/${PLUGIN}.ttl 
-  #DESTINATION ${CMAKE_INSTALL_PREFIX}/${LV2_INSTALL_DIR}
-  #DESTINATION ${CMAKE_INSTALL_PREFIX}
   DESTINATION ${LV2_INSTALL_DIR}
 )
