@@ -17,7 +17,7 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
 		LV2UI_Widget * widget,
 		const LV2_Feature * const * features) 
 {
-    if(strcmp(plugin_uri, STUCKUI_URI) != 0)
+    if(strcmp(plugin_uri, STUCK_URI) != 0)
     {
         return 0;
     }
@@ -46,7 +46,7 @@ void cleanup_stuckUI(LV2UI_Handle ui)
 {
     StuckUI *self = (StuckUI*)ui;
 
-    free(self);
+    delete self;
 }
 
 void stuckUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_size, uint32_t format, const void * buffer)

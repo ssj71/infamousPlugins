@@ -8,7 +8,6 @@
 #include"rms_calc.h"
 #include"stuck.h"
 
-#define STUCK_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck"
 //#define CV_PORTS
 
 enum states
