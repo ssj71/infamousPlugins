@@ -48,7 +48,7 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
     // set host to change size of the window
     if (resize)
     {
-      resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());
+      //resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());
     }
     fl_embed( self->ui,(Window)parentXwindow);
 
@@ -84,12 +84,34 @@ void stuckUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_si
     }
 }
 
+static int
+idle(LV2UI_Handle handle)
+{
+  StuckUI* self = (StuckUI*)handle;
+  
+  self->idle();
+  
+  return 0;
+}
+
+static const LV2UI_Idle_Interface idle_iface = { idle };
+
+static const void*
+extension_data(const char* uri)
+{
+  if (!strcmp(uri, LV2_UI__idleInterface))
+  {
+    return &idle_iface;
+  }
+  return NULL;
+}
+
 static const LV2UI_Descriptor stuckUI_descriptor = {
     STUCKUI_URI,
     init_stuckUI,
     cleanup_stuckUI,
     stuckUI_port_event,
-    0//extension
+    extension_data
 };
 
 LV2_SYMBOL_EXPORT 
