@@ -10,4 +10,5 @@
 <http://infamousplugins.sourceforge.net/plugs.html#stuck_ui>
 	a ui:X11UI ;
 	ui:binary <stuck_ui.so> ;
+	lv2:extensionData ui:idle;
 	.
