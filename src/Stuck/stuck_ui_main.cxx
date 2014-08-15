@@ -22,7 +22,7 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
         return 0;
     }
 
-    StuckUI* self = new StuckUI;
+    StuckUI* self = new StuckUI();
     if(!self) return 0;
 
     self->controller = controller;
