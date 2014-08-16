@@ -88,13 +88,22 @@ static int
 idle(LV2UI_Handle handle)
 {
   StuckUI* self = (StuckUI*)handle;
-  
   self->idle();
   
   return 0;
 }
 
+static int
+resize_func(LV2UI_Feature_Handle handle, int w, int h)
+{
+  StuckUI* self = (StuckUI*)handle;
+  self->ui->size(w,h);
+  
+  return 0;
+}
+
 static const LV2UI_Idle_Interface idle_iface = { idle };
+static const LV2UI_Resize resize_ui = { 0, resize_func };//ideally 1st member would be the StuckUI instance
 
 static const void*
 extension_data(const char* uri)
@@ -102,6 +111,10 @@ extension_data(const char* uri)
   if (!strcmp(uri, LV2_UI__idleInterface))
   {
     return &idle_iface;
+  }
+  if (!strcmp(uri, LV2_UI__resize))
+  {
+    return &resize_ui;
   }
   return NULL;
 }
