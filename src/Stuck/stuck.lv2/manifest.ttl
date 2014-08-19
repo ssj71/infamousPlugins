@@ -12,4 +12,5 @@
 	a ui:X11UI ;
 	ui:binary <stuck_ui.so> ;
 	lv2:extensionData ui:idle;
+	lv2:optionalFeature ui:noUserResize ;
 	.

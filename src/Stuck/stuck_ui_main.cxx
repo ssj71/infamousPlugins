@@ -48,7 +48,7 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
     // set host to change size of the window
     if (resize)
     {
-      //resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());
+      resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());
     }
     fl_embed( self->ui,(Window)parentXwindow);
 
@@ -97,7 +97,7 @@ static int
 resize_func(LV2UI_Feature_Handle handle, int w, int h)
 {
   StuckUI* self = (StuckUI*)handle;
-  self->ui->size(w,h);
+  //self->ui->size(w,h);
   
   return 0;
 }
