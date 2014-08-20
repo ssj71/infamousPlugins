@@ -3,6 +3,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 set(PLUGIN "powercut")
+set(PLUGDIR "PowerCut")
 project (${PLUGIN})
 
 set(LV2_INSTALL_DIR /usr/lib/lv2/${PLUGIN}.lv2 CACHE PATH "Specifies where the LV2 libraries should be installed")
@@ -14,7 +15,7 @@ pkg_check_modules(CAIRO cairo)
 pkg_check_modules(NTK ntk)
 pkg_check_modules(LV2 REQUIRED lv2>=.0.1.0)
 
-include_directories (${LV2_INCLUDE_DIRS} ${NTK_INCLUDE_DIRS} ${CAIRO_INCLUDE_DIRS} ../ffffltk ../draw ../PowerCut)
+include_directories (${LV2_INCLUDE_DIRS} ${NTK_INCLUDE_DIRS} ${CAIRO_INCLUDE_DIRS} ../ffffltk ../draw ../${PLUGDIR})
 link_directories (${LV2_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS} ${CAIRO_LIBRARY_DIRS})
 
 find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
@@ -30,6 +31,7 @@ add_library(${PLUGIN} SHARED
 add_library(${PLUGIN}_ui SHARED
   powercut.h
   powercut_ui_main.cxx
+#  reel.h
   ${${PLUGIN}_ui_FLTK_UI_SRCS}
 )
 

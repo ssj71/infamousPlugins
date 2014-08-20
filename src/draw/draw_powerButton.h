@@ -2,7 +2,6 @@
 #define DRAW_POWERBUTTON_H
 inline int cairo_code_draw_powerButton_get_width() { return 160; }
 inline int cairo_code_draw_powerButton_get_height() { return 64; }
-inline void cairo_code_draw_powerButton_render_reverse(cairo_t *cr, int val) { cairo_code_draw_powerButton_render(cr,1-val); }
 inline void cairo_code_draw_powerButton_render(cairo_t *cr, int val) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
@@ -202,4 +201,5 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 }
+inline void cairo_code_draw_powerButton_render_reverse(cairo_t *cr, int val) { cairo_code_draw_powerButton_render(cr,1-val); }
 #endif

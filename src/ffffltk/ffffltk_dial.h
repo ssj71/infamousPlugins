@@ -78,6 +78,7 @@ class Dial : public Fl_Slider
       drawing_h = 100;
       drawing_f = &default_bg_drawing;
       floatvalue = value();
+      units[0] = 0;
       
       mouseClickedY = 0;
       mouseClicked = false;
@@ -100,6 +101,7 @@ class Dial : public Fl_Slider
     int drawing_h;
     void (*drawing_f)(cairo_t*,float);//function pointer to draw function
     float floatvalue;
+    char units[4];
 
     void draw()
     {
@@ -208,7 +210,7 @@ class Dial : public Fl_Slider
 	      floatvalue = val;
               
               mouseClickedY = Fl::event_y();
-	      sprintf(lable,"%1.4f",val);
+	      sprintf(lable,"%1.3f%s",val,units);
 	      Fl_Widget::copy_label(lable);
               redraw();
               do_callback(); // makes FLTK call "extra" code entered in FLUID

@@ -555,9 +555,9 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 
-cairo_translate(cr,45.5,45.5);
+cairo_translate(cr,38.5,38.5);
 cairo_rotate(cr,3*PI/2*val - 3*PI/4);
-cairo_translate(cr,-45.5,-45.5);
+cairo_translate(cr,-38.5,-38.5);
 
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0,0,0,1);

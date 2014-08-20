@@ -20,72 +20,24 @@
  */
 
 
-#ifndef FFF_BACKGROUND_H
-#define FFF_BACKGROUND_H
+#ifndef FFF_REEL_H
+#define FFF_REEL_H
 
 
 #include <FL/Fl_Widget.H>
+#include <FL/Fl.H>
 #include <valarray>
 #include <string>
 
 //avtk drawing method (adapted)
-static void default_bg_drawing(cairo_t *cr)
+static void default_reel_drawing(cairo_t *cr,float cow)
 {
-    cairo_set_line_width(cr, 1.5);
-        
-        
-    // fill background
-   cairo_rectangle( cr, 0, 0, 100, 100);
-   cairo_set_source_rgba( cr, 66 / 255.f,  66 / 255.f ,  66 / 255.f , 1 );
-   cairo_fill( cr );
-   
-   
-   // set up dashed lines, 1 px off, 1 px on
-   double dashes[1];
-   dashes[0] = 2.0;
-   
-   cairo_set_dash ( cr, dashes, 1, 0.0);
-   cairo_set_line_width( cr, 1.0);
-        
-   // loop over each 2nd line, drawing dots
-   for ( int i = 0; i < 100; i += 4 )
-   {
-     cairo_move_to( cr, i, 0 );
-     cairo_line_to( cr, i, 100 );
-   }
-        
-   cairo_set_source_rgba( cr,  28 / 255.f,  28 / 255.f ,  28 / 255.f , 0.5 );
-   cairo_stroke(cr);
-   cairo_set_dash ( cr, dashes, 0, 0.0);
-   
-        
-   // draw header
-     // backing
-     cairo_rectangle(cr, 0, 0, 100, 20);
-     cairo_set_source_rgb( cr, 28 / 255.f,  28 / 255.f ,  28 / 255.f );
-     cairo_fill( cr );
-     
-     // text NOT YET SUPPORTED
-     //cairo_move_to( cr, 10, 14 );
-     //cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 1 );
-     //cairo_set_font_size( cr, 10 );
-     //cairo_show_text( cr, label );
-     
-     // lower stripe
-     cairo_move_to( cr, 0  , 20 );
-     cairo_line_to( cr, 100, 20 );
-     cairo_stroke( cr );
-   
-   
-   // stroke rim
-   cairo_rectangle(cr, 0, 0, 100, 100);
-   cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 1 );
-   cairo_stroke( cr );
-}
-
+};
 
 namespace ffffltk
 {
+
+static void reel_callback(void* handle);
 
 class PowerReel: public Fl_Widget
 {
@@ -102,7 +54,7 @@ class PowerReel: public Fl_Widget
 
       drawing_w = 100;
       drawing_h = 100;
-      drawing_f = &default_bg_drawing;
+      drawing_f = &default_reel_drawing;
       stretch = false;
       
       highlight = false;
@@ -111,7 +63,7 @@ class PowerReel: public Fl_Widget
       time = .5;
       trigger = 0;
 
-      Fl::add_timeout(.06,callback)
+      Fl::add_timeout(.06,reel_callback,this);
     }
     bool highlight;
     int x, y, w, h;
@@ -119,7 +71,7 @@ class PowerReel: public Fl_Widget
 
     int drawing_w;
     int drawing_h;
-    void (*drawing_f)(cairo_t*);//pointer to draw function
+    void (*drawing_f)(cairo_t*,float);//pointer to draw function
     bool stretch;
 
     float curve;
@@ -128,41 +80,6 @@ class PowerReel: public Fl_Widget
     int trigger;
     double angle;
 
-    void callback(void*)
-    {
-        if(trigger)
-	{
-	    float t = .06;
-	    float exp_decay = exp2(curve>0?curve:-curve);
-
-	    if(curve > 0)//logarithmic (convex)
-	    {
-		angle += .06/(curve)*log2(exp_decay - (exp_decay-1)*samples/time);
-	    }
-	    else if(curve == 0)//linear
-	    {
-		angle += .06*(1-samples/time);
-	    }
-	    else//exponential (concave)
-	    {
-		angle += .06*(exp_decay*exp2(samples*curve/time) - 1)/(exp_decay - 1);
-	    }   
-	    if(t>10)
-	    {
-	    }
-	    else
-	    {
-	        Fl::reset_timeout(t,callback);
-	    }
-	    samples++;
-	}
-	else
-	{
-	     angle += .06;
-	     samples = 0;
-	}
-        Fl::reset_timeout(.06,callback);
-    }
     
     void draw()
     {
@@ -179,7 +96,6 @@ class PowerReel: public Fl_Widget
 	shifty=0;
 	scalex = w/(double)drawing_w;
 	scaley = h/(double)drawing_h;
-	if(!stretch)
 	{
 	    if(scalex > scaley)
 	    {
@@ -200,7 +116,7 @@ class PowerReel: public Fl_Widget
 	cairo_scale(cr,scalex,scaley);
 	//call the draw function
 	if(drawing_f) drawing_f(cr,angle);
-	else default_bg_drawing(cr);
+	else default_reel_drawing(cr,angle);
 
         cairo_restore( cr );
       }
@@ -251,6 +167,41 @@ class PowerReel: public Fl_Widget
           return Fl_Widget::handle(event);
       }
     }
+};
+
+static void reel_callback(void* handle)
+{
+
+	PowerReel* reel = (PowerReel*)handle;
+	if(reel->trigger)
+	{
+	    if(reel->samples < reel->time)
+	    {
+		    float t = .06;
+		    float exp_decay = exp2(reel->curve>0?reel->curve:-reel->curve);
+
+		    if(reel->curve > 0)//logarithmic (convex)
+		    {
+			reel->angle += .06/(reel->curve)*log2(exp_decay - (exp_decay-1)*reel->samples/reel->time);
+		    }
+		    else if(reel->curve == 0)//linear
+		    {
+			reel->angle += .06*(1-reel->samples/reel->time);
+		    }
+		    else//exponential (concave)
+		    {
+			reel->angle += .06*(exp_decay*exp2(reel->samples*reel->curve/reel->time) - 1)/(exp_decay - 1);
+		    }   
+		    reel->samples++;
+	    }
+	}
+	else
+	{
+	     reel->angle += .06;
+	     reel->samples = 0;
+	}
+	Fl::repeat_timeout(.06,reel_callback,handle);
+	reel->redraw();
 };
 
 } // ffffltk

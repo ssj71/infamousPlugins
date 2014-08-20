@@ -4,12 +4,12 @@
 #include <FL/Fl_Double_Window.H>
 #include <FL/x.H>
 
-#include "stuck_ui.h"
+#include "powercut_ui.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
-#define STUCKUI_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck_ui"
+#define POWERCUTUI_URI "http://infamousplugins.sourceforge.net/plugs.html#powercut_ui"
 
-static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
+static LV2UI_Handle init_powercutUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,
 		const char * bundle_path,
 		LV2UI_Write_Function write_function,
@@ -17,12 +17,12 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
 		LV2UI_Widget * widget,
 		const LV2_Feature * const * features) 
 {
-    if(strcmp(plugin_uri, STUCK_URI) != 0)
+    if(strcmp(plugin_uri, POWERCUT_URI) != 0)
     {
         return 0;
     }
 
-    StuckUI* self = new StuckUI();
+    PowerCutUI* self = new PowerCutUI();
     if(!self) return 0;
     LV2UI_Resize* resize = NULL;
 
@@ -55,30 +55,32 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
     return (LV2UI_Handle)self;
 }
 
-void cleanup_stuckUI(LV2UI_Handle ui)
+void cleanup_powercutUI(LV2UI_Handle ui)
 {
-    StuckUI *self = (StuckUI*)ui;
+    PowerCutUI *self = (PowerCutUI*)ui;
 
     delete self;
 }
 
-void stuckUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_size, uint32_t format, const void * buffer)
+void powercutUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_size, uint32_t format, const void * buffer)
 {
-    StuckUI *self = (StuckUI*)ui;
+    PowerCutUI *self = (PowerCutUI*)ui;
     if(!format)
     {
       float val = *(float*)buffer;
       switch(port_index)
       {
-        case STICKIT:
-          self->stickit->value((int)val);
-	  self->led->value((int)val);
+        case PULL_THE_PLUG:
+          self->power->value((int)val);
+	  self->reel->trigger = val;
 	  break;
-        case DRONEGAIN:
-          self->volume->value(val);
-	  break;
-        case RELEASE:
+        case DECAY_TIME:
           self->time->value(val);
+	  self->reel->time = val/.06;
+	  break;
+        case DECAY_CURVE:
+          self->curve->value(val);
+	  self->reel->curve = val;
 	  break;
       }
     }
@@ -87,7 +89,7 @@ void stuckUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_si
 static int
 idle(LV2UI_Handle handle)
 {
-  StuckUI* self = (StuckUI*)handle;
+  PowerCutUI* self = (PowerCutUI*)handle;
   self->idle();
   
   return 0;
@@ -96,14 +98,14 @@ idle(LV2UI_Handle handle)
 static int
 resize_func(LV2UI_Feature_Handle handle, int w, int h)
 {
-  StuckUI* self = (StuckUI*)handle;
+  PowerCutUI* self = (PowerCutUI*)handle;
   //self->ui->size(w,h);
   
   return 0;
 }
 
 static const LV2UI_Idle_Interface idle_iface = { idle };
-static const LV2UI_Resize resize_ui = { 0, resize_func };//ideally 1st member would be the StuckUI instance
+static const LV2UI_Resize resize_ui = { 0, resize_func };//ideally 1st member would be the PowerCutUI instance
 
 static const void*
 extension_data(const char* uri)
@@ -119,11 +121,11 @@ extension_data(const char* uri)
   return NULL;
 }
 
-static const LV2UI_Descriptor stuckUI_descriptor = {
-    STUCKUI_URI,
-    init_stuckUI,
-    cleanup_stuckUI,
-    stuckUI_port_event,
+static const LV2UI_Descriptor powercutUI_descriptor = {
+    POWERCUTUI_URI,
+    init_powercutUI,
+    cleanup_powercutUI,
+    powercutUI_port_event,
     extension_data
 };
 
@@ -132,7 +134,7 @@ const LV2UI_Descriptor* lv2ui_descriptor(uint32_t index)
 {
     switch (index) {
     case 0:
-        return &stuckUI_descriptor;
+        return &powercutUI_descriptor;
     default:
         return NULL;
     }
