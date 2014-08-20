@@ -5,8 +5,8 @@
 #include<stdio.h>
 #include<string.h>
 #include<math.h>
+#include<powercut.h>
 
-#define POWERCUT_URI "http://infamousplugins.sourceforge.net/plugs.html#powercut"
 //#define CV_PORTS
 
 typedef struct _POWERCUT
@@ -31,16 +31,6 @@ typedef struct _POWERCUT
     float *dbg_p;
 }POWERCUT;
 
-enum _POWERCUT_PORTS
-{
-    IN =0,
-    OUT,
-    PULL_THE_PLUG,
-    DECAY_TIME,
-    DECAY_CURVE,
-    TRIGGER,
-    DBG
-};
 
 void run_powercut(LV2_Handle handle, uint32_t nframes)
 {
