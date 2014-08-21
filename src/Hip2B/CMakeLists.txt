@@ -2,8 +2,8 @@
 
 cmake_minimum_required(VERSION 2.6)
 
-set(PLUGIN "stuck")
-set(PLUGDIR "Stuck")
+set(PLUGIN "hip2b")
+set(PLUGDIR "Hip2B")
 project (${PLUGIN})
 
 set(LV2_INSTALL_DIR /usr/lib/lv2/${PLUGIN}.lv2 CACHE PATH "Specifies where the LV2 libraries should be installed")
@@ -24,15 +24,13 @@ fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
 # config libraries
 
 add_library(${PLUGIN} SHARED
-  stuck.c
-  stuck.h
-  rms_calc.c
-  rms_calc.h
+  square.c
+  hip2b.h
 )
 
 add_library(${PLUGIN}_ui SHARED
-  stuck.h
-  stuck_ui_main.cxx
+  hip2b.h
+  hip2b_ui_main.cxx
   ${${PLUGIN}_ui_FLTK_UI_SRCS}
 )
 

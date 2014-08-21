@@ -2,14 +2,24 @@
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
-@prefix pprops: <http://lv2plug.in/ns/ext/port-props> .
 
-@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+<<<<<<< HEAD
+@prefix lv2:     <http://lv2plug.in/ns/lv2core#> .
+@prefix lv2ui:   <http://lv2plug.in/ns/extensions/ui#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
+@prefix lv2atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
+@prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
+@prefix pprops:<http://lv2plug.in/ns/ext/port-props#> .
+@prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix param: <http://lv2plug.in/ns/ext/parameters#> .
 
 <http://infamousplugins.sourceforge.net/plugs.html#hip2b>
+=======
+<http://sourceforge.net/projects/infamousplugins:hip2b>
+>>>>>>> master
         a lv2:Plugin, lv2:DistortionPlugin ;
-        doap:name "the infamous Hip2B" ;
+        doap:name "Hip2B" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://infamousplugins.sourceforge.net> ;
@@ -17,7 +27,7 @@
         ] ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
-        ui:ui <http://infamousplugins.sourceforge.net/plugs.html#hip2b_ui> ;
+
 
         lv2:port [
                 a lv2:InputPort, lv2:AudioPort ;
@@ -57,15 +67,6 @@
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 5 ;
-                lv2:symbol "OCTAVE" ;
-                lv2:name "Octave" ;
-                lv2:default 0.0 ;
-                lv2:minimum -2.0 ;
-                lv2:maximum 0.0 ;
-                lv2:portProperty lv2:integer;
-        ], [
-                a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 6 ;
                 lv2:symbol "IN_GAIN" ;
                 lv2:name "Input Gain" ;
                 lv2:default 1.0 ;
@@ -73,7 +74,7 @@
                 lv2:maximum 2.0 ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 7 ;
+                lv2:index 6 ;
                 lv2:symbol "WETDRY" ;
                 lv2:name "Wet/Dry Mix" ;
                 lv2:default 0.7 ;
@@ -81,7 +82,7 @@
                 lv2:maximum 1.0 ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 8 ;
+                lv2:index 7 ;
                 lv2:symbol "OUT_GAIN" ;
                 lv2:name "Output Gain" ;
                 lv2:default 1.0 ;

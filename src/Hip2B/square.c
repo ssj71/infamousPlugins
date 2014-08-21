@@ -4,8 +4,8 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<math.h>
+#include<hip2b.h>
 
-#define HIP2B_URI "http://infamousplugins.sourceforge.net/plugs.html#hip2b"
 
 #define UP      1
 #define DOWN    -1
@@ -46,19 +46,6 @@ typedef struct _SQUARE
     float *wetdry_p;
     float *outgain_p;
 }SQUARE;
-
-enum square_ports
-{
-    IN =0,
-    OUT,
-    LATENCY,
-    UPP,
-    DOWNN,
-    OCTAVE,
-    INGAIN,
-    WETDRY,
-    OUTGAIN
-};
 
 //starting again.
 //just look 1 transition ahead, keep track of space to next trans.
@@ -183,10 +170,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     if(plug->dcprevout < PRACTICALLYZERO && plug->dcprevout > -PRACTICALLYZERO  && plug->headway > HALF)
     {
         plug->pos = 0;
-        //plug->step = 0;
         plug->state = 0;
-	//plug->nextstate = 0;
-	//plug->outstate = 0;
         plug->dcprevout = 0;
         plug->dcprevin = 0;
     }
@@ -213,11 +197,7 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
      	}
         k = -k;
     }
-    //for(i=0;i<=HALF;i++)
-    //{
-    //  printf("%f ",plug->table[i]);
-    //}
-    plug->pos = 0;
+
     plug->step = 0;
     plug->state = 0;
     plug->outstate = 0;

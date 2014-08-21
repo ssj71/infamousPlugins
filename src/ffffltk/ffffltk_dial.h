@@ -79,6 +79,7 @@ class Dial : public Fl_Slider
       drawing_f = &default_bg_drawing;
       floatvalue = value();
       units[0] = 0;
+      lock2int = 0;
       
       mouseClickedY = 0;
       mouseClicked = false;
@@ -102,6 +103,7 @@ class Dial : public Fl_Slider
     void (*drawing_f)(cairo_t*,float);//function pointer to draw function
     float floatvalue;
     char units[4];
+    int lock2int;//flag to draw onlyinteger values
 
     void draw()
     {
@@ -130,7 +132,9 @@ class Dial : public Fl_Slider
 	//scale the drawing
 	cairo_scale(cr,scale,scale);
 	//call the draw function
-	float val = (value()-minimum())/(maximum()-minimum());
+	float val = value();
+	if(lock2int) val = (int)val;
+	val = (val-minimum())/(maximum()-minimum());
 	if(drawing_f) drawing_f(cr,val);
 	else default_bg_drawing(cr,val);
         
@@ -207,6 +211,7 @@ class Dial : public Fl_Slider
               if ( val < minimum() ) val = minimum();
               
               set_value( val );
+	      if(lock2int) val = (int)val;
 	      floatvalue = val;
               
               mouseClickedY = Fl::event_y();
