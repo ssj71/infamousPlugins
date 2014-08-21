@@ -164,15 +164,15 @@ void run_square(LV2_Handle handle, uint32_t nframes)
             plug->headway--;
         }
         
-        //write out the frame 
-        temp = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*plug->outstate*plug->table[plug->pos];
-        CIRCULATE(r);
-        temp *= *plug->outgain_p;
+	//dc removal (hpf)
+	temp = .999*plug->dcprevout + plug->outstate*plug->table[plug->pos] - plug->dcprevin;
+	plug->dcprevin = plug->outstate*plug->table[plug->pos];
+        plug->dcprevout = temp;
 
-        //dc removal (hpf) 
-        plug->output_p[i] = .999*plug->dcprevout + temp - plug->dcprevin;
-        plug->dcprevin = temp;
-        plug->dcprevout = plug->output_p[i];
+        //write out the frame 
+        plug->output_p[i] = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*temp;
+        CIRCULATE(r);
+        plug->output_p[i] *= *plug->outgain_p;
     }
     *plug->latency_p = HALF;
     plug->w = w;
@@ -180,15 +180,16 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     plug->c = c;
 
     //this way for dc offset reset
-/*    if(plug->dcprevout < PRACTICALLYZERO && plug->dcprevout > -PRACTICALLYZERO  && plug->headway > HALF)
+    if(plug->dcprevout < PRACTICALLYZERO && plug->dcprevout > -PRACTICALLYZERO  && plug->headway > HALF)
     {
         plug->pos = 0;
-        plug->step = 0;
+        //plug->step = 0;
         plug->state = 0;
-	plug->nextstate = 0;
+	//plug->nextstate = 0;
+	//plug->outstate = 0;
         plug->dcprevout = 0;
         plug->dcprevin = 0;
-    }*/
+    }
 }
 
 LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
