@@ -177,27 +177,27 @@ static void reel_callback(void* handle)
 	{
 	    if(reel->samples < reel->time)
 	    {
-		    float t = .06;
-		    float exp_decay = exp2(reel->curve>0?reel->curve:-reel->curve);
+		    float exp_curve = exp2(reel->curve>0?reel->curve:-reel->curve);
 
 		    if(reel->curve > 0)//logarithmic (convex)
 		    {
-			reel->angle += .06/(reel->curve)*log2(exp_decay - (exp_decay-1)*reel->samples/reel->time);
+			reel->angle += 0.06/(reel->curve)*log2((exp_curve-1)*reel->samples/reel->time + 1);
 		    }
 		    else if(reel->curve == 0)//linear
 		    {
-			reel->angle += .06*(1-reel->samples/reel->time);
+			reel->angle += 0.06*reel->samples/reel->time;
 		    }
 		    else//exponential (concave)
 		    {
-			reel->angle += .06*(exp_decay*exp2(reel->samples*reel->curve/reel->time) - 1)/(exp_decay - 1);
+			reel->angle += 0.06*(exp2(-reel->curve*reel->samples/reel->time) - 1)/(exp_curve - 1);
 		    }   
 		    reel->samples++;
 	    }
+	    else
+	     reel->angle += .06;
 	}
 	else
 	{
-	     reel->angle += .06;
 	     reel->samples = 0;
 	}
 	Fl::repeat_timeout(.06,reel_callback,handle);

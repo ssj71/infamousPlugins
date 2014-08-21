@@ -5,6 +5,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<math.h>
+#include"powerup.h"
 
 //#define CV_PORTS
 

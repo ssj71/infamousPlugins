@@ -24,13 +24,13 @@ fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
 # config libraries
 
 add_library(${PLUGIN} SHARED
-  powercut.c
-  powercut.h
+  powerup.c
+  powerup.h
 )
 
 add_library(${PLUGIN}_ui SHARED
-  powercut.h
-  powercut_ui_main.cxx
+  powerup.h
+  powerup_ui_main.cxx
   ${${PLUGIN}_ui_FLTK_UI_SRCS}
 )
 
