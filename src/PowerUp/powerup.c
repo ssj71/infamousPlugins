@@ -155,6 +155,7 @@ void run_powerup(LV2_Handle handle, uint32_t nframes)
     }
     else
     {
+	plug->w &= plug->bufmask;
 	//if aborting a startup
 	if(plug->dcprevout != 0)
 	{
