@@ -31,7 +31,6 @@ add_library(${PLUGIN} SHARED
 add_library(${PLUGIN}_ui SHARED
   powercut.h
   powercut_ui_main.cxx
-#  reel.h
   ${${PLUGIN}_ui_FLTK_UI_SRCS}
 )
 

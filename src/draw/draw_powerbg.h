@@ -10,9 +10,9 @@ cairo_matrix_t matrix;
 
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_linear(381.83768, 660.42303, 381.83768, 235.14418);
-cairo_pattern_add_color_stop_rgba(pattern, 0,0,0,0,0.639216);
-cairo_pattern_add_color_stop_rgba(pattern, 0.5,0.396078,0.396078,0.396078,0.639216);
-cairo_pattern_add_color_stop_rgba(pattern, 1,0,0,0,0.639216);
+cairo_pattern_add_color_stop_rgba(pattern, 0,0.3,0.3,0.3,1);
+cairo_pattern_add_color_stop_rgba(pattern, 0.7,0.6,0.6,0.6,1);
+cairo_pattern_add_color_stop_rgba(pattern, 1,0.3,0.3,0.3,1);
 cairo_matrix_init(&matrix, 1.173365,0,0,1.142857,68.571426,221.637735);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_pattern_set_extend(pattern, CAIRO_EXTEND_PAD);
