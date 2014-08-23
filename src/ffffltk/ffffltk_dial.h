@@ -215,7 +215,10 @@ class Dial : public Fl_Slider
 	      floatvalue = val;
               
               mouseClickedY = Fl::event_y();
-	      sprintf(lable,"%1.3f%s",val,units);
+	      if(lock2int) 
+	          sprintf(lable,"%1.0f%s",val,units);
+	      else
+	          sprintf(lable,"%1.3f%s",val,units);
 	      Fl_Widget::copy_label(lable);
               redraw();
               do_callback(); // makes FLTK call "extra" code entered in FLUID
