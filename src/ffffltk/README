@@ -1,0 +1,63 @@
+This is the FFFFLTK README
+
+FFFFLTK (forked forked forked fast and light tool kit) is a fork of AVTK which is (kind of) a fork of NTK (really its just a collection of NTK widgets) which is a fork of FLTK. The purpose of FFFFLTK is to allow users to generate widgets in inkscapeor any svg with as little coding as possible. This is accomplished through a program called svg2cairo. You can find a tutorial on drawing widgets in inkscape in my blogpost at http://mountainbikesandtrombones.blogspot.com/2014/07/creating-gui-in-inkscape.html If you are uninterested in inkscape and SVG files, you may find these widgets useful for drawing customized looking UIs directly in Cairo.
+
+Each of these widgets uses a function pointer called the draw function which gets assigned the the public member variable 'drawing_f'. This function is accompanied by 2 other member variables drawing_w and drawing_h which describe the width and height of the svg drawing. Once these 3 variables are set everything else is taken care of. The function will be called when it needs to be drawn and will be scaled and placed properly. On widgets that do not change there is actually no extra coding necessary outside of FLUID.
+
+Most useful widgets do change. The best example is a dial. As the dial value changes the dial should move to reflect the current value. Therefore many of the drawing functions require an argument to reflect the current state. Each widget is detailed below and examples are given throughout this repository.
+
+The widgets are all in the ffffltk namespace and are entirely contained as headers for easy addition to existing projects. Simply add ffffltk.h and then start using the classes decribed below. The widgets can be more or less treated as the built in widgets that come with FLTK, so you can set the size, step, tooltip etc all through FLUID or programmatically. The exception is labels aren't supported in any ffffltk widgets. The labels are frequently used to show values, but it is expected you will label your widgets using fancy cairo pictures.
+
+=====WIDGETS======
+each widget is described below with any members ffffltk adds over the fltk version.
+
+ffffltk::Aspect_Group
+int drawing_w;
+int drawing_h;
+void* (drawing_f)(cairo_t*);
+//notes: this was made for widgets/groups that should maintain aspect ratio. If only a background is used with stretch set to false the widgets on top of the background will be repositioned as the window changes shape. This widget is to correct that behavior. Look at stuck for an example of an aspect group and powercut for one that does change aspect ratio. You'll see when using much text its easier to just use an aspect group.
+
+ffffltk::Background
+int drawing_w;
+int drawing_h;
+void* (drawing_f)(cairo_t*);
+bool stretch; // flag that indicates if aspect ratio can be changed default is true (set to false for text or images).
+//notes: this is used for decorations or backgrounds. See also aspect group.
+
+ffffltk::Button
+int drawing_w;
+int drawing_h;
+void* (drawing_f)(cairo_t*,float);//2nd arg is a float 0 or 1 corresponding to the value of the button
+float floatvalue; //public float used to pass by reference into LV2 plugins (the main reason I did this project)
+//notes: for a toggle button after creating an instance of a Button call type(FL_TOGGLE_BUTTON);
+
+ffffltk::Dial
+int drawing_w;
+int drawing_h;
+void* (drawing_f)(cairo_t*,float);//2nd arg is a float [0,1] corresponding from min (0) to max (1)
+float floatvalue; //public float used to pass by reference into LV2 plugins (the main reason I did this project)
+char units[4]; //string appended to current value label to show what units are being displayed
+bool lock2int; //flag to limit displayed value and float val to appear as integers (though the actual value may not be) see the octave dial in hip2b for an example.
+//notes: this was the first widget I implemented. I also use it for sliders.
+
+fffltk::Display
+int drawing_w;
+int drawing_h;
+void *(drawing_f)(cairo_t*, char);// 2nd arg is character to display
+int nchars; // number of characters in the display
+bool periods; //flag whether periods are treaded as their own character
+//notes: this function was intended for skuomorphic 7/14/16 segment display widgets, but there is no reason it can't be used for any stylized text. You might find it's easier to use than saving every piece of text as separate backgrounds (I haven't tried). Because of its design intent (n segment displays) it requires apriori knowledge of the number of characters in nchars. For the same reason the periods member is provided. If periods is false it will skip any characters in the string of value '.' and instead pass into the previous character the MSB high. This is because the period on n segment displays is actually printed on the same unit as the character before. The text displayed is the value of the widget label, truncated to nchars, left justified, with each letter given an equal amount of space, 
+
+ffffltk::Scope
+int drawing_w;
+int drawing_h;
+void *(drawing_f)(cairo_t*, float* data, int nframes, int start); //2nd arg is # samples added since last call, 3rd arg is start point of circular buffer
+float data[2048];
+void push_val(float val); //adds new value to data[]
+float max_val; //maximum number that fits on display
+float min_val; //minimum number that fits on display
+bool average; //flag to filter data so only 1 new value draw is called.
+//notes: Not yet implemented. This is intended to be a generic scope widget for drawing moving waveforms. It tracks the data and calls the draw function at 15 hz passing information on how many new data points have been added since the last time draw was called. This allows you to have flexibility in the display and also keeps consitency when data is added at different rates.
+
+======TODO=======
+I'm pretty sure that the efficiency could be improved. I frequently end up drawing the whole thing again when probably complicated sections could be saved and set again as the source surface. I'm no cairo master (which is why I went for converting from svg files).

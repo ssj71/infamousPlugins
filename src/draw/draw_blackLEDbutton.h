@@ -2,7 +2,7 @@
 #define DRAW_BLACKLEDBUTTON_H
 inline int cairo_code_draw_blackLEDbutton_get_width() { return 30; }
 inline int cairo_code_draw_blackLEDbutton_get_height() { return 45; }
-inline void cairo_code_draw_blackLEDbutton_render(cairo_t *cr) {
+inline void cairo_code_draw_blackLEDbutton_render(cairo_t *cr, int val) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -116,6 +116,8 @@ cairo_matrix_init(&matrix, 1,0,0,1,-728.0625,-186.71875);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
+if(val)
+{
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_linear(128.75, 337.91769, 128.75, 355.34933);
 cairo_pattern_add_color_stop_rgba(pattern, 0,1,0,0,0);
@@ -142,6 +144,7 @@ cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
+}
  /********************/
 }
 #endif
