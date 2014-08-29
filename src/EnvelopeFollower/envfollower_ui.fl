@@ -1,0 +1,264 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {.h} 
+code_name {.cxx}
+class EnvFollowerUI {open
+} {
+  Function {show()} {open
+  } {
+    Fl_Window ui {
+      label {the infamous envelope follower} open
+      xywh {812 415 603 420} type Double box UP_BOX resizable
+      code0 {\#include"ffffltk.h"}
+      code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
+      code2 {using namespace ffffltk;}
+      code3 {o->show();} visible
+    } {
+      Fl_Box logo {
+        xywh {23 1 15 31}
+        code0 {\#include"draw_infamousLogoTiny.h"}
+        code1 {o->drawing_h = cairo_code_draw_infamousLogoTiny_get_height(); o->drawing_w = cairo_code_draw_infamousLogoTiny_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoTiny_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box bg {
+        xywh {0 0 603 420}
+        code0 {\#include"envfollower.h"}
+        code1 {\#include"draw_envfollowerbg.h"}
+        code3 {o->drawing_h = cairo_code_draw_envfollowerbg_get_height(); o->drawing_w = cairo_code_draw_envfollowerbg_get_width(); o->drawing_f = &cairo_code_draw_envfollowerbg_render;}
+        class Background
+      }
+      Fl_Box title {
+        xywh {83 0 520 18}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envTitleLabel_get_height(); o->drawing_w = cairo_code_draw_envTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_envTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box prmslab {
+        xywh {36 250 7 156}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envPeakrmsLabel_get_height(); o->drawing_w = cairo_code_draw_envPeakrmsLabel_get_width(); o->drawing_f = &cairo_code_draw_envPeakrmsLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box alab {
+        xywh {76 296 7 63}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envAttackLabel_get_height(); o->drawing_w = cairo_code_draw_envAttackLabel_get_width(); o->drawing_f = &cairo_code_draw_envAttackLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box dlab {
+        xywh {116 302 7 52}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envDecayLabel_get_height(); o->drawing_w = cairo_code_draw_envDecayLabel_get_width(); o->drawing_f = &cairo_code_draw_envDecayLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box threshlab {
+        xywh {266 284 7 87}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envThresholdLabel_get_height(); o->drawing_w = cairo_code_draw_envThresholdLabel_get_width(); o->drawing_f = &cairo_code_draw_envThresholdLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box satlab {
+        xywh {306 280 7 97}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envSaturationLabel_get_height(); o->drawing_w = cairo_code_draw_envSaturationLabel_get_width(); o->drawing_f = &cairo_code_draw_envSaturationLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box minlab {
+        xywh {360 295 7 65}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envMinimumLabel_get_height(); o->drawing_w = cairo_code_draw_envMinimumLabel_get_width(); o->drawing_f = &cairo_code_draw_envMinimumLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box maxlab {
+        xywh {400 292 7 73}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envMaximumLabel_get_height(); o->drawing_w = cairo_code_draw_envMaximumLabel_get_width(); o->drawing_f = &cairo_code_draw_envMaximumLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box chanlab {
+        xywh {550 296 7 65}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envChannelLabel_get_height(); o->drawing_w = cairo_code_draw_envChannelLabel_get_width(); o->drawing_f = &cairo_code_draw_envChannelLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box cclab {
+        xywh {590 296 7 65}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envControlLabel_get_height(); o->drawing_w = cairo_code_draw_envControlLabel_get_width(); o->drawing_f = &cairo_code_draw_envControlLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box curlab1 {
+        xywh {151 352 73 7}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envCurrentLabel_get_height(); o->drawing_w = cairo_code_draw_envCurrentLabel_get_width(); o->drawing_f = &cairo_code_draw_envCurrentLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box curlab2 {
+        xywh {417 388 73 7}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envCurrentLabel_get_height(); o->drawing_w = cairo_code_draw_envCurrentLabel_get_width(); o->drawing_f = &cairo_code_draw_envCurrentLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box speedlab {
+        xywh {29 230 72 12}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envSpeedLabel_get_height(); o->drawing_w = cairo_code_draw_envSpeedLabel_get_width(); o->drawing_f = &cairo_code_draw_envSpeedLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box inlab {
+        xywh {199 230 59 12}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envInLabel_get_height(); o->drawing_w = cairo_code_draw_envInLabel_get_width(); o->drawing_f = &cairo_code_draw_envInLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box outlab {
+        xywh {373 230 86 12}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envOutLabel_get_height(); o->drawing_w = cairo_code_draw_envOutLabel_get_width(); o->drawing_f = &cairo_code_draw_envOutLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box midilab {
+        xywh {538 230 38 9}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envMidiLabel_get_height(); o->drawing_w = cairo_code_draw_envMidiLabel_get_width(); o->drawing_f = &cairo_code_draw_envMidiLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box revlab {
+        xywh {417 312 74 7}
+        code0 {\#include"draw_envLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_envReverseLabel_get_height(); o->drawing_w = cairo_code_draw_envReverseLabel_get_width(); o->drawing_f = &cairo_code_draw_envReverseLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Button reverse {
+        callback {write_function(controller,REVERSE,sizeof(float),0,&reverse->floatvalue);} selected
+        tooltip {reverse output} xywh {439 260 30 45}
+        code1 {\#include"draw_blackLEDbutton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_blackLEDbutton_get_height(); o->drawing_w = cairo_code_draw_blackLEDbutton_get_width(); o->drawing_f = &cairo_code_draw_blackLEDbutton_render;}
+        class Button
+      }
+      Fl_Dial peakrms {
+        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
+        tooltip {envelope type} xywh {5 250 38 156} step 0.01
+        code1 {\#include"draw_ivorySlider.h"}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        class Dial
+      }
+      Fl_Dial attack {
+        callback {write_function(controller,ATIME,sizeof(float),0,&attack->floatvalue);}
+        tooltip {attack time} xywh {45 250 38 156} minimum 0.001 maximum 15 step 0.1 value 0.01
+        code1 {\#include"draw_ivorySlider.h"}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        code3 {sprintf(o->units,"s");}
+        class Dial
+      }
+      Fl_Dial decay {
+        callback {write_function(controller,DTIME,sizeof(float),0,&decay->floatvalue);}
+        tooltip {decay time} xywh {85 250 38 156} minimum 0.001 maximum 15 step 0.1 value 0.01
+        code1 {\#include"draw_ivorySlider.h"}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        code3 {sprintf(o->units,"s");}
+        class Dial
+      }
+      Fl_Dial threshold {
+        callback {write_function(controller,THRESHOLD,sizeof(float),0,&threshold->floatvalue);}
+        tooltip {input threshold value} xywh {235 250 38 156} step 0.01
+        code1 {\#include"draw_ivorySlider.h"}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        class Dial
+      }
+      Fl_Dial saturation {
+        callback {write_function(controller,SATURATION,sizeof(float),0,&saturation->floatvalue);}
+        tooltip {input saturation value} xywh {275 250 38 156} maximum 2 step 0.02
+        code1 {\#include"draw_ivorySlider.h"}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        class Dial
+      }
+      Fl_Dial min {
+        callback {write_function(controller,MINV,sizeof(float),0,&min->floatvalue);}
+        tooltip {MIDI output minimum value} xywh {330 250 38 156} maximum 126 step 1
+        code1 {\#include"draw_ivorySlider.h"}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        code3 {o->lock2int = true;}
+        class Dial
+      }
+      Fl_Dial max {
+        callback {write_function(controller,MAXV,sizeof(float),0,&max->floatvalue);}
+        tooltip {MIDI output maximum value} xywh {370 250 38 156} minimum 1 maximum 127 step 1 value 127
+        code1 {\#include"draw_ivorySlider.h"}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        code3 {o->lock2int = true;}
+        class Dial
+      }
+      Fl_Dial channel {
+        callback {write_function(controller,CHANNEL,sizeof(float),0,&channel->floatvalue);}
+        tooltip {MIDI output channel} xywh {519 250 38 156} minimum 1 maximum 16 step 0.2 value 1
+        code1 {\#include"draw_ivorySlider.h"}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        code3 {o->lock2int = true;}
+        class Dial
+      }
+      Fl_Dial cc {
+        callback {write_function(controller,CONTROL_NO,sizeof(float),0,&cc->floatvalue);}
+        tooltip {MIDI output control number} xywh {559 250 38 156} maximum 127 step 1
+        code1 {\#include"draw_ivorySlider.h"}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        code3 {o->lock2int = true;}
+        class Dial
+      }
+      Fl_Box inLCD {
+        tooltip {current input value} xywh {143 298 89 45}
+        code0 {\#include"draw_16seg.h"}
+        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_blue16seg_render;}
+        code3 {o->nchars = 3; o->periods = false;}
+        class AsciiDisplay
+      }
+      Fl_Box outLCD {
+        tooltip {current output value} xywh {409 335 89 45}
+        code0 {\#include"draw_16seg.h"}
+        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_green16seg_render;}
+        code3 {o->nchars = 3; o->periods = false;}
+        class AsciiDisplay
+      }
+      Fl_Box inScope {
+        tooltip {input and output graph} xywh {1 14 600 200}
+        code0 {\#include"draw_envScopes.h"}
+        code1 {o->drawing_h = cairo_code_draw_envScope_get_height(); o->drawing_w = cairo_code_draw_envScope_get_width(); o->drawing_f = &cairo_code_draw_blue_envScope_render;}
+        class Scope
+      }
+      Fl_Box outScope {
+        tooltip {input and output graph} xywh {1 14 600 200}
+        code0 {\#include"draw_envScopes.h"}
+        code1 {o->drawing_h = cairo_code_draw_envScope_get_height(); o->drawing_w = cairo_code_draw_envScope_get_width(); o->drawing_f = &cairo_code_draw_green_envScope_render;}
+        class Scope
+      }
+    }
+  }
+  decl {LV2UI_Write_Function write_function;} {public local
+  }
+  decl {LV2UI_Controller controller;} {public local
+  }
+  Function {idle()} {open return_type void
+  } {
+    code {Fl::check();
+Fl::flush();} {}
+  }
+} 

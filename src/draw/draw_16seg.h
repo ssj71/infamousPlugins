@@ -1,5 +1,6 @@
 #ifndef DRAW_BLUE16SEG_H
 #define DRAW_BLUE16SEG_H
+#include"blur.h"
 inline int cairo_code_draw_16seg_get_width() { return 30; }
 inline int cairo_code_draw_16seg_get_height() { return 45; }
 inline short char2seg(char c);
@@ -85,7 +86,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -102,7 +103,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -119,7 +120,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -139,7 +140,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -160,7 +161,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -181,7 +182,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -198,7 +199,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -215,7 +216,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -232,7 +233,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -253,7 +254,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -270,7 +271,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -287,7 +288,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -304,7 +305,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -321,7 +322,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -342,7 +343,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -363,7 +364,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(rd,gb,bd,1);
+pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -754,8 +755,8 @@ cairo_surface_destroy(temp_surface);
 cairo_destroy(cr);
 }
 
-inline void cairo_code_draw_blue16seg_render(cairo_t *cr, char num){cairo_code_draw_blue16seg_render(cr, num, 4);}
-inline void cairo_code_draw_green16seg_render(cairo_t *cr, char num){cairo_code_draw_blue16seg_render(cr, num, 3);}
+inline void cairo_code_draw_blue16seg_render(cairo_t *cr, char num){cairo_code_draw_16seg_render(cr, num, 4);}
+inline void cairo_code_draw_green16seg_render(cairo_t *cr, char num){cairo_code_draw_16seg_render(cr, num, 3);}
 
 inline short char2seg(char c){
 /* this function is for converting to a 16 bit value where each bit corresponds to a segment of the LCD character. The LCD sements are indexed from MSB top right, going left then down. The period will be an extra argument. The bits are (0 is LSB, 15 MSB)

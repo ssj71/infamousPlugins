@@ -29,7 +29,7 @@
 #include <string>
 
 //avtk drawing method (adapted)
-static void default_display_drawing(cairo_t *cr)
+static void default_display_drawing(cairo_t *cr, char c)
 {
     cairo_set_line_width(cr, 1.5);
         
@@ -87,10 +87,10 @@ static void default_display_drawing(cairo_t *cr)
 namespace ffffltk
 {
 
-class Display: public Fl_Widget
+class AsciiDisplay: public Fl_Widget
 {
   public:
-    Display(int _x, int _y, int _w, int _h, const char *_label = ""):
+    AsciiDisplay(int _x, int _y, int _w, int _h, const char *_label = ""):
         Fl_Widget(_x, _y, _w, _h, _label)
     {
       x = _x;
@@ -98,21 +98,21 @@ class Display: public Fl_Widget
       w = _w;
       h = _h;
       
-      label = _label;
+      //label = _label;
 
       drawing_w = 100;
       drawing_h = 100;
-      drawing_f = &default_bg_drawing;
+      drawing_f = &default_display_drawing;
       
       nchars = 1;
       periods = true;
     }
     int x, y, w, h;
-    const char* label;
+    //const char* label;
 
     int drawing_w;
     int drawing_h;
-    void (*drawing_f)(cairo_t*);//pointer to draw function
+    void (*drawing_f)(cairo_t*,char);//pointer to draw function
     int nchars;
     bool periods;
     
@@ -148,7 +148,7 @@ class Display: public Fl_Widget
 	//scale the drawing
 	cairo_scale(cr,scalex,scaley);
 	//call the draw function for each character
-	char* str = label();
+	const char* str = label();
 	char c;
 	for (int i=0; i<nchars; i++)
 	{
@@ -161,8 +161,8 @@ class Display: public Fl_Widget
 	      i++;
 	    }
 	    cairo_translate(cr,i*offset,0);
-	    if(drawing_f) drawing_f(cr);
-	    else default_display_drawing(cr);
+	    if(drawing_f) drawing_f(cr,c);
+	    else default_display_drawing(cr,c);
 	  }
 	}
 

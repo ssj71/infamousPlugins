@@ -153,7 +153,7 @@ lv2:symbol "Control_Signal" .
                 lv2:portProperty lv2:integer ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
-                lv2:maximum 127.0 ;
+                lv2:maximum 126.0 ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -162,7 +162,7 @@ lv2:symbol "Control_Signal" .
                 lv2:name "MIDI Maximum Value" ;
                 lv2:portProperty lv2:integer ;
                 lv2:default 127.0 ;
-                lv2:minimum 0.0 ;
+                lv2:minimum 1.0 ;
                 lv2:maximum 127.0 ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
         ], [

@@ -30,18 +30,18 @@
 #include <string>
 
 //avtk drawing method (adapted)
-static void default_scope_drawing(cairo_t *cr,float data[], int start)
+static void default_scope_drawing(cairo_t *cr,float *data,unsigned short start)
 {
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     cairo_set_line_width(cr,1);
     cairo_set_miter_limit(cr,4);
     cairo_set_source_rgb(cr,0,1,0);
-    cairo_move_to(100,100*data[start];
     cairo_new_path(cr);
 
+    cairo_move_to(cr,100,100*data[start]);
     for (int i=1;i<100;i++)
     {
-        cairo_line_to(cr,100-i,100*data[start-i]);
+        cairo_line_to(cr,100-i,100*data[(start-i)&0x07FF]);
     }
     cairo_stroke(cr);
 };
@@ -84,7 +84,7 @@ class Scope: public Fl_Widget
 
     int drawing_w;
     int drawing_h;
-    void (*drawing_f)(cairo_t*,float, int);//pointer to draw function
+    void (*drawing_f)(cairo_t*,float*, unsigned short);//pointer to draw function
 
     float data[2048];
     int min_val;
