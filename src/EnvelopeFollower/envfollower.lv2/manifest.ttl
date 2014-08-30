@@ -1,7 +1,14 @@
 @prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
 <http://infamousplugins.sourceforge.net/plugs.html#envfollower>
-        a lv2:Plugin, lv2:EnvelopePlugin ;
-        lv2:binary <envfollower.so> ;
-        rdfs:seeAlso <envfollower.ttl> .
+    a lv2:Plugin, lv2:EnvelopePlugin ;
+    lv2:binary <envfollower.so> ;
+    rdfs:seeAlso <envfollower.ttl> .
+
+<http://infamousplugins.sourceforge.net/plugs.html#envfollower_ui>
+    a ui:X11UI ;
+    ui:binary <envfollower_ui.so> ;
+    lv2:extensionData ui:idle;
+    lv2:optionalFeature ui:noUserResize .

@@ -4,13 +4,14 @@
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix lv2:     <http://lv2plug.in/ns/lv2core#> .
-@prefix lv2ui:   <http://lv2plug.in/ns/extensions/ui#> .
 @prefix pset: <http://lv2plug.in/ns/ext/presets#> .
 @prefix lv2atom: <http://lv2plug.in/ns/ext/atom#> .
 @prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
 @prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
 @prefix param: <http://lv2plug.in/ns/ext/parameters#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
 <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio>
 a param:ControlGroup ;
@@ -38,7 +39,7 @@ lv2:symbol "Control_Signal" .
         ] ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
-
+        ui:ui <http://infamousplugins.sourceforge.net/plugs.html#envfollower_ui> ;
 
         lv2:port [
                 a lv2:InputPort, lv2:AudioPort ;
