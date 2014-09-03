@@ -140,7 +140,7 @@ class Scope: public Fl_Widget
             }
             else
             {
-            scaley = scalex;
+                scaley = scalex;
                 shifty = h - scaley*drawing_h;
             }
         }

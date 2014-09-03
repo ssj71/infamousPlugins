@@ -8,7 +8,7 @@ class EnvFollowerUI {open
   } {
     Fl_Window ui {
       label {the infamous envelope follower} open
-      xywh {812 415 603 420} type Double box UP_BOX resizable
+      xywh {814 415 603 420} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -148,7 +148,7 @@ class EnvFollowerUI {open
         class Background
       }
       Fl_Button reverse {
-        callback {write_function(controller,REVERSE,sizeof(float),0,&reverse->floatvalue);} selected
+        callback {write_function(controller,REVERSE,sizeof(float),0,&reverse->floatvalue);}
         tooltip {reverse output} xywh {439 260 30 45}
         code1 {\#include"draw_blackLEDbutton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -231,7 +231,7 @@ class EnvFollowerUI {open
         code3 {o->nchars = 3; o->periods = false;}
         class AsciiDisplay
       }
-      Fl_Box outLCD {
+      Fl_Box outLCD {selected
         tooltip {current output value} xywh {409 335 89 45}
         code0 {\#include"draw_16seg.h"}
         code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_green16seg_render;}

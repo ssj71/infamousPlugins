@@ -124,48 +124,72 @@ class AsciiDisplay: public Fl_Widget
         
         cairo_save( cr );
 
-	//calcluate scale and centering
-	double scalex,
-	scaley,
-	shiftx=0,
-	shifty=0,
-	offset = 0;//distance between characters
-	scalex = w/(double)(drawing_w*nchars);
-	scaley = h/(double)drawing_h;
-	if(scalex > scaley)
-	{
-	    scalex = scaley;
-	    shiftx = (w - scalex*drawing_w)/2.f;
-	}
-	else
-	{
-	    scaley = scalex;
-	    shifty = h - scaley*drawing_h;
-	}
-	offset = scalex*drawing_w;
-	//move to position in the window
-	cairo_translate(cr,x+shiftx,y+shifty);
-	//scale the drawing
-	cairo_scale(cr,scalex,scaley);
-	//call the draw function for each character
-	const char* str = label();
-	char c;
-	for (int i=0; i<nchars; i++)
-	{
-	  c = str[i];
-	  if(c ==0) i=nchars;
-	  else{
-	    if(!periods && str[i+1] == '.')
-	    {
-	      c+=128;//add period to digit
-	      i++;
-	    }
-	    cairo_translate(cr,i*offset,0);
-	    if(drawing_f) drawing_f(cr,c);
-	    else default_display_drawing(cr,c);
-	  }
-	}
+        //calcluate scale and centering
+        double scalex,
+        scaley,
+        shiftx=0,
+        shifty=0,
+        offset = 0;//distance between characters
+        scalex = w/(double)(drawing_w);
+        //scalex = w/(double)(drawing_w*nchars);
+        scaley = h/(double)drawing_h;
+        if(scalex > scaley)
+        {
+            scalex = scaley;
+            //shiftx = (w - scalex*drawing_w*nchars)/2.f;
+            shiftx = (w - scalex*drawing_w)/2.f;
+        }
+        else
+        {
+            scaley = scalex;
+            shifty = h - scaley*drawing_h;
+        }
+        offset = scalex*drawing_w;
 
+        //each char is printed on own surface, then they're combined
+        //cairo_surface_t *temp_surface;
+        //cairo_t *old_cr = cr;
+
+        //call the draw function for each character
+        const char* str = label();
+        char c;
+        for (int i=0; i<nchars; i++)
+        {
+          c = str[i];
+          if(c == 0)
+          {
+              //draw blanks
+              i=nchars;
+          }
+          else
+          {
+            if(!periods && str[i+1] == '.')
+            {
+              c+=128;//add period to digit
+              i++;
+            }
+            //new surface
+            //temp_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,w,h);
+            //cr = cairo_create(temp_surface);
+
+            //move
+            //cairo_translate(cr,x+shiftx+i*offset,y+shifty);
+            cairo_translate(cr,x+shiftx,y+shifty);
+            //cairo_translate(cr,i*offset,0);
+
+            //scale
+            cairo_scale(cr,scalex,scaley);
+            if(drawing_f) drawing_f(cr,c);
+            else default_display_drawing(cr,c);
+            //combine surfaces, cleanup
+            //cairo_set_source_surface(old_cr,temp_surface,0,0);
+            //cairo_paint(old_cr);
+            //cairo_surface_destroy(temp_surface);
+            //cairo_destroy(cr);
+          }
+        }
+
+        //cairo_restore( old_cr );
         cairo_restore( cr );
       }
     }
