@@ -17,19 +17,19 @@ switch(color)
 {
   case 0://red
     r = 1; g = 0; b = 0;
-    rd = .3333; g = 0; b = 0;
+    rd = .3333; gd = 0; bd = 0;
     break;
   case 3://green
     r = 0; g = 1; b = 0;
-    rd = 0; g = .3333; b = 0;
+    rd = 0; gd = .3333; bd = 0;
     break;
   case 4://blue
     r = 0; g = 0; b = 1;
-    rd = 0; g = 0; b = .3333;
+    rd = 0; gd = 0; bd = .3333;
     break;
   default://red
     r = 1; g = 0; b = 0;
-    rd = .3333; g = 0; b = 0;
+    rd = .3333; gd = 0; bd = 0;
     break;
 }
 
@@ -755,8 +755,9 @@ cairo_surface_destroy(temp_surface);
 cairo_destroy(cr);
 }
 
-inline void cairo_code_draw_blue16seg_render(cairo_t *cr, char num){cairo_code_draw_16seg_render(cr, num, 4);}
+inline void cairo_code_draw_red16seg_render(cairo_t *cr, char num){cairo_code_draw_16seg_render(cr, num, 0);}
 inline void cairo_code_draw_green16seg_render(cairo_t *cr, char num){cairo_code_draw_16seg_render(cr, num, 3);}
+inline void cairo_code_draw_blue16seg_render(cairo_t *cr, char num){cairo_code_draw_16seg_render(cr, num, 4);}
 
 inline short char2seg(char c){
 /* this function is for converting to a 16 bit value where each bit corresponds to a segment of the LCD character. The LCD sements are indexed from MSB top right, going left then down. The period will be an extra argument. The bits are (0 is LSB, 15 MSB)

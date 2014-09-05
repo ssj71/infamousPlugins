@@ -153,7 +153,8 @@ class AsciiDisplay: public Fl_Widget
         //call the draw function for each character
         const char* str = label();
         char c;
-        for (int i=0; i<nchars; i++)
+        //for (int i=0; i<nchars; i++)
+        int i=0;
         {
           c = str[i];
           if(c == 0)
@@ -203,6 +204,20 @@ class AsciiDisplay: public Fl_Widget
       h = H;
       redraw();
     }
+    /*
+    int handle(int event)
+    {
+      return 0;
+      
+      switch(event)
+      {
+        case FL_ENTER:
+        case FL_LEAVE:
+            return 1;
+        default:
+            return 0;
+      }
+    }*/
    /* 
     int handle(int event)
     {

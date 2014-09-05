@@ -1,9 +1,9 @@
 #ifndef DRAW_VINTAGEKNOB_H
 #define DRAW_VINTAGEKNOB_H
 #define PI 3.1415926535897932384626433832795
-inline int cairo_code_draw_vintagedial_get_width() { return 91; }
-inline int cairo_code_draw_vintagedial_get_height() { return 91; }
-inline void cairo_code_draw_vintagedial_render(cairo_t *cr, float val) {
+inline int cairo_code_draw_ivoryDial_get_width() { return 91; }
+inline int cairo_code_draw_ivoryDial_get_height() { return 91; }
+inline void cairo_code_draw_ivoryDial_render(cairo_t *cr, float val) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;

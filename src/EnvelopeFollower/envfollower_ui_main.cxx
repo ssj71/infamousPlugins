@@ -107,7 +107,7 @@ void envfollowerUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buf
 	  break;
         case CTL_OUT:
           sprintf(str,"%3.0f",val*127.0);
-          self->inLCD->copy_label(str);
+          self->outLCD->copy_label(str);
           self->outScope->push_val(val);
 	  break;
       }

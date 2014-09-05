@@ -236,6 +236,9 @@ class Dial : public Fl_Slider
           //}
           mouseClicked = false;
           return 1;
+        case FL_ENTER:
+        case FL_LEAVE:
+           return 1;
         default:
           return Fl_Widget::handle(event);
       }
