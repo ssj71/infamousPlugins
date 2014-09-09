@@ -277,23 +277,8 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     }
 
     //do last value to output ctl port, should maybe do average but meh...
-    if(plug->out <= *plug->threshold_p)
-    {
-	*plug->ctl_out_p = 0;
-    }
-    else if(plug->out >= *plug->saturation_p)
-    {
-        *plug->ctl_out_p = 1;
-    }
-    else
-    {
-        *plug->ctl_out_p = (plug->out - *plug->threshold_p)/(*plug->saturation_p  - *plug->threshold_p);
-    }
-    if(*plug->crev_p)
-    {
-        *plug->ctl_out_p = 1 - *plug->ctl_out_p;
-    }
     *plug->ctl_in_p = plug->out;
+    *plug->ctl_out_p = plug->mout/127.0;//when CV ports are supported this will show the CV value
 }
 
 
