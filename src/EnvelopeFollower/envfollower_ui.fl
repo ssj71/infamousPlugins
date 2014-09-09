@@ -233,10 +233,9 @@ class EnvFollowerUI {open
       }
       Fl_Box outLCD {selected
         tooltip {current output value} xywh {409 335 89 45}
-        #code0 {\#include"draw_16seg.h"}
-        code0 {\#include"draw_ivoryDial.h"}
+        code0 {\#include"draw_16seg.h"}
         code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_blue16seg_render;}
-        #code3 {o->nchars = 3; o->periods = false;}
+        code3 {o->nchars = 3; o->periods = false;}
         class AsciiDisplay
       }
       Fl_Box inScope {

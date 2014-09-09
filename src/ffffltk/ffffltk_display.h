@@ -122,7 +122,6 @@ class AsciiDisplay: public Fl_Widget
       {
         cairo_t *cr = Fl::cairo_cc();
         
-        cairo_save( cr );
 
         //calcluate scale and centering
         double scalex,
@@ -130,14 +129,14 @@ class AsciiDisplay: public Fl_Widget
         shiftx=0,
         shifty=0,
         offset = 0;//distance between characters
-        scalex = w/(double)(drawing_w);
-        //scalex = w/(double)(drawing_w*nchars);
+        //scalex = w/(double)(drawing_w);
+        scalex = w/(double)(drawing_w*nchars);
         scaley = h/(double)drawing_h;
         if(scalex > scaley)
         {
             scalex = scaley;
-            //shiftx = (w - scalex*drawing_w*nchars)/2.f;
-            shiftx = (w - scalex*drawing_w)/2.f;
+            shiftx = (w - scalex*drawing_w*nchars)/2.f;
+            //shiftx = (w - scalex*drawing_w)/2.f;
         }
         else
         {
@@ -153,8 +152,7 @@ class AsciiDisplay: public Fl_Widget
         //call the draw function for each character
         const char* str = label();
         char c;
-        //for (int i=0; i<nchars; i++)
-        int i=0;
+        for (int i=0; i<nchars; i++)
         {
           c = str[i];
           if(c == 0)
@@ -172,16 +170,19 @@ class AsciiDisplay: public Fl_Widget
             //new surface
             //temp_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,w,h);
             //cr = cairo_create(temp_surface);
+        
+            cairo_save( cr );
 
             //move
-            //cairo_translate(cr,x+shiftx+i*offset,y+shifty);
-            cairo_translate(cr,x+shiftx,y+shifty);
+            cairo_translate(cr,x+shiftx+i*offset,y+shifty);
+            //cairo_translate(cr,x+shiftx,y+shifty);
             //cairo_translate(cr,i*offset,0);
 
             //scale
             cairo_scale(cr,scalex,scaley);
             if(drawing_f) drawing_f(cr,c);
             else default_display_drawing(cr,c);
+            cairo_restore(cr);
             //combine surfaces, cleanup
             //cairo_set_source_surface(old_cr,temp_surface,0,0);
             //cairo_paint(old_cr);
@@ -191,7 +192,7 @@ class AsciiDisplay: public Fl_Widget
         }
 
         //cairo_restore( old_cr );
-        cairo_restore( cr );
+        //cairo_restore( cr );
       }
     }
     
