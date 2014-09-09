@@ -9,7 +9,7 @@ cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(1,1,1,1);
+pattern = cairo_pattern_create_rgba(1,1,1,.7);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -54,7 +54,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(1,1,1,1);
+pattern = cairo_pattern_create_rgba(1,1,1,.7);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -69,7 +69,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(1,1,1,1);
+pattern = cairo_pattern_create_rgba(1,1,1,.7);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
