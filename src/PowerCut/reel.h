@@ -63,7 +63,7 @@ class PowerReel: public Fl_Widget
       time = .5;
       trigger = 0;
 
-      Fl::add_timeout(.06,reel_callback,this);
+      Fl::add_timeout(.1,reel_callback,this);
     }
     bool highlight;
     int x, y, w, h;
@@ -177,27 +177,26 @@ static void reel_callback(void* handle)
 	{
 	    if(reel->samples < reel->time)
 	    {
-		    float t = .06;
 		    float exp_decay = exp2(reel->curve>0?reel->curve:-reel->curve);
 
 		    if(reel->curve > 0)//logarithmic (convex)
 		    {
-			reel->angle += .06/(reel->curve)*log2(exp_decay - (exp_decay-1)*reel->samples/reel->time);
+			reel->angle += .10/(reel->curve)*log2(exp_decay - (exp_decay-1)*reel->samples/reel->time);
 		    }
 		    else if(reel->curve == 0)//linear
 		    {
-			reel->angle += .06*(1-reel->samples/reel->time);
+			reel->angle += .10*(1-reel->samples/reel->time);
 		    }
 		    else//exponential (concave)
 		    {
-			reel->angle += .06*(exp_decay*exp2(reel->samples*reel->curve/reel->time) - 1)/(exp_decay - 1);
+			reel->angle += .10*(exp_decay*exp2(reel->samples*reel->curve/reel->time) - 1)/(exp_decay - 1);
 		    }   
 		    reel->samples++;
 	    }
 	}
 	else
 	{
-	     reel->angle += .06;
+	     reel->angle += .10;
 	     reel->samples = 0;
 	}
 	Fl::repeat_timeout(.06,reel_callback,handle);

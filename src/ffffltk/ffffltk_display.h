@@ -145,54 +145,36 @@ class AsciiDisplay: public Fl_Widget
         }
         offset = scalex*drawing_w;
 
-        //each char is printed on own surface, then they're combined
-        //cairo_surface_t *temp_surface;
-        //cairo_t *old_cr = cr;
-
         //call the draw function for each character
         const char* str = label();
         char c;
+        int j = 0;
         for (int i=0; i<nchars; i++)
         {
-          c = str[i];
+          c = str[j++];
           if(c == 0)
           {
               //draw blanks
-              i=nchars;
+              j--; 
           }
-          else
-          {
-            if(!periods && str[i+1] == '.')
-            {
+          else if(!periods && str[j] == '.')
+	  {
               c+=128;//add period to digit
-              i++;
-            }
-            //new surface
-            //temp_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,w,h);
-            //cr = cairo_create(temp_surface);
-        
-            cairo_save( cr );
-
-            //move
-            cairo_translate(cr,x+shiftx+i*offset,y+shifty);
-            //cairo_translate(cr,x+shiftx,y+shifty);
-            //cairo_translate(cr,i*offset,0);
-
-            //scale
-            cairo_scale(cr,scalex,scaley);
-            if(drawing_f) drawing_f(cr,c);
-            else default_display_drawing(cr,c);
-            cairo_restore(cr);
-            //combine surfaces, cleanup
-            //cairo_set_source_surface(old_cr,temp_surface,0,0);
-            //cairo_paint(old_cr);
-            //cairo_surface_destroy(temp_surface);
-            //cairo_destroy(cr);
+              j++;
           }
+       
+          cairo_save( cr );
+
+          //move
+          cairo_translate(cr,x+shiftx+i*offset,y+shifty);
+          //scale
+          cairo_scale(cr,scalex,scaley);
+          if(drawing_f) drawing_f(cr,c);
+          else default_display_drawing(cr,c);
+
+          cairo_restore(cr);
         }
 
-        //cairo_restore( old_cr );
-        //cairo_restore( cr );
       }
     }
     

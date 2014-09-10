@@ -181,20 +181,20 @@ static void reel_callback(void* handle)
 
 		    if(reel->curve > 0)//logarithmic (convex)
 		    {
-			reel->angle += 0.06/(reel->curve)*log2((exp_curve-1)*reel->samples/reel->time + 1);
+			reel->angle += 0.10/(reel->curve)*log2((exp_curve-1)*reel->samples/reel->time + 1);
 		    }
 		    else if(reel->curve == 0)//linear
 		    {
-			reel->angle += 0.06*reel->samples/reel->time;
+			reel->angle += 0.10*reel->samples/reel->time;
 		    }
 		    else//exponential (concave)
 		    {
-			reel->angle += 0.06*(exp2(-reel->curve*reel->samples/reel->time) - 1)/(exp_curve - 1);
+			reel->angle += 0.10*(exp2(-reel->curve*reel->samples/reel->time) - 1)/(exp_curve - 1);
 		    }   
 		    reel->samples++;
 	    }
 	    else
-	     reel->angle += .06;
+	     reel->angle += .10;
 	}
 	else
 	{

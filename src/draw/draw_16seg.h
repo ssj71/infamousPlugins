@@ -382,7 +382,7 @@ old_cr = cr;
 cr = cairo_create(temp_surface);
 
 /********dot************/
-if(num>127){
+if(num < 0){
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(r,g,b,1);
 cairo_set_source(cr, pattern);
