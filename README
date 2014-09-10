@@ -1,25 +1,59 @@
 Welcome to the INFAMOUS Plugins README
 
-Things are just firing up. So far we have exactly 7 plugins. But hey, its gettin there right?
+These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use. So far we have exactly 7 plugins. Installation is discussed first here then the plugins below.
 
+To install, fulfill the dependencies, then run the commands:
+    cd make
+    cmake ..
+    make
+    sudo make install
 
-To install, make sure you have the dependencies and then just run the script install.sh:
-    chmod 700 install.sh
-    ./install.sh
-    
-    
-This will ask for your password using su or sudo, so be prepared. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
-
+Once this is complete you can already start using the plugins in your favorite LV2 host
 
 Dependencies:
+    cmake
+    ntk
+    ntk-fluid
+    cairo
+    lv2-dev
+
+
+If you do not have ntk and ntk-fluid already installed use the commands:
+    git pull git://git.tuxfamily.org/gitroot/non/fltk.git ntk
+    cd ntk
+    ./waf configure
+    ./waf
+    sudo ./waf install
+
+If you are anti-GUI the plugins are designed to be completely functional with a host generated UI. You can build and install the plugins without GUIs. To install without GUIs, use the legacy qmake files. Make sure you have the dependencies and then just run the script install.sh:
+    chmod 700 install.sh
+    ./install.sh
+This will ask for your password using sudo, so be prepared. If you are not a sudoer, run the script with the option --no-sudo and it will use su instead.
+
+No GUI Build Dependencies:
     qmake (qt4-dev-tools package on ubuntu)
     lv2-dev
     gcc
-
-
+    
 A NOTE ABOUT CV PORTS!:
-I have commented out all the cv ports (envfollower and stuck) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they we frequently interpreted as second port of a stereo pair.
+I have commented out all the cv ports (envfollower, stuck, and the powercut/up plugins) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they we frequently interpreted as second port of a stereo pair.
 If you want to re-enable the ports, in envfollower.c and stuck.c uncomment the line "//#define CV_PORTS" (remove the "//") and in the respective .ttl files, uncomment the blocks at the bottom. If you wish to use the CV ports as audio ports (required for any host but ingen at the time of writing), open the *.ttl file for that plugin and find the line with "lv2:AudioPort ; #CvPort ;" and remove "AudioPort ; #" which will cause the port to be declared as Cv rather than audio.
+
+A NOTE TO PACKAGERS:
+Each plugin can be built individually by navigating to the directory src/$pluginName. If you are using guis you can do an out of source build by performing:
+    mkdir build
+    cd build
+    cmake ..
+    make
+    cp $plugin.so ../$plugin.lv2/
+    cp $plugin_ui.so ../$plugin_ui.lv2/
+    cd ..
+
+The plugin bundle to be packaged is the $plugin.lv2 directory. Each plugin is in a separate folder; repeat this in every plugin's subdirectory.
+
+If you wish to package the GUI-less versions, run these commands instead:
+    qmake
+    make
 
 Now lets talk about what you're installing:
 
@@ -57,11 +91,11 @@ Parameter Description:
 
 
 ==========================================
-1b. rule
+1b. infamous-rule
 
-This visulizes cell automata on a torus. Run it by opening a terminal, navigating to the utils folder and run 
+This visualizes cell automata on a torus. Run it by opening a terminal run 
 
-    ./rule <rule number> <initial condition>
+    infamous-rule <rule number> <initial condition>
     
 The least significant digit corresponds to the first harmonic
 
