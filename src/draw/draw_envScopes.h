@@ -17,7 +17,7 @@ cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-pattern = cairo_pattern_create_rgba(0,0,1,1);
+pattern = cairo_pattern_create_rgba(.3,.6,1,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -26,7 +26,7 @@ cairo_new_path(cr);
 cairo_move_to(cr,598,-183.33*data[start]+183.33);
 for(unsigned short i=1;i<596;i++)
 {
-    cairo_line_to(cr,598-i,183.33*data[(start - i)&0x7FF]);
+    cairo_line_to(cr,598-i,183.33-183.33*data[(start - i)&0x7FF]);
 }
 
 cairo_set_tolerance(cr, 0.1);
@@ -66,7 +66,7 @@ cairo_new_path(cr);
 cairo_move_to(cr,598,-183.33*data[start]+183.33);
 for(unsigned short i=1;i<596;i++)
 {
-    cairo_line_to(cr,598-i,183.33*data[(start - i)&0x7FF]/127);
+    cairo_line_to(cr,598-i,183.33-183.33*data[(start - i)&0x7FF]);
 }
 
 cairo_set_tolerance(cr, 0.1);

@@ -76,7 +76,7 @@ class Scope: public Fl_Widget
       max_val = 1;
       for(int i=0;i<2048;i++)
         data[i] = 0;
-      Fl::add_timeout(.06,scope_callback,this);
+      Fl::add_timeout(.10,scope_callback,this);
     }
     bool highlight;
     int x, y, w, h;
@@ -201,7 +201,7 @@ class Scope: public Fl_Widget
 static void scope_callback(void* handle)
 {
     Scope* scope = (Scope*)handle;
-    Fl::repeat_timeout(.06,scope_callback,handle);
+    Fl::repeat_timeout(.10,scope_callback,handle);
     if(scope->average)
     {
         scope->push_avg();
