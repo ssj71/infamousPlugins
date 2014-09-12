@@ -46,6 +46,7 @@ static LV2UI_Handle init_envfollowerUI(const struct _LV2UI_Descriptor * descript
     // set host to change size of the window
     if (resize)
     {
+      self->ui->size(400,200);//test different aspect ratios for when it will be resizable
       resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());
     }
     fl_embed( self->ui,(Window)parentXwindow);
