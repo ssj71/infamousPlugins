@@ -169,8 +169,6 @@ class Dial : public Fl_Slider
 	    char n[20];
 	    float val=0;
 	    sprintf(n,"%f",value());
-	    //currently crashes if user presses cancel :(
-	    //if(sscanf(fl_input("Enter Value:",n),"%f",&val))
 	    const char *r = fl_input("Enter Value:",n);
 	    if(r!=NULL && sscanf(r,"%f",&val))
 	    {

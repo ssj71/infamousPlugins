@@ -8,149 +8,612 @@ class CaSynthUI {open
   } {
     Fl_Window ui {
       label {the infamous cellular automaton synth} open
-      xywh {753 493 460 600} type Double box UP_BOX resizable
+      xywh {371 402 460 600} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
       code3 {o->show();} visible
     } {
       Fl_Box bg {
-        xywh {0 0 603 420}
+        xywh {0 0 460 600}
         code0 {\#include"envfollower.h"}
         code1 {\#include"draw_envfollowerbg.h"}
-        code3 {o->drawing_h = cairo_code_draw_envfollowerbg_get_height(); o->drawing_w = cairo_code_draw_envfollowerbg_get_width(); o->drawing_f = &cairo_code_draw_envfollowerbg_render;}
+        code3 {o->drawing_h = cairo_code_draw_casbg_get_height(); o->drawing_w = cairo_code_draw_casbg_get_width(); o->drawing_f = &cairo_code_draw_casbg_render;}
         class Background
       }
       Fl_Box logo {
-        xywh {23 1 15 31}
-        code0 {\#include"draw_infamousLogoTiny.h"}
-        code1 {o->drawing_h = cairo_code_draw_infamousLogoTiny_get_height(); o->drawing_w = cairo_code_draw_infamousLogoTiny_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoTiny_render;}
+        xywh {29 305 228 286}
+        code0 {\#include"draw_infamousLogoTrans.h"}
+        code1 {o->drawing_h = cairo_code_draw_infamousLogoTrans_get_height(); o->drawing_w = cairo_code_draw_infamousLogoTrans_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoTrans_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box title {
-        xywh {83 0 520 18}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envTitleLabel_get_height(); o->drawing_w = cairo_code_draw_envTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_envTitleLabel_render;}
+        xywh {302 502 131 83}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box mf {
-        xywh {86 306 7 63}
+        xywh {16 21 96 127}
         code0 {\#include"draw_casFrames.h"}
         code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
         class Background
       }
       Fl_Box cf {
-        xywh {76 296 7 63}
+        xywh {16 168 253 423}
         code0 {\#include"draw_casFrames.h"}
         code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
         class Background
       }
-      Fl_Box dlab {
-        xywh {116 302 7 52}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envDecayLabel_get_height(); o->drawing_w = cairo_code_draw_envDecayLabel_get_width(); o->drawing_f = &cairo_code_draw_envDecayLabel_render;}
+      Fl_Box of {
+        xywh {16 298 244 293}
+        code0 {\#include"draw_casFrames.h"}
+        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        class Background
+      }
+      Fl_Box hf {
+        xywh {281 130 165 70}
+        code0 {\#include"draw_casFrames.h"}
+        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        class Background
+      }
+      Fl_Box ef {
+        xywh {281 223 165 70}
+        code0 {\#include"draw_casFrames.h"}
+        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        class Background
+      }
+      Fl_Box af {
+        xywh {281 316 165 70}
+        code0 {\#include"draw_casFrames.h"}
+        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        class Background
+      }
+      Fl_Box ff {
+        xywh {281 411 165 70}
+        code0 {\#include"draw_casFrames.h"}
+        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        class Background
+      }
+      Fl_Box ml {
+        xywh {26 10 48 10}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box threshlab {
-        xywh {266 284 7 87}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envThresholdLabel_get_height(); o->drawing_w = cairo_code_draw_envThresholdLabel_get_width(); o->drawing_f = &cairo_code_draw_envThresholdLabel_render;}
+      Fl_Box cl {
+        xywh {103 20 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box satlab {
-        xywh {306 280 7 97}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envSaturationLabel_get_height(); o->drawing_w = cairo_code_draw_envSaturationLabel_get_width(); o->drawing_f = &cairo_code_draw_envSaturationLabel_render;}
+      Fl_Box ol {
+        xywh {133 50 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box minlab {
-        xywh {360 295 7 65}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envMinimumLabel_get_height(); o->drawing_w = cairo_code_draw_envMinimumLabel_get_width(); o->drawing_f = &cairo_code_draw_envMinimumLabel_render;}
+      Fl_Box pl {
+        xywh {163 80 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box maxlab {
-        xywh {400 292 7 73}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envMaximumLabel_get_height(); o->drawing_w = cairo_code_draw_envMaximumLabel_get_width(); o->drawing_f = &cairo_code_draw_envMaximumLabel_render;}
+      Fl_Box vl {
+        xywh {173 90 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box chanlab {
-        xywh {550 296 7 65}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envChannelLabel_get_height(); o->drawing_w = cairo_code_draw_envChannelLabel_get_width(); o->drawing_f = &cairo_code_draw_envChannelLabel_render;}
+      Fl_Box el {
+        xywh {143 60 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box cclab {
-        xywh {590 296 7 65}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envControlLabel_get_height(); o->drawing_w = cairo_code_draw_envControlLabel_get_width(); o->drawing_f = &cairo_code_draw_envControlLabel_render;}
+      Fl_Box hl {
+        xywh {153 70 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box curlab1 {
-        xywh {151 352 73 7}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envCurrentLabel_get_height(); o->drawing_w = cairo_code_draw_envCurrentLabel_get_width(); o->drawing_f = &cairo_code_draw_envCurrentLabel_render;}
+      Fl_Box al {
+        xywh {113 30 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box curlab2 {
-        xywh {417 388 73 7}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envCurrentLabel_get_height(); o->drawing_w = cairo_code_draw_envCurrentLabel_get_width(); o->drawing_f = &cairo_code_draw_envCurrentLabel_render;}
+      Fl_Box fl {
+        xywh {123 40 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box speedlab {
-        xywh {29 230 72 12}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envSpeedLabel_get_height(); o->drawing_w = cairo_code_draw_envSpeedLabel_get_width(); o->drawing_f = &cairo_code_draw_envSpeedLabel_render;}
+      Fl_Box chanL {
+        xywh {133 50 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box inlab {
-        xywh {199 230 59 12}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envInLabel_get_height(); o->drawing_w = cairo_code_draw_envInLabel_get_width(); o->drawing_f = &cairo_code_draw_envInLabel_render;}
+      Fl_Box gainL {
+        xywh {143 60 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box outlab {
-        xywh {373 230 86 12}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envOutLabel_get_height(); o->drawing_w = cairo_code_draw_envOutLabel_get_width(); o->drawing_f = &cairo_code_draw_envOutLabel_render;}
+      Fl_Box mwavL {
+        xywh {163 80 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box midilab {
-        xywh {538 230 38 9}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envMidiLabel_get_height(); o->drawing_w = cairo_code_draw_envMidiLabel_get_width(); o->drawing_f = &cairo_code_draw_envMidiLabel_render;}
+      Fl_Box lenL {
+        xywh {153 70 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box revlab {
-        xywh {417 312 74 7}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_envReverseLabel_get_height(); o->drawing_w = cairo_code_draw_envReverseLabel_get_width(); o->drawing_f = &cairo_code_draw_envReverseLabel_render;}
+      Fl_Box hwavL {
+        xywh {163 80 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Button reverse {
-        callback {write_function(controller,REVERSE,sizeof(float),0,&reverse->floatvalue);}
-        tooltip {reverse output} xywh {439 260 30 45}
-        code1 {\#include"draw_blackLEDbutton.h"}
+      Fl_Box nharmL {
+        xywh {173 90 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box widthL {
+        xywh {183 100 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box aL {
+        xywh {193 110 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box dL {
+        xywh {203 120 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box bL {
+        xywh {213 130 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box swL {
+        xywh {223 140 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box suL {
+        xywh {233 150 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box rL {
+        xywh {243 160 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box amwavL {
+        xywh {253 170 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box amgainL {
+        xywh {263 180 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box amfreqL {
+        xywh {273 190 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box fmwavL {
+        xywh {283 200 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box fmgainL {
+        xywh {293 210 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box fmfreqL {
+        xywh {303 220 520 18}
+        code0 {\#include"draw_casLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Button rule7 {
+        callback {unsigned char tmp = rule;
+if(rule7->value())
+  tmp |= 0x80;
+else
+  tmp &= 0x80;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);}
+        tooltip {reverse output} xywh {449 270 30 45}
+        code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_blackLEDbutton_get_height(); o->drawing_w = cairo_code_draw_blackLEDbutton_get_width(); o->drawing_f = &cairo_code_draw_blackLEDbutton_render;}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button rule6 {
+        callback {unsigned char tmp = rule;
+if(rule6->value())
+  tmp |= 0x40;
+else
+  tmp &= 0x40;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);}
+        tooltip {reverse output} xywh {459 280 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button rule5 {
+        callback {unsigned char tmp = rule;
+if(rule5->value())
+  tmp |= 0x20;
+else
+  tmp &= 0x20;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);} selected
+        tooltip {reverse output} xywh {469 290 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button rule4 {
+        callback {unsigned char tmp = rule;
+if(rule4->value())
+  tmp |= 0x10;
+else
+  tmp &= 0x10;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);}
+        tooltip {reverse output} xywh {479 300 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button rule3 {
+        callback {unsigned char tmp = rule;
+if(rule3->value())
+  tmp |= 0x08;
+else
+  tmp &= 0x08;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);}
+        tooltip {reverse output} xywh {489 310 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button rule2 {
+        callback {unsigned char tmp = rule;
+if(rule2->value())
+  tmp |= 0x04;
+else
+  tmp &= 0x04;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);}
+        tooltip {reverse output} xywh {499 320 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button rule1 {
+        callback {unsigned char tmp = rule;
+if(rule1->value())
+  tmp |= 0x02;
+else
+  tmp &= 0x02;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);}
+        tooltip {reverse output} xywh {509 330 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button rule0 {
+        callback {unsigned char tmp = rule;
+if(rule0->value())
+  tmp |= 0x01;
+else
+  tmp &= 0x01;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);}
+        tooltip {reverse output} xywh {519 340 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init15 {
+        callback {unsigned short tmp = initial_condition;
+if(init15->value())
+  tmp |= 0x8000;
+else
+  tmp &= 0x8000;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {459 280 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init14 {
+        callback {unsigned short tmp = initial_condition;
+if(init14->value())
+  tmp |= 0x4000;
+else
+  tmp &= 0x4000;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {469 290 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init13 {
+        callback {unsigned short tmp = initial_condition;
+if(init13->value())
+  tmp |= 0x2000;
+else
+  tmp &= 0x2000;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {479 300 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init12 {
+        callback {unsigned short tmp = initial_condition;
+if(init12->value())
+  tmp |= 0x1000;
+else
+  tmp &= 0x1000;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {489 310 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init11 {
+        callback {unsigned short tmp = initial_condition;
+if(init11->value())
+  tmp |= 0x0800;
+else
+  tmp &= 0x0800;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {499 320 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init10 {
+        callback {unsigned short tmp = initial_condition;
+if(init10->value())
+  tmp |= 0x0400;
+else
+  tmp &= 0x0400;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {509 330 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init9 {
+        callback {unsigned short tmp = initial_condition;
+if(init9->value())
+  tmp |= 0x0200;
+else
+  tmp &= 0x0200;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {519 340 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init8 {
+        callback {unsigned short tmp = initial_condition;
+if(init8->value())
+  tmp |= 0x0100;
+else
+  tmp &= 0x0100;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {529 350 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init7 {
+        callback {unsigned short tmp = initial_condition;
+if(init7->value())
+  tmp |= 0x0080;
+else
+  tmp &= 0x0080;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {539 360 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init6 {
+        callback {unsigned short tmp = initial_condition;
+if(init6->value())
+  tmp |= 0x0040;
+else
+  tmp &= 0x0040;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {549 370 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init5 {
+        callback {unsigned short tmp = initial_condition;
+if(init5->value())
+  tmp |= 0x0020;
+else
+  tmp &= 0x0020;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {559 380 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init4 {
+        callback {unsigned short tmp = initial_condition;
+if(init4->value())
+  tmp |= 0x0010;
+else
+  tmp &= 0x0010;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {569 390 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init3 {
+        callback {unsigned short tmp = initial_condition;
+if(init3->value())
+  tmp |= 0x0008;
+else
+  tmp &= 0x0008;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {579 400 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init2 {
+        callback {unsigned short tmp = initial_condition;
+if(init2->value())
+  tmp |= 0x0004;
+else
+  tmp &= 0x0004;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {589 410 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init1 {
+        callback {unsigned short tmp = initial_condition;
+if(init1->value())
+  tmp |= 0x0002;
+else
+  tmp &= 0x0002;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {599 420 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button init0 {
+        callback {unsigned short tmp = initial_condition;
+if(init0->value())
+  tmp |= 0x0001;
+else
+  tmp &= 0x0001;
+rule = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {609 430 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button hal {
+        callback {//randomize everything}
+        tooltip {reverse output} xywh {479 300 30 45}
+        code1 {\#include"draw_hal.h"}
+        code3 {o->drawing_h = cairo_code_draw_hal_get_height(); o->drawing_w = cairo_code_draw_hal_get_width(); o->drawing_f = &cairo_code_draw_hal_render;}
         class Button
       }
       Fl_Box cellgrid {
@@ -291,35 +754,41 @@ class CaSynthUI {open
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
-      Fl_Box of {
-        xywh {86 306 7 63}
-        code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
-        class Background
+      Fl_Button secret_rule {
+        callback {char n[20];
+float val=0;
+sprintf(n,"%f",rule);
+const char *r = fl_input("Enter Value:",n);
+if(r!=NULL && sscanf(r,"%f",&val))
+{
+  if ( val > 255 ) val = 255;
+  if ( val < 0 ) val = 0;
+  rule = val;
+}
+write_function(controller,RULE,sizeof(float),0,&rule);}
+        tooltip {reverse output} xywh {619 440 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
       }
-      Fl_Box hf {
-        xywh {96 316 7 63}
-        code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
-        class Background
-      }
-      Fl_Box ef {
-        xywh {106 326 7 63}
-        code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
-        class Background
-      }
-      Fl_Box af {
-        xywh {116 336 7 63}
-        code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
-        class Background
-      }
-      Fl_Box ff {selected
-        xywh {126 346 7 63}
-        code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
-        class Background
+      Fl_Button secret_initial {
+        callback {char n[20];
+float val=0;
+sprintf(n,"%f",initial_condition);
+const char *r = fl_input("Enter Value:",n);
+if(r!=NULL && sscanf(r,"%f",&val))
+{
+  if ( val > 65535 ) val = 65535;
+  if ( val < 0 ) val = 0;
+  initial_condition = val;
+}
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+        tooltip {reverse output} xywh {629 450 30 45}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
       }
     }
   }
@@ -331,5 +800,43 @@ class CaSynthUI {open
   } {
     code {Fl::check();
 Fl::flush();} {}
+  }
+  decl {float rule;} {private local
+  }
+  Function {set_rule(float ru)} {open return_type void
+  } {
+    code {rule = ru;
+unsigned char r = ru;
+rule7->value(r&0x80);
+rule6->value(r&0x40);
+rule5->value(r&0x20);
+rule4->value(r&0x10);
+rule3->value(r&0x08);
+rule2->value(r&0x04);
+rule1->value(r&0x02);
+rule0->value(r&0x01);} {}
+  }
+  decl {float initial_condition;} {private local
+  }
+  Function {set_initial_condition(float in)} {open return_type void
+  } {
+    code {inital_condition = in;
+unsigned short i = in;
+init15->value(i&0x8000);
+init14->value(i&0x4000);
+init13->value(i&0x2000);
+init12->value(i&0x1000);
+init11->value(i&0x0800);
+init10->value(i&0x0400);
+init9->value(i&0x0200);
+init8->value(i&0x0100);
+init7->value(i&0x0080);
+init6->value(i&0x0040);
+init5->value(i&0x0020);
+init4->value(i&0x0010);
+init3->value(i&0x0008);
+init2->value(i&0x0004);
+init1->value(i&0x0002);
+init0->value(i&0x0001);} {}
   }
 } 
