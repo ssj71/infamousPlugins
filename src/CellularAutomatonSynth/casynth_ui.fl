@@ -85,56 +85,56 @@ class CaSynthUI {open
         class Background
       }
       Fl_Box cl {
-        xywh {103 20 520 18}
+        xywh {29 158 28 10}
         code0 {\#include"draw_casLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box ol {
-        xywh {133 50 520 18}
+        xywh {29 288 46 12}
         code0 {\#include"draw_casLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box pl {
-        xywh {163 80 520 18}
+        xywh {131 10 69 10}
         code0 {\#include"draw_casLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box vl {
-        xywh {173 90 520 18}
+        xywh {131 56 33 10}
         code0 {\#include"draw_casLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box el {
-        xywh {143 60 520 18}
+        xywh {293 210 57 12}
         code0 {\#include"draw_casLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box hl {
-        xywh {153 70 520 18}
+        xywh {293 119 66 10}
         code0 {\#include"draw_casLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box al {
-        xywh {113 30 520 18}
+        xywh {293 303 138 12}
         code0 {\#include"draw_casLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box fl {
-        xywh {123 40 520 18}
+        xywh {293 399 145 12}
         code0 {\#include"draw_casLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
         code2 {o->stretch = false;}
