@@ -32,9 +32,9 @@ write_function(controller,STICKIT,sizeof(float),0,&stickit->floatvalue);}
         }
         Fl_Button led {
           xywh {77 217 18 18} deactivate
-          code1 {\#include"draw_blueLED.h"}
+          code1 {\#include"draw_LED.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
-          code3 {o->drawing_h = cairo_code_draw_blueLED_get_height(); o->drawing_w = cairo_code_draw_blueLED_get_width(); o->drawing_f = &cairo_code_draw_blueLED_render;}
+          code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_blueLED_render;}
           class Button
         }
         Fl_Dial volume {
