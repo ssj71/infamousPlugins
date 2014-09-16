@@ -36,13 +36,13 @@ class CaSynthUI {open
         class Background
       }
       Fl_Box mf {
-        xywh {16 21 96 127}
+        xywh {16 21 96 66}
         code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
         class Background
       }
       Fl_Box cf {
-        xywh {16 168 253 423}
+        xywh {16 108 253 483}
         code0 {\#include"draw_casFrames.h"}
         code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
         class Background
@@ -50,233 +50,233 @@ class CaSynthUI {open
       Fl_Box of {
         xywh {16 298 244 293}
         code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
         class Background
       }
       Fl_Box hf {
         xywh {281 130 165 70}
         code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
         class Background
       }
       Fl_Box ef {
         xywh {281 223 165 70}
         code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
         class Background
       }
       Fl_Box af {
         xywh {281 316 165 70}
         code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
         class Background
       }
       Fl_Box ff {
         xywh {281 411 165 70}
         code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casCellFrame_get_height(); o->drawing_w = cairo_code_draw_casCellFrame_get_width(); o->drawing_f = &cairo_code_draw_casCellFrame_render;}
+        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
         class Background
       }
       Fl_Box ml {
         xywh {26 10 48 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casMasterLabel_get_height(); o->drawing_w = cairo_code_draw_casMasterLabel_get_width(); o->drawing_f = &cairo_code_draw_casMasterLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box cl {
-        xywh {29 158 28 10}
+        xywh {29 98 28 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casCellLabel_get_height(); o->drawing_w = cairo_code_draw_casCellLabel_get_width(); o->drawing_f = &cairo_code_draw_casCellLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box ol {
         xywh {29 288 46 12}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casOutputLabel_get_height(); o->drawing_w = cairo_code_draw_casOutputLabel_get_width(); o->drawing_f = &cairo_code_draw_casOutputLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box pl {
         xywh {131 10 69 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casParameterLabel_get_height(); o->drawing_w = cairo_code_draw_casParameterLabel_get_width(); o->drawing_f = &cairo_code_draw_casParameterLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box vl {
         xywh {131 56 33 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casValueLabel_get_height(); o->drawing_w = cairo_code_draw_casValueLabel_get_width(); o->drawing_f = &cairo_code_draw_casValueLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box el {
         xywh {293 210 57 12}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casEnvelopeLabel_get_height(); o->drawing_w = cairo_code_draw_casEnvelopeLabel_get_width(); o->drawing_f = &cairo_code_draw_casEnvelopeLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box hl {
         xywh {293 119 66 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casHarmonicsLabel_get_height(); o->drawing_w = cairo_code_draw_casHarmonicsLabel_get_width(); o->drawing_f = &cairo_code_draw_casHarmonicsLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box al {
         xywh {293 303 138 12}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casAMLabel_get_height(); o->drawing_w = cairo_code_draw_casAMLabel_get_width(); o->drawing_f = &cairo_code_draw_casAMLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box fl {
         xywh {293 399 145 12}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casFMLabel_get_height(); o->drawing_w = cairo_code_draw_casFMLabel_get_width(); o->drawing_f = &cairo_code_draw_casFMLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box chanL {
         xywh {44 31 15 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casChLabel_get_height(); o->drawing_w = cairo_code_draw_casChLabel_get_width(); o->drawing_f = &cairo_code_draw_casChLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box gainL {
         xywh {70 65 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casGLabel_get_height(); o->drawing_w = cairo_code_draw_casGLabel_get_width(); o->drawing_f = &cairo_code_draw_casGLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box mwavL {
-        xywh {23 86 83 62}
+      Fl_Box cwavL {
+        xywh {23 114 83 62}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casWaveLabel_get_height(); o->drawing_w = cairo_code_draw_casWaveLabel_get_width(); o->drawing_f = &cairo_code_draw_casWaveLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box lenL {
-        xywh {39 197 7 10}
+        xywh {39 199 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casLLabel_get_height(); o->drawing_w = cairo_code_draw_casLLabel_get_width(); o->drawing_f = &cairo_code_draw_casLLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box ruL {
         xywh {19 233 247 9}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casRuleLabel_get_height(); o->drawing_w = cairo_code_draw_casRuleLabel_get_width(); o->drawing_f = &cairo_code_draw_casRuleLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box hwavL {
         xywh {293 138 68 55}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casHarmWaveLabel_get_height(); o->drawing_w = cairo_code_draw_casHarmWaveLabel_get_width(); o->drawing_f = &cairo_code_draw_casHarmWaveLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box nharmL {
         xywh {412 142 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casNLabel_get_height(); o->drawing_w = cairo_code_draw_casNLabel_get_width(); o->drawing_f = &cairo_code_draw_casNLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box widthL {
         xywh {391 177 9 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casWLabel_get_height(); o->drawing_w = cairo_code_draw_casWLabel_get_width(); o->drawing_f = &cairo_code_draw_casWLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box aL {
         xywh {321 231 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casALabel_get_height(); o->drawing_w = cairo_code_draw_casALabel_get_width(); o->drawing_f = &cairo_code_draw_casALabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box dL {
         xywh {370 231 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casDLabel_get_height(); o->drawing_w = cairo_code_draw_casDLabel_get_width(); o->drawing_f = &cairo_code_draw_casDLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box bL {
         xywh {420 231 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casBLabel_get_height(); o->drawing_w = cairo_code_draw_casBLabel_get_width(); o->drawing_f = &cairo_code_draw_casBLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box swL {
         xywh {301 266 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casSLabel_get_height(); o->drawing_w = cairo_code_draw_casSLabel_get_width(); o->drawing_f = &cairo_code_draw_casSLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box suL {
         xywh {350 266 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casSLabel_get_height(); o->drawing_w = cairo_code_draw_casSLabel_get_width(); o->drawing_f = &cairo_code_draw_casSLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box rL {
         xywh {400 266 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casRLabel_get_height(); o->drawing_w = cairo_code_draw_casRLabel_get_width(); o->drawing_f = &cairo_code_draw_casRLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box amwavL {
         xywh {285 323 83 62}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casWaveLabel_get_height(); o->drawing_w = cairo_code_draw_casWaveLabel_get_width(); o->drawing_f = &cairo_code_draw_casWaveLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box amgainL {
         xywh {392 365 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casGLabel_get_height(); o->drawing_w = cairo_code_draw_casGLabel_get_width(); o->drawing_f = &cairo_code_draw_casGLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box amfreqL {
         xywh {412 330 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casFLabel_get_height(); o->drawing_w = cairo_code_draw_casFLabel_get_width(); o->drawing_f = &cairo_code_draw_casFLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box fmwavL {
         xywh {285 418 83 62}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casWaveLabel_get_height(); o->drawing_w = cairo_code_draw_casWaveLabel_get_width(); o->drawing_f = &cairo_code_draw_casWaveLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box fmgainL {
         xywh {392 460 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casGLabel_get_height(); o->drawing_w = cairo_code_draw_casGLabel_get_width(); o->drawing_f = &cairo_code_draw_casGLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
       Fl_Box fmfreqL {
         xywh {412 425 7 10}
         code0 {\#include"draw_casLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casTitleLabel_get_height(); o->drawing_w = cairo_code_draw_casTitleLabel_get_width(); o->drawing_f = &cairo_code_draw_casTitleLabel_render;}
+        code1 {o->drawing_h = cairo_code_draw_casFLabel_get_height(); o->drawing_w = cairo_code_draw_casFLabel_get_width(); o->drawing_f = &cairo_code_draw_casFLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
@@ -400,7 +400,7 @@ else
   tmp &= 0x8000;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {459 280 30 45}
+        tooltip {initial condition, bit 15} xywh {26 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -414,7 +414,7 @@ else
   tmp &= 0x4000;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {469 290 30 45}
+        tooltip {initial condition, bit 14} xywh {41 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -428,7 +428,7 @@ else
   tmp &= 0x2000;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {479 300 30 45}
+        tooltip {initial condition, bit 13} xywh {56 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -442,7 +442,7 @@ else
   tmp &= 0x1000;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {489 310 30 45}
+        tooltip {initial condition, bit 12} xywh {70 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -456,7 +456,7 @@ else
   tmp &= 0x0800;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {499 320 30 45}
+        tooltip {initial condition, bit 11} xywh {85 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -470,7 +470,7 @@ else
   tmp &= 0x0400;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {509 330 30 45}
+        tooltip {initial condition, bit 10} xywh {99 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -484,7 +484,7 @@ else
   tmp &= 0x0200;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {519 340 30 45}
+        tooltip {initial condition, bit 9} xywh {114 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -498,7 +498,7 @@ else
   tmp &= 0x0100;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {529 350 30 45}
+        tooltip {initial condition, bit 8} xywh {129 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -512,7 +512,7 @@ else
   tmp &= 0x0080;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {539 360 30 45}
+        tooltip {initial condition, bit 7} xywh {143 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -526,7 +526,7 @@ else
   tmp &= 0x0040;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {549 370 30 45}
+        tooltip {initial condition, bit 6} xywh {158 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -540,7 +540,7 @@ else
   tmp &= 0x0020;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {559 380 30 45}
+        tooltip {initial condition, bit 5} xywh {172 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -554,7 +554,7 @@ else
   tmp &= 0x0010;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {569 390 30 45}
+        tooltip {initial condition, bit 4} xywh {187 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -568,7 +568,7 @@ else
   tmp &= 0x0008;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {579 400 30 45}
+        tooltip {initial condition, bit 3} xywh {202 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -582,7 +582,7 @@ else
   tmp &= 0x0004;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {589 410 30 45}
+        tooltip {initial condition, bit 2} xywh {216 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -596,7 +596,7 @@ else
   tmp &= 0x0002;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {599 420 30 45}
+        tooltip {initial condition, bit 1} xywh {231 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -610,7 +610,7 @@ else
   tmp &= 0x0001;
 rule = tmp;
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {609 430 30 45}
+        tooltip {initial condition, bit 0} xywh {246 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -618,145 +618,145 @@ write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
       }
       Fl_Button hal {
         callback {//randomize everything}
-        tooltip {reverse output} xywh {479 300 30 45}
+        tooltip {HAL 9000} xywh {157 115 82 82}
         code1 {\#include"draw_hal.h"}
         code3 {o->drawing_h = cairo_code_draw_hal_get_height(); o->drawing_w = cairo_code_draw_hal_get_width(); o->drawing_f = &cairo_code_draw_hal_render;}
         class Button
       }
       Fl_Box cellgrid {
-        tooltip {current input value} xywh {143 298 89 45}
+        tooltip {cell progression preview} xywh {29 305 228 286}
         code0 {\#include"cellgrid.h"}
         class CellGrid
       }
       Fl_Dial channel {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {5 250 38 156} step 0.01
+        callback {write_function(controller,CHANNEL,sizeof(float),0,&channel->floatvalue);}
+        tooltip {MIDI channel} xywh {61 27 30 30} step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial mastergain {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {15 260 38 156} step 0.01
+        callback {write_function(controller,MASTER_GAIN,sizeof(float),0,&masterbain->floatvalue);}
+        tooltip {gain} xywh {37 52 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
-      Fl_Dial masterwaveform {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {25 270 38 156} step 0.01
+      Fl_Dial cellwaveform {
+        callback {write_function(controller,WAVE,sizeof(float),0,&cellwaveform->floatvalue);}
+        tooltip {waveform} xywh {49 134 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial lifetime {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {35 280 38 156} step 0.01
+        callback {write_function(controller,CELL_LIFE,sizeof(float),0,&lifetime->floatvalue);}
+        tooltip {time between cell transitions} xywh {49 185 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial harmgain {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {45 290 38 156} step 0.01
+        callback {write_function(controller,HARM_MODE,sizeof(float),0,&harmgain->floatvalue);}
+        tooltip {gain of harmonics} xywh {311 152 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial nharmonics {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {55 300 38 156} step 0.01
+        callback {write_function(controller,NHARMONICS,sizeof(float),0,&nharmonics->floatvalue);}
+        tooltip {num. of harmonics} xywh {378 138 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial harmwidth {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {65 310 38 156} step 0.01
+        callback {write_function(controller,HARMWIDTH,sizeof(float),0,&harmwidth->floatvalue);}
+        tooltip {width/detune} xywh {403 163 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial a {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {75 320 38 156} step 0.01
+        callback {write_function(controller,ENV_A,sizeof(float),0,&a->floatvalue);}
+        tooltip {attack} xywh {286 227 30 30 } step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial d {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {85 330 38 156} step 0.01
+        callback {write_function(controller,ENV_D,sizeof(float),0,&d->floatvalue);}
+        tooltip {decay} xywh {336 227 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial b {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {85 330 38 156} step 0.01
+        callback {write_function(controller,ENV_B,sizeof(float),0,&b->floatvalue);}
+        tooltip {break point} xywh {386 227 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial sw {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {95 340 38 156} step 0.01
+        callback {write_function(controller,ENV_SWL,sizeof(float),0,&sw->floatvalue);}
+        tooltip {swell} xywh {311 252 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial su {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {105 350 38 156} step 0.01
+        callback {write_function(controller,ENV_SUS,sizeof(float),0,&su->floatvalue);}
+        tooltip {sustain} xywh {361 252 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial r {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {115 360 38 156} step 0.01
+        callback {write_function(controller,ENV_R,sizeof(float),0,&r->floatvalue);}
+        tooltip {release} xywh {411 252 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial amwave {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {125 370 38 156} step 0.01
+        callback {write_function(controller,AMOD_WAV,sizeof(float),0,&amwave->floatvalue);}
+        tooltip {waveform} xywh {312 343 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial amfreq {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {135 380 38 156} step 0.01
+        callback {write_function(controller,AMOD_FREQ,sizeof(float),0,&amfreq->floatvalue);}
+        tooltip {frequency} xywh {378 326 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial amgain {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {145 390 38 156} step 0.01
+        callback {write_function(controller,AMOD_GAIN,sizeof(float),0,&amgain->floatvalue);}
+        tooltip {gain} xywh {403 219 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial fmwave {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {155 400 38 156} step 0.01
+        callback {write_function(controller,FMOD_WAV,sizeof(float),0,&fmwave->floatvalue);}
+        tooltip {waveform} xywh {312 439 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial fmfreq {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {165 410 38 156} step 0.01
+        callback {write_function(controller,FMOD_FREQ,sizeof(float),0,&fmfreq->floatvalue);}
+        tooltip {frequency} xywh {378 422 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial fmgain {
-        callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
-        tooltip {envelope type} xywh {175 420 38 156} step 0.01
+        callback {write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
+        tooltip {gain} xywh {403 446 30 30} step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
@@ -764,37 +764,45 @@ write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
       Fl_Button secret_rule {
         callback {char n[20];
 float val=0;
+int i=0;
 sprintf(n,"%f",rule);
 const char *r = fl_input("Enter Value:",n);
-if(r!=NULL && sscanf(r,"%f",&val))
+if(r!=NULL && sscanf(r,"0x%2x",&i))
+{
+  val = i;
+  set_rule(val);
+}
+else if(r!=NULL && sscanf(r,"%f",&val))
 {
   if ( val > 255 ) val = 255;
   if ( val < 0 ) val = 0;
-  rule = val;
+  set_rule(val);
 }
 write_function(controller,RULE,sizeof(float),0,&rule);}
-        tooltip {reverse output} xywh {619 440 30 45}
-        code1 {\#include"draw_tinyButton.h"}
-        code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        tooltip {enter rule value} xywh {0 243 26 20}
+        code1 {o->drawing_f = &draw_nothing_render;}
         class Button
       }
       Fl_Button secret_initial {
         callback {char n[20];
 float val=0;
+int i=0;
 sprintf(n,"%f",initial_condition);
 const char *r = fl_input("Enter Value:",n);
-if(r!=NULL && sscanf(r,"%f",&val))
+if(r!=NULL && sscanf(rm"0x%4x",&i))
+{
+  val = i;
+  set_initial_condition(val);
+}
+else if(r!=NULL && sscanf(r,"%f",&val))
 {
   if ( val > 65535 ) val = 65535;
   if ( val < 0 ) val = 0;
-  initial_condition = val;
+  set_initial_condition(val);
 }
 write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {reverse output} xywh {629 450 30 45}
-        code1 {\#include"draw_tinyButton.h"}
-        code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        tooltip {enter intial value} xywh {0 263 26 20}
+        code1 {o->drawing_f = &draw_nothing_render;}
         class Button
       }
     }
