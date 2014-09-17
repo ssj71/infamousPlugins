@@ -127,7 +127,7 @@ lv2:symbol "Modulation" .
                 lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 3 ] ;
                 lv2:default 1.0 ;
                 lv2:minimum 0.0 ;
-                lv2:maximum 4.0 ;
+                lv2:maximum 3.0 ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#casynth:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;

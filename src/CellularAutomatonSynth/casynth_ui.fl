@@ -8,11 +8,11 @@ class CaSynthUI {open
   } {
     Fl_Window ui {
       label {the infamous cellular automaton synth} open
-      xywh {371 402 460 600} type Double box UP_BOX resizable
+      xywh {222 161 460 600} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
-      code3 {o->show();} visible
+      code3 {o->show();srand ((unsigned int) time (NULL));} visible
     } {
       Fl_Box bg {
         xywh {0 0 460 600}
@@ -287,7 +287,9 @@ if(rule7->value())
 else
   tmp &= 0x80;
 rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);}
+write_function(controller,RULE,sizeof(float),0,&rule);
+cellgrid->rule = rule;
+cellgrid->redraw();}
         tooltip {rule, bit 7} xywh {26 247 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -301,7 +303,9 @@ if(rule6->value())
 else
   tmp &= 0x40;
 rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);}
+write_function(controller,RULE,sizeof(float),0,&rule);
+cellgrid->rule = rule;
+cellgrid->redraw();}
         tooltip {rule, bit 6} xywh {58 247 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -315,7 +319,9 @@ if(rule5->value())
 else
   tmp &= 0x20;
 rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);} selected
+write_function(controller,RULE,sizeof(float),0,&rule);
+cellgrid->rule = rule;
+cellgrid->redraw();}
         tooltip {rule, bit 5} xywh {89 247 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -329,8 +335,10 @@ if(rule4->value())
 else
   tmp &= 0x10;
 rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);}
-        tooltip {rule, bit 4} xywh {120 247 13 13}
+write_function(controller,RULE,sizeof(float),0,&rule);
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 4} xywh {120 247 13 13} value 1
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -343,8 +351,10 @@ if(rule3->value())
 else
   tmp &= 0x08;
 rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);}
-        tooltip {rule, bit 3} xywh {152 247 13 13}
+write_function(controller,RULE,sizeof(float),0,&rule);
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 3} xywh {152 247 13 13} value 1
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -357,8 +367,10 @@ if(rule2->value())
 else
   tmp &= 0x04;
 rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);}
-        tooltip {rule, bit 2} xywh {183 247 13 13}
+write_function(controller,RULE,sizeof(float),0,&rule);
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 2} xywh {183 247 13 13} value 1
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -371,8 +383,10 @@ if(rule1->value())
 else
   tmp &= 0x02;
 rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);}
-        tooltip {rule, bit 1} xywh {214 247 13 13}
+write_function(controller,RULE,sizeof(float),0,&rule);
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 1} xywh {214 247 13 13} value 1
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -385,7 +399,9 @@ if(rule0->value())
 else
   tmp &= 0x01;
 rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);}
+write_function(controller,RULE,sizeof(float),0,&rule);
+cellgrid->rule = rule;
+cellgrid->redraw();}
         tooltip {rule, bit 0} xywh {246 247 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -398,8 +414,10 @@ if(init15->value())
   tmp |= 0x8000;
 else
   tmp &= 0x8000;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 15} xywh {26 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -412,8 +430,10 @@ if(init14->value())
   tmp |= 0x4000;
 else
   tmp &= 0x4000;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 14} xywh {41 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -426,8 +446,10 @@ if(init13->value())
   tmp |= 0x2000;
 else
   tmp &= 0x2000;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 13} xywh {56 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -440,8 +462,10 @@ if(init12->value())
   tmp |= 0x1000;
 else
   tmp &= 0x1000;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 12} xywh {70 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -454,8 +478,10 @@ if(init11->value())
   tmp |= 0x0800;
 else
   tmp &= 0x0800;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 11} xywh {85 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -468,8 +494,10 @@ if(init10->value())
   tmp |= 0x0400;
 else
   tmp &= 0x0400;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 10} xywh {99 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -482,8 +510,10 @@ if(init9->value())
   tmp |= 0x0200;
 else
   tmp &= 0x0200;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 9} xywh {114 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -496,8 +526,10 @@ if(init8->value())
   tmp |= 0x0100;
 else
   tmp &= 0x0100;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 8} xywh {129 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -510,8 +542,10 @@ if(init7->value())
   tmp |= 0x0080;
 else
   tmp &= 0x0080;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 7} xywh {143 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -524,8 +558,10 @@ if(init6->value())
   tmp |= 0x0040;
 else
   tmp &= 0x0040;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 6} xywh {158 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -538,8 +574,10 @@ if(init5->value())
   tmp |= 0x0020;
 else
   tmp &= 0x0020;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 5} xywh {172 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -552,8 +590,10 @@ if(init4->value())
   tmp |= 0x0010;
 else
   tmp &= 0x0010;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 4} xywh {187 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -566,8 +606,10 @@ if(init3->value())
   tmp |= 0x0008;
 else
   tmp &= 0x0008;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 3} xywh {202 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -580,8 +622,10 @@ if(init2->value())
   tmp |= 0x0004;
 else
   tmp &= 0x0004;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 2} xywh {216 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -594,8 +638,10 @@ if(init1->value())
   tmp |= 0x0002;
 else
   tmp &= 0x0002;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
         tooltip {initial condition, bit 1} xywh {231 268 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -608,16 +654,131 @@ if(init0->value())
   tmp |= 0x0001;
 else
   tmp &= 0x0001;
-rule = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {initial condition, bit 0} xywh {246 268 13 13}
+initial_condition = tmp;
+write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
+        tooltip {initial condition, bit 0} xywh {246 268 13 13} value 1
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
         class Button
       }
       Fl_Button hal {
-        callback {//randomize everything}
+        callback {//randomize everything
+float tmp;
+\#define MIN(a,b) (a<b?a:b)
+\#define MAX(a,b) (a<b?b:a)
+
+tmp = rand()/(float)RAND_MAX;
+tmp = (int)(0xFF*tmp);
+set_rule(tmp)
+write_function(controller,RULE,sizeof(float),0,&rule);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = (int)(0xFFFF*tmp);
+set_initial_condition(tmp);
+write_function(controller,HARM_MODE,sizeof(float),0,&initial_condition);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = (int)(5*tmp);
+cellwaveform->value(tmp);
+cellwaveform->floatvalue = tmp;
+write_function(controller,WAVE,sizeof(float),0,&cellwaveform->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 9.999*tmp + 0.001;
+lifetime->value(tmp);
+lifetime->floatvalue = tmp;
+write_function(controller,CELL_LIFE,sizeof(float),0,&lifetime->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = (int)(3*tmp);
+harmgain->value(tmp);
+harmgain->floatvalue = tmp;
+write_function(controller,HARM_MODE,sizeof(float),0,&harmgain->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = (int)(16*tmp);
+nharmonics->value(tmp);
+nharmonics->floatvalue = tmp;
+write_function(controller,NHARMONICS,sizeof(float),0,&nharmonics->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 50*tmp;
+harmwidth->value(tmp);
+harmwidth->floatvalue = tmp;
+write_function(controller,HARM_WIDTH,sizeof(float),0,&harmwidth->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 14.999*tmp + 0.001;
+a->value(tmp);
+a->floatvalue = tmp;
+write_function(controller,ENV_A,sizeof(float),0,&a->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 14.999*tmp + 0.001;
+d->value(tmp);
+d->floatvalue = tmp;
+write_function(controller,ENV_D,sizeof(float),0,&d->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+b->value(tmp);
+b->floatvalue = tmp;
+write_function(controller,ENV_B,sizeof(float),0,&b->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 14.999*tmp + 0.001;
+sw->value(tmp);
+sw->floatvalue = tmp;
+write_function(controller,ENV_SWL,sizeof(float),0,&sw->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+su->value(tmp);
+su->floatvalue = tmp;
+write_function(controller,ENV_SUS,sizeof(float),0,&su->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 14.999*tmp + 0.001;
+r->value(tmp);
+r->floatvalue = tmp;
+write_function(controller,ENV_R,sizeof(float),0,&r->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 5*tmp;
+amwave->value(tmp);
+amwave->floatvalue = tmp;
+write_function(controller,AMOD_WAV,sizeof(float),0,&amwave->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 5*tmp;
+fmwave->value(tmp);
+fmwave->floatvalue = tmp;
+write_function(controller,FMOD_WAV,sizeof(float),0,&fmwave->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 110*tmp;
+amfreq->value(tmp);
+amfreq->floatvalue = tmp;
+write_function(controller,AMOD_FREQ,sizeof(float),0,&amfreq->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 110*tmp;
+fmfreq->value(tmp);
+fmfreq->floatvalue = tmp;
+write_function(controller,FMOD_FREQ,sizeof(float),0,&fmfreq->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 2*tmp-1;
+amgain->value(tmp);
+amgain->floatvalue = tmp;
+write_function(controller,AMOD_GAIN,sizeof(float),0,&amgain->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = 8*tmp-4;
+fmgain->value(tmp);
+fmgain->floatvalue = tmp;
+write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip {HAL 9000} xywh {157 115 82 82}
         code1 {\#include"draw_hal.h"}
         code3 {o->drawing_h = cairo_code_draw_hal_get_height(); o->drawing_w = cairo_code_draw_hal_get_width(); o->drawing_f = &cairo_code_draw_hal_render;}
@@ -630,133 +791,137 @@ write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
       }
       Fl_Dial channel {
         callback {write_function(controller,CHANNEL,sizeof(float),0,&channel->floatvalue);}
-        tooltip {MIDI channel} xywh {61 27 30 30} step 0.1
+        tooltip {MIDI channel} xywh {61 27 30 30} maximum 16 step 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->lock2int = true;}
         class Dial
       }
       Fl_Dial mastergain {
         callback {write_function(controller,MASTER_GAIN,sizeof(float),0,&masterbain->floatvalue);}
-        tooltip {gain} xywh {37 52 30 30} step 0.01
+        tooltip gain xywh {37 52 30 30} maximum 2 step 0.02 value 1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial cellwaveform {
         callback {write_function(controller,WAVE,sizeof(float),0,&cellwaveform->floatvalue);}
-        tooltip {waveform} xywh {49 134 30 30} step 0.01
+        tooltip waveform xywh {49 134 30 30} maximum 5 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial lifetime {
         callback {write_function(controller,CELL_LIFE,sizeof(float),0,&lifetime->floatvalue);}
-        tooltip {time between cell transitions} xywh {49 185 30 30} step 0.01
+        tooltip {time between cell transitions} xywh {49 185 30 30} minimum 0.001 maximum 10 step 0.05 value 0.25
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {strcpy(o->units,"s");}
         class Dial
       }
       Fl_Dial harmgain {
         callback {write_function(controller,HARM_MODE,sizeof(float),0,&harmgain->floatvalue);}
-        tooltip {gain of harmonics} xywh {311 152 30 30} step 0.01
+        tooltip {gain of harmonics} xywh {311 152 30 30} maximum 3 step 0.08 value 1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial nharmonics {
         callback {write_function(controller,NHARMONICS,sizeof(float),0,&nharmonics->floatvalue);}
-        tooltip {num. of harmonics} xywh {378 138 30 30} step 0.01
+        tooltip {num. of harmonics} xywh {378 138 30 30} maximum 16 step 0.1 value 12
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->lock2int = true;}
         class Dial
       }
       Fl_Dial harmwidth {
         callback {write_function(controller,HARMWIDTH,sizeof(float),0,&harmwidth->floatvalue);}
-        tooltip {width/detune} xywh {403 163 30 30} step 0.01
+        tooltip {width/detune} xywh {403 163 30 30} maximum 50 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {strcpy(o->units,"cents");}
         class Dial
       }
       Fl_Dial a {
         callback {write_function(controller,ENV_A,sizeof(float),0,&a->floatvalue);}
-        tooltip {attack} xywh {286 227 30 30 } step 0.01
+        tooltip attack xywh {286 227 30 30} minimum 0.001 maximum 15 step 0.1 value 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial d {
         callback {write_function(controller,ENV_D,sizeof(float),0,&d->floatvalue);}
-        tooltip {decay} xywh {336 227 30 30} step 0.01
+        tooltip decay xywh {336 227 30 30} minimum 0.001 maximum 15 step 0.1 value 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial b {
         callback {write_function(controller,ENV_B,sizeof(float),0,&b->floatvalue);}
-        tooltip {break point} xywh {386 227 30 30} step 0.01
+        tooltip {break point} xywh {386 227 30 30} step 0.01 value 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial sw {
         callback {write_function(controller,ENV_SWL,sizeof(float),0,&sw->floatvalue);}
-        tooltip {swell} xywh {311 252 30 30} step 0.01
+        tooltip swell xywh {311 252 30 30} minimum 0.001 maximum 15 step 0.1 value 3
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial su {
         callback {write_function(controller,ENV_SUS,sizeof(float),0,&su->floatvalue);}
-        tooltip {sustain} xywh {361 252 30 30} step 0.01
+        tooltip sustain xywh {361 252 30 30} step 0.01 value 0.75
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial r {
         callback {write_function(controller,ENV_R,sizeof(float),0,&r->floatvalue);}
-        tooltip {release} xywh {411 252 30 30} step 0.01
+        tooltip release xywh {411 252 30 30} minimum 0.001 maximum 15 step 0.1 value 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial amwave {
         callback {write_function(controller,AMOD_WAV,sizeof(float),0,&amwave->floatvalue);}
-        tooltip {waveform} xywh {312 343 30 30} step 0.01
+        tooltip waveform xywh {312 343 30 30} maximum 5 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial amfreq {
         callback {write_function(controller,AMOD_FREQ,sizeof(float),0,&amfreq->floatvalue);}
-        tooltip {frequency} xywh {378 326 30 30} step 0.01
+        tooltip frequency xywh {378 326 30 30} maximum 110 step 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial amgain {
         callback {write_function(controller,AMOD_GAIN,sizeof(float),0,&amgain->floatvalue);}
-        tooltip {gain} xywh {403 219 30 30} step 0.01
+        tooltip gain xywh {403 350 30 30} minimum -1 step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial fmwave {
         callback {write_function(controller,FMOD_WAV,sizeof(float),0,&fmwave->floatvalue);}
-        tooltip {waveform} xywh {312 439 30 30} step 0.01
+        tooltip waveform xywh {312 439 30 30} maximum 5 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial fmfreq {
         callback {write_function(controller,FMOD_FREQ,sizeof(float),0,&fmfreq->floatvalue);}
-        tooltip {frequency} xywh {378 422 30 30} step 0.01
+        tooltip frequency xywh {378 422 30 30} maximum 110 step 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
       }
       Fl_Dial fmgain {
-        callback {write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
-        tooltip {gain} xywh {403 446 30 30} step 0.01
+        callback {write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);} selected
+        tooltip gain xywh {403 446 30 30} minimum -4 maximum 4 step 0.05
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
         class Dial
@@ -829,7 +994,8 @@ rule4->value(r&0x10);
 rule3->value(r&0x08);
 rule2->value(r&0x04);
 rule1->value(r&0x02);
-rule0->value(r&0x01);} {}
+rule0->value(r&0x01);
+cellgrid->rule = r;} {}
   }
   decl {float initial_condition;} {private local
   }
@@ -852,6 +1018,7 @@ init4->value(i&0x0010);
 init3->value(i&0x0008);
 init2->value(i&0x0004);
 init1->value(i&0x0002);
-init0->value(i&0x0001);} {}
+init0->value(i&0x0001);
+cellgrid->initial_condition = i;} {}
   }
 } 
