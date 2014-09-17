@@ -16,8 +16,8 @@ class CaSynthUI {open
     } {
       Fl_Box bg {
         xywh {0 0 460 600}
-        code0 {\#include"envfollower.h"}
-        code1 {\#include"draw_envfollowerbg.h"}
+        code0 {\#include"casynth.h"}
+        code1 {\#include"draw_casbg.h"}
         code3 {o->drawing_h = cairo_code_draw_casbg_get_height(); o->drawing_w = cairo_code_draw_casbg_get_width(); o->drawing_f = &cairo_code_draw_casbg_render;}
         class Background
       }
@@ -787,6 +787,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
       Fl_Box cellgrid {
         tooltip {cell progression preview} xywh {29 305 228 286}
         code0 {\#include"cellgrid.h"}
+        code2 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width();}
         class CellGrid
       }
       Fl_Dial channel {

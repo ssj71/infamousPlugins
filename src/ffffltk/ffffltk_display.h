@@ -31,56 +31,6 @@
 //avtk drawing method (adapted)
 static void default_display_drawing(cairo_t *cr, char c)
 {
-    cairo_set_line_width(cr, 1.5);
-        
-        
-    // fill background
-   cairo_rectangle( cr, 0, 0, 100, 100);
-   cairo_set_source_rgba( cr, 66 / 255.f,  66 / 255.f ,  66 / 255.f , 1 );
-   cairo_fill( cr );
-   
-   
-   // set up dashed lines, 1 px off, 1 px on
-   double dashes[1];
-   dashes[0] = 2.0;
-   
-   cairo_set_dash ( cr, dashes, 1, 0.0);
-   cairo_set_line_width( cr, 1.0);
-        
-   // loop over each 2nd line, drawing dots
-   for ( int i = 0; i < 100; i += 4 )
-   {
-     cairo_move_to( cr, i, 0 );
-     cairo_line_to( cr, i, 100 );
-   }
-        
-   cairo_set_source_rgba( cr,  28 / 255.f,  28 / 255.f ,  28 / 255.f , 0.5 );
-   cairo_stroke(cr);
-   cairo_set_dash ( cr, dashes, 0, 0.0);
-   
-        
-   // draw header
-     // backing
-     cairo_rectangle(cr, 0, 0, 100, 20);
-     cairo_set_source_rgb( cr, 28 / 255.f,  28 / 255.f ,  28 / 255.f );
-     cairo_fill( cr );
-     
-     // text NOT YET SUPPORTED
-     //cairo_move_to( cr, 10, 14 );
-     //cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 1 );
-     //cairo_set_font_size( cr, 10 );
-     //cairo_show_text( cr, label );
-     
-     // lower stripe
-     cairo_move_to( cr, 0  , 20 );
-     cairo_line_to( cr, 100, 20 );
-     cairo_stroke( cr );
-   
-   
-   // stroke rim
-   cairo_rectangle(cr, 0, 0, 100, 100);
-   cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 1 );
-   cairo_stroke( cr );
 }
 
 
