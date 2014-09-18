@@ -728,6 +728,8 @@ inline short char2seg(char c){
 */
 c = c&0x7F;
 switch(c){
+  case 45://-
+    return 0x0180;
   case 48://0
     return 0xe667;
   case 49://1
@@ -802,6 +804,8 @@ switch(c){
   case 90://Z
     return 0xc423;
 
+  case 97://a
+    return 0xc2a7;
   default:
     return 0;
 }
