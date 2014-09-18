@@ -44,6 +44,7 @@ static LV2UI_Handle init_casynthUI(const struct _LV2UI_Descriptor * descriptor,
     }
 
     self->ui = self->show();
+    srand ((unsigned int) time (NULL));
     fl_open_display();
     // set host to change size of the window
     if (resize)

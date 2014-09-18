@@ -12,7 +12,7 @@ class CaSynthUI {open
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
-      code3 {o->show();srand ((unsigned int) time (NULL));} visible
+      code3 {o->show();} visible
     } {
       Fl_Box bg {
         xywh {0 0 460 600}
@@ -678,7 +678,7 @@ write_function(controller,RULE,sizeof(float),0,&rule);
 tmp = rand()/(float)RAND_MAX;
 tmp = (int)(0xFFFF*tmp);
 set_initial_condition(tmp);
-write_function(controller,HARM_MODE,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 
 tmp = rand()/(float)RAND_MAX;
 tmp = (int)(5*tmp);
@@ -699,24 +699,30 @@ harmgain->floatvalue = tmp;
 write_function(controller,HARM_MODE,sizeof(float),0,&harmgain->floatvalue);
 
 tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp = 1-tmp;//bias to larger values
 tmp = (int)(16*tmp);
 nharmonics->value(tmp);
 nharmonics->floatvalue = tmp;
 write_function(controller,NHARMONICS,sizeof(float),0,&nharmonics->floatvalue);
 
 tmp = rand()/(float)RAND_MAX;
-tmp = 50*tmp;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= 50;
 harmwidth->value(tmp);
 harmwidth->floatvalue = tmp;
 write_function(controller,HARM_WIDTH,sizeof(float),0,&harmwidth->floatvalue);
 
 tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 14.999*tmp + 0.001;
 a->value(tmp);
 a->floatvalue = tmp;
 write_function(controller,ENV_A,sizeof(float),0,&a->floatvalue);
 
 tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 14.999*tmp + 0.001;
 d->value(tmp);
 d->floatvalue = tmp;
@@ -728,6 +734,7 @@ b->floatvalue = tmp;
 write_function(controller,ENV_B,sizeof(float),0,&b->floatvalue);
 
 tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 14.999*tmp + 0.001;
 sw->value(tmp);
 sw->floatvalue = tmp;
@@ -739,6 +746,7 @@ su->floatvalue = tmp;
 write_function(controller,ENV_SUS,sizeof(float),0,&su->floatvalue);
 
 tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 14.999*tmp + 0.001;
 r->value(tmp);
 r->floatvalue = tmp;
@@ -757,25 +765,30 @@ fmwave->floatvalue = tmp;
 write_function(controller,FMOD_WAV,sizeof(float),0,&fmwave->floatvalue);
 
 tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 110*tmp;
 amfreq->value(tmp);
 amfreq->floatvalue = tmp;
 write_function(controller,AMOD_FREQ,sizeof(float),0,&amfreq->floatvalue);
 
 tmp = rand()/(float)RAND_MAX;
-tmp = 110*tmp;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= 110;
 fmfreq->value(tmp);
 fmfreq->floatvalue = tmp;
 write_function(controller,FMOD_FREQ,sizeof(float),0,&fmfreq->floatvalue);
 
-tmp = rand()/(float)RAND_MAX;
-tmp = 2*tmp-1;
+tmp = 2*rand()/(float)RAND_MAX -1;
+tmp *= 2*rand()/(float)RAND_MAX -1;
 amgain->value(tmp);
 amgain->floatvalue = tmp;
 write_function(controller,AMOD_GAIN,sizeof(float),0,&amgain->floatvalue);
 
-tmp = rand()/(float)RAND_MAX;
-tmp = 8*tmp-4;
+tmp = 2*rand()/(float)RAND_MAX -1;
+tmp *= 2*rand()/(float)RAND_MAX -1;
+tmp *= 8;
 fmgain->value(tmp);
 fmgain->floatvalue = tmp;
 write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
