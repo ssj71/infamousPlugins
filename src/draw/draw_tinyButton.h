@@ -106,6 +106,9 @@ cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 cairo_matrix_init(&matrix, 1,0,0,1,-915.02844,-473.718751);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
+}
+else
+{
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.501961,0.501961,0.501961,1);
@@ -157,10 +160,6 @@ cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 cairo_matrix_init(&matrix, 1,0,0,1,-789.25,-430.17803);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
-}
-
-else
-{
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.501961,0,0,1);

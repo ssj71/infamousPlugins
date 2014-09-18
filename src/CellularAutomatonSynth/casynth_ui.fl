@@ -285,7 +285,7 @@ class CaSynthUI {open
 if(rule7->value())
   tmp |= 0x80;
 else
-  tmp &= 0x80;
+  tmp &= ~0x80;
 rule = tmp;
 write_function(controller,RULE,sizeof(float),0,&rule);
 cellgrid->rule = rule;
@@ -301,7 +301,7 @@ cellgrid->redraw();}
 if(rule6->value())
   tmp |= 0x40;
 else
-  tmp &= 0x40;
+  tmp &= ~0x40;
 rule = tmp;
 write_function(controller,RULE,sizeof(float),0,&rule);
 cellgrid->rule = rule;
@@ -317,7 +317,7 @@ cellgrid->redraw();}
 if(rule5->value())
   tmp |= 0x20;
 else
-  tmp &= 0x20;
+  tmp &= ~0x20;
 rule = tmp;
 write_function(controller,RULE,sizeof(float),0,&rule);
 cellgrid->rule = rule;
@@ -333,7 +333,7 @@ cellgrid->redraw();}
 if(rule4->value())
   tmp |= 0x10;
 else
-  tmp &= 0x10;
+  tmp &= ~0x10;
 rule = tmp;
 write_function(controller,RULE,sizeof(float),0,&rule);
 cellgrid->rule = rule;
@@ -349,7 +349,7 @@ cellgrid->redraw();}
 if(rule3->value())
   tmp |= 0x08;
 else
-  tmp &= 0x08;
+  tmp &= ~0x08;
 rule = tmp;
 write_function(controller,RULE,sizeof(float),0,&rule);
 cellgrid->rule = rule;
@@ -365,7 +365,7 @@ cellgrid->redraw();}
 if(rule2->value())
   tmp |= 0x04;
 else
-  tmp &= 0x04;
+  tmp &= ~0x04;
 rule = tmp;
 write_function(controller,RULE,sizeof(float),0,&rule);
 cellgrid->rule = rule;
@@ -381,7 +381,7 @@ cellgrid->redraw();}
 if(rule1->value())
   tmp |= 0x02;
 else
-  tmp &= 0x02;
+  tmp &= ~0x02;
 rule = tmp;
 write_function(controller,RULE,sizeof(float),0,&rule);
 cellgrid->rule = rule;
@@ -397,7 +397,7 @@ cellgrid->redraw();}
 if(rule0->value())
   tmp |= 0x01;
 else
-  tmp &= 0x01;
+  tmp &= ~0x01;
 rule = tmp;
 write_function(controller,RULE,sizeof(float),0,&rule);
 cellgrid->rule = rule;
@@ -413,9 +413,9 @@ cellgrid->redraw();}
 if(init15->value())
   tmp |= 0x8000;
 else
-  tmp &= 0x8000;
+  tmp &= ~0x8000;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 15} xywh {26 268 13 13}
@@ -429,9 +429,9 @@ cellgrid->redraw();}
 if(init14->value())
   tmp |= 0x4000;
 else
-  tmp &= 0x4000;
+  tmp &= ~0x4000;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 14} xywh {41 268 13 13}
@@ -445,9 +445,9 @@ cellgrid->redraw();}
 if(init13->value())
   tmp |= 0x2000;
 else
-  tmp &= 0x2000;
+  tmp &= ~0x2000;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 13} xywh {56 268 13 13}
@@ -461,9 +461,9 @@ cellgrid->redraw();}
 if(init12->value())
   tmp |= 0x1000;
 else
-  tmp &= 0x1000;
+  tmp &= ~0x1000;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 12} xywh {70 268 13 13}
@@ -477,9 +477,9 @@ cellgrid->redraw();}
 if(init11->value())
   tmp |= 0x0800;
 else
-  tmp &= 0x0800;
+  tmp &= ~0x0800;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 11} xywh {85 268 13 13}
@@ -493,9 +493,9 @@ cellgrid->redraw();}
 if(init10->value())
   tmp |= 0x0400;
 else
-  tmp &= 0x0400;
+  tmp &= ~0x0400;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 10} xywh {99 268 13 13}
@@ -509,9 +509,9 @@ cellgrid->redraw();}
 if(init9->value())
   tmp |= 0x0200;
 else
-  tmp &= 0x0200;
+  tmp &= ~0x0200;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 9} xywh {114 268 13 13}
@@ -525,9 +525,9 @@ cellgrid->redraw();}
 if(init8->value())
   tmp |= 0x0100;
 else
-  tmp &= 0x0100;
+  tmp &= ~0x0100;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 8} xywh {129 268 13 13}
@@ -541,9 +541,9 @@ cellgrid->redraw();}
 if(init7->value())
   tmp |= 0x0080;
 else
-  tmp &= 0x0080;
+  tmp &= ~0x0080;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 7} xywh {143 268 13 13}
@@ -557,9 +557,9 @@ cellgrid->redraw();}
 if(init6->value())
   tmp |= 0x0040;
 else
-  tmp &= 0x0040;
+  tmp &= ~0x0040;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 6} xywh {158 268 13 13}
@@ -573,9 +573,9 @@ cellgrid->redraw();}
 if(init5->value())
   tmp |= 0x0020;
 else
-  tmp &= 0x0020;
+  tmp &= ~0x0020;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 5} xywh {172 268 13 13}
@@ -589,9 +589,9 @@ cellgrid->redraw();}
 if(init4->value())
   tmp |= 0x0010;
 else
-  tmp &= 0x0010;
+  tmp &= ~0x0010;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 4} xywh {187 268 13 13}
@@ -605,9 +605,9 @@ cellgrid->redraw();}
 if(init3->value())
   tmp |= 0x0008;
 else
-  tmp &= 0x0008;
+  tmp &= ~0x0008;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 3} xywh {202 268 13 13}
@@ -621,9 +621,9 @@ cellgrid->redraw();}
 if(init2->value())
   tmp |= 0x0004;
 else
-  tmp &= 0x0004;
+  tmp &= ~0x0004;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 2} xywh {216 268 13 13}
@@ -637,9 +637,9 @@ cellgrid->redraw();}
 if(init1->value())
   tmp |= 0x0002;
 else
-  tmp &= 0x0002;
+  tmp &= ~0x0002;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 1} xywh {231 268 13 13}
@@ -653,9 +653,9 @@ cellgrid->redraw();}
 if(init0->value())
   tmp |= 0x0001;
 else
-  tmp &= 0x0001;
+  tmp &= ~0x0001;
 initial_condition = tmp;
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 cellgrid->initial_condition = initial_condition;
 cellgrid->redraw();}
         tooltip {initial condition, bit 0} xywh {246 268 13 13} value 1
@@ -672,7 +672,7 @@ float tmp;
 
 tmp = rand()/(float)RAND_MAX;
 tmp = (int)(0xFF*tmp);
-set_rule(tmp)
+set_rule(tmp);
 write_function(controller,RULE,sizeof(float),0,&rule);
 
 tmp = rand()/(float)RAND_MAX;
@@ -787,7 +787,8 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
       Fl_Box cellgrid {
         tooltip {cell progression preview} xywh {29 305 228 286}
         code0 {\#include"cellgrid.h"}
-        code2 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width();}
+        code1 {\#include"draw_LED.h"}
+        code2 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width();o->drawing_f = cairo_code_draw_redLED_render;}
         class CellGrid
       }
       Fl_Dial channel {
@@ -799,7 +800,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         class Dial
       }
       Fl_Dial mastergain {
-        callback {write_function(controller,MASTER_GAIN,sizeof(float),0,&masterbain->floatvalue);}
+        callback {write_function(controller,MASTER_GAIN,sizeof(float),0,&mastergain->floatvalue);}
         tooltip gain xywh {37 52 30 30} maximum 2 step 0.02 value 1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
@@ -810,6 +811,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip waveform xywh {49 134 30 30} maximum 5 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->lock2int = true;}
         class Dial
       }
       Fl_Dial lifetime {
@@ -825,6 +827,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip {gain of harmonics} xywh {311 152 30 30} maximum 3 step 0.08 value 1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->lock2int = true;}
         class Dial
       }
       Fl_Dial nharmonics {
@@ -836,7 +839,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         class Dial
       }
       Fl_Dial harmwidth {
-        callback {write_function(controller,HARMWIDTH,sizeof(float),0,&harmwidth->floatvalue);}
+        callback {write_function(controller,HARM_WIDTH,sizeof(float),0,&harmwidth->floatvalue);}
         tooltip {width/detune} xywh {403 163 30 30} maximum 50 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
@@ -848,6 +851,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip attack xywh {286 227 30 30} minimum 0.001 maximum 15 step 0.1 value 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {strcpy(o->units,"s");}
         class Dial
       }
       Fl_Dial d {
@@ -855,6 +859,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip decay xywh {336 227 30 30} minimum 0.001 maximum 15 step 0.1 value 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {strcpy(o->units,"s");}
         class Dial
       }
       Fl_Dial b {
@@ -869,6 +874,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip swell xywh {311 252 30 30} minimum 0.001 maximum 15 step 0.1 value 3
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {strcpy(o->units,"s");}
         class Dial
       }
       Fl_Dial su {
@@ -883,6 +889,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip release xywh {411 252 30 30} minimum 0.001 maximum 15 step 0.1 value 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {strcpy(o->units,"s");}
         class Dial
       }
       Fl_Dial amwave {
@@ -890,6 +897,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip waveform xywh {312 343 30 30} maximum 5 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->lock2int = true;}
         class Dial
       }
       Fl_Dial amfreq {
@@ -897,6 +905,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip frequency xywh {378 326 30 30} maximum 110 step 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {strcpy(o->units,"hz");}
         class Dial
       }
       Fl_Dial amgain {
@@ -911,6 +920,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip waveform xywh {312 439 30 30} maximum 5 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->lock2int = true;}
         class Dial
       }
       Fl_Dial fmfreq {
@@ -918,10 +928,15 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip frequency xywh {378 422 30 30} maximum 110 step 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {strcpy(o->units,"hz");}
         class Dial
       }
       Fl_Dial fmgain {
-        callback {write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);} selected
+        callback {write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);
+char s[18];
+sprintf(s,"          %1.3f",fmgain->floatvalue);
+param->copy_label("Freq. Mod. Gain");
+value->copy_label(s);} selected
         tooltip gain xywh {403 446 30 30} minimum -4 maximum 4 step 0.05
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
@@ -955,7 +970,7 @@ float val=0;
 int i=0;
 sprintf(n,"%f",initial_condition);
 const char *r = fl_input("Enter Value:",n);
-if(r!=NULL && sscanf(rm"0x%4x",&i))
+if(r!=NULL && sscanf(r,"0x%4x",&i))
 {
   val = i;
   set_initial_condition(val);
@@ -966,10 +981,24 @@ else if(r!=NULL && sscanf(r,"%f",&val))
   if ( val < 0 ) val = 0;
   set_initial_condition(val);
 }
-write_function(controller,INIT_CELL,sizeof(float),0,&initial_condition);}
-        tooltip {enter intial value} xywh {0 263 26 20}
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);}
+        tooltip {enter initial value} xywh {0 263 26 20}
         code1 {o->drawing_f = &draw_nothing_render;}
         class Button
+      }
+      Fl_Box param{
+        tooltip {current input value} xywh {118 22 332 28}
+        code0 {\#include"draw_16seg.h"}
+        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_red16seg_render;}
+        code3 {o->nchars = 18; o->periods = false;}
+        class AsciiDisplay
+      }
+      Fl_Box value{
+        tooltip {current output value} xywh {118 68 332 28}
+        code0 {\#include"draw_16seg.h"}
+        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_red16seg_render;}
+        code3 {o->nchars = 18; o->periods = false;}
+        class AsciiDisplay
       }
     }
   }
@@ -989,37 +1018,64 @@ Fl::flush();} {}
     code {rule = ru;
 unsigned char r = ru;
 rule7->value(r&0x80);
+rule7->redraw();
 rule6->value(r&0x40);
+rule6->redraw();
 rule5->value(r&0x20);
+rule5->redraw();
 rule4->value(r&0x10);
+rule4->redraw();
 rule3->value(r&0x08);
+rule3->redraw();
 rule2->value(r&0x04);
+rule2->redraw();
 rule1->value(r&0x02);
+rule1->redraw();
 rule0->value(r&0x01);
-cellgrid->rule = r;} {}
+rule0->redraw();
+cellgrid->rule = r;
+cellgrid->redraw();} {}
   }
   decl {float initial_condition;} {private local
   }
   Function {set_initial_condition(float in)} {open return_type void
   } {
-    code {inital_condition = in;
+    code {initial_condition = in;
 unsigned short i = in;
 init15->value(i&0x8000);
+init15->redraw();
 init14->value(i&0x4000);
+init14->redraw();
 init13->value(i&0x2000);
+init13->redraw();
 init12->value(i&0x1000);
+init12->redraw();
 init11->value(i&0x0800);
+init11->redraw();
 init10->value(i&0x0400);
+init10->redraw();
 init9->value(i&0x0200);
+init9->redraw();
 init8->value(i&0x0100);
+init8->redraw();
 init7->value(i&0x0080);
+init7->redraw();
 init6->value(i&0x0040);
+init6->redraw();
 init5->value(i&0x0020);
+init5->redraw();
 init4->value(i&0x0010);
+init4->redraw();
 init3->value(i&0x0008);
+init3->redraw();
 init2->value(i&0x0004);
+init2->redraw();
 init1->value(i&0x0002);
+init1->redraw();
 init0->value(i&0x0001);
-cellgrid->initial_condition = i;} {}
+init0->redraw();
+cellgrid->initial_condition = i;
+cellgrid->redraw();} {}
+
   }
 } 

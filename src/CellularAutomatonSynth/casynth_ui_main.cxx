@@ -1,3 +1,6 @@
+#ifndef CASYNTH_H
+#define CASYNTH_H
+
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/x.H>
@@ -31,14 +34,13 @@ static LV2UI_Handle init_casynthUI(const struct _LV2UI_Descriptor * descriptor,
     for (int i = 0; features[i]; ++i)
     {
         if (!strcmp(features[i]->URI, LV2_UI__parent)) 
-	{
+        {
            parentXwindow = features[i]->data;
         }
 	else if (!strcmp(features[i]->URI, LV2_UI__resize)) 
-	{
+        {
            resize = (LV2UI_Resize*)features[i]->data;
         }
-
     }
 
     self->ui = self->show();
@@ -133,8 +135,8 @@ void casynthUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_
         case INIT_CELLS:
           self->set_initial_condition(val);
 	  break;
-      }
-    }
+      }//switch
+    }//if float
 }
 
 static int
@@ -155,8 +157,8 @@ resize_func(LV2UI_Feature_Handle handle, int w, int h)
   return 0;
 }
 
-static const LV2UI_Idle_Interface idle_iface;// = { idle };
-static const LV2UI_Resize resize_ui ;//= { 0, resize_func };//ideally 1st member would be the CaSynthUI instance
+static const LV2UI_Idle_Interface idle_iface = { idle };
+static const LV2UI_Resize resize_ui = { 0, resize_func };//ideally 1st member would be the CaSynthUI instance
 
 static const void*
 extension_data(const char* uri)
@@ -190,3 +192,4 @@ const LV2UI_Descriptor* lv2ui_descriptor(uint32_t index)
         return NULL;
     }
 }
+#endif

@@ -32,6 +32,7 @@
 //avtk drawing method (adapted)
 static void default_cell_drawing(cairo_t *cr,int v)
 {
+  v++;
 };
 
 namespace ffffltk
@@ -55,16 +56,14 @@ class CellGrid: public Fl_Widget
       drawing_f = &default_cell_drawing;
 
       rule = 30;
-      initial_condition = 1;
-
-      Fl::add_timeout(.1,reel_callback,this);
+      initial_condition = 1; 
     }
     int x, y, w, h;
     const char* label;
 
     int drawing_w;
     int drawing_h;
-    void (*drawing_f)(cairo_t*,float);//pointer to draw function
+    void (*drawing_f)(cairo_t*,int);//pointer to draw function
 
     unsigned char rule;
     unsigned short initial_condition;
@@ -79,7 +78,7 @@ class CellGrid: public Fl_Widget
         double scalex,
         scaley,
         offset = 0;//distance between leds
-        scalex = w/(double)(drawing_w*16);
+        scalex = w/(double)(drawing_w*24);//1.5*16=24
         scaley = h/(double)drawing_h;
         if(scalex > scaley)
         {
@@ -100,7 +99,7 @@ class CellGrid: public Fl_Widget
             for (int j=0; j<16; j++)
             {
            
-              int v = cells&0x8000>>i;
+              int v = cells&0x8000>>j;
               cairo_save( cr );
 
               //move
@@ -114,6 +113,7 @@ class CellGrid: public Fl_Widget
             }
 
             //calculate cells
+            temp = 0;
             for(unsigned char index=0;index<=15;index++)
             {
                 //the idea is to shift the rule mask (w/rollover) according to the 3
@@ -125,8 +125,9 @@ class CellGrid: public Fl_Widget
                 temp |= ((rule & 1<<((cells>>index|cells<<(15-index+1) )&7) )>0)<<index;
             }
             cells=temp<<1|temp>>15;
-        }
-    }
+        }//rows
+      }//if damage
+    }//end draw
     
     void resize(int X, int Y, int W, int H)
     {
@@ -137,7 +138,7 @@ class CellGrid: public Fl_Widget
       h = H;
       redraw();
     }
-
+};//class
 } // ffffltk
 
 #endif // FFF_CELLGRIDD_H

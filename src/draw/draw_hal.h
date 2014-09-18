@@ -2,7 +2,7 @@
 #define DRAW_HAL_H
 inline int cairo_code_draw_hal_get_width() { return 82; }
 inline int cairo_code_draw_hal_get_height() { return 82; }
-inline void cairo_code_draw_hal_render(cairo_t *cr) {
+inline void cairo_code_draw_hal_render(cairo_t *cr, int bogus) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -35,7 +35,7 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 16);
+cairo_set_line_width(cr, 3);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -56,7 +56,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 3.743746);
+cairo_set_line_width(cr, 3);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -77,7 +77,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 3.738693);
+cairo_set_line_width(cr, 3);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -94,7 +94,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 3.738693);
+cairo_set_line_width(cr, 3.2);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -110,6 +110,7 @@ cairo_matrix_init(&matrix, 0.559793,0,0,0.559793,-141.483807,-609.127432);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
+/*
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 cairo_set_line_width(cr, 16);
 cairo_set_miter_limit(cr, 4);
@@ -137,6 +138,7 @@ cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 cairo_matrix_init(&matrix, 0.350419,0,0,0.350419,0.800957,-390.49345);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
+*/
 /********************/
 }
 #endif

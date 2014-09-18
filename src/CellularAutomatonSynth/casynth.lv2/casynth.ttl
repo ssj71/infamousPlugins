@@ -38,6 +38,7 @@ lv2:symbol "Modulation" .
         ] ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
+        lv2ui:ui <http://infamousplugins.sourceforge.net/plugs.html#casynth_ui> ;
 
         lv2:port [
                 a lv2:InputPort, lv2atom:AtomPort ;

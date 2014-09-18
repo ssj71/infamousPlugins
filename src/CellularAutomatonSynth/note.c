@@ -44,13 +44,11 @@ void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, unsigned char 
         self->envelope[i] = 1;
     }
 
-    self->fmod_func = &mySin;
     self->fmod_gain = fmod_gain;//start this at 0
     self->fmod_phase = 0;
     self->fmod_step = 0;
     init_hysteresis(&(self->fhyst));
 
-    self->amod_func = &mySin;
     self->amod_gain = amod_gain;//start this at 0
     self->amod_phase = 0;
     self->amod_step = 0;

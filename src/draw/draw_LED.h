@@ -118,9 +118,9 @@ cairo_stroke_preserve(cr);
 }
 
 inline void cairo_code_draw_redLED_render(cairo_t *cr, int val) {
-    inline void cairo_code_draw_LED_render(cr, val,0);}
+    cairo_code_draw_LED_render(cr, val,0);}
 inline void cairo_code_draw_greenLED_render(cairo_t *cr, int val) {
-    inline void cairo_code_draw_LED_render(cr, val,3);}
+    cairo_code_draw_LED_render(cr, val,3);}
 inline void cairo_code_draw_blueLED_render(cairo_t *cr, int val) {
-    inline void cairo_code_draw_LED_render(cr, val,4);}
+    cairo_code_draw_LED_render(cr, val,4);}
 #endif
