@@ -805,7 +805,25 @@ switch(c){
     return 0xc423;
 
   case 97://a
-    return 0xc2a7;
+    return 0x1032;
+  case 98://b
+    return 0x0819;
+  case 99://c
+    return 0x0091;
+  case 100://d
+    return 0x0832;
+  case 101://e
+    return 0x0691;
+  case 102://f
+    return 0x0590;
+  case 103://g
+    return 0x0685;
+  case 104://h
+    return 0x0894;
+  case 105://i
+    return 0x0010;
+  case 106://j
+    return 0x
   default:
     return 0;
 }
