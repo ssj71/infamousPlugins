@@ -102,8 +102,8 @@ cairo_curve_to(cr, 137.960938, 285.945312, 138.9375, 285.644531, 139.730469, 285
 cairo_curve_to(cr, 140.382812, 284.609375, 140.902344, 283.960938, 141.222656, 283.222656);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-231.137283,671.255864);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-231.137283,671.255864);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -123,8 +123,8 @@ cairo_curve_to(cr, 141.875, 282.054688, 142.4375, 282.617188, 142.4375, 283.3125
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,110.469288,212.022679);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,110.469288,212.022679);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -141,8 +141,8 @@ cairo_curve_to(cr, 141.367188, 281.722656, 141.5, 281.488281, 141.683594, 281.30
 cairo_curve_to(cr, 141.824219, 281.171875, 141.992188, 281.0625, 142.171875, 280.992188);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -159,8 +159,8 @@ cairo_curve_to(cr, 141.089844, 284.921875, 140.953125, 285.152344, 140.769531, 2
 cairo_curve_to(cr, 140.628906, 285.46875, 140.460938, 285.578125, 140.28125, 285.648438);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -177,8 +177,8 @@ cairo_curve_to(cr, 142.671875, 283.457031, 142.902344, 283.589844, 143.085938, 2
 cairo_curve_to(cr, 143.222656, 283.914062, 143.328125, 284.082031, 143.398438, 284.265625);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -195,8 +195,8 @@ cairo_curve_to(cr, 139.628906, 283.394531, 139.398438, 283.257812, 139.21875, 28
 cairo_curve_to(cr, 139.082031, 282.933594, 138.972656, 282.765625, 138.902344, 282.585938);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -213,8 +213,8 @@ cairo_curve_to(cr, 140.152344, 282.085938, 140.082031, 281.824219, 140.085938, 2
 cairo_curve_to(cr, 140.085938, 281.371094, 140.128906, 281.175781, 140.207031, 281);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -231,8 +231,8 @@ cairo_curve_to(cr, 142.539062, 282.402344, 142.796875, 282.332031, 143.054688, 2
 cairo_curve_to(cr, 143.25, 282.339844, 143.445312, 282.378906, 143.625, 282.460938);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -249,8 +249,8 @@ cairo_curve_to(cr, 142.21875, 284.542969, 142.289062, 284.804688, 142.285156, 28
 cairo_curve_to(cr, 142.285156, 285.257812, 142.242188, 285.453125, 142.164062, 285.628906);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -267,8 +267,8 @@ cairo_curve_to(cr, 140.054688, 284.445312, 139.796875, 284.511719, 139.539062, 2
 cairo_curve_to(cr, 139.34375, 284.507812, 139.148438, 284.464844, 138.96875, 284.386719);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.0977223,0,0,0.0977223,111.300424,209.698779);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -324,8 +324,8 @@ cairo_line_to(cr, 135.3125, 238.839844);
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -365,8 +365,8 @@ cairo_curve_to(cr, 128.167969, 227.800781, 126.980469, 227.761719, 126.980469, 2
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -410,8 +410,8 @@ cairo_curve_to(cr, 128.664062, 229.007812, 128.546875, 229.007812, 128.148438, 2
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -430,8 +430,8 @@ cairo_curve_to(cr, 132.839844, 224.078125, 133.789062, 224.71875, 134.429688, 22
 cairo_curve_to(cr, 134.726562, 226, 134.960938, 226.460938, 135.113281, 226.941406);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -459,8 +459,8 @@ cairo_move_to(cr, 126.164062, 228.183594);
 cairo_line_to(cr, 132.320312, 228.339844);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -494,8 +494,8 @@ cairo_curve_to(cr, 131.257812, 232.007812, 132.824219, 232.996094, 133.789062, 2
 cairo_curve_to(cr, 134.757812, 235.824219, 135.113281, 237.640625, 134.753906, 239.316406);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.546763,0,0,0.546763,-230.67986,670.206668);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -531,8 +531,8 @@ cairo_curve_to(cr, 117.710938, 255.480469, 116.015625, 250.773438, 117.710938, 2
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -548,8 +548,8 @@ cairo_move_to(cr, 126.84375, 255.164062);
 cairo_line_to(cr, 127.011719, 255.164062);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -565,8 +565,8 @@ cairo_move_to(cr, 121.804688, 249.859375);
 cairo_line_to(cr, 121.972656, 249.859375);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -582,8 +582,8 @@ cairo_move_to(cr, 126.84375, 249.859375);
 cairo_line_to(cr, 127.011719, 249.859375);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -599,8 +599,8 @@ cairo_move_to(cr, 131.886719, 249.859375);
 cairo_line_to(cr, 132.054688, 249.859375);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -616,8 +616,8 @@ cairo_move_to(cr, 129.367188, 252.511719);
 cairo_line_to(cr, 129.53125, 252.511719);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -633,8 +633,8 @@ cairo_move_to(cr, 124.324219, 252.511719);
 cairo_line_to(cr, 124.492188, 252.511719);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -650,8 +650,8 @@ cairo_move_to(cr, 119.285156, 252.511719);
 cairo_line_to(cr, 119.453125, 252.511719);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -667,8 +667,8 @@ cairo_move_to(cr, 121.804688, 255.164062);
 cairo_line_to(cr, 121.972656, 255.164062);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -684,8 +684,8 @@ cairo_move_to(cr, 124.324219, 257.816406);
 cairo_line_to(cr, 124.492188, 257.816406);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_pattern_set_extend(pattern, CAIRO_EXTEND_NONE);
@@ -830,8 +830,8 @@ cairo_curve_to(cr, 157.910156, 255.054688, 166.863281, 235.320312, 184, 235.3203
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.875,0,0,0.875,-368.151849,-202.671873);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.875,0,0,0.875,-368.151849,-202.671873);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -867,8 +867,8 @@ cairo_curve_to(cr, 204.089844, 165.785156, 215.140625, 176.835938, 215.140625, 1
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.875,0,0,0.875,-525.483886,-401.907276);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.875,0,0,0.875,-525.483886,-401.907276);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -904,8 +904,8 @@ cairo_curve_to(cr, 186.527344, 202.425781, 188.308594, 204.210938, 188.308594, 2
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.619152,0,0,0.619152,-315.415543,-196.617242);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.619152,0,0,0.619152,-315.415543,-196.617242);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -941,8 +941,8 @@ cairo_curve_to(cr, 198.777344, 202.425781, 200.558594, 204.210938, 200.558594, 2
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.619152,0,0,0.619152,-303.165543,-196.617242);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.619152,0,0,0.619152,-303.165543,-196.617242);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -978,8 +978,8 @@ cairo_curve_to(cr, 186.527344, 178.515625, 188.308594, 176.734375, 188.308594, 1
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.619152,0,0,-0.619152,-315.415543,577.56154);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.619152,0,0,-0.619152,-315.415543,577.56154);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -1015,8 +1015,8 @@ cairo_curve_to(cr, 198.777344, 178.515625, 200.558594, 176.734375, 200.558594, 1
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 0.619152,0,0,-0.619152,-303.165543,577.56154);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 0.619152,0,0,-0.619152,-303.165543,577.56154);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 }

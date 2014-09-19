@@ -21,8 +21,8 @@ switch(color)
     rd = 0; gd = .3333; bd = 0;
     break;
   case 4://blue
-    r = 0.3; g = 0.6; b = 1;
-    rd = 0; gd = 0; bd = .2;
+    r = 0.055555; g = 0.1; b = 1;
+    rd = 0; gd = 0; bd = .4;
     break;
   default://red
     r = 1; g = 0; b = 0;
@@ -64,8 +64,8 @@ cairo_curve_to(cr, 12.875, 3.070312, 15.699219, 5.894531, 15.699219, 9.375);
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1,0,0,1,-60.60796,-180.04859);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1,0,0,1,-60.60796,-180.04859);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********light************/
 if(val)
@@ -93,8 +93,8 @@ cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
 pattern = cairo_pattern_create_radial(70, 189.425, 0, 70, 189.425, 7.306019);
 cairo_pattern_add_color_stop_rgba(pattern, 0,r,g,b,1);
-cairo_pattern_add_color_stop_rgba(pattern, 0,r,g,b,1);
-cairo_pattern_add_color_stop_rgba(pattern, 0,r,g,b,0.4);
+cairo_pattern_add_color_stop_rgba(pattern, .75,r,g,b,1);
+cairo_pattern_add_color_stop_rgba(pattern, 1,r,g,b,0.4);
 cairo_matrix_init(&matrix, 0.86675,0.000000312469,-0.000000305437,0.886706,61.859452,181.110871);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_pattern_set_extend(pattern, CAIRO_EXTEND_PAD);
@@ -110,8 +110,8 @@ cairo_curve_to(cr, 13.003906, 2.839844, 15.929688, 5.765625, 15.929688, 9.375);
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1.036663,0,0,1.036663,-63.17433,-186.99338);
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_matrix_init(&matrix, 1.036663,0,0,1.036663,-63.17433,-186.99338);
+//cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 }//if on
 /********************/
