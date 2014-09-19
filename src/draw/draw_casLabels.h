@@ -2280,276 +2280,6 @@ cairo_fill_preserve(cr);
  /********************/
 }
 #endif
-#ifndef DRAW_CASHARMALABEL_H
-#define DRAW_CASHARMALABEL_H
-inline int cairo_code_draw_casHarmALabel_get_width() { return 7; }
-inline int cairo_code_draw_casHarmALabel_get_height() { return 10; }
-inline void cairo_code_draw_casHarmALabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
-cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
-
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(0,0,0,1);
-cairo_set_source(cr, pattern);
-cairo_pattern_destroy(pattern);
-cairo_new_path(cr);
-cairo_move_to(cr, 2.75, 0);
-cairo_line_to(cr, 7.328125, 0);
-cairo_line_to(cr, 7.328125, 8.800781);
-cairo_curve_to(cr, 7.328125, 8.824219, 7.324219, 8.859375, 7.3125, 8.894531);
-cairo_curve_to(cr, 7.3125, 8.921875, 7.292969, 8.984375, 7.246094, 9.085938);
-cairo_curve_to(cr, 7.21875, 9.230469, 7.054688, 9.40625, 6.753906, 9.617188);
-cairo_curve_to(cr, 6.5, 9.796875, 6.082031, 9.886719, 5.503906, 9.886719);
-cairo_line_to(cr, 5.503906, 5.40625);
-cairo_curve_to(cr, 5.285156, 5.460938, 4.976562, 5.488281, 4.578125, 5.488281);
-cairo_line_to(cr, 2.75, 5.488281);
-cairo_curve_to(cr, 2.632812, 5.488281, 2.542969, 5.5, 2.480469, 5.515625);
-cairo_curve_to(cr, 2.414062, 5.523438, 2.289062, 5.558594, 2.097656, 5.613281);
-cairo_curve_to(cr, 1.914062, 5.667969, 1.824219, 5.8125, 1.824219, 6.046875);
-cairo_line_to(cr, 1.824219, 8.796875);
-cairo_curve_to(cr, 1.824219, 8.84375, 1.824219, 8.878906, 1.824219, 8.90625);
-cairo_curve_to(cr, 1.796875, 8.988281, 1.773438, 9.074219, 1.757812, 9.167969);
-cairo_curve_to(cr, 1.738281, 9.257812, 1.585938, 9.402344, 1.292969, 9.601562);
-cairo_curve_to(cr, 1.003906, 9.792969, 0.570312, 9.886719, 0, 9.886719);
-cairo_line_to(cr, 0, 1.648438);
-cairo_curve_to(cr, 0, 1.558594, 0.0078125, 1.472656, 0.0273438, 1.390625);
-cairo_curve_to(cr, 0.0546875, 1.308594, 0.0898438, 1.222656, 0.136719, 1.128906);
-cairo_curve_to(cr, 0.21875, 0.929688, 0.382812, 0.75, 0.625, 0.585938);
-cairo_curve_to(cr, 0.828125, 0.429688, 1.101562, 0.296875, 1.457031, 0.175781);
-cairo_curve_to(cr, 1.820312, 0.0585938, 2.25, 0, 2.75, 0);
-cairo_move_to(cr, 5.503906, 3.296875);
-cairo_line_to(cr, 5.503906, 1.089844);
-cairo_line_to(cr, 2.75, 1.089844);
-cairo_curve_to(cr, 2.414062, 1.089844, 2.160156, 1.152344, 1.988281, 1.28125);
-cairo_curve_to(cr, 1.90625, 1.378906, 1.851562, 1.503906, 1.824219, 1.648438);
-cairo_line_to(cr, 1.824219, 4.496094);
-cairo_curve_to(cr, 2.105469, 4.429688, 2.414062, 4.398438, 2.75, 4.398438);
-cairo_line_to(cr, 4.578125, 4.398438);
-cairo_curve_to(cr, 4.929688, 4.398438, 5.171875, 4.339844, 5.296875, 4.222656);
-cairo_curve_to(cr, 5.433594, 4.09375, 5.503906, 3.96875, 5.503906, 3.839844);
-cairo_line_to(cr, 5.503906, 3.296875);
-cairo_set_tolerance(cr, 0.1);
-cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
-cairo_fill_preserve(cr);
- /********************/
-}
-#endif
-#ifndef DRAW_CASHARMBLABEL_H
-#define DRAW_CASHARMBLABEL_H
-inline int cairo_code_draw_casHarmBLabel_get_width() { return 7; }
-inline int cairo_code_draw_casHarmBLabel_get_height() { return 10; }
-inline void cairo_code_draw_casHarmBLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
-cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
-
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(0,0,0,1);
-cairo_set_source(cr, pattern);
-cairo_pattern_destroy(pattern);
-cairo_new_path(cr);
-cairo_move_to(cr, 2.75, 0);
-cairo_line_to(cr, 7.328125, 0);
-cairo_line_to(cr, 7.328125, 3.839844);
-cairo_curve_to(cr, 7.328125, 4.078125, 7.238281, 4.316406, 7.054688, 4.5625);
-cairo_curve_to(cr, 6.984375, 4.679688, 6.882812, 4.789062, 6.753906, 4.890625);
-cairo_curve_to(cr, 6.628906, 4.988281, 6.457031, 5.085938, 6.238281, 5.175781);
-cairo_line_to(cr, 7.054688, 5.652344);
-cairo_line_to(cr, 7.328125, 5.800781);
-cairo_line_to(cr, 7.328125, 8.242188);
-cairo_curve_to(cr, 7.328125, 8.339844, 7.320312, 8.429688, 7.300781, 8.511719);
-cairo_curve_to(cr, 7.28125, 8.59375, 7.238281, 8.691406, 7.164062, 8.796875);
-cairo_curve_to(cr, 7.109375, 8.917969, 7.054688, 9.011719, 7, 9.085938);
-cairo_curve_to(cr, 6.945312, 9.148438, 6.847656, 9.226562, 6.703125, 9.316406);
-cairo_curve_to(cr, 6.511719, 9.480469, 6.230469, 9.617188, 5.855469, 9.726562);
-cairo_curve_to(cr, 5.484375, 9.832031, 5.058594, 9.886719, 4.578125, 9.886719);
-cairo_line_to(cr, 0, 9.886719);
-cairo_line_to(cr, 0, 1.648438);
-cairo_curve_to(cr, 0, 1.558594, 0.0078125, 1.472656, 0.0273438, 1.390625);
-cairo_curve_to(cr, 0.0546875, 1.308594, 0.0898438, 1.222656, 0.136719, 1.128906);
-cairo_curve_to(cr, 0.21875, 0.929688, 0.382812, 0.75, 0.625, 0.585938);
-cairo_curve_to(cr, 0.828125, 0.429688, 1.101562, 0.296875, 1.457031, 0.175781);
-cairo_curve_to(cr, 1.820312, 0.0585938, 2.25, 0, 2.75, 0);
-cairo_move_to(cr, 5.503906, 8.242188);
-cairo_line_to(cr, 5.503906, 6.277344);
-cairo_line_to(cr, 4.195312, 5.488281);
-cairo_line_to(cr, 2.75, 5.488281);
-cairo_curve_to(cr, 2.632812, 5.488281, 2.542969, 5.496094, 2.480469, 5.515625);
-cairo_curve_to(cr, 2.414062, 5.523438, 2.289062, 5.558594, 2.097656, 5.613281);
-cairo_curve_to(cr, 1.914062, 5.664062, 1.824219, 5.8125, 1.824219, 6.046875);
-cairo_line_to(cr, 1.824219, 8.796875);
-cairo_line_to(cr, 4.578125, 8.796875);
-cairo_curve_to(cr, 4.941406, 8.796875, 5.175781, 8.734375, 5.285156, 8.609375);
-cairo_curve_to(cr, 5.429688, 8.488281, 5.503906, 8.367188, 5.503906, 8.238281);
-cairo_move_to(cr, 5.503906, 3.839844);
-cairo_line_to(cr, 5.503906, 1.089844);
-cairo_line_to(cr, 2.75, 1.089844);
-cairo_curve_to(cr, 2.414062, 1.089844, 2.160156, 1.152344, 1.988281, 1.28125);
-cairo_curve_to(cr, 1.90625, 1.378906, 1.851562, 1.503906, 1.824219, 1.648438);
-cairo_line_to(cr, 1.824219, 4.496094);
-cairo_curve_to(cr, 2.105469, 4.429688, 2.414062, 4.398438, 2.75, 4.398438);
-cairo_line_to(cr, 4.578125, 4.398438);
-cairo_curve_to(cr, 4.929688, 4.398438, 5.171875, 4.339844, 5.296875, 4.222656);
-cairo_curve_to(cr, 5.433594, 4.09375, 5.503906, 3.96875, 5.503906, 3.839844);
-cairo_set_tolerance(cr, 0.1);
-cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
-cairo_fill_preserve(cr);
- /********************/
-}
-#endif
-#ifndef DRAW_CASHARMDLABEL_H
-#define DRAW_CASHARMDLABEL_H
-inline int cairo_code_draw_casHarmDLabel_get_width() { return 7; }
-inline int cairo_code_draw_casHarmDLabel_get_height() { return 10; }
-inline void cairo_code_draw_casHarmDLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
-cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
-
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(0,0,0,1);
-cairo_set_source(cr, pattern);
-cairo_pattern_destroy(pattern);
-cairo_new_path(cr);
-cairo_move_to(cr, 3.40625, 0.164062);
-cairo_line_to(cr, 7.054688, 2.355469);
-cairo_line_to(cr, 7.328125, 2.519531);
-cairo_line_to(cr, 7.328125, 8.242188);
-cairo_curve_to(cr, 7.328125, 8.53125, 7.226562, 8.785156, 7.027344, 9.003906);
-cairo_curve_to(cr, 6.863281, 9.203125, 6.636719, 9.371094, 6.347656, 9.507812);
-cairo_curve_to(cr, 6.101562, 9.617188, 5.800781, 9.714844, 5.449219, 9.808594);
-cairo_curve_to(cr, 5.175781, 9.859375, 4.886719, 9.886719, 4.578125, 9.886719);
-cairo_line_to(cr, 0, 9.886719);
-cairo_line_to(cr, 0, 1.648438);
-cairo_curve_to(cr, 0, 1.492188, 0.0195312, 1.351562, 0.0546875, 1.226562);
-cairo_curve_to(cr, 0.101562, 1.089844, 0.171875, 0.976562, 0.273438, 0.886719);
-cairo_curve_to(cr, 0.355469, 0.792969, 0.449219, 0.710938, 0.558594, 0.640625);
-cairo_curve_to(cr, 0.667969, 0.558594, 0.800781, 0.472656, 0.953125, 0.382812);
-cairo_curve_to(cr, 1.042969, 0.335938, 1.175781, 0.285156, 1.347656, 0.230469);
-cairo_curve_to(cr, 1.53125, 0.175781, 1.6875, 0.132812, 1.824219, 0.09375);
-cairo_curve_to(cr, 1.980469, 0.078125, 2.148438, 0.0585938, 2.328125, 0.0390625);
-cairo_curve_to(cr, 2.519531, 0.015625, 2.660156, 0, 2.75, 0);
-cairo_line_to(cr, 3.132812, 0);
-cairo_line_to(cr, 3.40625, 0.164062);
-cairo_move_to(cr, 5.503906, 8.242188);
-cairo_line_to(cr, 5.503906, 2.996094);
-cairo_line_to(cr, 2.425781, 1.128906);
-cairo_curve_to(cr, 2.261719, 1.128906, 2.117188, 1.179688, 1.988281, 1.28125);
-cairo_curve_to(cr, 1.90625, 1.363281, 1.851562, 1.484375, 1.824219, 1.648438);
-cairo_line_to(cr, 1.824219, 8.796875);
-cairo_line_to(cr, 4.578125, 8.796875);
-cairo_curve_to(cr, 4.722656, 8.796875, 4.824219, 8.792969, 4.890625, 8.785156);
-cairo_curve_to(cr, 4.960938, 8.765625, 5.066406, 8.734375, 5.203125, 8.691406);
-cairo_curve_to(cr, 5.402344, 8.609375, 5.503906, 8.457031, 5.503906, 8.242188);
-cairo_set_tolerance(cr, 0.1);
-cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
-cairo_fill_preserve(cr);
- /********************/
-}
-#endif
-#ifndef DRAW_CASHARMFLABEL_H
-#define DRAW_CASHARMFLABEL_H
-inline int cairo_code_draw_casHarmFLabel_get_width() { return 7; }
-inline int cairo_code_draw_casHarmFLabel_get_height() { return 10; }
-inline void cairo_code_draw_casHarmFLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
-cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
-
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(0,0,0,1);
-cairo_set_source(cr, pattern);
-cairo_pattern_destroy(pattern);
-cairo_new_path(cr);
-cairo_move_to(cr, 2.75, 0);
-cairo_line_to(cr, 7.328125, 0);
-cairo_curve_to(cr, 7.328125, 0.0273438, 7.324219, 0.0585938, 7.3125, 0.09375);
-cairo_curve_to(cr, 7.3125, 0.121094, 7.292969, 0.191406, 7.246094, 0.300781);
-cairo_curve_to(cr, 7.21875, 0.464844, 7.0625, 0.636719, 6.78125, 0.816406);
-cairo_curve_to(cr, 6.5, 1, 6.074219, 1.089844, 5.503906, 1.089844);
-cairo_line_to(cr, 2.75, 1.089844);
-cairo_curve_to(cr, 2.414062, 1.089844, 2.160156, 1.152344, 1.988281, 1.28125);
-cairo_curve_to(cr, 1.90625, 1.378906, 1.851562, 1.503906, 1.824219, 1.648438);
-cairo_line_to(cr, 1.824219, 4.480469);
-cairo_curve_to(cr, 2.015625, 4.425781, 2.324219, 4.398438, 2.75, 4.398438);
-cairo_line_to(cr, 5.503906, 4.398438);
-cairo_curve_to(cr, 5.503906, 4.425781, 5.5, 4.457031, 5.488281, 4.496094);
-cairo_curve_to(cr, 5.488281, 4.523438, 5.464844, 4.585938, 5.421875, 4.683594);
-cairo_curve_to(cr, 5.394531, 4.832031, 5.230469, 5.007812, 4.929688, 5.214844);
-cairo_curve_to(cr, 4.675781, 5.398438, 4.25, 5.488281, 3.648438, 5.488281);
-cairo_line_to(cr, 2.75, 5.488281);
-cairo_curve_to(cr, 2.425781, 5.488281, 2.171875, 5.546875, 1.988281, 5.667969);
-cairo_curve_to(cr, 1.90625, 5.792969, 1.851562, 5.921875, 1.824219, 6.046875);
-cairo_line_to(cr, 1.824219, 8.796875);
-cairo_curve_to(cr, 1.824219, 8.84375, 1.824219, 8.878906, 1.824219, 8.90625);
-cairo_curve_to(cr, 1.796875, 8.988281, 1.773438, 9.074219, 1.757812, 9.167969);
-cairo_curve_to(cr, 1.738281, 9.257812, 1.585938, 9.402344, 1.292969, 9.601562);
-cairo_curve_to(cr, 1.003906, 9.792969, 0.570312, 9.886719, 0, 9.886719);
-cairo_line_to(cr, 0, 1.648438);
-cairo_curve_to(cr, 0, 1.558594, 0.0078125, 1.472656, 0.0273438, 1.390625);
-cairo_curve_to(cr, 0.0546875, 1.308594, 0.0898438, 1.222656, 0.136719, 1.128906);
-cairo_curve_to(cr, 0.21875, 0.929688, 0.382812, 0.75, 0.625, 0.585938);
-cairo_curve_to(cr, 0.828125, 0.429688, 1.101562, 0.296875, 1.457031, 0.175781);
-cairo_curve_to(cr, 1.820312, 0.0585938, 2.25, 0, 2.75, 0);
-cairo_set_tolerance(cr, 0.1);
-cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
-cairo_fill_preserve(cr);
- /********************/
-}
-#endif
-#ifndef DRAW_CASHARMNLABEL_H
-#define DRAW_CASHARMNLABEL_H
-inline int cairo_code_draw_casHarmNLabel_get_width() { return 7; }
-inline int cairo_code_draw_casHarmNLabel_get_height() { return 10; }
-inline void cairo_code_draw_casHarmNLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
-cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
-
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(0,0,0,1);
-cairo_set_source(cr, pattern);
-cairo_pattern_destroy(pattern);
-cairo_new_path(cr);
-cairo_move_to(cr, 2.75, 0);
-cairo_line_to(cr, 7.328125, 0);
-cairo_line_to(cr, 7.328125, 8.796875);
-cairo_curve_to(cr, 7.328125, 8.824219, 7.324219, 8.859375, 7.3125, 8.894531);
-cairo_curve_to(cr, 7.3125, 8.921875, 7.292969, 8.984375, 7.246094, 9.085938);
-cairo_curve_to(cr, 7.21875, 9.230469, 7.054688, 9.40625, 6.753906, 9.617188);
-cairo_curve_to(cr, 6.5, 9.796875, 6.082031, 9.886719, 5.503906, 9.886719);
-cairo_line_to(cr, 5.503906, 1.089844);
-cairo_line_to(cr, 2.75, 1.089844);
-cairo_curve_to(cr, 2.414062, 1.089844, 2.160156, 1.152344, 1.988281, 1.28125);
-cairo_curve_to(cr, 1.90625, 1.378906, 1.851562, 1.503906, 1.824219, 1.648438);
-cairo_line_to(cr, 1.824219, 8.796875);
-cairo_curve_to(cr, 1.824219, 8.84375, 1.824219, 8.878906, 1.824219, 8.90625);
-cairo_curve_to(cr, 1.796875, 8.988281, 1.773438, 9.074219, 1.757812, 9.167969);
-cairo_curve_to(cr, 1.738281, 9.257812, 1.585938, 9.402344, 1.292969, 9.601562);
-cairo_curve_to(cr, 1.003906, 9.792969, 0.570312, 9.886719, 0, 9.886719);
-cairo_line_to(cr, 0, 1.648438);
-cairo_curve_to(cr, 0, 1.558594, 0.0078125, 1.472656, 0.0273438, 1.390625);
-cairo_curve_to(cr, 0.0546875, 1.308594, 0.0898438, 1.222656, 0.136719, 1.128906);
-cairo_curve_to(cr, 0.21875, 0.929688, 0.382812, 0.75, 0.625, 0.585938);
-cairo_curve_to(cr, 0.828125, 0.429688, 1.101562, 0.296875, 1.457031, 0.175781);
-cairo_curve_to(cr, 1.820312, 0.0585938, 2.25, 0, 2.75, 0);
-cairo_set_tolerance(cr, 0.1);
-cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
-cairo_fill_preserve(cr);
- /********************/
-}
-#endif
 #ifndef DRAW_CASHARMONICSLABEL_H
 #define DRAW_CASHARMONICSLABEL_H
 inline int cairo_code_draw_casHarmonicsLabel_get_width() { return 66; }
@@ -2897,123 +2627,6 @@ cairo_fill_preserve(cr);
  /********************/
 }
 #endif
-#ifndef DRAW_CASHARMRLABEL_H
-#define DRAW_CASHARMRLABEL_H
-inline int cairo_code_draw_casHarmRLabel_get_width() { return 7; }
-inline int cairo_code_draw_casHarmRLabel_get_height() { return 10; }
-inline void cairo_code_draw_casHarmRLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
-cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
-
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(0,0,0,1);
-cairo_set_source(cr, pattern);
-cairo_pattern_destroy(pattern);
-cairo_new_path(cr);
-cairo_move_to(cr, 2.75, 0);
-cairo_line_to(cr, 7.328125, 0);
-cairo_line_to(cr, 7.328125, 3.839844);
-cairo_curve_to(cr, 7.328125, 4.078125, 7.238281, 4.316406, 7.054688, 4.5625);
-cairo_curve_to(cr, 6.984375, 4.679688, 6.882812, 4.789062, 6.753906, 4.890625);
-cairo_curve_to(cr, 6.628906, 4.988281, 6.457031, 5.085938, 6.238281, 5.175781);
-cairo_line_to(cr, 7.054688, 5.652344);
-cairo_line_to(cr, 7.328125, 5.800781);
-cairo_line_to(cr, 7.328125, 8.800781);
-cairo_curve_to(cr, 7.328125, 8.824219, 7.324219, 8.859375, 7.3125, 8.894531);
-cairo_curve_to(cr, 7.3125, 8.921875, 7.292969, 8.984375, 7.246094, 9.085938);
-cairo_curve_to(cr, 7.21875, 9.230469, 7.054688, 9.40625, 6.753906, 9.617188);
-cairo_curve_to(cr, 6.5, 9.796875, 6.082031, 9.886719, 5.503906, 9.886719);
-cairo_line_to(cr, 5.503906, 6.277344);
-cairo_line_to(cr, 4.195312, 5.488281);
-cairo_line_to(cr, 2.75, 5.488281);
-cairo_curve_to(cr, 2.632812, 5.488281, 2.542969, 5.5, 2.480469, 5.515625);
-cairo_curve_to(cr, 2.414062, 5.523438, 2.289062, 5.558594, 2.097656, 5.613281);
-cairo_curve_to(cr, 1.914062, 5.667969, 1.824219, 5.8125, 1.824219, 6.046875);
-cairo_line_to(cr, 1.824219, 8.796875);
-cairo_curve_to(cr, 1.824219, 8.84375, 1.824219, 8.878906, 1.824219, 8.90625);
-cairo_curve_to(cr, 1.796875, 8.988281, 1.773438, 9.074219, 1.757812, 9.167969);
-cairo_curve_to(cr, 1.738281, 9.257812, 1.585938, 9.402344, 1.292969, 9.601562);
-cairo_curve_to(cr, 1.003906, 9.792969, 0.570312, 9.886719, 0, 9.886719);
-cairo_line_to(cr, 0, 1.648438);
-cairo_curve_to(cr, 0, 1.558594, 0.0078125, 1.472656, 0.0273438, 1.390625);
-cairo_curve_to(cr, 0.0546875, 1.308594, 0.0898438, 1.222656, 0.136719, 1.128906);
-cairo_curve_to(cr, 0.21875, 0.929688, 0.382812, 0.75, 0.625, 0.585938);
-cairo_curve_to(cr, 0.828125, 0.429688, 1.101562, 0.296875, 1.457031, 0.175781);
-cairo_curve_to(cr, 1.820312, 0.0585938, 2.25, 0, 2.75, 0);
-cairo_move_to(cr, 5.503906, 3.839844);
-cairo_line_to(cr, 5.503906, 1.089844);
-cairo_line_to(cr, 2.75, 1.089844);
-cairo_curve_to(cr, 2.414062, 1.089844, 2.160156, 1.152344, 1.988281, 1.28125);
-cairo_curve_to(cr, 1.90625, 1.378906, 1.851562, 1.503906, 1.824219, 1.648438);
-cairo_line_to(cr, 1.824219, 4.496094);
-cairo_curve_to(cr, 2.105469, 4.429688, 2.414062, 4.398438, 2.75, 4.398438);
-cairo_line_to(cr, 4.578125, 4.398438);
-cairo_curve_to(cr, 4.929688, 4.398438, 5.171875, 4.339844, 5.296875, 4.222656);
-cairo_curve_to(cr, 5.433594, 4.09375, 5.503906, 3.96875, 5.503906, 3.839844);
-cairo_set_tolerance(cr, 0.1);
-cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
-cairo_fill_preserve(cr);
- /********************/
-}
-#endif
-#ifndef DRAW_CASHARMSLABEL_H
-#define DRAW_CASHARMSLABEL_H
-inline int cairo_code_draw_casHarmSLabel_get_width() { return 7; }
-inline int cairo_code_draw_casHarmSLabel_get_height() { return 10; }
-inline void cairo_code_draw_casHarmSLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
-cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
-
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(0,0,0,1);
-cairo_set_source(cr, pattern);
-cairo_pattern_destroy(pattern);
-cairo_new_path(cr);
-cairo_move_to(cr, 2.75, 0);
-cairo_line_to(cr, 7.328125, 0);
-cairo_curve_to(cr, 7.328125, 0.0273438, 7.324219, 0.0585938, 7.3125, 0.09375);
-cairo_curve_to(cr, 7.3125, 0.121094, 7.292969, 0.191406, 7.246094, 0.300781);
-cairo_curve_to(cr, 7.21875, 0.464844, 7.0625, 0.636719, 6.78125, 0.816406);
-cairo_curve_to(cr, 6.5, 1, 6.074219, 1.089844, 5.503906, 1.089844);
-cairo_line_to(cr, 2.75, 1.089844);
-cairo_curve_to(cr, 2.414062, 1.089844, 2.160156, 1.152344, 1.988281, 1.28125);
-cairo_curve_to(cr, 1.90625, 1.378906, 1.851562, 1.503906, 1.824219, 1.648438);
-cairo_line_to(cr, 1.824219, 4.398438);
-cairo_line_to(cr, 7.328125, 4.398438);
-cairo_line_to(cr, 7.328125, 8.242188);
-cairo_curve_to(cr, 7.328125, 8.53125, 7.226562, 8.785156, 7.027344, 9.003906);
-cairo_curve_to(cr, 6.863281, 9.203125, 6.636719, 9.371094, 6.347656, 9.507812);
-cairo_curve_to(cr, 6.101562, 9.617188, 5.800781, 9.714844, 5.449219, 9.804688);
-cairo_curve_to(cr, 5.175781, 9.859375, 4.886719, 9.886719, 4.578125, 9.886719);
-cairo_line_to(cr, 0, 9.886719);
-cairo_curve_to(cr, 0, 9.535156, 0.15625, 9.28125, 0.464844, 9.125);
-cairo_curve_to(cr, 0.570312, 9.070312, 0.722656, 9.011719, 0.914062, 8.949219);
-cairo_curve_to(cr, 1.101562, 8.886719, 1.242188, 8.84375, 1.335938, 8.824219);
-cairo_line_to(cr, 1.824219, 8.796875);
-cairo_line_to(cr, 4.578125, 8.796875);
-cairo_curve_to(cr, 4.722656, 8.796875, 4.824219, 8.792969, 4.890625, 8.785156);
-cairo_curve_to(cr, 4.960938, 8.765625, 5.066406, 8.734375, 5.203125, 8.691406);
-cairo_curve_to(cr, 5.402344, 8.609375, 5.503906, 8.457031, 5.503906, 8.242188);
-cairo_line_to(cr, 5.503906, 5.488281);
-cairo_line_to(cr, 0, 5.488281);
-cairo_line_to(cr, 0, 1.648438);
-cairo_curve_to(cr, 0, 1.558594, 0.0078125, 1.472656, 0.0273438, 1.390625);
-cairo_curve_to(cr, 0.0546875, 1.308594, 0.0898438, 1.222656, 0.136719, 1.128906);
-cairo_curve_to(cr, 0.21875, 0.929688, 0.382812, 0.75, 0.625, 0.585938);
-cairo_curve_to(cr, 0.828125, 0.429688, 1.101562, 0.296875, 1.457031, 0.175781);
-cairo_curve_to(cr, 1.820312, 0.0585938, 2.25, 0, 2.75, 0);
-cairo_set_tolerance(cr, 0.1);
-cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
-cairo_fill_preserve(cr);
- /********************/
-}
-#endif
 #ifndef DRAW_CASHARMWAVELABEL_H
 #define DRAW_CASHARMWAVELABEL_H
 inline int cairo_code_draw_casHarmWaveLabel_get_width() { return 68; }
@@ -3025,7 +2638,7 @@ cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 1.158142);
+cairo_set_line_width(cr, 2);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -3046,7 +2659,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 1.238209);
+cairo_set_line_width(cr, 2);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -3065,7 +2678,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 1.238209);
+cairo_set_line_width(cr, 2);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -3085,7 +2698,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 1.238209);
+cairo_set_line_width(cr, 2);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -3106,58 +2719,6 @@ cairo_matrix_init(&matrix, 1,0,0,1,-306.101265,-253.59139);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
-}
-#endif
-#ifndef DRAW_CASHARMWLABEL_H
-#define DRAW_CASHARMWLABEL_H
-inline int cairo_code_draw_casHarmWLabel_get_width() { return 9; }
-inline int cairo_code_draw_casHarmWLabel_get_height() { return 10; }
-inline void cairo_code_draw_casHarmWLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
-cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
-
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-pattern = cairo_pattern_create_rgba(0,0,0,1);
-cairo_set_source(cr, pattern);
-cairo_pattern_destroy(pattern);
-cairo_new_path(cr);
-cairo_move_to(cr, 7.328125, 1.089844);
-cairo_curve_to(cr, 7.328125, 0.734375, 7.488281, 0.480469, 7.804688, 0.328125);
-cairo_curve_to(cr, 8.132812, 0.171875, 8.417969, 0.0820312, 8.664062, 0.0546875);
-cairo_line_to(cr, 9.152344, 0);
-cairo_line_to(cr, 9.152344, 8.242188);
-cairo_curve_to(cr, 9.152344, 8.53125, 9.054688, 8.785156, 8.851562, 9.003906);
-cairo_curve_to(cr, 8.691406, 9.203125, 8.46875, 9.367188, 8.1875, 9.492188);
-cairo_curve_to(cr, 7.90625, 9.621094, 7.609375, 9.726562, 7.300781, 9.808594);
-cairo_curve_to(cr, 7, 9.859375, 6.703125, 9.886719, 6.402344, 9.886719);
-cairo_line_to(cr, 0, 9.886719);
-cairo_line_to(cr, 0, 1.089844);
-cairo_curve_to(cr, 0, 0.734375, 0.160156, 0.480469, 0.476562, 0.328125);
-cairo_curve_to(cr, 0.792969, 0.171875, 1.082031, 0.0820312, 1.335938, 0.0546875);
-cairo_line_to(cr, 1.824219, 0);
-cairo_line_to(cr, 1.824219, 8.796875);
-cairo_line_to(cr, 2.75, 8.796875);
-cairo_curve_to(cr, 2.898438, 8.796875, 3, 8.792969, 3.066406, 8.785156);
-cairo_curve_to(cr, 3.136719, 8.765625, 3.242188, 8.734375, 3.378906, 8.691406);
-cairo_curve_to(cr, 3.558594, 8.609375, 3.648438, 8.457031, 3.648438, 8.242188);
-cairo_line_to(cr, 3.648438, 1.089844);
-cairo_curve_to(cr, 3.648438, 0.734375, 3.808594, 0.480469, 4.125, 0.328125);
-cairo_curve_to(cr, 4.445312, 0.171875, 4.738281, 0.0820312, 5.011719, 0.0546875);
-cairo_line_to(cr, 5.503906, 0);
-cairo_line_to(cr, 5.503906, 8.242188);
-cairo_curve_to(cr, 5.503906, 8.449219, 5.457031, 8.636719, 5.367188, 8.796875);
-cairo_line_to(cr, 6.402344, 8.796875);
-cairo_curve_to(cr, 6.472656, 8.796875, 6.554688, 8.796875, 6.648438, 8.796875);
-cairo_curve_to(cr, 6.738281, 8.789062, 6.875, 8.75, 7.054688, 8.675781);
-cairo_curve_to(cr, 7.238281, 8.605469, 7.328125, 8.457031, 7.328125, 8.242188);
-cairo_line_to(cr, 7.328125, 1.089844);
-cairo_set_tolerance(cr, 0.1);
-cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
-cairo_fill_preserve(cr);
- /********************/
 }
 #endif
 #ifndef DRAW_CASLLABEL_H
