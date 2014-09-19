@@ -83,7 +83,8 @@ cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 cairo_matrix_init(&matrix, 1,0,0,1,-267,-418.09375);
 cairo_pattern_set_matrix(pattern, &matrix);*/
-cairo_pattern_set_matrix(pattern, &matrix);
+//cairo_pattern_set_matrix(pattern, &matrix);
+cairo_stroke(cr);
 /********dot************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
@@ -823,7 +824,7 @@ switch(c){
   case 105://i
     return 0x0010;
   case 106://j
-    return 0x
+    return 0x020c;
   default:
     return 0;
 }

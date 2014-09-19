@@ -536,7 +536,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -553,7 +553,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -570,7 +570,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -587,7 +587,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -604,7 +604,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -621,7 +621,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -638,7 +638,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -655,7 +655,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -672,7 +672,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -689,7 +689,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -706,7 +706,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -723,7 +723,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -740,7 +740,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -757,7 +757,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -774,7 +774,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -791,7 +791,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -808,7 +808,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -825,7 +825,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -842,7 +842,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -859,7 +859,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -876,7 +876,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -893,7 +893,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -910,7 +910,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -927,7 +927,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -944,7 +944,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -961,7 +961,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -978,7 +978,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -995,7 +995,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -1012,7 +1012,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -1029,7 +1029,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -1046,7 +1046,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -1063,7 +1063,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -1080,7 +1080,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
@@ -1097,7 +1097,7 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-cairo_set_line_width(cr, 5);
+cairo_set_line_width(cr, 1);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
