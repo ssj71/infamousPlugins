@@ -755,11 +755,11 @@ switch(c){
   case 65://A
     return 0xe3c4;
   case 66://B
-    return 0xcb97;
+    return 0xca97;
   case 67://C
     return 0xe043;
   case 68://D
-    return 0xcb17;
+    return 0xca17;
   case 69://E
     return 0xe1c3;
   case 70://F
@@ -773,7 +773,7 @@ switch(c){
   case 74://J
     return 0x0247;
   case 75://K
-    return 0x0c18;
+    return 0x25c4;
   case 76://L
     return 0x2043;
   case 77://M
@@ -795,7 +795,7 @@ switch(c){
   case 85://U
     return 0x2247;
   case 86://V
-    return 0x120c;
+    return 0x2460;
   case 87://W
     return 0x226c;
   case 88://X
@@ -806,25 +806,57 @@ switch(c){
     return 0xc423;
 
   case 97://a
-    return 0x1032;
+    return 0x4295;
   case 98://b
-    return 0x0819;
+    return 0x0895;
   case 99://c
     return 0x0091;
   case 100://d
-    return 0x0832;
+    return 0x0295;
   case 101://e
-    return 0x0691;
+    return 0x4a91;
   case 102://f
     return 0x0590;
   case 103://g
-    return 0x0685;
+    return 0x4a85;
   case 104://h
     return 0x0894;
   case 105://i
     return 0x0010;
   case 106://j
-    return 0x020c;
+    return 0x0215;
+  case 107://k
+    return 0x0c94;
+  case 108://l
+    return 0x0204;
+  case 109://m
+    return 0x01d4;
+  case 110://n
+    return 0x0094;
+  case 111://o
+    return 0x0095;
+  case 112://p
+    return 0x4a90;
+  case 113://q
+    return 0xa911;
+  case 114://r
+    return 0x0090;
+  case 115://s
+    return 0x0485;
+  case 116://t
+    return 0x1190;
+  case 117://u
+    return 0x0015;
+  case 118://v
+    return 0x000c;
+  case 119://w
+    return 0x006c;
+  case 120://x
+    return 0x1428;
+  case 121://y
+    return 0x1420;
+  case 122://z
+    return 0xc423;
   default:
     return 0;
 }
