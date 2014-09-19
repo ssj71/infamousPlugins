@@ -809,7 +809,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip {MIDI channel} xywh {61 27 30 30} maximum 16 step 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
         class Dial
       }
       Fl_Dial mastergain {
@@ -817,6 +817,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip gain xywh {37 52 30 30} maximum 2 step 0.02 value 1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial cellwaveform {
@@ -824,7 +825,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip waveform xywh {49 134 30 30} maximum 5 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
         class Dial
       }
       Fl_Dial lifetime {
@@ -832,7 +833,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip {time between cell transitions} xywh {49 185 30 30} minimum 0.001 maximum 10 step 0.05 value 0.25
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {strcpy(o->units,"s");}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial harmgain {
@@ -840,7 +841,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip {gain of harmonics} xywh {311 152 30 30} maximum 3 step 0.08 value 1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
         class Dial
       }
       Fl_Dial nharmonics {
@@ -848,7 +849,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip {num. of harmonics} xywh {378 138 30 30} maximum 16 step 0.1 value 12
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
         class Dial
       }
       Fl_Dial harmwidth {
@@ -856,7 +857,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip {width/detune} xywh {403 163 30 30} maximum 50 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {strcpy(o->units,"cents");}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial a {
@@ -864,7 +865,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip attack xywh {286 227 30 30} minimum 0.001 maximum 15 step 0.1 value 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {strcpy(o->units,"s");}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial d {
@@ -872,7 +873,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip decay xywh {336 227 30 30} minimum 0.001 maximum 15 step 0.1 value 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {strcpy(o->units,"s");}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial b {
@@ -880,6 +881,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip {break point} xywh {386 227 30 30} step 0.01 value 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial sw {
@@ -887,7 +889,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip swell xywh {311 252 30 30} minimum 0.001 maximum 15 step 0.1 value 3
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {strcpy(o->units,"s");}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial su {
@@ -895,6 +897,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip sustain xywh {361 252 30 30} step 0.01 value 0.75
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial r {
@@ -902,7 +905,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip release xywh {411 252 30 30} minimum 0.001 maximum 15 step 0.1 value 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {strcpy(o->units,"s");}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial amwave {
@@ -910,7 +913,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip waveform xywh {312 343 30 30} maximum 5 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
         class Dial
       }
       Fl_Dial amfreq {
@@ -918,7 +921,7 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip frequency xywh {378 326 30 30} maximum 110 step 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {strcpy(o->units,"hz");}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial amgain {
@@ -926,33 +929,63 @@ write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);}
         tooltip gain xywh {403 350 30 30} minimum -1 step 0.01
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial fmwave {
-        callback {write_function(controller,FMOD_WAV,sizeof(float),0,&fmwave->floatvalue);}
+        callback {write_function(controller,FMOD_WAV,sizeof(float),0,&fmwave->floatvalue);
+param->copy_label("FREQ. MOD. WAVEFORM");
+int a = fmwave->floatvalue; 
+switch(a)
+{
+case 0:
+  value->copy_label("              SINE");
+  break;
+case 1:
+  value->copy_label("               SAW");
+  break;
+case 2:
+  value->copy_label("            SQUARE");
+  break;
+case 3:
+  value->copy_label("          TRIANGLE");
+  break;
+case 4:
+  value->copy_label("       WHITE NOISE");
+  break;
+case 5:
+  value->copy_label("            RANDOM");
+  break;
+}
+param->copy_label("FREQ. MOD. WAVEFORM");}
         tooltip waveform xywh {312 439 30 30} maximum 5 step 0.1
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
         class Dial
       }
       Fl_Dial fmfreq {
-        callback {write_function(controller,FMOD_FREQ,sizeof(float),0,&fmfreq->floatvalue);}
+        callback {write_function(controller,FMOD_FREQ,sizeof(float),0,&fmfreq->floatvalue);
+char s[20];
+sprintf(s,"%17.2fhz",fmfreq->floatvalue);
+param->copy_label("FREQ. MOD. FREQ.");
+value->copy_label(s);}
         tooltip frequency xywh {378 422 30 30} maximum 110 step 0.5
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {strcpy(o->units,"hz");}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial fmgain {
         callback {write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);
-char s[18];
-sprintf(s,"          %1.3f",fmgain->floatvalue);
-param->copy_label("Freq. Mod. Gain");
+char s[20];
+sprintf(s,"%19.3f",fmgain->floatvalue);
+param->copy_label("FREQ. MOD. GAIN");
 value->copy_label(s);} selected
         tooltip gain xywh {403 446 30 30} minimum -4 maximum 4 step 0.05
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Button secret_rule {

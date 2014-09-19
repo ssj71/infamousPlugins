@@ -80,19 +80,15 @@ class Dial : public Fl_Slider
       floatvalue = value();
       units[0] = 0;
       lock2int = 0;
+      drawLabel = true;
       
       mouseClickedY = 0;
       mouseClicked = false;
       
-//      highlight = false;
-      label = _label;
     }
     
- //   bool highlight;
     int x, y, w, h;
-    const char* label;
-    bool drawLab;
-    void drawLabel(bool b){drawLab = b; redraw();}
+    int drawLabel;
     
     int mouseClickedY;
     bool mouseClicked;
@@ -126,7 +122,6 @@ class Dial : public Fl_Slider
 	else
 	  shifty = h - scale*drawing_h;
         //label behind value
-	draw_label();
 	//move to position in the window
 	cairo_translate(cr,x+shiftx,y+shifty);
 	//scale the drawing
@@ -217,7 +212,7 @@ class Dial : public Fl_Slider
 	          sprintf(lable,"%1.0f%s",val,units);
 	      else
 	          sprintf(lable,"%1.3f%s",val,units);
-	      Fl_Widget::copy_label(lable);
+	      if(drawLabel)Fl_Widget::copy_label(lable);
               redraw();
               do_callback(); // makes FLTK call "extra" code entered in FLUID
             }
