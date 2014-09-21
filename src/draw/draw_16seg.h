@@ -17,7 +17,7 @@ switch(color)
 {
   case 0://red
     r = 1; g = 0; b = 0;
-    rd = .3333; gd = 0; bd = 0;
+    rd = .3; gd = 0; bd = 0;
     break;
   case 3://green
     r = 0; g = 1; b = 0;
@@ -91,11 +91,11 @@ pattern = cairo_pattern_create_rgba(rd,gd,bd,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
-cairo_move_to(cr, 27.773438, 39.507812);
-cairo_curve_to(cr, 27.773438, 40.652344, 26.847656, 41.578125, 25.707031, 41.578125);
+cairo_move_to(cr, 29.773438, 39.507812);//top right corner, lower part of curve
+cairo_curve_to(cr, 29.773438, 40.652344, 28.847656, 41.578125, 27.707031, 41.578125);
 cairo_curve_to(cr, 24.5625, 41.578125, 23.636719, 40.652344, 23.636719, 39.507812);
-cairo_curve_to(cr, 23.636719, 38.367188, 24.5625, 37.441406, 25.707031, 37.441406);
-cairo_curve_to(cr, 26.847656, 37.441406, 27.773438, 38.367188, 27.773438, 39.507812);
+cairo_curve_to(cr, 23.636719, 38.367188, 24.5625, 37.441406, 27.707031, 37.441406);
+cairo_curve_to(cr, 28.847656, 37.441406, 29.773438, 38.367188, 29.773438, 39.507812);
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
@@ -389,11 +389,11 @@ pattern = cairo_pattern_create_rgba(r,g,b,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
-cairo_move_to(cr, 27.773438, 39.507812);
-cairo_curve_to(cr, 27.773438, 40.652344, 26.847656, 41.578125, 25.707031, 41.578125);
+cairo_move_to(cr, 29.773438, 39.507812);//top right corner, lower part of curve
+cairo_curve_to(cr, 29.773438, 40.652344, 28.847656, 41.578125, 27.707031, 41.578125);
 cairo_curve_to(cr, 24.5625, 41.578125, 23.636719, 40.652344, 23.636719, 39.507812);
-cairo_curve_to(cr, 23.636719, 38.367188, 24.5625, 37.441406, 25.707031, 37.441406);
-cairo_curve_to(cr, 26.847656, 37.441406, 27.773438, 38.367188, 27.773438, 39.507812);
+cairo_curve_to(cr, 23.636719, 38.367188, 24.5625, 37.441406, 27.707031, 37.441406);
+cairo_curve_to(cr, 28.847656, 37.441406, 29.773438, 38.367188, 29.773438, 39.507812);
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
@@ -708,7 +708,7 @@ cairo_fill_preserve(cr);
 }
 /********************/
 
-blur_image_surface(temp_surface,3);
+blur_image_surface(temp_surface,2);
 cairo_set_source_surface(old_cr,temp_surface,0,0);
 cairo_paint(old_cr);
 cairo_surface_destroy(temp_surface);
