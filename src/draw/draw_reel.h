@@ -2,16 +2,16 @@
 #define DRAW_REEL_H
 inline int cairo_code_draw_reel_get_width() { return 381; }
 inline int cairo_code_draw_reel_get_height() { return 381; }
-inline void cairo_code_draw_reel_render(cairo_t *cr, float val) {
+inline void cairo_code_draw_reel_logo_render(cairo_t *cr, float val) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-old_cr = cr;
-temp_surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 381, 381);
-cr = cairo_create(temp_surface);
+//cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+//old_cr = cr;
+//temp_surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 381, 381);
+//cr = cairo_create(temp_surface);
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.101961,0.101961,0.101961,1);
 cairo_set_source(cr, pattern);
@@ -687,13 +687,21 @@ cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 //cairo_matrix_init(&matrix, 1.676031,0,0,1.676031,-724.83171,-1277.56901);
 //cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
+}
+
+inline void cairo_code_draw_reel_render(cairo_t *cr){
+cairo_surface_t *temp_surface;
+cairo_t *old_cr;
+cairo_pattern_t *pattern;
+cairo_matrix_t matrix;
+
 /********************/
 cairo_pattern_set_extend(pattern, CAIRO_EXTEND_NONE);
 cairo_pattern_set_filter(pattern, CAIRO_FILTER_GOOD);
-cairo_destroy(cr);
-cr = old_cr;
-cairo_set_source_surface(cr, temp_surface, 0, 0);
-cairo_surface_destroy(temp_surface);
+//cairo_destroy(cr);
+//cr = old_cr;
+//cairo_set_source_surface(cr, temp_surface, 0, 0);
+//cairo_surface_destroy(temp_surface);
 pattern = cairo_pattern_create_rgba(0,0,0,0.396078);
 cairo_mask(cr, pattern);
 cairo_pattern_destroy(pattern);
@@ -710,9 +718,9 @@ cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 
 
-cairo_translate(cr,190.5,190.5);
-cairo_rotate(cr,val);
-cairo_translate(cr,-190.5,-190.5);
+//cairo_translate(cr,190.5,190.5);
+//cairo_rotate(cr,val);
+//cairo_translate(cr,-190.5,-190.5);
 
 
 cairo_new_path(cr);
