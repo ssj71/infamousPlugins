@@ -30,10 +30,6 @@
 #include <string>
 
 //avtk drawing method (adapted)
-static void default_reel_drawing(cairo_t *cr,float cow)
-{
-};
-
 namespace ffffltk
 {
 
@@ -54,7 +50,6 @@ class PowerReel: public Fl_Widget
 
       drawing_w = 100;
       drawing_h = 100;
-      drawing_f = &default_reel_drawing;
       stretch = false;
       
       highlight = false;
@@ -62,6 +57,10 @@ class PowerReel: public Fl_Widget
       curve = 0;
       time = .5;
       trigger = 0;
+     
+     
+      iconcr = cairo_surface_create();
+      cairo_code_draw_reel_icon_render();
 
       Fl::add_timeout(.1,reel_callback,this);
     }
@@ -79,6 +78,9 @@ class PowerReel: public Fl_Widget
     float samples;
     int trigger;
     double angle;
+
+    cairo_t *iconcr;
+    cairo_t *reelcr;
 
     
     void draw()
@@ -108,15 +110,11 @@ class PowerReel: public Fl_Widget
 	        shifty = h - scaley*drawing_h;
 	    }
 	}
-	//label behind value
-	draw_label();
 	//move to position in the window
 	cairo_translate(cr,x+shiftx,y+shifty);
 	//scale the drawing
 	cairo_scale(cr,scalex,scaley);
 	//call the draw function
-	if(drawing_f) drawing_f(cr,angle);
-	else default_reel_drawing(cr,angle);
 
         cairo_restore( cr );
       }
