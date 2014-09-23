@@ -36,7 +36,7 @@ cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 cairo_stroke_preserve(cr);
 /********************/
 
-blur_image_surface(temp_surface,3);
+//blur_image_surface(temp_surface,3);
 cairo_set_source_surface(old_cr,temp_surface,0,0);
 cairo_paint(old_cr);
 cairo_surface_destroy(temp_surface);
@@ -76,7 +76,7 @@ cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 cairo_stroke_preserve(cr);
 /********************/
 
-blur_image_surface(temp_surface,3);
+//blur_image_surface(temp_surface,3);
 cairo_set_source_surface(old_cr,temp_surface,0,0);
 cairo_paint(old_cr);
 cairo_surface_destroy(temp_surface);

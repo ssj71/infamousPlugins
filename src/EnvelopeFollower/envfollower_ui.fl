@@ -230,17 +230,17 @@ if(min->value() >= max->value()){min->value(max->value()-1);}}
       }
       Fl_Box inLCD {
         tooltip {current input value} xywh {143 298 89 45}
-        code0 {\#include"draw_16seg.h"}
-        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_blue16seg_render;}
+        code0 {\#include"envdisplay.h"}
+        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_blue16seg_light_render;o->bg_drawing_f = &cairo_code_draw_blue16seg_lightbg_render;}
         code3 {o->nchars = 3; o->periods = false;}
-        class AsciiDisplay
+        class EnvAsciiDisplay
       }
       Fl_Box outLCD {selected
         tooltip {current output value} xywh {409 335 89 45}
         code0 {\#include"draw_16seg.h"}
-        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_green16seg_render;}
+        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_green16seg_light_render;o->bg_drawing_f = &cairo_code_draw_green16seg_lightbg_render;}
         code3 {o->nchars = 3; o->periods = false;}
-        class AsciiDisplay
+        class EnvAsciiDisplay
       }
       Fl_Box inScope {
         tooltip {input and output graph} xywh {1 14 600 200}
