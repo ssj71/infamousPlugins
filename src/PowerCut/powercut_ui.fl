@@ -28,12 +28,12 @@ class PowerCutUI {open
         class Background
       }
       Fl_Box timelabel {
-        xywh {47 179 80 21}
+        xywh {32 175 110 29}
         code2 {o->drawing_h = cairo_code_draw_pwrdecaytLabel_get_height(); o->drawing_w = cairo_code_draw_pwrdecaytLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrdecaytLabel_render;}
         class Background
       }
       Fl_Box curvelabel {
-        xywh {174 179 105 118}
+        xywh {163 175 116 123}
         code2 {o->drawing_h = cairo_code_draw_pwrdecaycLabel_get_height(); o->drawing_w = cairo_code_draw_pwrdecaycLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrdecaycLabel_render;}
         class Background
       }

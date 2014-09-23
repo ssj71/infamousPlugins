@@ -46,6 +46,7 @@ static LV2UI_Handle init_powercutUI(const struct _LV2UI_Descriptor * descriptor,
     self->ui = self->show();
     fl_open_display();
     // set host to change size of the window
+//    self->ui->size(.5*self->ui->w(), .5*self->ui->h());//I want it a bit smaller than I designed it
     if (resize)
     {
       resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());

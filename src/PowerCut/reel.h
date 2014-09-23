@@ -130,9 +130,9 @@ class PowerReel: public Fl_Widget
         //call the draw function
         cairo_set_source_surface(cr,logosurf,0,0);
         cairo_paint(cr);
-        cairo_translate(cr,w/2.0,h/2.0);
+        cairo_translate(cr,drawing_w/2.0,drawing_h/2.0);
         cairo_rotate(cr,angle);
-        cairo_translate(cr,-w/2.0,-h/2.0);
+        cairo_translate(cr,-drawing_w/2.0,-drawing_h/2.0);
         cairo_set_source_surface(cr,reelsurf,0,0);
         cairo_paint(cr);
 

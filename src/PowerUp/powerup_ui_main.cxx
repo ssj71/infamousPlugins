@@ -45,6 +45,7 @@ static LV2UI_Handle init_powerupUI(const struct _LV2UI_Descriptor * descriptor,
 
     self->ui = self->show();
     fl_open_display();
+    //self->ui->size(.5*self->ui->w(), .5*self->ui->h());//I want it a bit smaller than I designed it
     // set host to change size of the window
     if (resize)
     {

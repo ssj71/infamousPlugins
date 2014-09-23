@@ -28,12 +28,12 @@ class PowerUpUI {open
         class Background
       }
       Fl_Box timelabel {
-        xywh {41 183 92 18}
+        xywh {13 179 127 25}
         code2 {o->drawing_h = cairo_code_draw_pwrstarttLabel_get_height(); o->drawing_w = cairo_code_draw_pwrstarttLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrstarttLabel_render;}
         class Background
       }
       Fl_Box curvelabel {
-        xywh {170 183 109 115}
+        xywh {145 179 132 119}
         code2 {o->drawing_h = cairo_code_draw_pwrstartcLabel_get_height(); o->drawing_w = cairo_code_draw_pwrstartcLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrstartcLabel_render;}
         class Background
       }
@@ -56,7 +56,7 @@ reel->trigger = power->value();}
       Fl_Dial time {
         callback {write_function(controller,STARTUP_TIME,sizeof(float),0,&time->floatvalue);
 if(!power->value()){reel->time = time->value()/.06;}}
-        tooltip {Startup Time} xywh {48 218 77 77} maximum 10 step 0.1 value 0.5
+        tooltip {Startup Time} xywh {38 218 77 77} maximum 10 step 0.1 value 0.5
         code1 {\#include"draw_silverDial.h"}
         code2 {o->drawing_h = cairo_code_draw_silverDial_get_height(); o->drawing_w = cairo_code_draw_silverDial_get_width(); o->drawing_f = &cairo_code_draw_silverDial_render;}
         code3 {sprintf(o->units,"s");}
@@ -65,7 +65,7 @@ if(!power->value()){reel->time = time->value()/.06;}}
       Fl_Dial curve {
         callback {write_function(controller,STARTUP_CURVE,sizeof(float),0,&curve->floatvalue);
 if(!power->value()){reel->curve = curve->value();}} selected
-        tooltip {Startup Curve} xywh {182 218 77 77} minimum -10 maximum 10 step 0.2
+        tooltip {Startup Curve} xywh {172 218 77 77} minimum -10 maximum 10 step 0.2
         code1 {\#include"draw_tabDial.h"}
         code2 {o->drawing_h = cairo_code_draw_silverDial_get_height(); o->drawing_w = cairo_code_draw_silverDial_get_width(); o->drawing_f = &cairo_code_draw_silverDial_render;}
         class Dial

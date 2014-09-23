@@ -121,12 +121,12 @@ class PowerReel: public Fl_Widget
         cairo_translate(cr,x+shiftx,y+shifty);
         //scale the drawing
         cairo_scale(cr,scalex,scaley);
-        //call the draw function
+        //draw it
         cairo_set_source_surface(cr,logosurf,0,0);
         cairo_paint(cr);
-        cairo_translate(cr,w/2.0,h/2.0);
+        cairo_translate(cr,drawing_w/2.0,drawing_h/2.0);
         cairo_rotate(cr,angle);
-        cairo_translate(cr,-w/2.0,-h/2.0);
+        cairo_translate(cr,-drawing_w/2.0,-drawing_h/2.0);
         cairo_set_source_surface(cr,reelsurf,0,0);
         cairo_paint(cr);
         cairo_restore( cr );
@@ -143,41 +143,6 @@ class PowerReel: public Fl_Widget
       redraw();
     }
     
-    int handle(int event)
-    {
-      return 0;
-      
-      switch(event)
-      {
-        case FL_PUSH:
-          highlight = 0;
-          redraw();
-          return 1;
-        case FL_DRAG: {
-            int t = Fl::event_inside(this);
-            if (t != highlight) {
-              redraw();
-            }
-          }
-          return 1;
-        case FL_RELEASE:
-          if (highlight) {
-            highlight = 0;
-            redraw();
-            do_callback();
-          }
-          return 1;
-        case FL_SHORTCUT:
-          if ( test_shortcut() )
-          {
-            do_callback();
-            return 1;
-          }
-          return 0;
-        default:
-          return Fl_Widget::handle(event);
-      }
-    }
 };
 
 static void reel_callback(void* handle)
