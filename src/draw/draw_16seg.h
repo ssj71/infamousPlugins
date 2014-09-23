@@ -41,7 +41,7 @@ cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
 
-cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
 pattern = cairo_pattern_create_rgba(0.4,0.4,0.4,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);

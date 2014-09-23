@@ -2,7 +2,7 @@
 #define DRAW_REEL_H
 inline int cairo_code_draw_reel_get_width() { return 381; }
 inline int cairo_code_draw_reel_get_height() { return 381; }
-inline void cairo_code_draw_reel_logo_render(cairo_t *cr, float val) {
+inline void cairo_code_draw_reel_logo_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -696,14 +696,14 @@ cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
 /********************/
-cairo_pattern_set_extend(pattern, CAIRO_EXTEND_NONE);
-cairo_pattern_set_filter(pattern, CAIRO_FILTER_GOOD);
+//cairo_pattern_set_extend(pattern, CAIRO_EXTEND_NONE);
+//cairo_pattern_set_filter(pattern, CAIRO_FILTER_GOOD);
 //cairo_destroy(cr);
 //cr = old_cr;
 //cairo_set_source_surface(cr, temp_surface, 0, 0);
 //cairo_surface_destroy(temp_surface);
-pattern = cairo_pattern_create_rgba(0,0,0,0.396078);
-cairo_mask(cr, pattern);
+//pattern = cairo_pattern_create_rgba(0,0,0,0.396078);
+//cairo_mask(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_radial(634.19897, 300.75153, 0, 634.19897, 300.75153, 217.67741);

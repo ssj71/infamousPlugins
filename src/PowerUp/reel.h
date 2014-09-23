@@ -54,14 +54,18 @@ class PowerReel: public Fl_Widget
 
       drawing_w = 100;
       drawing_h = 100;
-      drawing_f = &default_reel_drawing;
       stretch = false;
       
-      highlight = false;
-
       curve = 0;
       time = .5;
       trigger = 0;
+
+      logosurf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,cairo_code_draw_reel_get_width(),cairo_code_draw_reel_get_height());//w,h;
+      reelsurf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,cairo_code_draw_reel_get_width(),cairo_code_draw_reel_get_height());//w,h
+      logocr = cairo_create(logosurf);
+      reelcr = cairo_create(reelsurf);
+      cairo_code_draw_reel_logo_render(logocr);
+      cairo_code_draw_reel_render(reelcr);
 
       Fl::add_timeout(.06,reel_callback,this);
     }
@@ -80,6 +84,10 @@ class PowerReel: public Fl_Widget
     int trigger;
     double angle;
 
+    cairo_t *logocr;
+    cairo_t *reelcr;
+    cairo_surface_t *logosurf;
+    cairo_surface_t *reelsurf;
     
     void draw()
     {
@@ -89,35 +97,38 @@ class PowerReel: public Fl_Widget
         
         cairo_save( cr );
 
-	//calcluate scale and centering
-	double scalex,
-	scaley,
-	shiftx=0,
-	shifty=0;
-	scalex = w/(double)drawing_w;
-	scaley = h/(double)drawing_h;
-	{
-	    if(scalex > scaley)
-	    {
-	        scalex = scaley;
-	        shiftx = (w - scalex*drawing_w)/2.f;
-	    }
-	    else
-	    {
-		scaley = scalex;
-	        shifty = h - scaley*drawing_h;
-	    }
-	}
-	//label behind value
-	draw_label();
-	//move to position in the window
-	cairo_translate(cr,x+shiftx,y+shifty);
-	//scale the drawing
-	cairo_scale(cr,scalex,scaley);
-	//call the draw function
-	if(drawing_f) drawing_f(cr,angle);
-	else default_reel_drawing(cr,angle);
+        //calcluate scale and centering
+        double scalex,
+        scaley,
+        shiftx=0,
+        shifty=0;
+        scalex = w/(double)drawing_w;
+        scaley = h/(double)drawing_h;
+        {
+            if(scalex > scaley)
+            {
+                scalex = scaley;
+                shiftx = (w - scalex*drawing_w)/2.f;
+            }
+            else
+            {
+            scaley = scalex;
+                shifty = h - scaley*drawing_h;
+            }
+        }
 
+        //move to position in the window
+        cairo_translate(cr,x+shiftx,y+shifty);
+        //scale the drawing
+        cairo_scale(cr,scalex,scaley);
+        //call the draw function
+        cairo_set_source_surface(cr,logosurf,0,0);
+        cairo_paint(cr);
+        cairo_translate(cr,w/2.0,h/2.0);
+        cairo_rotate(cr,angle);
+        cairo_translate(cr,-w/2.0,-h/2.0);
+        cairo_set_source_surface(cr,reelsurf,0,0);
+        cairo_paint(cr);
         cairo_restore( cr );
       }
     }

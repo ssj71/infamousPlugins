@@ -41,7 +41,7 @@ class PowerCutUI {open
         xywh {286 8 381 381}
         code0 {\#include"draw_reel.h"}
         code1 {\#include"reel.h"}
-        code2 {o->drawing_h = cairo_code_draw_reel_get_height(); o->drawing_w = cairo_code_draw_reel_get_width(); o->drawing_f = &cairo_code_draw_reel_render;}
+        code2 {o->drawing_h = cairo_code_draw_reel_get_height(); o->drawing_w = cairo_code_draw_reel_get_width(); }
         class PowerReel
       }
       Fl_Button power {
