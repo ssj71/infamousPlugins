@@ -41,8 +41,8 @@ cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
 
-cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
-pattern = cairo_pattern_create_rgba(0.4,0.4,0.4,1);
+cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+pattern = cairo_pattern_create_rgba(0.2,0.2,0.2,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -752,7 +752,7 @@ switch(c){
   case 52://4
     return 0x2384;
   case 53://5
-    return 0xe10b;
+    return 0xd087;//0xe10b
   case 54://6
     return 0xe1c7;
   case 55://7
@@ -872,7 +872,7 @@ switch(c){
 }
 }
 
-//light versions
+//light versions require custom widget
 
 inline void cairo_code_draw_16segbg_render(cairo_t *cr, unsigned char color) {
 //r = 0;
@@ -882,23 +882,19 @@ inline void cairo_code_draw_16segbg_render(cairo_t *cr, unsigned char color) {
 //b = 4;
 //i = 5;
 //v = 6;
-float r,g,b, rd,gd,bd;//lit and dark colors;
+float  rd,gd,bd;//lit and dark colors;
 switch(color)
 {
   case 0://red
-    r = 1; g = 0; b = 0;
     rd = .3; gd = 0; bd = 0;
     break;
   case 3://green
-    r = 0; g = 1; b = 0;
     rd = 0; gd = .3333; bd = 0;
     break;
   case 4://blue
-    r = 0.3; g = 0.6; b = 1;
-    rd = 0; gd = 0; bd = .15;
+    rd = 0; gd = 0; bd = .2;
     break;
   default://red
-    r = 1; g = 0; b = 0;
     rd = .3333; gd = 0; bd = 0;
     break;
 }
@@ -909,8 +905,8 @@ cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
 
-cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
-pattern = cairo_pattern_create_rgba(0.4,0.4,0.4,1);
+cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+pattern = cairo_pattern_create_rgba(0.2,0.2,0.2,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);
@@ -936,7 +932,8 @@ cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
 pattern = cairo_pattern_create_rgba(0,0,0,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
-/*cairo_new_path(cr);
+/*
+cairo_new_path(cr);
 cairo_move_to(cr, 3.753906, 0.761719);
 cairo_line_to(cr, 26.492188, 0.761719);
 cairo_curve_to(cr, 28.148438, 0.761719, 29.492188, 2.101562, 29.492188, 3.757812);
@@ -949,9 +946,9 @@ cairo_curve_to(cr, 0.757812, 2.101562, 2.097656, 0.761719, 3.753906, 0.761719);
 cairo_close_path(cr);
 cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-cairo_matrix_init(&matrix, 1,0,0,1,-267,-418.09375);
-cairo_pattern_set_matrix(pattern, &matrix);*/
+//cairo_matrix_init(&matrix, 1,0,0,1,-267,-418.09375);
 //cairo_pattern_set_matrix(pattern, &matrix);
+*/
 cairo_stroke(cr);
 /********dot************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -1257,24 +1254,20 @@ cairo_t *old_cr;
 cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
-float r,g,b, rd,gd,bd;//lit and dark colors;
+float r,g,b;//lit and dark colors;
 switch(color)
 {
   case 0://red
     r = 1; g = 0; b = 0;
-    rd = .3; gd = 0; bd = 0;
     break;
   case 3://green
     r = 0; g = 1; b = 0;
-    rd = 0; gd = .3333; bd = 0;
     break;
   case 4://blue
-    r = 0.3; g = 0.5; b = 1;
-    rd = 0; gd = 0; bd = .2;
+    r = 0.3; g = 0.6; b = 1;
     break;
   default://red
     r = 1; g = 0; b = 0;
-    rd = .3333; gd = 0; bd = 0;
     break;
 }
 

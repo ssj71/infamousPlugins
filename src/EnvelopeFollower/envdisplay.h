@@ -160,47 +160,6 @@ class EnvAsciiDisplay: public Fl_Widget
       h = H;
       redraw();
     }
-    /*
-    int handle(int event)
-    {
-      return 0;
-      
-      switch(event)
-      {
-        case FL_ENTER:
-        case FL_LEAVE:
-            return 1;
-        default:
-            return 0;
-      }
-    }*/
-   /* 
-    int handle(int event)
-    {
-      return 0;
-      
-      switch(event)
-      {
-        case FL_PUSH:
-          redraw();
-          return 1;
-        case FL_DRAG: {
-            int t = Fl::event_inside(this);
-            redraw();
-          }
-          return 1;
-        case FL_SHORTCUT:
-          if ( test_shortcut() )
-          {
-            do_callback();
-            return 1;
-          }
-          return 0;
-        default:
-          return Fl_Widget::handle(event);
-      }
-    }
-    */
 };
 
 } // ffffltk
