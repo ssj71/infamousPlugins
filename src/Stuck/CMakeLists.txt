@@ -6,7 +6,7 @@ set(PLUGIN "stuck")
 set(PLUGDIR "Stuck")
 project (${PLUGIN})
 
-set(LV2_INSTALL_DIR /usr/lib/lv2/${PLUGIN}.lv2 CACHE PATH "Specifies where the LV2 libraries should be installed")
+set(LV2_INSTALL_DIR /usr/lib/lv2/${PLUGIN}.lv2 ) # CACHE PATH "Specifies where the LV2 libraries should be installed")
 set(CMAKE_C_FLAGS "-Wall -g -msse2 -mfpmath=sse -ffast-math")
 
 # check for our various libraries
