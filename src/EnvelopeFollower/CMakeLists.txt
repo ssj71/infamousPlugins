@@ -7,7 +7,7 @@ set(PLUGDIR "EnvelopeFollower")
 project (${PLUGIN})
 
 set(LV2_INSTALL_DIR /usr/lib/lv2/${PLUGIN}.lv2 ) # CACHE PATH "Specifies where the LV2 libraries should be installed")
-set(CMAKE_C_FLAGS "-Wall -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
+set(CMAKE_C_FLAGS "-g -std=c99 -msse2 -mfpmath=sse -ffast-math")
 
 # check for our various libraries
 find_package(PkgConfig)
