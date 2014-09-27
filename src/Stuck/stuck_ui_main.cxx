@@ -59,6 +59,7 @@ void cleanup_stuckUI(LV2UI_Handle ui)
 {
     StuckUI *self = (StuckUI*)ui;
 
+    delete self->ui;
     delete self;
 }
 

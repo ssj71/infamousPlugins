@@ -58,6 +58,7 @@ void cleanup_envfollowerUI(LV2UI_Handle ui)
 {
     EnvFollowerUI *self = (EnvFollowerUI*)ui;
 
+    delete self->ui;
     delete self;
 }
 

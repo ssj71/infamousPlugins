@@ -78,6 +78,12 @@ class Scope: public Fl_Widget
         data[i] = 0;
       Fl::add_timeout(.10,scope_callback,this);
     }
+
+    ~Scope()
+    {
+        Fl::remove_timeout(scope_callback);
+    }
+
     bool highlight;
     int x, y, w, h;
     const char* label;

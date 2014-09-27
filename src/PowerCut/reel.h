@@ -69,11 +69,13 @@ class PowerReel: public Fl_Widget
 
     ~PowerReel()
     {
-      cairo_surface_destroy(logosurf);
-      cairo_surface_destroy(reelsurf);
-      cairo_destroy(logocr);
-      cairo_destroy(reelcr);
+	  Fl::remove_timeout(reel_callback);
+      //cairo_destroy(logocr);
+      //cairo_destroy(reelcr);
+      //cairo_surface_destroy(logosurf);
+      //cairo_surface_destroy(reelsurf);
     }
+
 
     bool highlight;
     int x, y, w, h;

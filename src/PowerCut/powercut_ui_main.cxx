@@ -60,6 +60,7 @@ void cleanup_powercutUI(LV2UI_Handle ui)
 {
     PowerCutUI *self = (PowerCutUI*)ui;
 
+    delete self->ui;
     delete self;
 }
 

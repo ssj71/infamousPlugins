@@ -51,6 +51,6 @@ install(TARGETS ${PLUGIN} ${PLUGIN}_ui
   DESTINATION ${LV2_INSTALL_DIR}
 )
 
-install (FILES ${PLUGIN}.lv2/manifest.ttl ${PLUGIN}.lv2/${PLUGIN}.ttl 
+install (FILES ${PLUGIN}.lv2/manifest.ttl ${PLUGIN}.lv2/${PLUGIN}.ttl ${PLUGIN}.lv2/${PLUGIN}_presets.ttl
   DESTINATION ${LV2_INSTALL_DIR}
 )

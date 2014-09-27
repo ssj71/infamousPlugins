@@ -60,6 +60,7 @@ void cleanup_powerupUI(LV2UI_Handle ui)
 {
     PowerUpUI *self = (PowerUpUI*)ui;
 
+    delete self->ui;
     delete self;
 }
 

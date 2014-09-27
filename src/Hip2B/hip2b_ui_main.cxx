@@ -57,6 +57,7 @@ void cleanup_hip2bUI(LV2UI_Handle ui)
 {
     Hip2BUI *self = (Hip2BUI*)ui;
 
+    delete self->ui;
     delete self;
 }
 

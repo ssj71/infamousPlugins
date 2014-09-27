@@ -57,6 +57,7 @@ void cleanup_cheapdistUI(LV2UI_Handle ui)
 {
     CheapDistUI *self = (CheapDistUI*)ui;
 
+    delete self->ui;
     delete self;
 }
 

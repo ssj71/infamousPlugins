@@ -61,6 +61,7 @@ void cleanup_casynthUI(LV2UI_Handle ui)
 {
     CaSynthUI *self = (CaSynthUI*)ui;
 
+    delete self->ui;
     delete self;
 }
 
