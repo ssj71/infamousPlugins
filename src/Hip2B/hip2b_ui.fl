@@ -36,21 +36,21 @@ class Hip2BUI {open
           class Dial
         }
         Fl_Dial input {
-          callback {write_function(controller,INGAIN,sizeof(float),0,&up->floatvalue);}
+          callback {write_function(controller,INGAIN,sizeof(float),0,&input->floatvalue);}
           tooltip {Input Gain} xywh {35 146 89 89} maximum 2 step 0.01 value 1
           code1 {\#include"draw_squareDial.h"}
           code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialy_render;}
           class Dial
         }
         Fl_Dial output {
-          callback {write_function(controller,OUTGAIN,sizeof(float),0,&up->floatvalue);}
+          callback {write_function(controller,OUTGAIN,sizeof(float),0,&output->floatvalue);}
           tooltip {Output Gain} xywh {162 146 89 89} maximum 2 step 0.01 value 1
           code1 {\#include"draw_squareDial.h"}
           code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialgccw_render;}
           class Dial
         }
         Fl_Dial octave {
-          callback {write_function(controller,OCTAVE,sizeof(float),0,&up->floatvalue);} selected
+          callback {write_function(controller,OCTAVE,sizeof(float),0,&octave->floatvalue);} selected
           tooltip {Octave/Dirt} xywh {35 258 89 89} minimum -2 maximum 0 step 0.05
           code1 {\#include"draw_squareDial.h"}
           code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialo_render;}
@@ -58,7 +58,7 @@ class Hip2BUI {open
           class Dial
         }
         Fl_Dial wetdry {
-          callback {write_function(controller,WETDRY,sizeof(float),0,&up->floatvalue);}
+          callback {write_function(controller,WETDRY,sizeof(float),0,&wetdry->floatvalue);}
           tooltip {Wet/Dry Mix} xywh {162 258 89 89} step 0.01 value 0.7
           code1 {\#include"draw_squareDial.h"}
           code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialpccw_render;}
