@@ -183,8 +183,8 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     {
         plug->atime = *plug->atime_p;
         float tmp = 2.2*plug->sample_time;
-        float den = 2*plug->atime + tmp;
-        plug->up[0] = (2 - plug->sample_time)*plug->atime/den;
+        float den = 2.0*plug->atime + tmp;
+        plug->up[0] = (2.0 - plug->sample_time)*plug->atime/den;
         plug->up[1] = tmp/den;
         plug->up[2] = plug->sample_time*plug->atime/den;
     }
@@ -192,8 +192,8 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     {
         plug->dtime = *plug->dtime_p;
         float tmp = 2.2*plug->sample_time;
-        float den = 2*plug->dtime + tmp;
-        plug->dn[0] = (2 - plug->sample_time)*plug->dtime/den;
+        float den = 2.0*plug->dtime + tmp;
+        plug->dn[0] = (2.0 - plug->sample_time)*plug->dtime/den;
         plug->dn[1] = tmp/den;
         plug->dn[2] = plug->sample_time*plug->dtime/den;
     }
@@ -206,7 +206,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
 	rms = rms_shift(&plug->rms_calc,buf[i]);
 
         plug->prev = plug->current;
-        plug->current = (1 - *plug->peakrms_p)*peak + *plug->peakrms_p*rms;
+        plug->current = (1.0 - *plug->peakrms_p)*peak + *plug->peakrms_p*rms;
 
         if(plug->current >= plug->out)
         {

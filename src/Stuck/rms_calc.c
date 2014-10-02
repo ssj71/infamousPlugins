@@ -28,6 +28,7 @@ float rms_shift(RMS_CALC* calc, float x)
     calc->buf[calc->indx] = x*x;
     calc->sum += calc->buf[calc->indx++];
     calc->indx = calc->indx<calc->size?calc->indx:0;
+    calc->sum = calc->sum>=0?calc->sum:0;
     return calc->rms = sqrt(calc->sum/(float)calc->size);
 }
 
@@ -37,6 +38,7 @@ void rms_shift_no_out(RMS_CALC* calc, float x)
     calc->buf[calc->indx] = x*x;
     calc->sum += calc->buf[calc->indx++];
     calc->indx = calc->indx<calc->size?calc->indx:0;
+    calc->sum = calc->sum>=0?calc->sum:0;
 }
 
 float rms_calculate(RMS_CALC* calc)
