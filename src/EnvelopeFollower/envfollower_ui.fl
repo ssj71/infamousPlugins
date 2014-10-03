@@ -180,7 +180,10 @@ class EnvFollowerUI {open
       }
       Fl_Dial threshold {
         callback {write_function(controller,THRESHOLD,sizeof(float),0,&threshold->floatvalue);
-if(threshold->value() >= saturation->value()){saturation->value(threshold->value()+.01);}}
+if(threshold->value() >= saturation->value()){saturation->value(threshold->value()+.01); inBound->max=saturation->value();}
+inBound->min = threshold->floatvalue;
+inBound->drawlines=true;
+inBound->redraw();outBound->redraw();}
         tooltip {input threshold value} xywh {235 250 38 156} step 0.01
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
@@ -188,7 +191,10 @@ if(threshold->value() >= saturation->value()){saturation->value(threshold->value
       }
       Fl_Dial saturation {
         callback {write_function(controller,SATURATION,sizeof(float),0,&saturation->floatvalue);
-if(threshold->value() >= saturation->value()){threshold->value(saturation->value()-.01);}}
+if(threshold->value() >= saturation->value()){threshold->value(saturation->value()-.01); inBound->min=threshold->value();}
+inBound->max = saturation->floatvalue;
+inBound->drawlines=true;
+inBound->redraw();outBound->redraw();}
         tooltip {input saturation value} xywh {275 250 38 156} maximum 2 step 0.02
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
@@ -196,7 +202,10 @@ if(threshold->value() >= saturation->value()){threshold->value(saturation->value
       }
       Fl_Dial min {
         callback {write_function(controller,MINV,sizeof(float),0,&min->floatvalue);
-if(min->value() >= max->value()){max->value(min->value()+1);}}
+if(min->value() >= max->value()){max->value(min->value()+1); outBound->max=max->value()/127.0;}
+outBound->min = min->floatvalue/127.0;
+outBound->drawlines=true;
+outBound->redraw();inBound->redraw();}
         tooltip {MIDI output minimum value} xywh {330 250 38 156} maximum 126 step 1
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
@@ -205,7 +214,10 @@ if(min->value() >= max->value()){max->value(min->value()+1);}}
       }
       Fl_Dial max {
         callback {write_function(controller,MAXV,sizeof(float),0,&max->floatvalue);
-if(min->value() >= max->value()){min->value(max->value()-1);}}
+if(min->value() >= max->value()){min->value(max->value()-1); outBound->min=min->value()/127.0;}
+outBound->max = max->floatvalue/127.0;
+outBound->drawlines=true;
+outBound->redraw();inBound->redraw();}
         tooltip {MIDI output maximum value} xywh {370 250 38 156} minimum 1 maximum 127 step 1 value 127
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
@@ -243,16 +255,27 @@ if(min->value() >= max->value()){min->value(max->value()-1);}}
         class EnvAsciiDisplay
       }
       Fl_Box inScope {
-        tooltip {input and output graph} xywh {1 19 600 198}
+        tooltip {input and output graph} xywh {1 24 600 193}
         code0 {\#include"draw_envScopes.h"}
         code1 {o->drawing_h = cairo_code_draw_envScope_get_height(); o->drawing_w = cairo_code_draw_envScope_get_width(); o->drawing_f = &cairo_code_draw_blue_envScope_render;}
         class Scope
       }
       Fl_Box outScope {
-        tooltip {input and output graph} xywh {1 19 600 198}
+        tooltip {input and output graph} xywh {1 24 600 193}
         code0 {\#include"draw_envScopes.h"}
         code1 {o->drawing_h = cairo_code_draw_envScope_get_height(); o->drawing_w = cairo_code_draw_envScope_get_width(); o->drawing_f = &cairo_code_draw_green_envScope_render;}
         class Scope
+      }
+      Fl_Box inBound{
+        tooltip {input and output graph} xywh {1 20 600 193}
+        code0 {\#include"envbounds.h"}
+        code1 {o->blue = true;}
+        class EnvBounds 
+      }
+      Fl_Box outBound{
+        tooltip {input and output graph} xywh {10 20 589 193}
+        code0 {\#include"draw_envScopes.h"}
+        class EnvBounds 
       }
     }
   }
