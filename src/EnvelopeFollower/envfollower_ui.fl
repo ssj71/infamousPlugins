@@ -243,13 +243,13 @@ if(min->value() >= max->value()){min->value(max->value()-1);}}
         class EnvAsciiDisplay
       }
       Fl_Box inScope {
-        tooltip {input and output graph} xywh {1 14 600 200}
+        tooltip {input and output graph} xywh {1 19 600 198}
         code0 {\#include"draw_envScopes.h"}
         code1 {o->drawing_h = cairo_code_draw_envScope_get_height(); o->drawing_w = cairo_code_draw_envScope_get_width(); o->drawing_f = &cairo_code_draw_blue_envScope_render;}
         class Scope
       }
       Fl_Box outScope {
-        tooltip {input and output graph} xywh {1 14 600 200}
+        tooltip {input and output graph} xywh {1 19 600 198}
         code0 {\#include"draw_envScopes.h"}
         code1 {o->drawing_h = cairo_code_draw_envScope_get_height(); o->drawing_w = cairo_code_draw_envScope_get_width(); o->drawing_f = &cairo_code_draw_green_envScope_render;}
         class Scope
