@@ -155,6 +155,8 @@ class Dial : public Fl_Slider
       
       //Fl_Slider::handle( event );
       
+      float val = value();
+      char lable[20];
       switch(event) {
         case FL_PUSH:
           //highlight = 1;
@@ -162,7 +164,6 @@ class Dial : public Fl_Slider
 	  {
 	   // Fl_Window tmp* = new Fl_Window(Fl::event_x(),Fl::event_y(),100,200,"Enter Value");
 	    char n[20];
-	    float val=0;
 	    sprintf(n,"%f",value());
 	    const char *r = fl_input("Enter Value:",n);
 	    if(r!=NULL && sscanf(r,"%f",&val))
@@ -180,57 +181,64 @@ class Dial : public Fl_Slider
           {
             if ( Fl::event_state(FL_BUTTON1) )
             {
-              if ( mouseClicked == false ) // catch the "click" event
-              {
-                mouseClickedY = Fl::event_y();
-                mouseClicked = true;
-              }
-              
-              float deltaY = mouseClickedY - Fl::event_y();
-	      char lable[20];
-              
-              float val = value();
-	      if(step())
-	      {
-                  val += deltaY *step();/// 100.f*(maximum()-minimum());
-	      }
-	      else
-	      {
-	          val += deltaY/100.f;
-	      }
+                  if ( mouseClicked == false ) // catch the "click" event
+                  {
+                    mouseClickedY = Fl::event_y();
+                    mouseClicked = true;
+                  }
+                  
+                  float deltaY = mouseClickedY - Fl::event_y();
+                  
+                  if(step())
+                  {
+                      val += deltaY *step();/// 100.f*(maximum()-minimum());
+                  }
+                  else
+                  {
+                      val += deltaY/100.f;
+                  }
 
-              
-              if ( val > maximum() ) val = maximum();
-              if ( val < minimum() ) val = minimum();
-              
-              set_value( val );
-	      if(lock2int) val = (int)val;
-	      floatvalue = val;
-              
-              mouseClickedY = Fl::event_y();
-	      if(lock2int) 
-	          sprintf(lable,"%1.0f%s",val,units);
-	      else
-	          sprintf(lable,"%1.3f%s",val,units);
-	      if(drawLabel)Fl_Widget::copy_label(lable);
-              redraw();
-              do_callback(); // makes FLTK call "extra" code entered in FLUID
+                  
+                  if ( val > maximum() ) val = maximum();
+                  if ( val < minimum() ) val = minimum();
+                  
+                  set_value( val );
+                  if(lock2int) val = (int)val;
+                  floatvalue = val;
+                  
+                  mouseClickedY = Fl::event_y();
+                  if(lock2int) 
+                      sprintf(lable,"%1.0f%s",val,units);
+                  else
+                      sprintf(lable,"%1.3f%s",val,units);
+                  if(drawLabel)Fl_Widget::copy_label(lable);
+                  redraw();
+                  do_callback(); // makes FLTK call "extra" code entered in FLUID
             }
           }
           return 1;
         case FL_RELEASE:
           //if (highlight) {
            // highlight = 0;
-	    Fl_Widget::copy_label("");
+            Fl_Widget::copy_label("");
             redraw();
-	    floatvalue = value();
+            floatvalue = value();
             // never do anything after a callback, as the callback
             // may delete the widget!
           //}
           mouseClicked = false;
           return 1;
         case FL_ENTER:
+	      if(lock2int) 
+	          sprintf(lable,"%1.0f%s",val,units);
+	      else
+	          sprintf(lable,"%1.3f%s",val,units);
+	      if(drawLabel)Fl_Widget::copy_label(lable);
+              redraw();
+          return 1;
         case FL_LEAVE:
+            Fl_Widget::copy_label("");
+            redraw();
            return 1;
         default:
           return Fl_Widget::handle(event);
