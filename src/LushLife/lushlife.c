@@ -663,8 +663,10 @@ TUNERHANDLE RetunerAlloc(int fsamp, unsigned char format)
 		if (fsamp < 64000)
 		{
 			// At 44.1 and 48 kHz resample to double rate
-			tune->Upsamp = 1;
-			tune->Ipsize = 4096;
+			//tune->Upsamp = 1;
+			//tune->Ipsize = 4096;
+			tune->Upsamp = 0;//ssj
+			tune->Ipsize = 2048;
 			tune->Fftlen = 2048;
 			tune->Frsize = 128;
 			if (resamplerSetup(&tune->Resampler, 1, 2, 1, 32)) goto fail; // 32 is medium quality
@@ -736,16 +738,10 @@ fail:		RetunerFree(tune);
 			for (i = 0; i < tune->Fftlen; i++) tune->FftWcorr[i] /= t;
 
 			// Initialise all counters and other state
-	//		tune->Notebits = 0;
 			tune->Lastnote = -1;
-	//		tune->Count = 0;
 			tune->Cycle = tune->Frsize;
-	//		tune->Error = 0.0f;
 			tune->Ratio = 1.0f;
-	//		tune->Xfade = false;
-	//		tune->Ipindex = tune->Frindex = tune->Frcount = 0;
 			tune->Rindex1 = tune->Ipsize / 2;
-	//		tune->Rindex2 = 0;
 		}
 	}
 
@@ -870,10 +866,6 @@ static void findcycle(register Retuner * tune)
 	}
 }
 
-
-
-
-
 static void finderror(register Retuner * tune)
 {
 	int    i, m, im;
@@ -923,9 +915,6 @@ static void finderror(register Retuner * tune)
 }
 
 
-
-
-
 static float cubic(float * v, float a)
 {
 	register float	b, c;
@@ -935,9 +924,6 @@ static float cubic(float * v, float a)
 	return (1.0f + 1.5f * c) * (v[1] * b + v[2] * a)
 	    - 0.5f * c * (v[0] * b + v[1] + v[2] + v[3] * a);
 }
-
-
-
 
 
 // Pitch shifting is done by resampling the input at the
