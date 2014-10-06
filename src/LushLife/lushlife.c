@@ -1043,7 +1043,7 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 						// If the pitch estimate succeeds, find the
 						// nearest note and required resampling ratio
 						tune->Count = 0;
-						finderror(tune);
+						//finderror(tune);
 					}
 
 					else if (++tune->Count > 5)
@@ -1054,7 +1054,7 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 						// pitch error is reset
 						tune->Count = 5;
 						tune->Cycle = tune->Frsize;
-						tune->Error = 0;
+						//tune->Error = 0;
 					}
 
 					else if (tune->Count == 2)
@@ -1063,7 +1063,8 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 						tune->Lastnote = -1;
 					}
                 
-					tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
+					//tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
+					tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f ));
 				}
 
 				// If the previous fragment was crossfading,
