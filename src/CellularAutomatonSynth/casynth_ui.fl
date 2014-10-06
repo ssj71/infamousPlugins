@@ -169,7 +169,7 @@ class CaSynthUI {open
         class Background
       }
       Fl_Box ruL {
-        xywh {19 233 247 9}
+        xywh {18 233 247 9}
         code0 {\#include"draw_casLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_casRuleLabel_get_height(); o->drawing_w = cairo_code_draw_casRuleLabel_get_width(); o->drawing_f = &cairo_code_draw_casRuleLabel_render;}
         code2 {o->stretch = false;}
@@ -294,7 +294,7 @@ value->copy_label(s);
 param->copy_label("RULE");
 cellgrid->rule = rule;
 cellgrid->redraw();}
-        tooltip {rule, bit 7} xywh {26 247 13 13}
+        tooltip {rule, bit 7} xywh {27 247 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -314,7 +314,7 @@ value->copy_label(s);
 param->copy_label("RULE");
 cellgrid->rule = rule;
 cellgrid->redraw();}
-        tooltip {rule, bit 6} xywh {58 247 13 13}
+        tooltip {rule, bit 6} xywh {59 247 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -334,7 +334,7 @@ value->copy_label(s);
 param->copy_label("RULE");
 cellgrid->rule = rule;
 cellgrid->redraw();}
-        tooltip {rule, bit 5} xywh {89 247 13 13}
+        tooltip {rule, bit 5} xywh {90 247 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -374,7 +374,7 @@ value->copy_label(s);
 param->copy_label("RULE");
 cellgrid->rule = rule;
 cellgrid->redraw();}
-        tooltip {rule, bit 3} xywh {152 247 13 13} value 1
+        tooltip {rule, bit 3} xywh {151 247 13 13} value 1
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -394,7 +394,7 @@ value->copy_label(s);
 param->copy_label("RULE");
 cellgrid->rule = rule;
 cellgrid->redraw();}
-        tooltip {rule, bit 2} xywh {183 247 13 13} value 1
+        tooltip {rule, bit 2} xywh {181 247 13 13} value 1
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -414,7 +414,7 @@ value->copy_label(s);
 param->copy_label("RULE");
 cellgrid->rule = rule;
 cellgrid->redraw();}
-        tooltip {rule, bit 1} xywh {214 247 13 13} value 1
+        tooltip {rule, bit 1} xywh {212 247 13 13} value 1
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
@@ -434,7 +434,7 @@ value->copy_label(s);
 param->copy_label("RULE");
 cellgrid->rule = rule;
 cellgrid->redraw();}
-        tooltip {rule, bit 0} xywh {246 247 13 13}
+        tooltip {rule, bit 0} xywh {243 247 13 13}
         code1 {\#include"draw_tinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
