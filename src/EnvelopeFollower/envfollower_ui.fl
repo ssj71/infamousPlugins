@@ -159,7 +159,7 @@ class EnvFollowerUI {open
         callback {write_function(controller,PEAKRMS,sizeof(float),0,&peakrms->floatvalue);}
         tooltip {envelope type} xywh {5 250 38 156} step 0.01
         code1 {\#include"draw_ivorySlider.h"}
-        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;o->labelcolor(FL_DARK3);o->labelsize(12);}
         class Dial
       }
       Fl_Dial attack {
@@ -167,7 +167,7 @@ class EnvFollowerUI {open
         tooltip {attack time} xywh {45 250 38 156} minimum 0.001 maximum 15 step 0.1 value 0.01
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-        code3 {sprintf(o->units,"s");}
+        code3 {sprintf(o->units,"s");o->labelcolor(FL_DARK3);o->labelsize(12);}
         class Dial
       }
       Fl_Dial decay {
@@ -175,7 +175,7 @@ class EnvFollowerUI {open
         tooltip {decay time} xywh {85 250 38 156} minimum 0.001 maximum 15 step 0.1 value 0.01
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-        code3 {sprintf(o->units,"s");}
+        code3 {sprintf(o->units,"s");o->labelcolor(FL_DARK3);o->labelsize(12);}
         class Dial
       }
       Fl_Dial threshold {
@@ -186,7 +186,7 @@ inBound->drawlines=true;
 inBound->redraw();outBound->redraw();}
         tooltip {input threshold value} xywh {235 250 38 156} step 0.01
         code1 {\#include"draw_ivorySlider.h"}
-        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;o->labelcolor(FL_DARK3);o->labelsize(12);}
         class Dial
       }
       Fl_Dial saturation {
@@ -197,7 +197,7 @@ inBound->drawlines=true;
 inBound->redraw();outBound->redraw();}
         tooltip {input saturation value} xywh {275 250 38 156} maximum 2 step 0.02
         code1 {\#include"draw_ivorySlider.h"}
-        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+        code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;o->labelcolor(FL_DARK3);o->labelsize(12);}
         class Dial
       }
       Fl_Dial min {
@@ -209,7 +209,7 @@ outBound->redraw();inBound->redraw();}
         tooltip {MIDI output minimum value} xywh {330 250 38 156} maximum 126 step 1
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
         class Dial
       }
       Fl_Dial max {
@@ -221,7 +221,7 @@ outBound->redraw();inBound->redraw();}
         tooltip {MIDI output maximum value} xywh {370 250 38 156} minimum 1 maximum 127 step 1 value 127
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
         class Dial
       }
       Fl_Dial channel {
@@ -229,7 +229,7 @@ outBound->redraw();inBound->redraw();}
         tooltip {MIDI output channel} xywh {519 250 38 156} minimum 1 maximum 16 step 0.2 value 1
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
         class Dial
       }
       Fl_Dial cc {
@@ -237,7 +237,7 @@ outBound->redraw();inBound->redraw();}
         tooltip {MIDI output control number} xywh {559 250 38 156} maximum 127 step 1
         code1 {\#include"draw_ivorySlider.h"}
         code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-        code3 {o->lock2int = true;}
+        code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
         class Dial
       }
       Fl_Box inLCD {
