@@ -12,7 +12,7 @@ To install this version, make sure you have the dependencies and then just run t
     ./install.sh
     
     
-This will ask for your password using su or sudo, so be prepared. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
+This will ask for your password using su or sudo, so be prepared. If you are not a sudoer, then pass the argument --no-sudo when you call the install script. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
 
 
 Dependencies:
