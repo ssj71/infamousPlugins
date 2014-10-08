@@ -1,9 +1,10 @@
-NAME = stuck
+NAME = ewham 
 
 TARGET = $${NAME}_lv2
 TEMPLATE = lib
 CONFIG += shared plugin
 CONFIG -= qt
+LIBS += -lfftw3
 
 QMAKE_CFLAGS += -g \
     -msse2 \
@@ -11,15 +12,15 @@ QMAKE_CFLAGS += -g \
     -ffast-math
 
 
-SOURCES += stuck.c \
-    rms_calc.c  
+SOURCES += ewham.c \
+    retuner.c  
     
-HEADERS += rms_calc.h
+HEADERS += retuner.h \
+    fftw3.h
 
 OTHER_FILES += \
-    stuck.lv2/manifest.ttl \
-    stuck.lv2/stuck.ttl
-
+    ewham.lv2/manifest.ttl \
+    ewham.lv2/ewham.ttl
 
 unix {
 

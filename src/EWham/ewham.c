@@ -4,6 +4,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
+#include"ewham.h"
 #include"retuner.h"
 
 #define EWHAM_URI "http://infamousplugins.sourceforge.net/plugs.html#ewham"
@@ -24,21 +25,21 @@ typedef struct _EWHAM
 }EWHAM;
 
 enum _MODES{
-    CLASSIC,
+    CLASSIC = 0,
     HARMONIZER,
     CHORUS
-}
+};
 
 enum _LOCK{
-    NONE,
+    NONE = 0,
     LAND_ON_SEMITONE,
     LOCK_TO_SEMITONE
-}
+};
 
 void run_ewham(LV2_Handle handle, uint32_t nframes)
 {
     EWHAM* plug = (EWHAM*)handle;
-    float current = (1-*plug->expression_p)*plug->start_p + *plug->expression_p*(*plug->finish_p);
+    float current = (1-*plug->expression_p)*(*plug->start_p) + *plug->expression_p*(*plug->finish_p);
     int currint;
     uint32_t i;
 
@@ -50,7 +51,7 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
             plug->prev = current;
             current = currint;
         }
-        else if(*plug->lock_p = LOCK_TO_SEMITONE)
+        else if(*plug->lock_p == LOCK_TO_SEMITONE)
         {
             currint = current + .5;
             plug->prev = current;
@@ -66,7 +67,7 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
         RetunerSetOffset(plug->tuner,current/100.0);
     }
 
-    RetunerProcess(plug-tuner,plug->input_p,plug->output_p,nframes);
+    RetunerProcess(plug->tuner,plug->input_p,plug->output_p,nframes);
 
     if(*plug->mode_p != CLASSIC)
     {
