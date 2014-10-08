@@ -4,7 +4,8 @@ TARGET = $${NAME}_lv2
 TEMPLATE = lib
 CONFIG += shared plugin
 CONFIG -= qt
-LIBS += -lfftw3
+
+LIBS += -lfftw3f
 
 QMAKE_CFLAGS += -g \
     -msse2 \
@@ -16,7 +17,7 @@ SOURCES += ewham.c \
     retuner.c  
     
 HEADERS += retuner.h \
-    fftw3.h
+    ewham.h
 
 OTHER_FILES += \
     ewham.lv2/manifest.ttl \
