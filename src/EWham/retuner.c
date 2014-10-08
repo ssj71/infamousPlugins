@@ -524,16 +524,17 @@ TUNERHANDLE RetunerAlloc(int fsamp, unsigned char format)
 		tune->Refpitch = 440.0f;
 		tune->Corrfilt = tune->Corrgain = 1.0f;
 //		tune->Corroffs = tune->Notebias = 0.0f;
+		tune->Corroffs = 0.0f;
 		tune->Notemask = 0xFFF;
 
 		if (fsamp < 64000)
 		{
 			// At 44.1 and 48 kHz resample to double rate
-			tune->Upsamp = 1;
+			//tune->Upsamp = 1;
 			tune->Ipsize = 4096;
 			tune->Fftlen = 2048;
 			tune->Frsize = 128;
-			if (resamplerSetup(&tune->Resampler, 1, 2, 1, 32)) goto fail; // 32 is medium quality
+			//if (resamplerSetup(&tune->Resampler, 1, 2, 1, 32)) goto fail; // 32 is medium quality
 
 			// Prefeed some input samples to remove delay
 //			resamplerProcess(&tune->Resampler, 0, tune->Resampler.Table->_hl * 2 - 1, 0, 0, tune);
@@ -923,7 +924,7 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 						// If the pitch estimate succeeds, find the
 						// nearest note and required resampling ratio
 						tune->Count = 0;
-						finderror(tune);
+						//finderror(tune);
 					}
 
 					else if (++tune->Count > 5)
@@ -943,7 +944,8 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 						tune->Lastnote = -1;
 					}
                 
-					tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
+					//tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
+					tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f ));
 				}
 
 				// If the previous fragment was crossfading,
