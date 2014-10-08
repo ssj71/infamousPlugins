@@ -613,6 +613,7 @@ fail:		RetunerFree(tune);
 	//		tune->Ipindex = tune->Frindex = tune->Frcount = 0;
 			tune->Rindex1 = tune->Ipsize / 2;
 	//		tune->Rindex2 = 0;
+            //tune->Cycle = tune->Frsize;
 		}
 	}
 
@@ -918,13 +919,13 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 				if (++tune->Frcount == 4)
 				{
 					tune->Frcount = 0;
-					findcycle(tune);
+					//findcycle(tune);
 					if (tune->Cycle)
 					{
 						// If the pitch estimate succeeds, find the
 						// nearest note and required resampling ratio
 						tune->Count = 0;
-						//finderror(tune);
+						finderror(tune);
 					}
 
 					else if (++tune->Count > 5)

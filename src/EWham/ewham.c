@@ -43,7 +43,7 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
     int currint;
     uint32_t i;
 
-    if(*plug->mode_p == CHORUS)
+    if(*plug->mode_p != CHORUS)
     {
         if(*plug->lock_p == LAND_ON_SEMITONE && plug->prev == current)
         {
