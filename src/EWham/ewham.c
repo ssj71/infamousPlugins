@@ -81,7 +81,7 @@ return;
 LV2_Handle init_ewham(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     EWHAM* plug = malloc(sizeof(EWHAM));
-    plug->tuner = RetunerAlloc(sample_freq,TUNERTYPE_32BIT|TUNERTYPE_MONOINPUT|TUNERTYPE_MONOOUTPUT);
+    plug->tuner = RetunerAlloc(sample_freq,TUNERTYPE_FLOAT|TUNERTYPE_MONOINPUT|TUNERTYPE_MONOOUTPUT);
 
     return plug;
 }

@@ -531,7 +531,8 @@ TUNERHANDLE RetunerAlloc(int fsamp, unsigned char format)
 		{
 			// At 44.1 and 48 kHz resample to double rate
 			//tune->Upsamp = 1;
-			tune->Ipsize = 4096;
+			//tune->Ipsize = 4096;
+			tune->Ipsize = 2048;
 			tune->Fftlen = 2048;
 			tune->Frsize = 128;
 			//if (resamplerSetup(&tune->Resampler, 1, 2, 1, 32)) goto fail; // 32 is medium quality
@@ -919,13 +920,13 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 				if (++tune->Frcount == 4)
 				{
 					tune->Frcount = 0;
-					//findcycle(tune);
+					findcycle(tune);
 					if (tune->Cycle)
 					{
 						// If the pitch estimate succeeds, find the
 						// nearest note and required resampling ratio
 						tune->Count = 0;
-						finderror(tune);
+						//finderror(tune);
 					}
 
 					else if (++tune->Count > 5)
