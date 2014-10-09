@@ -959,16 +959,16 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 				// of pitch periods, and to avoid reading outside
 				// the circular input buffer limits it must be at
 				// least one fragment size
-				dr = tune->Cycle * (int)ceil((double)(tune->Frsize / tune->Cycle));
-				dp = dr / tune->Frsize;
-				ph = r1 - tune->Ipindex;
-				if (ph < 0) ph += tune->Ipsize;
+				dr = tune->Cycle * (int)ceil((double)(tune->Frsize / tune->Cycle));//samples per fragment raised to nearest complete cycle
+				dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
+				ph = r1 - tune->Ipindex;//how many samples left to read this period
+				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
 				if (tune->Upsamp)
 				{
 					ph /= 2;
 					dr *= 2;
 				}
-				ph = ph / tune->Frsize + 2 * tune->Ratio - 10;
+				ph = ph / tune->Frsize + 2 * tune->Ratio - 10;//fragments left to read - target (about 8 frags)
 				if (ph > 0.5f)
 				{
 					// Jump back by 'dr' frames and crossfade.
@@ -984,6 +984,7 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 					if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
 				}
 				else
+                    //keep reading from current position
 					tune->Xfade = 0;
 			}
 		}
