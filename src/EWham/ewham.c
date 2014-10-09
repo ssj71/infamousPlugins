@@ -14,6 +14,7 @@ typedef struct _EWHAM
     TUNERHANDLE tuner;
     double sample_freq;
     float prev;
+    unsigned int count;
     
     float *input_p;
     float *output_p;
@@ -47,18 +48,24 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
     {
         if(*plug->lock_p == LAND_ON_SEMITONE && plug->prev == current)
         {
-            currint = current + .5;
             plug->prev = current;
-            current = currint;
+            if(plug->count++ > 5)
+            {
+                currint = current + .5;
+                current = currint;
+            }
         }
         else if(*plug->lock_p == LOCK_TO_SEMITONE)
         {
-            currint = current + .5;
             plug->prev = current;
+            currint = current + .5;
             current = currint;
         }
         else 
+        {
             plug->prev = current;
+            plug->count = 0;
+        }
 
         RetunerSetOffset(plug->tuner,current);
     }
@@ -81,6 +88,7 @@ return;
 LV2_Handle init_ewham(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     EWHAM* plug = malloc(sizeof(EWHAM));
+    plug->count = plug->prev = 0;
     plug->tuner = RetunerAlloc(sample_freq,TUNERTYPE_FLOAT|TUNERTYPE_MONOINPUT|TUNERTYPE_MONOOUTPUT);
 
     return plug;
