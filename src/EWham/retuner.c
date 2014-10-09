@@ -969,7 +969,14 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 					dr *= 2;
 				}
 				ph = ph / tune->Frsize + 2 * tune->Ratio - 10;//fragments left to read - target (about 8 frags)
-				if (ph > 0.5f)
+                if(ph > 1.5f)
+                {
+					// Jump back by 'dr' frames and crossfade.
+                    tune->Xfade = 1;
+                    r2 = r1 - 2.0*dr;
+					if (r2 < 0) r2 += tune->Ipsize;
+                }
+				else if (ph > 0.5f)
 				{
 					// Jump back by 'dr' frames and crossfade.
 					tune->Xfade = 1;
