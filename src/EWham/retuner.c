@@ -75,53 +75,6 @@ typedef struct
 
 
 
-
-
-static double sinc(double x)
-{
-	x = fabs(x);
-	if (x < 1e-6) return 1.0;
-	x *= M_PI;
-	return sin(x) / x;
-}
-
-
-
-
-
-static double wind(double x)
-{
-	x = fabs(x);
-	if (x >= 1.0) return 0.0f;
-	x *= M_PI;
-	return 0.384 + 0.500 * cos(x) + 0.116 * cos(2 * x);
-}
-
-
-
-static unsigned int gcd(unsigned int a, unsigned int b)
-{
-	if (a == 0) return b;
-	if (b == 0) return a;
-	while (1)
-	{
-		if (a > b)
-		{
-			a = a % b;
-			if (a == 0) return b;
-			if (a == 1) return 1;
-		}
-		else
-		{
-			b = b % a;
-			if (b == 0) return a;
-			if (b == 1) return 1;
-		}
-	}    
-	return 1; 
-}
-
-
 static void * tuner_get_input(register Retuner * tune, register void * inputs, register float *v)
 {
 	register unsigned long	offset;
@@ -595,8 +548,6 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 
 
 			// At higher sample rates apply lowpass filter
-			else
-			{
 				int		i;
 
 				// Not implemented yet, just copy
@@ -605,7 +556,6 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 					inp = tuner_get_input(tune, inp, &tune->Ipbuff[tune->Ipindex]);
 					++tune->Ipindex;
 				}
-			}
 
 			// Extra samples for interpolation
 			tune->Ipbuff[tune->Ipsize + 0] = tune->Ipbuff[0];
