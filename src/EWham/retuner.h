@@ -64,6 +64,8 @@ void RetunerSetOffset(TUNERHANDLE, float);
 void RetunerSetNoteMask(TUNERHANDLE, unsigned int);
 unsigned int RetunerGetNoteset(TUNERHANDLE);
 float RetunerGetError(TUNERHANDLE);
+void RetunerSetLatency(TUNERHANDLE, unsigned int);//don't set below 256
+unsigned int RetunerGetLatency(TUNERHANDLE);
 
 #ifdef __cplusplus
 }

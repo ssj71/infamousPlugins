@@ -57,6 +57,7 @@ typedef struct
 	float			Corrfilt; 
 	float			Corrgain;
 	float			Corroffs;
+    float           Latency;//latency in fragments
 
 	int				Lastnote;
 	int				Count;
@@ -198,7 +199,17 @@ void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k)
 	((Retuner *)tune)->Notemask = k;
 }
 
+//set latency in samples
+void RetunerSetLatency(TUNERHANDLE tune, unsigned int samp)
+{
+	((Retuner *)tune)->Latency = samp/((Retuner *)tune)->Frsize;
+}
 
+//get latency in samples
+unsigned int RetunerGetLatency(TUNERHANDLE tune)
+{
+   return ((Retuner *)tune)->Latency*((Retuner *)tune)->Frsize;
+}
 
 
 unsigned int RetunerGetNoteset(TUNERHANDLE tune)
@@ -344,6 +355,7 @@ fail:		RetunerFree(tune);
 			tune->Lastnote = -1;
 	//		tune->Count = 0;
 			tune->Cycle = tune->Frsize;
+            tune->Latency = 8;
 	//		tune->Error = 0.0f;
 			tune->Ratio = 1.0f;
 	//		tune->Xfade = false;
@@ -693,7 +705,7 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 				ph = r1 - tune->Ipindex;//how many samples left to read this period
 				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
 
-				ph = ph / tune->Frsize + 2 * tune->Ratio - 10;//fragments left to read - target (about 8 frags)
+				ph = ph / tune->Frsize + 2 * tune->Ratio - 2 - tune->Latency;//fragments left to read - target (about 8 frags)
                 if(ph > 1.5f)
                 {
 					// Jump back by 'dr' frames and crossfade.
