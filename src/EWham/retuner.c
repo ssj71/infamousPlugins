@@ -443,59 +443,6 @@ static void findcycle(register Retuner * tune)
 
 
 
-
-static void finderror(register Retuner * tune)
-{
-	int    i, m, im;
-	float  a, am, d, dm, f;
-
-	if (!tune->Notemask)
-	{
-		tune->Error = 0;
-		tune->Lastnote = -1;
-	}
-	else
-	{
-		//	f = log2f(tune->Fsamp / (tune->Cycle * tune->Refpitch));
-		f = log((tune->Fsamp / (tune->Cycle * tune->Refpitch)))/log(2);
-
-		dm = 0;
-		am = 1;
-		im = -1;
-		for (i = 0, m = 1; i < 12; i++, m <<= 1)
-		{
-			if (tune->Notemask & m)
-			{
-				d = f - (i - 9) / 12.0f;
-				d -= (float)floor((d + 0.5f));
-				a = (float)fabs(d);
-				if (i == tune->Lastnote) a -= tune->Notebias;
-				if (a < am)
-				{
-					am = a;
-					dm = d;
-					im = i;
-				}
-			}
-		}
-
-		if (tune->Lastnote == im)
-			tune->Error += tune->Corrfilt * (dm - tune->Error);
-		else
-		{
-			tune->Error = dm;
-			tune->Lastnote = im;
-		}
-
-		// For display only.
-		tune->Notebits |= 1 << im;
-	}
-}
-
-
-
-
-
 static float cubic(float * v, float a)
 {
 	register float	b, c;
