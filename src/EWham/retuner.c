@@ -315,7 +315,6 @@ fail:		RetunerFree(tune);
 	//		tune->Ipindex = tune->Frindex = tune->Frcount = 0;
 			tune->Rindex1 = tune->Ipsize / 2;
 	//		tune->Rindex2 = 0;
-            //tune->Cycle = tune->Frsize;
 		}
 	}
 
@@ -385,8 +384,7 @@ static void findcycle(register Retuner * tune)
 	k = tune->Ipsize - 1;
 	for (i = 0; i < tune->Fftlen; i++)
 	{
-		tune->FftTdata[i] = tune->FftTwind[i] * tune->Ipbuff[j & k];
-		j += d;
+		tune->FftTdata[i] = tune->FftTwind[i] * tune->Ipbuff[j++ & k];
 	}
 	fftwf_execute_dft_r2c(tune->Fwdplan, tune->FftTdata, tune->FftFdata);    
 	f = tune->Fsamp / (tune->Fftlen * 2.5e3f);
