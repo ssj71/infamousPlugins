@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
 //
-//  Copyright (C) 2009-2011 Fons Adriaensen <fons@linuxaudio.org>
+//  Copyright (C) 2014-2111 Spencer Jackson <ssjackson71@gmail.com>>
 //    
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // -----------------------------------------------------------------------
+
+//this code is mostly written by Jeff Glatt based on code from Fons Adriaensen.
 
 #ifndef __RETUNER_H
 #define __RETUNER_H

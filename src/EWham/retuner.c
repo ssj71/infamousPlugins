@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
 //
-//  Copyright (C) 2009-2011 Fons Adriaensen <fons@linuxaudio.org>
+//  Copyright (C) 2014-2111 Spencer Jackson <ssjackson71@gmail.com>
 //    
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -18,6 +18,10 @@
 //
 // -----------------------------------------------------------------------
 
+
+//  This code is mostly written by Jeff Glatt based on original code from Fons Adriaensen
+
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -30,26 +34,6 @@ extern "C" {
 
 typedef struct
 {
-	double			_fr;
-	unsigned int	_hl;
-	unsigned int	_np;	
-	float			Table[1];
-} Resampler_table;
-
-typedef struct
-{
-	float *			Buff;
-	Resampler_table *	Table;
-	unsigned int	InMax;
-	unsigned int	Index;
-	unsigned int	NRead;
-	unsigned int	NZero;
-	unsigned int	Phase;
-	unsigned int	Pstep;
-} Resampler;
-
-typedef struct
-{
 	float *			Ipbuff;
 	float *			Xffunc;
 	float *			FftTwind;
@@ -58,7 +42,6 @@ typedef struct
 	fftwf_complex *	FftFdata;
 	fftwf_plan		Fwdplan;
 	fftwf_plan		Invplan;
-	Resampler		Resampler;
 	int				Fsamp;
 	int				Ifmin, Ifmax;
 	int				Fftlen;
@@ -115,63 +98,6 @@ static double wind(double x)
 
 
 
-
-
-static Resampler_table * resamplerTableCreate(double fr, unsigned int hl, unsigned int np)
-{
-	register Resampler_table * table;
-
-	if ((table = (Resampler_table *)malloc(sizeof(Resampler_table) - sizeof(float) + (sizeof(float) * hl * (np + 1)))))
-	{
-		unsigned int  i, j;
-		double        t;
-		float         *p;
-
-		table->_fr = fr;
-		table->_hl = hl;
-		table->_np = np;
-		p = &table->Table[0];
-		for (j = 0; j <= np; j++)
-		{
-			t = (double) j / (double) np;
-			for (i = 0; i < hl; i++)
-			{
-				p[hl - i - 1] = (float)(fr * sinc(t * fr) * wind(t / hl));
-				t += 1;
-			}
-			p += hl;
-		}
-	}
-	
-	return table;
-}
-
-
-
-
-
-static void resamplerTableDestroy(Resampler_table * table)
-{
-	if (table) free(table);
-}
-
-
-
-
-
-static void resamplerClear(register Resampler * resamp)
-{
-	resamplerTableDestroy(resamp->Table);
-	resamp->Table = 0;
-
-	if (resamp->Buff) free(resamp->Buff);
-	resamp->Buff = 0;
-}
-
-
-
-
-
 static unsigned int gcd(unsigned int a, unsigned int b)
 {
 	if (a == 0) return b;
@@ -193,51 +119,6 @@ static unsigned int gcd(unsigned int a, unsigned int b)
 	}    
 	return 1; 
 }
-
-
-static int resamplerSetup(register Resampler * resamp, unsigned int fs_inp, unsigned int fs_out, unsigned int nchan, unsigned int hlen)
-{
-	unsigned int       g, h, k, n, s;
-	double             r, frel;
-
-	if (hlen >= 8 && hlen <= 96)
-	{
-		r = (double) fs_out / (double) fs_inp;
-		g = gcd(fs_out, fs_inp);
-		n = fs_out / g;
-		s = fs_inp / g;
-
-		k = 0;
-		if ((16 * r >= 1) && (n <= 1000))
-		{
-			h = hlen;
-			k = 250;
-			frel = 1.0 - (2.6 / hlen);
-			if (r < 1) 
-			{
-				frel *= r;
-				h = (unsigned int)(ceil(h / r));
-				k = (unsigned int)(ceil(k / r));
-			}
-			resamp->Table = resamplerTableCreate(frel, h, n);
-			resamp->Buff = (float *)malloc(sizeof(float) * nchan * (2 * h - 1 + k));
-		}
-
-		if (resamp->Table && resamp->Buff)
-		{
-			resamp->NRead = 2 * resamp->Table->_hl;
-			resamp->InMax = k;
-			resamp->Pstep = s;
-			return 0;
-		}
-	}
-
-	resamplerClear(resamp);
-	return 1;
-}
-
-
-
 
 
 static void * tuner_get_input(register Retuner * tune, register void * inputs, register float *v)
@@ -287,147 +168,6 @@ static void * tuner_get_input(register Retuner * tune, register void * inputs, r
 }
 
 
-
-
-
-static void * resamplerProcess(register Resampler * resamp, void * input, unsigned int inFrames, float * output, unsigned int outFrames, Retuner * tune)
-{
-	unsigned int   hl, ph, np, dp, in, nr, nz, n;
-	float          *p1, *p2;
-
-//	if (!resamp->Table) return;
-
-	hl = resamp->Table->_hl;
-	np = resamp->Table->_np;
-	dp = resamp->Pstep;
-	in = resamp->Index;
-	nr = resamp->NRead;
-	ph = resamp->Phase;
-	nz = resamp->NZero;
-	n = (2 * hl - nr);
-	p1 = resamp->Buff + in;
-	p2 = p1 + n;
-
-	while (outFrames)
-	{
-		if (nr)
-		{
-			if (!inFrames) break;
-
-			if (input)
-			{
-				input = tuner_get_input(tune, input, p2);
-				nz = 0;
-			}
-			else
-			{
-				*p2 = 0;
-				if (nz < 2 * hl) nz++;
-			}
-			nr--;
-			p2++;
-			inFrames--;
-		}
-		else
-		{
-			if (output)
-			{
-				if (nz < 2 * hl)
-				{
-					float *			c1;
-					float *			c2;
-					float *			q1;
-					float *			q2;
-					float			s;
-					unsigned int	i;
-
-					c1 = &resamp->Table->Table[hl * ph];
-					c2 = &resamp->Table->Table[hl * (np - ph)];
-
-					q1 = p1;
-					q2 = p2;
-					s = 1e-20f;
-					for (i = 0; i < hl; i++)
-					{
-						q2--;
-						s += *q1 * c1[i] + *q2 * c2[i];
-						q1++;
-					}
-
-					*output++ = s - 1e-20f;
-				}
-				else
-					*output++ = 0;
-			}
-
-			outFrames--;
-
-			ph += dp;
-			if (ph >= np)
-			{
-				nr = ph / np;
-				ph -= nr * np;
-				in += nr;
-				p1 += nr;
-				if (in >= resamp->InMax)
-				{
-					n = (2 * hl - nr);
-					memcpy(resamp->Buff, p1, n * sizeof(float));
-					in = 0;
-					p1 = resamp->Buff;
-					p2 = p1 + n;
-				}
-			}
-		}
-	}
-
-	resamp->Index = in;
-	resamp->NRead = nr;
-	resamp->Phase = ph;
-	resamp->NZero = nz;
-
-	return input;
-}
-
-
-
-
-
-/*
-
-enum { XS = 173, YS = 17, XM = 0, YM = 0, Y1 = 7, Y2 = 10 };
-
-void tmeter::update_meter()
-{
-    float v0, v1;
-    int k0, k1;
-
-    v0 = v1 = RetunerGetError(tune);
-
-    k0 = (int)(floor(86.0 + 80.0 * v0 + 0.5));
-    k1 = (int)(floor(86.0 + 80.0 * v1 + 0.5));
-    if (k0 < 4) k0 = 4;
-    if (k0 > 168) k0 = 168;
-    if (k1 < 4) k1 = 4;
-    if (k1 > 168) k1 = 168;
-    XSetFunction(Display, MainGc, GXcopy);
-    XPutImage(Display, MeterWin, MainGc, _imag0, _k0 - 2, 0, XM + _k0 - 2, YM, 5 + _k1 - _k0, Y1); 
-    _k0 = k0;
-    _k1 = k1;
-    XPutImage(Display, MeterWin, MainGc, _imag1, k0 - 2, 0, XM + k0 - 2, YM, 5 + k1 - k0, Y1); 
-}
-
-*/
-
-
-// 12 note buttons c to b (low 12 bits of tune->Notemask)
-// tune (tune->Refpitch) = 400 to 480, def 440
-// bias (tune->Notebias) = 0 to 1, def 0.5
-// filter (tune->Corrfilt) = 0.50 to 0.02, def 0.10 
-// corr (tune->Corrgain) = 0 to 1, def 1. 
-// offset (tune->Corroffs) = -2 to 2, def 0
-
-
 void RetunerSetPitch(TUNERHANDLE tune, float v)
 {
 	((Retuner *)tune)->Refpitch = v;
@@ -473,7 +213,6 @@ unsigned int RetunerGetNoteset(TUNERHANDLE tune)
 
 
 
-
 float RetunerGetError(TUNERHANDLE tune)
 {
 	return 12.0f * ((Retuner *)tune)->Error;
@@ -492,7 +231,6 @@ void RetunerFree(TUNERHANDLE handle)
 
 	if ((tune = handle))
 	{
-		resamplerClear(&tune->Resampler);
 		if (tune->Ipbuff) free(tune->Ipbuff);
 		if (tune->Xffunc) free(tune->Xffunc);
 		fftwf_free(tune->FftTwind);
@@ -535,10 +273,8 @@ TUNERHANDLE RetunerAlloc(int fsamp, unsigned char format)
 			tune->Ipsize = 2048;
 			tune->Fftlen = 2048;
 			tune->Frsize = 128;
-			//if (resamplerSetup(&tune->Resampler, 1, 2, 1, 32)) goto fail; // 32 is medium quality
 
 			// Prefeed some input samples to remove delay
-//			resamplerProcess(&tune->Resampler, 0, tune->Resampler.Table->_hl * 2 - 1, 0, 0, tune);
 		}
 		else if (fsamp < 128000)
 		{
@@ -678,7 +414,7 @@ static void findcycle(register Retuner * tune)
 	int    d, h, i, j, k;
 	float  f, m, t, x, y, z;
 
-	d = tune->Upsamp ? 2 : 1;
+	d = 1;
 	h = tune->Fftlen / 2;
 	j = tune->Ipindex;
 	k = tune->Ipsize - 1;
@@ -845,12 +581,6 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 			if (nfram < k) k = nfram;
 			nfram -= k;
 
-			// At 44.1 and 48 kHz upsample by 2
-			if (tune->Upsamp)
-			{
-				inp = resamplerProcess(&tune->Resampler, inp, k, tune->Ipbuff + tune->Ipindex, k * 2, tune);
-				tune->Ipindex += 2 * k;
-			}
 
 			// At higher sample rates apply lowpass filter
 			else
@@ -873,7 +603,6 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 
 			// Process available samples
 			dr = tune->Ratio;
-			if (tune->Upsamp) dr *= 2;
 			if (tune->Xfade)
 			{
 				// Interpolate and crossfade
@@ -963,11 +692,7 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 				dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
 				ph = r1 - tune->Ipindex;//how many samples left to read this period
 				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
-				if (tune->Upsamp)
-				{
-					ph /= 2;
-					dr *= 2;
-				}
+
 				ph = ph / tune->Frsize + 2 * tune->Ratio - 10;//fragments left to read - target (about 8 frags)
                 if(ph > 1.5f)
                 {
