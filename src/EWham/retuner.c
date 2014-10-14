@@ -600,19 +600,13 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 				ph = r1 - tune->Ipindex;//how many samples left to read this period
 				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
 
-				ph = ph / tune->Frsize + 2 * tune->Ratio - 2 - tune->Latency;//fragments left to read - target (about 8 frags)
-                if(ph > 1.5f)
-                {
-					// Jump back by 'dr' frames and crossfade.
-                    tune->Xfade = 1;
-                    r2 = r1 - 2.0*dr;
-					if (r2 < 0) r2 += tune->Ipsize;
-                }
-				else if (ph > 0.5f)
+				ph = ph / tune->Frsize - tune->Latency;//fragments left to read - target (about 8 frags)
+				if (ph > 0.5f)
 				{
 					// Jump back by 'dr' frames and crossfade.
 					tune->Xfade = 1;
-					r2 = r1 - dr;
+                    int i = (int)(ph + .5);//round to nearest fragment
+					r2 = r1 - i*dr;
 					if (r2 < 0) r2 += tune->Ipsize;
 				}
 				else if (ph + dp < 0.5f)
