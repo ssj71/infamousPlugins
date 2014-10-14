@@ -20,7 +20,7 @@ Dependencies:
 
 
 If you do not have ntk and ntk-fluid already installed use the commands:
-    git pull git://git.tuxfamily.org/gitroot/non/fltk.git ntk
+    git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
     cd ntk
     ./waf configure
     ./waf
