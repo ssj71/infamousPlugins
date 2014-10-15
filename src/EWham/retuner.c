@@ -597,10 +597,11 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 				// least one fragment size
 				dr = tune->Cycle * (int)ceil((double)(tune->Frsize / tune->Cycle));//samples per fragment raised to nearest complete cycle
 				dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
-				ph = r1 - tune->Ipindex;//how many samples left to read this period
+#if(0)
+				ph = r1 - tune->Ipindex;//samples that can be written before overwriting read buffer
 				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
 
-				ph = ph / tune->Frsize - tune->Latency;//fragments left to read - target (about 8 frags)
+				ph = ph / tune->Frsize - tune->Latency;//fragments left to write - target (about 8 frags)
 				if (ph > 0.5f)
 				{
 					// Jump back by 'dr' frames and crossfade.
@@ -614,6 +615,27 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 					// Jump forward by 'dr' frames and crossfade.
 					tune->Xfade = 1;
 					r2 = r1 + dr;
+					if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
+				}
+#endif
+				ph = tune->Ipindex - r1;//samples that can be read /latency
+				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
+
+				ph = -ph / tune->Frsize + tune->Latency;//fragments left - target (about 8 frags) = latency error
+				if (ph < 0.5f)
+				{
+					// Jump back by 'dr' frames and crossfade.
+					tune->Xfade = 1;
+                    int i = (int)(ph + .5);//round to nearest fragment
+					r2 = r1 - i*dr;
+					if (r2 < 0) r2 += tune->Ipsize;
+				}
+				else if (ph > 0.5f)
+				{
+					// Jump forward by 'dr' frames and crossfade.
+					tune->Xfade = 1;
+                    int i = (int)(ph + .5);//round to nearest fragment
+					r2 = r1 + i*dr;
 					if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
 				}
 				else
