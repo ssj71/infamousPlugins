@@ -188,7 +188,8 @@ TUNERHANDLE RetunerAlloc(int fsamp)
 			//tune->Ipsize = 4096;
 			tune->Ipsize = 2048;
 			tune->Fftlen = 2048;
-			tune->Frsize = 128;
+			//tune->Frsize = 128;
+			tune->Frsize = 64;
 
 			// Prefeed some input samples to remove delay
 		}
@@ -197,14 +198,16 @@ TUNERHANDLE RetunerAlloc(int fsamp)
 			// 88.2 or 96 kHz.
 //			tune->Upsamp = false;
 			tune->Ipsize = tune->Fftlen = 4096;
-			tune->Frsize = 256;
+			//tune->Frsize = 256;
+			tune->Frsize = 128;
 		}
 		else
 		{
 			// 192 kHz, double time domain buffers sizes
 //			tune->Upsamp = false;
 			tune->Ipsize = tune->Fftlen = 8192;
-			tune->Frsize = 512;
+			//tune->Frsize = 512;
+			tune->Frsize = 256;
 		}
 
 		// Accepted correlation peak range, corresponding to 60..1200 Hz
@@ -397,18 +400,10 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 			nfram -= k;
 
 
-			// At higher sample rates apply lowpass filter
-				int		i;
-
-				// Not implemented yet, just copy
-                memcpy(tune->Ipbuff + tune->Ipindex,inp,k*sizeof(float));
-                tune->Ipindex += k;
-                inp += k;
-				//for (i=0; i < k; i++)
-				{
-					//inp = tuner_get_input(tune, inp, &tune->Ipbuff[tune->Ipindex]);
-					//++tune->Ipindex;
-				}
+            //copy input
+            memcpy(tune->Ipbuff + tune->Ipindex,inp,k*sizeof(float));
+            tune->Ipindex += k;
+            inp += k;
 
 			// Extra samples for interpolation
 			tune->Ipbuff[tune->Ipsize + 0] = tune->Ipbuff[0];
@@ -462,8 +457,8 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 			{
 				fi = 0;
 
-				// Estimate the pitch every 4th fragment
-				if (++tune->Frcount == 4)
+				// Estimate the pitch every 8th fragment
+				if (++tune->Frcount == 8)
 				{
 					tune->Frcount = 0;
 					findcycle(tune);
@@ -507,38 +502,25 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 				// least one fragment size
 				dr = tune->Cycle * (int)ceil((double)(tune->Frsize / tune->Cycle));//samples per fragment raised to nearest complete cycle
 				dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
-#if(0)
-				ph = r1 - tune->Ipindex;//samples that can be written before overwriting read buffer
-				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
-
-				ph = ph / tune->Frsize - tune->Latency;//fragments left to write - target (about 8 frags)
-				if (ph > 0.5f)
-				{
-					// Jump back by 'dr' frames and crossfade.
-					tune->Xfade = 1;
-                    int i = (int)(ph + .5);//round to nearest fragment
-					r2 = r1 - i*dr;
-					if (r2 < 0) r2 += tune->Ipsize;
-				}
-				else if (ph + dp < 0.5f)
-				{
-					// Jump forward by 'dr' frames and crossfade.
-					tune->Xfade = 1;
-					r2 = r1 + dr;
-					if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
-				}
-#endif
 				ph = tune->Ipindex - r1;//samples that can be read /latency
 				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
 
-				ph = -ph / tune->Frsize + 2*tune->Ratio - 2.0 + tune->Latency;//fragments left - target (about 8 frags) = latency error
-                int i = (int)(ph + .5);//round to nearest fragment
+                //to keep latency at a minimum but still prevent reading ahead of the write buffer
+                //we should try to make sure there is always a complete fragment left at the end of 
+                //the current fragment. Since you aren't sure if the ratio will change during this
+                //fragment the only way to really guarantee it is to not start any closer than 2 fragments
+                //to begin with. You can get a little closer because the highest playback rate is bound
+                //at 4x (2 oct) so actually 1.75 fragments. 
+				ph = -ph / tune->Frsize + 5.0;//tune->Latency;//-fragments left + target (about 8 frags) = latency error 
+                int i = (int)ceil(ph/dp);//round to nearest place we can actually jump to that should leave us somewhere behind the target
 				if (i)
 				{
 					// Jump an integer number of 'dr' frames and crossfade.
+                    //if(i>0)i++;
 					tune->Xfade = 1;
 					r2 = r1 - i*dr;
 					if (r2 < 0) r2 += tune->Ipsize;
+                    else if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
 				}
 				else
                     //keep reading from current position
