@@ -53,9 +53,9 @@ typedef int REV_ERROR;
 
 typedef void * TUNERHANDLE;
 
-TUNERHANDLE RetunerAlloc(int, unsigned char);
+TUNERHANDLE RetunerAlloc(int);
 void RetunerFree(TUNERHANDLE);
-void RetunerProcess(TUNERHANDLE, void *, void *, unsigned int);
+void RetunerProcess(TUNERHANDLE, float *, float *, unsigned int);
 void RetunerSetPitch(TUNERHANDLE, float);
 void RetunerSetNoteBias(TUNERHANDLE, float);
 void RetunerSetFilter(TUNERHANDLE, float);

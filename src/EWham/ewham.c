@@ -89,7 +89,7 @@ LV2_Handle init_ewham(const LV2_Descriptor *descriptor,double sample_freq, const
 {
     EWHAM* plug = malloc(sizeof(EWHAM));
     plug->count = plug->prev = 0;
-    plug->tuner = RetunerAlloc(sample_freq,TUNERTYPE_FLOAT|TUNERTYPE_MONOINPUT|TUNERTYPE_MONOOUTPUT);
+    plug->tuner = RetunerAlloc(sample_freq);
     RetunerSetLatency(plug->tuner,RetunerGetLatency(plug->tuner)*1.0/8.0);//set latency to a little over 1 frag
 
     return plug;

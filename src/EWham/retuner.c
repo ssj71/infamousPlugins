@@ -75,53 +75,6 @@ typedef struct
 
 
 
-static void * tuner_get_input(register Retuner * tune, register void * inputs, register float *v)
-{
-	register unsigned long	offset;
-	register float			value;
-
-	switch (tune->Format & TUNERTYPE_BITSMASK)
-	{
-		case TUNERTYPE_8BIT:
-		{
-			value = (float)*((char *)inputs);
-			offset = sizeof(char);
-			break;
-		}
-		case TUNERTYPE_16BIT:
-		{
-			value = (float)*((short *)inputs);
-			offset = sizeof(short);
-			break;
-		}
-		case TUNERTYPE_32BIT:
-		{
-			value = (float)*((int32_t *)inputs);
-			offset = sizeof(int32_t);
-			break;
-		}
-		case TUNERTYPE_FLOAT:
-		{
-			value = (float)*((float *)inputs);
-			offset = sizeof(float);
-			break;
-		}
-#ifdef REV_DBL_SUPPORT
-		case TUNERTYPE_DOUBLE:
-		{
-			value = (float)*((double *)inputs);
-			offset = sizeof(double);
-		}
-#endif
-	}
-
-	*v = value;
-	if (!(tune->Format & TUNERTYPE_MONOOUTPUT)) offset <<= 1;
-	inputs = (char *)inputs + offset;
-	return inputs;
-}
-
-
 void RetunerSetPitch(TUNERHANDLE tune, float v)
 {
 	((Retuner *)tune)->Refpitch = v;
@@ -211,7 +164,7 @@ void RetunerFree(TUNERHANDLE handle)
 
 
 
-TUNERHANDLE RetunerAlloc(int fsamp, unsigned char format)
+TUNERHANDLE RetunerAlloc(int fsamp)
 {
 	register Retuner * tune;
 	int   i, h;
@@ -222,7 +175,6 @@ TUNERHANDLE RetunerAlloc(int fsamp, unsigned char format)
 		memset(tune, 0, sizeof(Retuner));
 
 		tune->Fsamp = fsamp;
-		tune->Format = format;
 		tune->Refpitch = 440.0f;
 		tune->Corrfilt = tune->Corrgain = 1.0f;
 //		tune->Corroffs = tune->Notebias = 0.0f;
@@ -325,53 +277,6 @@ fail:		RetunerFree(tune);
 
 
 
-static void * store_output(register Retuner * tune, register void * outputs, register float v)
-{
-	register unsigned long	offset;
-
-	switch (tune->Format & TUNERTYPE_BITSMASK)
-	{
-		case TUNERTYPE_8BIT:
-		{
-			*((char *)outputs) = (char)v;
-			offset = sizeof(char);
-			break;
-		}
-		case TUNERTYPE_16BIT:
-		{
-			*((short *)outputs) = (short)v;
-			offset = sizeof(short);
-			break;
-		}
-		case TUNERTYPE_32BIT:
-		{
-			*((int32_t *)outputs) = (int32_t)v;
-			offset = sizeof(int32_t);
-			break;
-		}
-		case TUNERTYPE_FLOAT:
-		{
-			*((float *)outputs) = (float)v;
-			offset = sizeof(float);
-			break;
-		}
-#ifdef REV_DBL_SUPPORT
-		case TUNERTYPE_DOUBLE:
-		{
-			*((double *)outputs) = (double)v;
-			offset = sizeof(double);
-		}
-#endif
-	}
-
-	if (!(tune->Format & TUNERTYPE_MONOOUTPUT)) offset <<= 1;
-	outputs = (char *)outputs + offset;
-	return outputs;
-}
-
-
-
-
 
 static void findcycle(register Retuner * tune)
 {
@@ -465,7 +370,7 @@ static float cubic(float * v, float a)
 // tune->Fftsize = 16 * tune->Frsize, the estimation window moves
 // by 1/4 of the FFT length.
 
-void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfram)
+void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int nfram)
 {
 	register Retuner *	tune;
 	int					fi;
@@ -496,10 +401,13 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 				int		i;
 
 				// Not implemented yet, just copy
-				for (i=0; i < k; i++)
+                memcpy(tune->Ipbuff + tune->Ipindex,inp,k*sizeof(float));
+                tune->Ipindex += k;
+                inp += k;
+				//for (i=0; i < k; i++)
 				{
-					inp = tuner_get_input(tune, inp, &tune->Ipbuff[tune->Ipindex]);
-					++tune->Ipindex;
+					//inp = tuner_get_input(tune, inp, &tune->Ipbuff[tune->Ipindex]);
+					//++tune->Ipindex;
 				}
 
 			// Extra samples for interpolation
@@ -524,7 +432,8 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 					u2 = cubic(tune->Ipbuff + i, r2 - i);
 					v = tune->Xffunc[fi++];
 
-					out = store_output(tune, out, (1 - v) * u1 + v * u2);
+					//out = store_output(tune, out, (1 - v) * u1 + v * u2);
+					*out++ =  (1 - v) * u1 + v * u2;
 
 					r1 += dr;
 					if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
@@ -541,7 +450,8 @@ void RetunerProcess(TUNERHANDLE handle, void * inp, void * out, unsigned int nfr
 					int		i;
 
 					i = (int)r1;
-					out = store_output(tune, out, cubic(tune->Ipbuff + i, r1 - i));
+					//out = store_output(tune, out, cubic(tune->Ipbuff + i, r1 - i));
+                    *out++ = cubic(tune->Ipbuff + i, r1 - i);
 					r1 += dr;
 					if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
 				}
