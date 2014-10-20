@@ -373,7 +373,7 @@ static float cubic(float * v, float a)
 // tune->Fftsize = 16 * tune->Frsize, the estimation window moves
 // by 1/4 of the FFT length.
 
-void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int nfram)
+void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int nfram, float *lat)
 {
 	register Retuner *	tune;
 	int					fi;
@@ -427,7 +427,10 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 					u2 = cubic(tune->Ipbuff + i, r2 - i);
 					v = tune->Xffunc[fi++];
 
-					//out = store_output(tune, out, (1 - v) * u1 + v * u2);
+                    ph = tune->Ipindex - r1;//samples that can be read /latency
+                    if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
+                    *lat++ = ph/(tune->Frsize*10);
+
 					*out++ =  (1 - v) * u1 + v * u2;
 
 					r1 += dr;
@@ -445,7 +448,10 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 					int		i;
 
 					i = (int)r1;
-					//out = store_output(tune, out, cubic(tune->Ipbuff + i, r1 - i));
+                    ph = tune->Ipindex - r1;//samples that can be read /latency
+                    if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
+                    *lat++ = ph/(tune->Frsize*10);
+
                     *out++ = cubic(tune->Ipbuff + i, r1 - i);
 					r1 += dr;
 					if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
@@ -453,7 +459,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 			}
 
 			// If at end of fragment check for jump
-			if (fi == tune->Frsize) 
+			if (fi >= tune->Frsize) 
 			{
 				fi = 0;
 
@@ -511,8 +517,12 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
                 //fragment the only way to really guarantee it is to not start any closer than 2 fragments
                 //to begin with. You can get a little closer because the highest playback rate is bound
                 //at 4x (2 oct) so actually 1.75 fragments. 
-				ph = -ph / tune->Frsize + 5.0;//tune->Latency;//-fragments left + target (about 8 frags) = latency error 
-                int i = (int)ceil(ph/dp);//round to nearest place we can actually jump to that should leave us somewhere behind the target
+
+                //The flaw with the above paragraph is that we only check after 1 fragment in RT has passed
+                // not at the resampled rate
+				ph = 6.0 - ph / tune->Frsize ;//tune->Latency;//tartget -fragments left = latency error 
+                int i = ceil(ph/dp);//round to nearest place we can actually jump to that should leave us somewhere behind the target
+                //int i = ceil(ph);
 				if (i)
 				{
 					// Jump an integer number of 'dr' frames and crossfade.

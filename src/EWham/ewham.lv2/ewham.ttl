@@ -82,4 +82,10 @@
                 lv2:scalePoint [ rdfs:label "Lock to Nearest Semitone"; rdf:value 2 ] ;
                 lv2:portProperty lv2:integer ;
         ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:AudioPort ;
+                lv2:index 7 ;
+                lv2:symbol "LATENCY" ;
+                lv2:name "Latency" ;
+        ] ;
 	.

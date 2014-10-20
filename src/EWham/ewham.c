@@ -23,6 +23,7 @@ typedef struct _EWHAM
     float *finish_p;
     float *mode_p;
     float *lock_p;
+    float *latency_p;
 }EWHAM;
 
 enum _MODES{
@@ -74,7 +75,7 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
         RetunerSetOffset(plug->tuner,current/100.0);
     }
 
-    RetunerProcess(plug->tuner,plug->input_p,plug->output_p,nframes);
+    RetunerProcess(plug->tuner,plug->input_p,plug->output_p,nframes,plug->latency_p);
 
     if(*plug->mode_p != CLASSIC)
     {
@@ -102,11 +103,12 @@ void connect_ewham_ports(LV2_Handle handle, uint32_t port, void *data)
     {
     case IN:            plug->input_p = (float*)data;break;
     case OUT:           plug->output_p = (float*)data;break;
-    case EXPRESSION:    plug->expression_p= (float*)data;break;
-    case START:         plug->start_p= (float*)data;break;
-    case FINISH:        plug->finish_p= (float*)data;break;
-    case MODE:          plug->mode_p= (float*)data;break;
-    case LOCK:          plug->lock_p= (float*)data;break;
+    case EXPRESSION:    plug->expression_p = (float*)data;break;
+    case START:         plug->start_p = (float*)data;break;
+    case FINISH:        plug->finish_p = (float*)data;break;
+    case MODE:          plug->mode_p = (float*)data;break;
+    case LOCK:          plug->lock_p = (float*)data;break;
+    case LATENCY:       plug->latency_p = (float*)data;break;
     default:            puts("UNKNOWN PORT YO!!");
     }
 }
