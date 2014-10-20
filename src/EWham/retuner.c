@@ -520,7 +520,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 
                 //The flaw with the above paragraph is that we only check after 1 fragment in RT has passed
                 // not at the resampled rate
-				ph = 6.0 - ph / tune->Frsize ;//tune->Latency;//tartget -fragments left = latency error 
+				ph = 1.5*tune->Ratio - ph / tune->Frsize ;//tune->Latency;//target -fragments left = latency error 
                 int i = ceil(ph/dp);//round to nearest place we can actually jump to that should leave us somewhere behind the target
                 //int i = ceil(ph);
 				if (i)
