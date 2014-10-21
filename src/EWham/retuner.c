@@ -50,6 +50,7 @@ typedef struct
 	int				Ipindex;
 	int				Frindex;
 	int				Frcount;
+    int             Dindex;
 
 	int				Notemask;
 	float			Refpitch;
@@ -58,6 +59,7 @@ typedef struct
 	float			Corrgain;
 	float			Corroffs;
     float           Latency;//latency in fragments
+    float           DryGain;
 
 	int				Lastnote;
 	int				Count;
@@ -108,13 +110,14 @@ void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k)
 //set latency in samples
 void RetunerSetLatency(TUNERHANDLE tune, unsigned int samp)
 {
-	((Retuner *)tune)->Latency = samp/((Retuner *)tune)->Frsize;
+	((Retuner *)tune)->Latency = samp/((Retuner *)tune)->Frsize - 2.0;
+    if(((Retuner *)tune)->Latency < 0) ((Retuner *)tune)->Latency = 0;
 }
 
 //get latency in samples
 unsigned int RetunerGetLatency(TUNERHANDLE tune)
 {
-   return ((Retuner *)tune)->Latency*((Retuner *)tune)->Frsize;
+   return (((Retuner *)tune)->Latency + 2.0)*((Retuner *)tune)->Frsize;
 }
 
 
@@ -125,6 +128,11 @@ unsigned int RetunerGetNoteset(TUNERHANDLE tune)
 	k = ((Retuner *)tune)->Notebits;
 	((Retuner *)tune)->Notebits = 0;
 	return k;
+}
+
+void RetunerSetDryGain(TUNERHANDLE tune, float g)
+{
+    ((Retuner *)tune)->DryGain = g;
 }
 
 
@@ -259,17 +267,17 @@ fail:		RetunerFree(tune);
 			for (i = 0; i < tune->Fftlen; i++) tune->FftWcorr[i] /= t;
 
 			// Initialise all counters and other state
-	//		tune->Notebits = 0;
 			tune->Lastnote = -1;
-	//		tune->Count = 0;
+            tune->Count = 0;
 			tune->Cycle = tune->Frsize;
-            tune->Latency = 8;
-	//		tune->Error = 0.0f;
+            tune->Latency = 0;
 			tune->Ratio = 1.0f;
-	//		tune->Xfade = false;
-	//		tune->Ipindex = tune->Frindex = tune->Frcount = 0;
-			tune->Rindex1 = tune->Ipsize / 2;
-	//		tune->Rindex2 = 0;
+			tune->Xfade = 0;
+			tune->Ipindex = tune->Frindex = tune->Frcount = 0;
+			tune->Rindex1 = tune->Ipsize - 2*tune->Frsize;
+			tune->Rindex2 = 0;
+            tune->DryGain = 0;
+            tune->Dindex = tune->Ipsize - 2*tune->Frsize;
 		}
 	}
 
@@ -373,10 +381,10 @@ static float cubic(float * v, float a)
 // tune->Fftsize = 16 * tune->Frsize, the estimation window moves
 // by 1/4 of the FFT length.
 
-void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int nfram, float *lat)
+void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int nfram)
 {
 	register Retuner *	tune;
-	int					fi;
+	int					fi, di;
 	float				r1, r2;
 
 	if ((tune = handle))
@@ -384,6 +392,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 		fi = tune->Frindex;  // Write index in current fragment.
 		r1 = tune->Rindex1;  // Read index for current input frame.
 		r2 = tune->Rindex2;  // Second read index while crossfading. 
+        di = tune->Dindex;   //Read index for dry signal
 
 		// No assumptions are made about fragments being aligned
 		// with process() calls, so we may be in the middle of
@@ -427,16 +436,13 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 					u2 = cubic(tune->Ipbuff + i, r2 - i);
 					v = tune->Xffunc[fi++];
 
-                    ph = tune->Ipindex - r1;//samples that can be read /latency
-                    if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
-                    *lat++ = ph/(tune->Frsize*10);
-
-					*out++ =  (1 - v) * u1 + v * u2;
+					*out++ =  (1 - v) * u1 + v * u2  +  tune->DryGain*tune->Ipbuff[di++];
 
 					r1 += dr;
 					if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
 					r2 += dr;
 					if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
+                    if (di >= tune->Ipsize) di -= tune->Ipsize;
 				}
 			}
 			else
@@ -445,16 +451,13 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 				fi += k;
 				while (k--)
 				{
-					int		i;
+					int i;
+                    i = (int)r1;
 
-					i = (int)r1;
-                    ph = tune->Ipindex - r1;//samples that can be read /latency
-                    if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
-                    *lat++ = ph/(tune->Frsize*10);
-
-                    *out++ = cubic(tune->Ipbuff + i, r1 - i);
+                    *out++ = cubic(tune->Ipbuff + i, r1 - i)  +  tune->DryGain*tune->Ipbuff[di++];
 					r1 += dr;
 					if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
+                    if (di >= tune->Ipsize) di -= tune->Ipsize;
 				}
 			}
 
@@ -513,14 +516,10 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 
                 //to keep latency at a minimum but still prevent reading ahead of the write buffer
                 //we should try to make sure there is always a complete fragment left at the end of 
-                //the current fragment. Since you aren't sure if the ratio will change during this
-                //fragment the only way to really guarantee it is to not start any closer than 2 fragments
-                //to begin with. You can get a little closer because the highest playback rate is bound
-                //at 4x (2 oct) so actually 1.75 fragments. 
-
-                //The flaw with the above paragraph is that we only check after 1 fragment in RT has passed
-                // not at the resampled rate
-				ph = 1.5*tune->Ratio - ph / tune->Frsize ;//tune->Latency;//target -fragments left = latency error 
+                //the current fragment. Since the number of fragments read back while a single frag
+                // is written is == Ratio, we can just add that amount to the target and it should 
+                //always have at least 1 fragment left to read while crossfading
+				ph = tune->Latency + 1.5*tune->Ratio - ph / tune->Frsize ;//target -fragments left = latency error 
                 int i = ceil(ph/dp);//round to nearest place we can actually jump to that should leave us somewhere behind the target
                 //int i = ceil(ph);
 				if (i)
@@ -542,6 +541,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 		tune->Frindex = fi;
 		tune->Rindex1 = r1;
 		tune->Rindex2 = r2;
+        tune->Dindex  = di;
 	}
 }
 

@@ -37,7 +37,7 @@ typedef void * TUNERHANDLE;
 
 TUNERHANDLE RetunerAlloc(int);
 void RetunerFree(TUNERHANDLE);
-void RetunerProcess(TUNERHANDLE, float *, float *, unsigned int, float*);
+void RetunerProcess(TUNERHANDLE, float *, float *, unsigned int);
 void RetunerSetPitch(TUNERHANDLE, float);
 void RetunerSetNoteBias(TUNERHANDLE, float);
 void RetunerSetFilter(TUNERHANDLE, float);
@@ -46,8 +46,9 @@ void RetunerSetOffset(TUNERHANDLE, float);
 void RetunerSetNoteMask(TUNERHANDLE, unsigned int);
 unsigned int RetunerGetNoteset(TUNERHANDLE);
 float RetunerGetError(TUNERHANDLE);
-void RetunerSetLatency(TUNERHANDLE, unsigned int);//don't set below 256
+void RetunerSetLatency(TUNERHANDLE, unsigned int);
 unsigned int RetunerGetLatency(TUNERHANDLE);
+void RetunerSetDryGain(TUNERHANDLE, float);
 
 #ifdef __cplusplus
 }

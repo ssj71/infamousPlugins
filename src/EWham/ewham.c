@@ -43,7 +43,6 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
     EWHAM* plug = (EWHAM*)handle;
     float current = (1-*plug->expression_p)*(*plug->start_p) + *plug->expression_p*(*plug->finish_p);
     int currint;
-    uint32_t i;
 
     if(*plug->mode_p != CHORUS)
     {
@@ -74,14 +73,18 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
     {
         RetunerSetOffset(plug->tuner,current/100.0);
     }
-
-    RetunerProcess(plug->tuner,plug->input_p,plug->output_p,nframes,plug->latency_p);
-
+    
     if(*plug->mode_p != CLASSIC)
     {
-        for(i=0;i<nframes;i++)
-            plug->output_p[i] += plug->input_p[i];
+        RetunerSetDryGain(plug->tuner,.9); 
     }
+    else
+    {
+        RetunerSetDryGain(plug->tuner,0);
+    }
+
+    RetunerProcess(plug->tuner,plug->input_p,plug->output_p,nframes);
+    *plug->latency_p = RetunerGetLatency(plug->tuner);
 
 return;
 }
@@ -91,7 +94,6 @@ LV2_Handle init_ewham(const LV2_Descriptor *descriptor,double sample_freq, const
     EWHAM* plug = malloc(sizeof(EWHAM));
     plug->count = plug->prev = 0;
     plug->tuner = RetunerAlloc(sample_freq);
-    RetunerSetLatency(plug->tuner,RetunerGetLatency(plug->tuner)*1.0/8.0);//set latency to a little over 1 frag
 
     return plug;
 }
