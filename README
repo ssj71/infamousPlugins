@@ -1,14 +1,14 @@
 Welcome to the INFAMOUS Plugins README
 
-Things are just firing up. So far we have exactly 7 plugins. But hey, its gettin there right?
+Things are just firing up. So far we have exactly 8 plugins. But hey, its gettin there right?
 
+IF YOU HAVE SEEN THESE PLUGINS PICTURED ON OUR WEBSITE YOU WILL NOTICE THAT THERE ARE NO GUIs IN THIS VERSION! The GUIs are in version 0.1.0, which shall be released when either adequate donations, or sufficient time has elapsed. Please visit http://infamousplugins.sourceforge.net/donations.html to learn more.
 
 To install, make sure you have the dependencies and then just run the script install.sh:
-    chmod 700 install.sh
     ./install.sh
     
     
-This will ask for your password using su or sudo, so be prepared. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
+This will ask for your password using sudo, so be prepared. If you are not a sudoer, call the install script with the argument --no-sudo.  Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
 
 
 Dependencies:
