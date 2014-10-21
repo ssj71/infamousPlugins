@@ -120,14 +120,28 @@ This is a clone of the electro-harmonix freeze. It drones the note being played 
 6. power cut
 
 This plugin is commonly called tape stop. Another one I might not actually use, but the DSP was fun anyway. It just copies the audio through until the "Pull the Plug!" port is toggled to 1 (or the CV trigger port goes above 1). Then it slows the audio down gradually to a complete stop and outputs silence until the trigger is released, much like unplugging the power chord of a record player or maybe tape player. I've never heard this happen to a tape player. A turntable actually has enough inertia. Anyway, you can adjust the length of the decay and the curve. Its pretty fun. With some automation this can make some crazy glitch type effects.
+
     PULL THE PLUG - start the decay (>=1) or turn it off/reset it(<1)
     DECAY TIME - length of decay in seconds
     DECAY CURVE - the shape of the decay, concave (logarithmic) slows more and more with time, convex (exponential) slows less and less with time
 
 =============================================
-6. power up
+7. power up
 
 This is the opposite of the power cut. It "winds up" rather than down, or goes from silence when off, to slowly speeding up to full speed in the amount of time set by the control. NOTE THIS PLUGIN IS ABSOLUTELY NOT USEABLE LIVE! It introduces nearly 10 seconds of latency. But in a recording context your mmodern DAW will compensate. I wasn't even going to do this because of the non-causal DSP but then the math was challenging and I couldn't back down. The latency could be dynamic but I have no idea how well hosts would cope with that, so I chose to leave it static.
+
     FIRE IT UP - start the startup (>=1) or turn it off/reset it(<1)
     STARTUP TIME - length of startup in seconds
     STARTUP CURVE - the shape of the startup, concave (logarithmic) starts quickly then changes less and less with time, convex (exponential) takes a while to get started then quickly approaches normal speed. 
+
+=============================================
+8. ewham
+
+I wanted a whammy style pitchshifter and found folks weren't quite satisfied with the alternatives. This one is based on the algorithm in Fons Adriaensen's AT1 pitch corrector. I haven't benchmarked mine to see if its better than others but considering its sitting around 4% DSP load I think its not too shabby. It does incur 128 samples of latency. It could do better but the sound quality might suffer some. Its geared mostly toward guitar but works quite well for voice too. It will struggle with polyphonic sounds, but works great for leads.
+
+    EXPRESSION - This would be what you tie your midi expression pedal to. It blends the pitch shift from the start to the finish value
+    START - Pitch shift amount (in semitones) when the expression is at 0
+    FINISH - Pitch shift amount (in semitones) when the expression is at 1
+    MODE - determines if dry signal is mixed in (harmonizer) or not (classic shifter). Chorus mode makes the detune more fine grained (cents instead of semitones) so you can use the expression to dial in more or less chorus effect
+    LOCK MODE - this can allow the pitch shift to go smoothly to any value, change to the nearest semitone when expression stops changing, or to jump directly from semitone to semitone
+    
