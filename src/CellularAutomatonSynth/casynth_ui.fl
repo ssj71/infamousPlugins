@@ -1213,12 +1213,20 @@ if(r!=NULL && sscanf(r,"0x%2x",&i))
 {
   val = i;
   set_rule(val);
+  char s[20];
+  sprintf(s,"%18i",(int)rule);
+  value->copy_label(s);
+  param->copy_label("RULE");
 }
 else if(r!=NULL && sscanf(r,"%f",&val))
 {
   if ( val > 255 ) val = 255;
   if ( val < 0 ) val = 0;
   set_rule(val);
+  char s[20];
+  sprintf(s,"%18i",(int)rule);
+  value->copy_label(s);
+  param->copy_label("RULE");
 }
 write_function(controller,RULE,sizeof(float),0,&rule);}
         tooltip {enter rule value} xywh {0 243 26 20}
@@ -1235,12 +1243,20 @@ if(r!=NULL && sscanf(r,"0x%4x",&i))
 {
   val = i;
   set_initial_condition(val);
+  char s[20];
+  sprintf(s,"%18i",(int)initial_condition);
+  value->copy_label(s);
+  param->copy_label("INIT. CONDITION");
 }
 else if(r!=NULL && sscanf(r,"%f",&val))
 {
   if ( val > 65535 ) val = 65535;
   if ( val < 0 ) val = 0;
   set_initial_condition(val);
+  char s[20];
+  sprintf(s,"%18i",(int)initial_condition);
+  value->copy_label(s);
+  param->copy_label("INIT. CONDITION");
 }
 write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);}
         tooltip {enter initial value} xywh {0 263 26 20}
