@@ -143,7 +143,7 @@ diff -up a/libavdevice/jack_audio.c b/libavdevice/jack_audio.c
 -        jack_client_close(self->client);
 -        return AVERROR(ENOMEM);
 -    }
-+    //self->timefilter  = ff_timefilter_new (1.0 / self->sample_rate, self->buffer_size, 1.5);
++    
  
      /* Create FIFO buffers */
      self->filled_pkts = av_fifo_alloc_array(FIFO_PACKETS_NUM, sizeof(AVPacket));
