@@ -1,5 +1,5 @@
-#ifndef LUSHLIFE_H
-#define LUSHLIFE_H
+#ifndef EWHAM_H
+#define EWHAM_H
 enum stuck_ports
 {
     IN =0,
@@ -8,6 +8,7 @@ enum stuck_ports
     START,
     FINISH,
     MODE,
-    LOCK
+    LOCK,
+    LATENCY
 };
 #endif

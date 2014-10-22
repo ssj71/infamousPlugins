@@ -27,29 +27,11 @@
 extern "C" {
 #endif
 
-#ifdef WIN32
-#include <windows.h>
-#ifndef int32_t
-#define int32_t long 
-typedef DWORD REV_ERROR;
-#endif
-#else
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <errno.h>
 typedef int REV_ERROR;
-#endif
-
-#define TUNERTYPE_8BIT			0
-#define TUNERTYPE_16BIT			1
-#define TUNERTYPE_32BIT			2
-#define TUNERTYPE_FLOAT			3
-#define TUNERTYPE_DOUBLE			4
-#define TUNERTYPE_BITSMASK		0x07
-#define TUNERTYPE_MONOOUTPUT		0x20
-#define TUNERTYPE_MONOINPUT		0x40
-//#define TUNERTYPE_NONINTERLEAVED	0x80
 
 typedef void * TUNERHANDLE;
 
@@ -64,8 +46,9 @@ void RetunerSetOffset(TUNERHANDLE, float);
 void RetunerSetNoteMask(TUNERHANDLE, unsigned int);
 unsigned int RetunerGetNoteset(TUNERHANDLE);
 float RetunerGetError(TUNERHANDLE);
-void RetunerSetLatency(TUNERHANDLE, unsigned int);//don't set below 256
+void RetunerSetLatency(TUNERHANDLE, unsigned int);
 unsigned int RetunerGetLatency(TUNERHANDLE);
+void RetunerSetDryGain(TUNERHANDLE, float);
 
 #ifdef __cplusplus
 }
