@@ -11,13 +11,13 @@ extern "C" {
 typedef void* RESAMPLER_HANDLE;
 RESAMPLER_HANDLE ResamplerAlloc();
 void ResamplerFree(RESAMPLER_HANDLE);
-void ResamplerSetup(RESAMPLER_HANDLE, unsigned int   fs_inp, unsigned int fs_out, unsigned int nchan, unsigned int hlen);
+int ResamplerSetup(RESAMPLER_HANDLE, unsigned int   fs_inp, unsigned int fs_out, unsigned int nchan, unsigned int hlen);
 void ResamplerClear(RESAMPLER_HANDLE);
-void ResamplerReset(RESAMPLER_HANDLE);
-void ResamplerProcess(RESAMPLER_HANDLE);
-void ResamperNChan(RESAMPLER_HANDLE);
-void ResamplerInpSize(RESAMPLER_HANDLE);
-void ResamplerInpDist(RESAMPLER_HANDLE);
+int ResamplerReset(RESAMPLER_HANDLE);
+int ResamplerProcess(RESAMPLER_HANDLE);
+int ResamperNChan(RESAMPLER_HANDLE);
+int ResamplerInpSize(RESAMPLER_HANDLE);
+double ResamplerInpDist(RESAMPLER_HANDLE);
 
 //access to public members
 unsigned int ResamplerGetInpCount(RESAMPLER_HANDLE);
@@ -33,13 +33,13 @@ void ResamplerSetOutData(RESAMPLER_HANDLE, float * data);
 typedef void* VRESAMPLER_HANDLE;
 VRESAMPLER_HANDLE ResamplerAlloc();
 void VResamplerFree(VRESAMPLER_HANDLE);
-void VResamplerSetup(VRESAMPLER_HANDLE, double ratio, unsigned int nchan, unsigned int hlen);
+int VResamplerSetup(VRESAMPLER_HANDLE, double ratio, unsigned int nchan, unsigned int hlen);
 void VResamplerClear(VRESAMPLER_HANDLE);
-void VResamplerReset(VRESAMPLER_HANDLE);
-void VResamplerProcess(VRESAMPLER_HANDLE);
-void VResamperNChan(VRESAMPLER_HANDLE);
-void VResamplerInpSize(VRESAMPLER_HANDLE);
-void VResamplerInpDist(VRESAMPLER_HANDLE);
+int VResamplerReset(VRESAMPLER_HANDLE);
+int VResamplerProcess(VRESAMPLER_HANDLE);
+int VResamperNChan(VRESAMPLER_HANDLE);
+int VResamplerInpSize(VRESAMPLER_HANDLE);
+double VResamplerInpDist(VRESAMPLER_HANDLE);
 void VResamplerSetRRatio(VRESAMPLER_HANDLE, double ratio);
 void VResamplerSetRRFilt(VRESAMPLER_HANDLE, double time);
 

@@ -24,9 +24,9 @@ void ResamplerFree(RESAMPLER_HANDLE r)
    free((Rsampler *)r);
 }
 
-void ResamplerSetup(RESAMPLER_HANDLE r, unsigned int   fs_inp, unsigned int fs_out, unsigned int nchan, unsigned int hlen)
+int ResamplerSetup(RESAMPLER_HANDLE r, unsigned int   fs_inp, unsigned int fs_out, unsigned int nchan, unsigned int hlen)
 {
-   (Rsampler *)r->rsmp.setup(fs_inp,fs_out,nchan,hlen);
+   return (Rsampler *)r->rsmp.setup(fs_inp,fs_out,nchan,hlen);
 }
 
 void ResamplerClear(RESAMPLER_HANDLE r)
@@ -34,29 +34,29 @@ void ResamplerClear(RESAMPLER_HANDLE r)
    (Rsampler *)r->rsmp.clear();
 }
 
-void ResamplerReset(RESAMPLER_HANDLE r)
+int ResamplerReset(RESAMPLER_HANDLE r)
 {
-   (Rsampler *)r->rsmp.reset();
+   return (Rsampler *)r->rsmp.reset();
 }
 
-void ResamplerProcess(RESAMPLER_HANDLE r)
+int ResamplerProcess(RESAMPLER_HANDLE r)
 {
-   (Rsampler *)r->rsmp.process();
+   return (Rsampler *)r->rsmp.process();
 }
 
-void ResamperNChan(RESAMPLER_HANDLE r)
+int ResamperNChan(RESAMPLER_HANDLE r)
 {
-   (Rsampler *)r->rsmp.nchan();
+   return (Rsampler *)r->rsmp.nchan();
 }
 
-void ResamplerInpSize(RESAMPLER_HANDLE r)
+int ResamplerInpSize(RESAMPLER_HANDLE r)
 {
-   (Rsampler *)r->rsmp.inpsize();
+   return (Rsampler *)r->rsmp.inpsize();
 }
 
-void ResamplerInpDist(RESAMPLER_HANDLE r)
+double ResamplerInpDist(RESAMPLER_HANDLE r)
 {
-   (Rsampler *)r->rsmp.inpdist();
+   return (Rsampler *)r->rsmp.inpdist();
 }
 
 
@@ -126,49 +126,49 @@ void VResamplerFree(VRESAMPLER_HANDLE r)
     free((VRsampler *)r);
 }
 
-void VResamplerSetup(VRESAMPLER_HANDLE r, double ratio, unsigned int nchan, unsigned int hlen)
+int VResamplerSetup(VRESAMPLER_HANDLE r, double ratio, unsigned int nchan, unsigned int hlen)
 {
-    (VRsampler *)r->rsmp.
+    return (VRsampler *)r->rsmp.setup(ratio,nchan,hlen);
 }
 
 void VResamplerClear(VRESAMPLER_HANDLE r)
 {
-    (VRsampler *)r->rsmp.
+    return (VRsampler *)r->rsmp.clear();
 }
 
-void VResamplerReset(VRESAMPLER_HANDLE r)
+int VResamplerReset(VRESAMPLER_HANDLE r)
 {
-    (VRsampler *)r->rsmp.
+    return (VRsampler *)r->rsmp.reset();
 }
 
-void VResamplerProcess(VRESAMPLER_HANDLE r)
+int VResamplerProcess(VRESAMPLER_HANDLE r)
 {
-    (VRsampler *)r->rsmp.
+    return (VRsampler *)r->rsmp.process();
 }
 
-void VResamperNChan(VRESAMPLER_HANDLE r)
+int VResamperNChan(VRESAMPLER_HANDLE r)
 {
-    (VRsampler *)r->rsmp.
+    return (VRsampler *)r->rsmp.nchan();
 }
 
-void VResamplerInpSize(VRESAMPLER_HANDLE r)
+int VResamplerInpSize(VRESAMPLER_HANDLE r)
 {
-    (VRsampler *)r->rsmp.
+    return (VRsampler *)r->rsmp.inpsize();
 }
 
-int VResamplerInpDist(VRESAMPLER_HANDLE r)
+double VResamplerInpDist(VRESAMPLER_HANDLE r)
 {
     return (VRsampler *)r->rsmp.inp_dist();
 }
 
 void VResamplerSetRRatio(VRESAMPLER_HANDLE r, double ratio)
 {
-    (VRsampler *)r->rsmp.rratio(ratio);
+    (VRsampler *)r->rsmp.set_rratio(ratio);
 }
 
 void VResamplerSetRRFilt(VRESAMPLER_HANDLE r, double time)
 {
-    (VRsampler *)r->rsmp.rrfilt(time);
+    (VRsampler *)r->rsmp.set_rrfilt(time);
 }
 
 

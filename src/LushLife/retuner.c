@@ -27,10 +27,9 @@
 #include <math.h>
 #include "retuner.h"
 #include "fftw3.h"
+#include "c_resampler.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+
 
 typedef struct
 {
@@ -51,6 +50,7 @@ typedef struct
 	int				Frindex;
 	int				Frcount;
     int             Dindex;
+    RESAMPLER_HANDLE Resampler;
 
 	int				Notemask;
 	float			Refpitch;
@@ -61,7 +61,6 @@ typedef struct
     float           Latency;//latency in fragments
     float           DryGain;
 
-	int				Lastnote;
 	int				Count;
 	float			Cycle;
 	float			Error;
@@ -192,9 +191,9 @@ TUNERHANDLE RetunerAlloc(int fsamp)
 		if (fsamp < 64000)
 		{
 			// At 44.1 and 48 kHz resample to double rate
-			//tune->Upsamp = 1;
-			//tune->Ipsize = 4096;
-			tune->Ipsize = 2048;
+			tune->Upsamp = 1;
+			tune->Ipsize = 4096;
+			//tune->Ipsize = 2048;
 			tune->Fftlen = 2048;
 			//tune->Frsize = 128;
 			tune->Frsize = 64;
@@ -267,7 +266,6 @@ fail:		RetunerFree(tune);
 			for (i = 0; i < tune->Fftlen; i++) tune->FftWcorr[i] /= t;
 
 			// Initialise all counters and other state
-			tune->Lastnote = -1;
             tune->Count = 0;
 			tune->Cycle = tune->Frsize;
             tune->Latency = 0;
@@ -294,7 +292,7 @@ static void findcycle(register Retuner * tune)
 	int    d, h, i, j, k;
 	float  f, m, t, x, y, z;
 
-	d = 1;
+	d = tune->Upsamp ? 2 : 1;
 	h = tune->Fftlen / 2;
 	j = tune->Ipindex;
 	k = tune->Ipsize - 1;
@@ -408,11 +406,26 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 			if (nfram < k) k = nfram;
 			nfram -= k;
 
-
-            //copy input
-            memcpy(tune->Ipbuff + tune->Ipindex,inp,k*sizeof(float));
-            tune->Ipindex += k;
-            inp += k;
+			// At 44.1 and 48 kHz upsample by 2
+			if (tune->Upsamp)
+			{
+            //FIXME
+				inp = resamplerProcess(&tune->Resampler, inp, k, tune->Ipbuff + tune->Ipindex, k * 2, tune);
+				tune->Ipindex += 2 * k;
+            _resampler.inp_count = k;
+            _resampler.inp_data = inp;
+            _resampler.out_count = 2 * k;
+            _resampler.out_data = _ipbuff + _ipindex;
+            _resampler.process ();
+            _ipindex += 2 * k;
+			}
+            else
+            {
+                //copy input
+                memcpy(tune->Ipbuff + tune->Ipindex,inp,k*sizeof(float));
+                tune->Ipindex += k;
+                inp += k;
+            }
 
 			// Extra samples for interpolation
 			tune->Ipbuff[tune->Ipsize + 0] = tune->Ipbuff[0];
@@ -422,6 +435,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 
 			// Process available samples
 			dr = tune->Ratio;
+			if (tune->Upsamp) dr *= 2;
 			if (tune->Xfade)
 			{
 				// Interpolate and crossfade
@@ -490,11 +504,6 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 						tune->Error = 0;
 					}
 
-					else if (tune->Count == 2)
-					{
-						// Bias is removed after two unvoiced fragments
-						tune->Lastnote = -1;
-					}
                 
 					//tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
 					tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f ));
@@ -513,6 +522,11 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 				dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
 				ph = tune->Ipindex - r1;//samples that can be read /latency
 				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
+				if (tune->Upsamp)
+				{
+					ph /= 2;
+					dr *= 2;
+				}
 
                 //to keep latency at a minimum but still prevent reading ahead of the write buffer
                 //we should try to make sure there is always a complete fragment left at the end of 
@@ -545,6 +559,3 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 	}
 }
 
-#ifdef __cplusplus
-}
-#endif
