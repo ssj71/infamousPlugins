@@ -1,6 +1,7 @@
 //Spencer Jackson
 //resampler.cpp
 #include"c_resampler.h"
+#include"c_vresampler.h"
 #include<zita-resampler/resampler.h>
 
 // c wrapper for the excellent zita-resampler library

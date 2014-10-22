@@ -198,7 +198,14 @@ TUNERHANDLE RetunerAlloc(int fsamp)
 			//tune->Frsize = 128;
 			tune->Frsize = 64;
 
-			// Prefeed some input samples to remove delay
+            ResamplerSetup(tune->resampler,1,2,1,32);// 32 is medium quality.
+            // Prefeed some input samples to remove delay.
+            ResamplerSetInpCount(tune->resampler,ResamplerInpSize(tune->resampler)-1);
+            ResamplerSetInpData(tune->resampler,0);
+            ResamplerSetOutCount(tune->resampler,0);
+            ResamplerSetOutData(tune->resampler,0);
+            ResamplerProcess(tune->resampler);
+
 		}
 		else if (fsamp < 128000)
 		{
@@ -409,15 +416,12 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 			// At 44.1 and 48 kHz upsample by 2
 			if (tune->Upsamp)
 			{
-            //FIXME
-				inp = resamplerProcess(&tune->Resampler, inp, k, tune->Ipbuff + tune->Ipindex, k * 2, tune);
+                ResamplerSetInpCount(tune->Resampler,k);
+                ResamplerSetInpData(tune->Resampler,inp);
+                ResamplerSetOutCount(tune->Resampler,2*k);
+                ResamplerSetOutData(tune->Resampler,tune->Ipbuff+tune->Ipindex);
+                ResamplerProcess(tune->Resampler);
 				tune->Ipindex += 2 * k;
-            _resampler.inp_count = k;
-            _resampler.inp_data = inp;
-            _resampler.out_count = 2 * k;
-            _resampler.out_data = _ipbuff + _ipindex;
-            _resampler.process ();
-            _ipindex += 2 * k;
 			}
             else
             {

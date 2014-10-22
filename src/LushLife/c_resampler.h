@@ -1,9 +1,13 @@
 //Spencer Jackson
-//resampler.h
+//c_resampler.h
 
 // c wrapper for the excellent zita-resampler library
 // to learn more about this library and its useage you can read the documentation
 // at http://kokkinizita.linuxaudio.org/linuxaudio/zita-resampler/resampler.html
+#ifndef __RESAMPLER_H
+#define __RESAMPLER_H
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -29,30 +33,7 @@ void ResamplerSetInpData(RESAMPLER_HANDLE, float * data);
 float* ResamplerGetOutData(RESAMPLER_HANDLE);
 void ResamplerSetOutData(RESAMPLER_HANDLE, float * data);
 
-//VResampler Functions
-typedef void* VRESAMPLER_HANDLE;
-VRESAMPLER_HANDLE ResamplerAlloc();
-void VResamplerFree(VRESAMPLER_HANDLE);
-int VResamplerSetup(VRESAMPLER_HANDLE, double ratio, unsigned int nchan, unsigned int hlen);
-void VResamplerClear(VRESAMPLER_HANDLE);
-int VResamplerReset(VRESAMPLER_HANDLE);
-int VResamplerProcess(VRESAMPLER_HANDLE);
-int VResamperNChan(VRESAMPLER_HANDLE);
-int VResamplerInpSize(VRESAMPLER_HANDLE);
-double VResamplerInpDist(VRESAMPLER_HANDLE);
-void VResamplerSetRRatio(VRESAMPLER_HANDLE, double ratio);
-void VResamplerSetRRFilt(VRESAMPLER_HANDLE, double time);
-
-//access to public members
-unsigned int VResamplerGetInpCount(VRESAMPLER_HANDLE);
-void VResamplerSetInpCount(VRESAMPLER_HANDLE, unsigned int count);
-unsigned int VResamplerGetOutCount(VRESAMPLER_HANDLE);
-void VResamplerSetInpCount(VRESAMPLER_HANDLE, unsigned int count);
-float* VResamplerGetInpData(VRESAMPLER_HANDLE);
-void VResamplerSetInpData(VRESAMPLER_HANDLE, float * data);
-float* VResamplerGetOutData(VRESAMPLER_HANDLE);
-void VResamplerSetOutData(VRESAMPLER_HANDLE, float * data);
-
 #ifdef __cplusplus
 }
+#endif
 #endif
