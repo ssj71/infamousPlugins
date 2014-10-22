@@ -1,234 +1,237 @@
-// -----------------------------------------------------------------------
-//
-//  Copyright (C) 2014-2111 Spencer Jackson <ssjackson71@gmail.com>
-//    
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation; either version 2 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-// -----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
+    //
+    //  Copyright (C) 2014-2111 Spencer Jackson <ssjackson71@gmail.com>
+    //    
+    //  This program is free software; you can redistribute it and/or modify
+    //  it under the terms of the GNU General Public License as published by
+    //  the Free Software Foundation; either version 2 of the License, or
+    //  (at your option) any later version.
+    //
+    //  This program is distributed in the hope that it will be useful,
+    //  but WITHOUT ANY WARRANTY; without even the implied warranty of
+    //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    //  GNU General Public License for more details.
+    //
+    //  You should have received a copy of the GNU General Public License
+    //  along with this program; if not, write to the Free Software
+    //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    //
+    // -----------------------------------------------------------------------
 
 
-//  This code is mostly written by Jeff Glatt based on original code from Fons Adriaensen
+    //  This code is mostly written by Jeff Glatt based on original code from Fons Adriaensen
 
 
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include "retuner.h"
-#include "fftw3.h"
-#include "c_resampler.h"
-
-
-
-typedef struct
-{
-	float *			Ipbuff;
-	float *			Xffunc;
-	float *			FftTwind;
-	float *			FftWcorr;
-	float *			FftTdata;
-	fftwf_complex *	FftFdata;
-	fftwf_plan		Fwdplan;
-	fftwf_plan		Invplan;
-	int				Fsamp;
-	int				Ifmin, Ifmax;
-	int				Fftlen;
-	int				Ipsize;
-	int				Frsize;
-	int				Ipindex;
-	int				Frindex;
-	int				Frcount;
-    int             Dindex;
-    RESAMPLER_HANDLE Resampler;
-
-	int				Notemask;
-	float			Refpitch;
-	float			Notebias;
-	float			Corrfilt; 
-	float			Corrgain;
-	float			Corroffs;
-    float           Latency;//latency in fragments
-    float           DryGain;
-
-	int				Count;
-	float			Cycle;
-	float			Error;
-	float			Ratio;
-	float			Rindex1, Rindex2;
-	unsigned short	Notebits;
-	unsigned char	Xfade, Upsamp, Format;
-} Retuner;
-
-#ifndef M_PI
-#    define M_PI 3.14159265358979323846
-#endif
+    #include <stdlib.h>
+    #include <string.h>
+    #include <math.h>
+    #include "retuner.h"
+    #include "fftw3.h"
+    #include "c_resampler.h"
 
 
 
-void RetunerSetPitch(TUNERHANDLE tune, float v)
-{
-	((Retuner *)tune)->Refpitch = v;
-}
+    typedef struct
+    {
+        float *			Ipbuff;
+        float *			Xffunc;
+        float *			FftTwind;
+        float *			FftWcorr;
+        float *			FftTdata;
+        fftwf_complex *	FftFdata;
+        fftwf_plan		Fwdplan;
+        fftwf_plan		Invplan;
+        int				Fsamp;
+        int				Ifmin, Ifmax;
+        int				Fftlen;
+        int				Ipsize;
+        int				Frsize;
+        int				Ipindex;
+        int				Frindex;
+        int				Frcount;
+        int             Dindex;
+        RESAMPLER_HANDLE Resampler;
 
-void RetunerSetNoteBias(TUNERHANDLE tune, float v)
-{
-	((Retuner *)tune)->Notebias = v / 13.0f;
-}
+        int				Notemask;
+        float			Refpitch;
+        float			Notebias;
+        float			Corrfilt; 
+        float			Corrgain;
+        float			Corroffs;
+        float           Latency;//latency in fragments
+        float           DryGain;
 
-void RetunerSetFilter(TUNERHANDLE tune, float v)
-{
-	((Retuner *)tune)->Corrfilt = (4 * ((Retuner *)tune)->Frsize) / (v * ((Retuner *)tune)->Fsamp);
-}
+        int				Count;
+        float			Cycle;
+        float			Error;
+        float			Ratio;
+        float			Rindex1, Rindex2;
+        unsigned short	Notebits;
+        unsigned char	Xfade, Upsamp, Format;
+    } Retuner;
 
-void RetunerSetGain(TUNERHANDLE tune, float v)
-{
-	((Retuner *)tune)->Corrgain = v;
-}
-
-void RetunerSetOffset(TUNERHANDLE tune, float v)
-{
-	((Retuner *)tune)->Corroffs = v;
-}
-
-void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k)
-{
-	((Retuner *)tune)->Notemask = k;
-}
-
-//set latency in samples
-void RetunerSetLatency(TUNERHANDLE tune, unsigned int samp)
-{
-	((Retuner *)tune)->Latency = samp/((Retuner *)tune)->Frsize - 2.0;
-    if(((Retuner *)tune)->Latency < 0) ((Retuner *)tune)->Latency = 0;
-}
-
-//get latency in samples
-unsigned int RetunerGetLatency(TUNERHANDLE tune)
-{
-   return (((Retuner *)tune)->Latency + 2.0)*((Retuner *)tune)->Frsize;
-}
-
-
-unsigned int RetunerGetNoteset(TUNERHANDLE tune)
-{
-	register unsigned int k;
-
-	k = ((Retuner *)tune)->Notebits;
-	((Retuner *)tune)->Notebits = 0;
-	return k;
-}
-
-void RetunerSetDryGain(TUNERHANDLE tune, float g)
-{
-    ((Retuner *)tune)->DryGain = g;
-}
+    #ifndef M_PI
+    #    define M_PI 3.14159265358979323846
+    #endif
 
 
 
+    void RetunerSetPitch(TUNERHANDLE tune, float v)
+    {
+        ((Retuner *)tune)->Refpitch = v;
+    }
 
-float RetunerGetError(TUNERHANDLE tune)
-{
-	return 12.0f * ((Retuner *)tune)->Error;
-}
+    void RetunerSetNoteBias(TUNERHANDLE tune, float v)
+    {
+        ((Retuner *)tune)->Notebias = v / 13.0f;
+    }
+
+    void RetunerSetFilter(TUNERHANDLE tune, float v)
+    {
+        ((Retuner *)tune)->Corrfilt = (4 * ((Retuner *)tune)->Frsize) / (v * ((Retuner *)tune)->Fsamp);
+    }
+
+    void RetunerSetGain(TUNERHANDLE tune, float v)
+    {
+        ((Retuner *)tune)->Corrgain = v;
+    }
+
+    void RetunerSetOffset(TUNERHANDLE tune, float v)
+    {
+        ((Retuner *)tune)->Corroffs = v;
+    }
+
+    void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k)
+    {
+        ((Retuner *)tune)->Notemask = k;
+    }
+
+    //set latency in samples
+    void RetunerSetLatency(TUNERHANDLE tune, unsigned int samp)
+    {
+        ((Retuner *)tune)->Latency = samp/((Retuner *)tune)->Frsize - 2.0;
+        if(((Retuner *)tune)->Latency < 0) ((Retuner *)tune)->Latency = 0;
+    }
+
+    //get latency in samples
+    unsigned int RetunerGetLatency(TUNERHANDLE tune)
+    {
+       return (((Retuner *)tune)->Latency + 2.0)*((Retuner *)tune)->Frsize;
+    }
+
+
+    unsigned int RetunerGetNoteset(TUNERHANDLE tune)
+    {
+        register unsigned int k;
+
+        k = ((Retuner *)tune)->Notebits;
+        ((Retuner *)tune)->Notebits = 0;
+        return k;
+    }
+
+    void RetunerSetDryGain(TUNERHANDLE tune, float g)
+    {
+        ((Retuner *)tune)->DryGain = g;
+    }
 
 
 
 
-
-#define RETUNEFLAG_UPSAMPLE		0x80
-
-
-void RetunerFree(TUNERHANDLE handle)
-{
-	register Retuner * tune;
-
-	if ((tune = handle))
-	{
-		if (tune->Ipbuff) free(tune->Ipbuff);
-		if (tune->Xffunc) free(tune->Xffunc);
-		fftwf_free(tune->FftTwind);
-		fftwf_free(tune->FftWcorr);
-		fftwf_free(tune->FftTdata);
-		fftwf_free(tune->FftFdata);
-		fftwf_destroy_plan(tune->Fwdplan);
-		fftwf_destroy_plan(tune->Invplan);
-		free(tune);
-	}
-}
+    float RetunerGetError(TUNERHANDLE tune)
+    {
+        return 12.0f * ((Retuner *)tune)->Error;
+    }
 
 
 
 
 
-TUNERHANDLE RetunerAlloc(int fsamp)
-{
-	register Retuner * tune;
-	int   i, h;
-	float t, x, y;
+    #define RETUNEFLAG_UPSAMPLE		0x80
 
-	if ((tune = (Retuner *)malloc(sizeof(Retuner))))
-	{
-		memset(tune, 0, sizeof(Retuner));
 
-		tune->Fsamp = fsamp;
-		tune->Refpitch = 440.0f;
-		tune->Corrfilt = tune->Corrgain = 1.0f;
-//		tune->Corroffs = tune->Notebias = 0.0f;
-		tune->Corroffs = 0.0f;
-		tune->Notemask = 0xFFF;
+    void RetunerFree(TUNERHANDLE handle)
+    {
+        register Retuner * tune;
 
-		if (fsamp < 64000)
-		{
-			// At 44.1 and 48 kHz resample to double rate
-			tune->Upsamp = 1;
-			tune->Ipsize = 4096;
-			//tune->Ipsize = 2048;
-			tune->Fftlen = 2048;
-			//tune->Frsize = 128;
-			tune->Frsize = 64;
+        if ((tune = handle))
+        {
+            if (tune->Resampler) ResamplerFree(tune->Resampler);
+            if (tune->Ipbuff) free(tune->Ipbuff);
+            if (tune->Xffunc) free(tune->Xffunc);
+            fftwf_free(tune->FftTwind);
+            fftwf_free(tune->FftWcorr);
+            fftwf_free(tune->FftTdata);
+            fftwf_free(tune->FftFdata);
+            fftwf_destroy_plan(tune->Fwdplan);
+            fftwf_destroy_plan(tune->Invplan);
+            free(tune);
+        }
+    }
 
-            ResamplerSetup(tune->resampler,1,2,1,32);// 32 is medium quality.
-            // Prefeed some input samples to remove delay.
-            ResamplerSetInpCount(tune->resampler,ResamplerInpSize(tune->resampler)-1);
-            ResamplerSetInpData(tune->resampler,0);
-            ResamplerSetOutCount(tune->resampler,0);
-            ResamplerSetOutData(tune->resampler,0);
-            ResamplerProcess(tune->resampler);
 
-		}
-		else if (fsamp < 128000)
-		{
-			// 88.2 or 96 kHz.
-//			tune->Upsamp = false;
-			tune->Ipsize = tune->Fftlen = 4096;
-			//tune->Frsize = 256;
-			tune->Frsize = 128;
-		}
-		else
-		{
-			// 192 kHz, double time domain buffers sizes
-//			tune->Upsamp = false;
-			tune->Ipsize = tune->Fftlen = 8192;
-			//tune->Frsize = 512;
-			tune->Frsize = 256;
-		}
 
-		// Accepted correlation peak range, corresponding to 60..1200 Hz
-		tune->Ifmin = fsamp / 1200;
-		tune->Ifmax = fsamp / 60;
 
-		// Alloc various buffers
+
+    TUNERHANDLE RetunerAlloc(int fsamp)
+    {
+        register Retuner * tune;
+        int   i, h;
+        float t, x, y;
+
+        if ((tune = (Retuner *)malloc(sizeof(Retuner))))
+        {
+            memset(tune, 0, sizeof(Retuner));
+
+            tune->Fsamp = fsamp;
+            tune->Refpitch = 440.0f;
+            tune->Corrfilt = tune->Corrgain = 1.0f;
+    //		tune->Corroffs = tune->Notebias = 0.0f;
+            tune->Corroffs = 0.0f;
+            tune->Notemask = 0xFFF;
+
+            tune->resampler = ResamplerAlloc();
+
+            if (fsamp < 64000)
+            {
+                // At 44.1 and 48 kHz resample to double rate
+                tune->Upsamp = 1;
+                tune->Ipsize = 4096;
+                //tune->Ipsize = 2048;
+                tune->Fftlen = 2048;
+                //tune->Frsize = 128;
+                tune->Frsize = 64;
+
+                ResamplerSetup(tune->resampler,1,2,1,32);// 32 is medium quality.
+                // Prefeed some input samples to remove delay.
+                ResamplerSetInpCount(tune->resampler,ResamplerInpSize(tune->resampler)-1);
+                ResamplerSetInpData(tune->resampler,0);
+                ResamplerSetOutCount(tune->resampler,0);
+                ResamplerSetOutData(tune->resampler,0);
+                ResamplerProcess(tune->resampler);
+
+            }
+            else if (fsamp < 128000)
+            {
+                // 88.2 or 96 kHz.
+    //			tune->Upsamp = false;
+                tune->Ipsize = tune->Fftlen = 4096;
+                //tune->Frsize = 256;
+                tune->Frsize = 128;
+            }
+            else
+            {
+                // 192 kHz, double time domain buffers sizes
+    //			tune->Upsamp = false;
+                tune->Ipsize = tune->Fftlen = 8192;
+                //tune->Frsize = 512;
+                tune->Frsize = 256;
+            }
+
+            // Accepted correlation peak range, corresponding to 60..1200 Hz
+            tune->Ifmin = fsamp / 1200;
+            tune->Ifmax = fsamp / 60;
+
+            // Alloc various buffers
 		tune->Ipbuff = (float *)malloc(sizeof(float) * (tune->Ipsize + 3));			// Resampled or filtered input
 		tune->Xffunc = (float *)malloc(sizeof(float) * tune->Frsize);				// Crossfade function
 		tune->FftTwind = (float *)fftwf_malloc(tune->Fftlen * sizeof (float));		// Window function 
