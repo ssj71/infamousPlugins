@@ -15,6 +15,7 @@ Dependencies:
     qmake (qt4-dev-tools package on ubuntu)
     lv2-dev
     gcc
+    fftw3
 
 
 A NOTE ABOUT CV PORTS!:
