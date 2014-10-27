@@ -766,112 +766,111 @@ float tmp;
 \#define MIN(a,b) (a<b?a:b)
 \#define MAX(a,b) (a<b?b:a)
 
-tmp = 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
 tmp = (int)(0xFF*tmp);
 set_rule(tmp);
 write_function(controller,RULE,sizeof(float),0,&rule);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
 tmp = (int)(0xFFFF*tmp);
 set_initial_condition(tmp);
 write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
 tmp = (int)(5*tmp);
 cellwaveform->value(tmp);
 cellwaveform->floatvalue = tmp;
 write_function(controller,WAVE,sizeof(float),0,&cellwaveform->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp = 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
 tmp = 9.999*tmp + 0.001;
 lifetime->value(tmp);
 lifetime->floatvalue = tmp;
 write_function(controller,CELL_LIFE,sizeof(float),0,&lifetime->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
 tmp = (int)(3*tmp);
 harmgain->value(tmp);
 harmgain->floatvalue = tmp;
 write_function(controller,HARM_MODE,sizeof(float),0,&harmgain->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 1-tmp;//bias to larger values
 tmp = (int)(16*tmp);
 nharmonics->value(tmp);
 nharmonics->floatvalue = tmp;
 write_function(controller,NHARMONICS,sizeof(float),0,&nharmonics->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp *= 50;
 harmwidth->value(tmp);
 harmwidth->floatvalue = tmp;
 write_function(controller,HARM_WIDTH,sizeof(float),0,&harmwidth->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 14.999*tmp + 0.001;
 a->value(tmp);
 a->floatvalue = tmp;
 write_function(controller,ENV_A,sizeof(float),0,&a->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 14.999*tmp + 0.001;
 d->value(tmp);
 d->floatvalue = tmp;
 write_function(controller,ENV_D,sizeof(float),0,&d->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
 b->value(tmp);
 b->floatvalue = tmp;
 write_function(controller,ENV_B,sizeof(float),0,&b->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 14.999*tmp + 0.001;
 sw->value(tmp);
 sw->floatvalue = tmp;
 write_function(controller,ENV_SWL,sizeof(float),0,&sw->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
 su->value(tmp);
 su->floatvalue = tmp;
 write_function(controller,ENV_SUS,sizeof(float),0,&su->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp = 14.999*tmp + 0.001;
 r->value(tmp);
 r->floatvalue = tmp;
 write_function(controller,ENV_R,sizeof(float),0,&r->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp = 5*tmp;
+tmp = 5.0*rand()/(float)RAND_MAX;
 amwave->value(tmp);
 amwave->floatvalue = tmp;
 write_function(controller,AMOD_WAV,sizeof(float),0,&amwave->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp = 5*tmp;
+tmp = 5.0*rand()/(float)RAND_MAX;
 fmwave->value(tmp);
 fmwave->floatvalue = tmp;
 write_function(controller,FMOD_WAV,sizeof(float),0,&fmwave->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
-tmp = 110*tmp;
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= 110;
 amfreq->value(tmp);
 amfreq->floatvalue = tmp;
 write_function(controller,AMOD_FREQ,sizeof(float),0,&amfreq->floatvalue);
 
-tmp = 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
-tmp *= 2.0*rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
 tmp *= 110;
 fmfreq->value(tmp);
 fmfreq->floatvalue = tmp;
