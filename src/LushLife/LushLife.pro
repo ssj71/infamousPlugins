@@ -5,11 +5,13 @@ TEMPLATE = lib
 CONFIG += shared plugin
 CONFIG -= qt
 
+LIBS += -lfftw3f \
+    -lzita-resampler
+
 QMAKE_CFLAGS += -g \
     -msse2 \
     -mfpmath=sse \
     -ffast-math
-
 
 SOURCES += lushlife.c \
     retuner.c \
