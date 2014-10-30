@@ -11,13 +11,6 @@
 
 extern "C"{
 
-#if(0)
-typedef struct _Rsampler
-{
-    Resampler 
-}Rsampler;
-#endif
-
 RESAMPLER_HANDLE ResamplerAlloc()
 {
    Resampler* r = new Resampler();
@@ -83,7 +76,7 @@ unsigned int ResamplerGetOutCount(RESAMPLER_HANDLE r)
    return static_cast<Resampler*>(r)->out_count;
 }
 
-void ResamplerSetInpCount(RESAMPLER_HANDLE r, unsigned int count)
+void ResamplerSetOutCount(RESAMPLER_HANDLE r, unsigned int count)
 {
    static_cast<Resampler*>(r)->out_count = count;
 }
@@ -114,17 +107,11 @@ void ResamplerSetOutData(RESAMPLER_HANDLE r, float * data)
 
 
 
-#if(0)
 //VResampler Functions
 
-typedef struct _VRsampler
-{
-    VResampler 
-}VRsampler;
 
 VRESAMPLER_HANDLE VResamplerAlloc(){
-   VRsampler* r;
-   r = (VResampler *)malloc(sizeof(VRsampler));
+   VResampler* r = new VResampler();
    return (void *)r;
 }
 
@@ -153,7 +140,7 @@ int VResamplerProcess(VRESAMPLER_HANDLE r)
     return static_cast<VRsampler*>(r)->process();
 }
 
-int VResamperNChan(VRESAMPLER_HANDLE r)
+int VResamplerNChan(VRESAMPLER_HANDLE r)
 {
     return static_cast<VRsampler*>(r)->nchan();
 }
@@ -217,9 +204,9 @@ float* VResamplerGetOutData(VRESAMPLER_HANDLE r)
 
 void VResamplerSetOutData(VRESAMPLER_HANDLE r, float * data)
 {
-    //VRsampler* rs = static_cast<VRsampler*>(r);
     static_cast<VRsampler*>(r)->out_data = data;
 }
-#endif
+
+
 
 }//extern c
