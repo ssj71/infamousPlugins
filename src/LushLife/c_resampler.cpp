@@ -3,6 +3,7 @@
 #include"c_resampler.h"
 #include"c_vresampler.h"
 #include<zita-resampler/resampler.h>
+#include<zita-resampler/vresampler.h>
 
 // c wrapper for the excellent zita-resampler library
 // to learn more about this library and its useage you can read the documentation
@@ -211,5 +212,6 @@ float* VResamplerGetOutData(VRESAMPLER_HANDLE r)
 
 void VResamplerSetOutData(VRESAMPLER_HANDLE r, float * data)
 {
-    (VRsampler *)r->rsmp.out_data = data;
+    VRsampler* rs = (VRsampler *)r;
+    rs->rsmp.out_data = data;
 }

@@ -1,4 +1,4 @@
-NAME = stuck
+NAME = lushlife 
 
 TARGET = $${NAME}_lv2
 TEMPLATE = lib
@@ -11,14 +11,17 @@ QMAKE_CFLAGS += -g \
     -ffast-math
 
 
-SOURCES += stuck.c \
-    rms_calc.c  
+SOURCES += lushlife.c \
+    retuner.c \
+    c_resampler.cpp
     
-HEADERS += rms_calc.h
+HEADERS += lushlife.h \
+    retuner.h \
+    c_resampler.h
 
 OTHER_FILES += \
-    stuck.lv2/manifest.ttl \
-    stuck.lv2/stuck.ttl
+    lushlife.lv2/manifest.ttl \
+    lushlife.lv2/lushlife.ttl
 
 
 unix {

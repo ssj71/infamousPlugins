@@ -50,7 +50,7 @@
         int				Frindex;
         int				Frcount;
         int             Dindex;
-        RESAMPLER_HANDLE Resampler;
+        RESAMPLER_HANDLE resampler;
 
         int				Notemask;
         float			Refpitch;
@@ -146,8 +146,6 @@
 
 
 
-    #define RETUNEFLAG_UPSAMPLE		0x80
-
 
     void RetunerFree(TUNERHANDLE handle)
     {
@@ -155,7 +153,7 @@
 
         if ((tune = handle))
         {
-            if (tune->Resampler) ResamplerFree(tune->Resampler);
+            if (tune->resampler) ResamplerFree(tune->resampler);
             if (tune->Ipbuff) free(tune->Ipbuff);
             if (tune->Xffunc) free(tune->Xffunc);
             fftwf_free(tune->FftTwind);
@@ -241,7 +239,7 @@
 
 		if (!tune->Ipbuff || !tune->Xffunc || !tune->FftTwind || !tune->FftWcorr || !tune->FftTdata || !tune->FftFdata)
 		{
-fail:		RetunerFree(tune);
+    		RetunerFree(tune);
 			tune = 0;
 		}
 		else
@@ -419,11 +417,11 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 			// At 44.1 and 48 kHz upsample by 2
 			if (tune->Upsamp)
 			{
-                ResamplerSetInpCount(tune->Resampler,k);
-                ResamplerSetInpData(tune->Resampler,inp);
-                ResamplerSetOutCount(tune->Resampler,2*k);
-                ResamplerSetOutData(tune->Resampler,tune->Ipbuff+tune->Ipindex);
-                ResamplerProcess(tune->Resampler);
+                ResamplerSetInpCount(tune->resampler,k);
+                ResamplerSetInpData(tune->resampler,inp);
+                ResamplerSetOutCount(tune->resampler,2*k);
+                ResamplerSetOutData(tune->resampler,tune->Ipbuff+tune->Ipindex);
+                ResamplerProcess(tune->resampler);
 				tune->Ipindex += 2 * k;
 			}
             else
