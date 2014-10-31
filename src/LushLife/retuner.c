@@ -22,251 +22,258 @@
     //  This code is mostly written by Jeff Glatt based on original code from Fons Adriaensen
 
 
-    #include <stdlib.h>
-    #include <string.h>
-    #include <math.h>
-    #include "retuner.h"
-    #include "fftw3.h"
-    #include "c_resampler.h"
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include "retuner.h"
+#include "fftw3.h"
+#include "c_resampler.h"
 
-    typedef struct
+typedef struct
+{
+    char  Active;
+    float          Gain;
+    float          Pan;
+    float          Ratio;
+    float          Rindex1, Rindex2;
+    float          Latency;//latency in fragments
+    unsigned char  Xfade;
+    float		   Corroffs;
+
+    float          GainStep;
+    float          PanStep;
+} Whoosh;
+
+typedef struct
+{
+    float *			Ipbuff;
+    float *			Xffunc;
+    float *			FftTwind;
+    float *			FftWcorr;
+    float *			FftTdata;
+    fftwf_complex *	FftFdata;
+    fftwf_plan		Fwdplan;
+    fftwf_plan		Invplan;
+    int				Fsamp;
+    int				Ifmin, Ifmax;
+    int				Fftlen;
+    int				Ipsize;
+    int				Frsize;
+    int				Ipindex;
+    int				Frindex;
+    int				Frcount;
+    int             Dindex;
+    RESAMPLER_HANDLE resampler;
+    Whoosh*         Woosh;
+    unsigned int    nWoosh;
+
+    int				Notemask;
+    float			Refpitch;
+    float			Notebias;
+    float			Corrfilt; 
+    float			Corrgain;
+    float           DryGain;
+    float           DryPan;
+    float           DryGainStep;
+    float           DryPanStep;
+
+    int				Count;
+    float			Cycle[8];
+    float			Error;
+    unsigned short	Notebits;
+    unsigned char	Upsamp, Format;
+} Retuner;
+
+#ifndef M_PI
+#    define M_PI 3.14159265358979323846
+#endif
+
+
+
+void RetunerSetPitch(TUNERHANDLE tune, float v)
+{
+    ((Retuner *)tune)->Refpitch = v;
+}
+
+void RetunerSetNoteBias(TUNERHANDLE tune, float v)
+{
+    ((Retuner *)tune)->Notebias = v / 13.0f;
+}
+
+void RetunerSetFilter(TUNERHANDLE tune, float v)
+{
+    ((Retuner *)tune)->Corrfilt = (4 * ((Retuner *)tune)->Frsize) / (v * ((Retuner *)tune)->Fsamp);
+}
+
+void RetunerSetOffset(TUNERHANDLE tune, int i, float v)
+{
+    ((Retuner *)tune)->Woosh[i].Corroffs = v;
+}
+
+void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k)
+{
+    ((Retuner *)tune)->Notemask = k;
+}
+
+//set latency in samples
+void RetunerSetLatency(TUNERHANDLE tune,int i, unsigned long samp)
+{
+    ((Retuner *)tune)->Woosh[i].Latency = samp/((Retuner *)tune)->Frsize - 2.0;
+    if(((Retuner *)tune)->Woosh[i].Latency < 0) ((Retuner *)tune)->Woosh[i].Latency = 0;
+}
+
+//get latency in samples
+unsigned int RetunerGetLatency(TUNERHANDLE tune, int i)
+{
+   return (((Retuner *)tune)->Woosh[i].Latency + 2.0)*((Retuner *)tune)->Frsize;
+}
+
+
+unsigned int RetunerGetNoteset(TUNERHANDLE tune)
+{
+    register unsigned int k;
+
+    k = ((Retuner *)tune)->Notebits;
+    ((Retuner *)tune)->Notebits = 0;
+    return k;
+}
+
+void RetunerSetGain(TUNERHANDLE tune, int i, float g)
+{
+    if(i == -1)
     {
-        char  Active;
-        float          Gain;
-        float          Ratio;
-        float Rindex1, Rindex2;
-        float          Latency;//latency in fragments
-        unsigned char  Xfade;
-        float		   Corroffs;
-    } Whoosh;
-
-    typedef struct
-    {
-        float *			Ipbuff;
-        float *			Xffunc;
-        float *			FftTwind;
-        float *			FftWcorr;
-        float *			FftTdata;
-        fftwf_complex *	FftFdata;
-        fftwf_plan		Fwdplan;
-        fftwf_plan		Invplan;
-        int				Fsamp;
-        int				Ifmin, Ifmax;
-        int				Fftlen;
-        int				Ipsize;
-        int				Frsize;
-        int				Ipindex;
-        int				Frindex;
-        int				Frcount;
-        int             Dindex;
-        RESAMPLER_HANDLE resampler;
-        Whoosh*         Woosh;
-        unsigned int    nWoosh;
-
-        int				Notemask;
-        float			Refpitch;
-        float			Notebias;
-        float			Corrfilt; 
-        float			Corrgain;
-        float           DryGain;
-
-        int				Count;
-        float			Cycle[64];
-        float			Error;
-        unsigned short	Notebits;
-        unsigned char	Upsamp, Format;
-    } Retuner;
-
-    #ifndef M_PI
-    #    define M_PI 3.14159265358979323846
-    #endif
-
-
-
-    void RetunerSetPitch(TUNERHANDLE tune, float v)
-    {
-        ((Retuner *)tune)->Refpitch = v;
+        ((Retuner *)tune)->DryGainStep = g - ((Retuner *)tune)->DryGain;
     }
-
-    void RetunerSetNoteBias(TUNERHANDLE tune, float v)
+    else if(i< ((Retuner *)tune)->nWoosh)
     {
-        ((Retuner *)tune)->Notebias = v / 13.0f;
+        ((Retuner *)tune)->Woosh[i].GainStep = g - ((Retuner *)tune)->Woosh[i].Gain;
     }
+}
 
-    void RetunerSetFilter(TUNERHANDLE tune, float v)
+void RetunerSetPan(TUNERHANDLE tune, int i, float p)
+{
+    if(i == -1)
     {
-        ((Retuner *)tune)->Corrfilt = (4 * ((Retuner *)tune)->Frsize) / (v * ((Retuner *)tune)->Fsamp);
+        ((Retuner *)tune)->DryPanStep = p - ((Retuner *)tune)->DryPan;
     }
-
-    void RetunerSetOffset(TUNERHANDLE tune, int i, float v)
+    else if(i< ((Retuner *)tune)->nWoosh)
     {
-        ((Retuner *)tune)->Woosh[i].Corroffs = v;
+        ((Retuner *)tune)->Woosh[i].PanStep = p - ((Retuner *)tune)->Woosh[i].Pan;
     }
+}
 
-    void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k)
+void RetunerSetActive(TUNERHANDLE tune, int i, int a)
+{
+    if(i< ((Retuner *)tune)->nWoosh)
     {
-        ((Retuner *)tune)->Notemask = k;
-    }
-
-    //set latency in samples
-    void RetunerSetLatency(TUNERHANDLE tune,int i, unsigned long samp)
-    {
-        ((Retuner *)tune)->Woosh[i].Latency = samp/((Retuner *)tune)->Frsize - 2.0;
-        if(((Retuner *)tune)->Woosh[i].Latency < 0) ((Retuner *)tune)->Woosh[i].Latency = 0;
-    }
-
-    //get latency in samples
-    unsigned int RetunerGetLatency(TUNERHANDLE tune, int i)
-    {
-       return (((Retuner *)tune)->Woosh[i].Latency + 2.0)*((Retuner *)tune)->Frsize;
-    }
-
-
-    unsigned int RetunerGetNoteset(TUNERHANDLE tune)
-    {
-        register unsigned int k;
-
-        k = ((Retuner *)tune)->Notebits;
-        ((Retuner *)tune)->Notebits = 0;
-        return k;
-    }
-
-    void RetunerSetGain(TUNERHANDLE tune, int i, float g)
-    {
-        if(i == -1)
+        if( a )
         {
-            ((Retuner *)tune)->DryGainStep = g - ((Retuner *)tune)->DryGain;
+            //((Retuner *)tune)->Woosh[i].GainStep = ((Retuner *)tune)->Woosh[i].Gain;
+            ((Retuner *)tune)->Woosh[i].Gain = 0;
+            ((Retuner *)tune)->Woosh[i].Active = a;
         }
-        else if(i< ((Retuner *)tune)->nWoosh)
+        else
         {
-            ((Retuner *)tune)->Woosh[i].GainStep = g - ((Retuner *)tune)->Woosh[i].Gain;
-        }
-    }
-
-    void RetunerSetPan(TUNERHANDLE tune, int i, float p)
-    {
-        if(i == -1)
-        {
-            ((Retuner *)tune)->DryPanStep = p - ((Retuner *)tune)->DryPan;
-        }
-        else if(i< ((Retuner *)tune)->nWoosh)
-        {
-            ((Retuner *)tune)->Woosh[i].PanStep = p - ((Retuner *)tune)->Woosh[i].Pan;
-        }
-    }
-
-    void RetunerSetActive(TUNERHANDLE tune, int i, int a)
-    {
-        if(i< ((Retuner *)tune)->nWoosh)
-        {
-            if( a )
-            {
-                //((Retuner *)tune)->Woosh[i].GainStep = ((Retuner *)tune)->Woosh[i].Gain;
-                ((Retuner *)tune)->Woosh[i].Gain = 0;
-                ((Retuner *)tune)->Woosh[i].Active = a;
-            }
-            else
-            {
-                ((Retuner *)tune)->Woosh[i].Active = -1;
-            }
-        }
-    }
-
-
-
-    float RetunerGetError(TUNERHANDLE tune)
-    {
-        return 12.0f * ((Retuner *)tune)->Error;
-    }
-
-
-
-
-
-
-    void RetunerFree(TUNERHANDLE handle)
-    {
-        register Retuner * tune;
-
-        if ((tune = handle))
-        {
-            if (tune->resampler) ResamplerFree(tune->resampler);
-            if (tune->Ipbuff) free(tune->Ipbuff);
-            if (tune->Xffunc) free(tune->Xffunc);
-            fftwf_free(tune->FftTwind);
-            fftwf_free(tune->FftWcorr);
-            fftwf_free(tune->FftTdata);
-            fftwf_free(tune->FftFdata);
-            fftwf_destroy_plan(tune->Fwdplan);
-            fftwf_destroy_plan(tune->Invplan);
-            free(tune);
+            ((Retuner *)tune)->Woosh[i].Active = -1;
         }
     }
+}
+
+
+
+float RetunerGetError(TUNERHANDLE tune)
+{
+    return 12.0f * ((Retuner *)tune)->Error;
+}
 
 
 
 
 
-    TUNERHANDLE retuneralloc( int nwoosh, int fsamp)
+
+void RetunerFree(TUNERHANDLE handle)
+{
+    register Retuner * tune;
+
+    if ((tune = handle))
     {
-        register Retuner * tune;
-        int   i, h;
-        float t, x, y;
+        if (tune->resampler) ResamplerFree(tune->resampler);
+        if (tune->Ipbuff) free(tune->Ipbuff);
+        if (tune->Xffunc) free(tune->Xffunc);
+        fftwf_free(tune->FftTwind);
+        fftwf_free(tune->FftWcorr);
+        fftwf_free(tune->FftTdata);
+        fftwf_free(tune->FftFdata);
+        fftwf_destroy_plan(tune->Fwdplan);
+        fftwf_destroy_plan(tune->Invplan);
+        free(tune);
+    }
+}
 
-        if ((tune = (Retuner *)malloc(sizeof(Retuner))))
+
+
+
+
+TUNERHANDLE retuneralloc( int nwoosh, int fsamp)
+{
+    register Retuner * tune;
+    int   i, h;
+    float t, x, y;
+
+    if ((tune = (Retuner *)malloc(sizeof(Retuner))))
+    {
+        memset(tune, 0, sizeof(Retuner));
+
+        tune->Fsamp = fsamp;
+        tune->Refpitch = 440.0f;
+        tune->Corrfilt = tune->Corrgain = 1.0f;
+//		tune->Corroffs = tune->Notebias = 0.0f;
+        tune->Notemask = 0xFFF;
+        tune->nWoosh = nwoosh;
+
+        tune->resampler = ResamplerAlloc();
+
+        if (fsamp < 64000)
         {
-            memset(tune, 0, sizeof(Retuner));
+            // At 44.1 and 48 kHz resample to double rate
+            tune->Upsamp = 1;
+            tune->Ipsize = 8192;
+            //tune->Ipsize = 2048;
+            tune->Fftlen = 2048;
+            //tune->Frsize = 128;
+            tune->Frsize = 64;
 
-            tune->Fsamp = fsamp;
-            tune->Refpitch = 440.0f;
-            tune->Corrfilt = tune->Corrgain = 1.0f;
-    //		tune->Corroffs = tune->Notebias = 0.0f;
-            tune->Notemask = 0xFFF;
-            tune->nWoosh = nwoosh;
+            ResamplerSetup(tune->resampler,1,2,1,32);// 32 is medium quality.
+            // Prefeed some input samples to remove delay.
+            ResamplerSetInpCount(tune->resampler,ResamplerInpSize(tune->resampler)-1);
+            ResamplerSetInpData(tune->resampler,0);
+            ResamplerSetOutCount(tune->resampler,0);
+            ResamplerSetOutData(tune->resampler,0);
+            ResamplerProcess(tune->resampler);
 
-            tune->resampler = ResamplerAlloc();
+        }
+        else if (fsamp < 128000)
+        {
+            // 88.2 or 96 kHz.
+//			tune->Upsamp = false;
+            tune->Ipsize =  8192;
+            tune->Fftlen =  4096;
+            //tune->Frsize = 256;
+            tune->Frsize = 128;
+        }
+        else
+        {
+            // 192 kHz, double time domain buffers sizes
+//			tune->Upsamp = false;
+            tune->Ipsize =  16384;
+            tune->Fftlen = 8192;
+            //tune->Frsize = 512;
+            tune->Frsize = 256;
+        }
 
-            if (fsamp < 64000)
-            {
-                // At 44.1 and 48 kHz resample to double rate
-                tune->Upsamp = 1;
-                tune->Ipsize = 8192;
-                //tune->Ipsize = 2048;
-                tune->Fftlen = 2048;
-                //tune->Frsize = 128;
-                tune->Frsize = 64;
-
-                ResamplerSetup(tune->resampler,1,2,1,32);// 32 is medium quality.
-                // Prefeed some input samples to remove delay.
-                ResamplerSetInpCount(tune->resampler,ResamplerInpSize(tune->resampler)-1);
-                ResamplerSetInpData(tune->resampler,0);
-                ResamplerSetOutCount(tune->resampler,0);
-                ResamplerSetOutData(tune->resampler,0);
-                ResamplerProcess(tune->resampler);
-
-            }
-            else if (fsamp < 128000)
-            {
-                // 88.2 or 96 kHz.
-    //			tune->Upsamp = false;
-                tune->Ipsize =  8192;
-                tune->Fftlen =  4096;
-                //tune->Frsize = 256;
-                tune->Frsize = 128;
-            }
-            else
-            {
-                // 192 kHz, double time domain buffers sizes
-    //			tune->Upsamp = false;
-                tune->Ipsize =  16384;
-                tune->Fftlen = 8192;
-                //tune->Frsize = 512;
-                tune->Frsize = 256;
-            }
-
-            // Accepted correlation peak range, corresponding to 60..1200 Hz
-            tune->Ifmin = fsamp / 1200;
-            tune->Ifmax = fsamp / 60;
+        // Accepted correlation peak range, corresponding to 60..1200 Hz
+        tune->Ifmin = fsamp / 1200;
+        tune->Ifmax = fsamp / 60;
 
             // Alloc various buffers
 		tune->Ipbuff = (float *)malloc(sizeof(float) * (tune->Ipsize + 3));			// Resampled or filtered input
@@ -324,7 +331,7 @@
                 tune->Woosh[i].Corroffs = 0.0f;
             }
 
-            for (i = 0; i < 64; i++) tune->Cycle[i] = tune->Frsize;
+            for (i = 0; i < 8; i++) tune->Cycle[i] = tune->Frsize;
 
 			// Initialise all counters and other state
             tune->Count = 0;
@@ -379,7 +386,7 @@ static void findcycle(register Retuner * tune)
 		x = y;
 	}
 	i -= 4;
-    d = tune->Ipindex>>6;
+    d = tune->Ipindex>>11;
 	tune->Cycle[d] = 0;
 	if (i < tune->Ifmax)
 	{
@@ -444,8 +451,25 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
 
 	if ((tune = handle))
 	{
+        unsigned int l;
+
 		fi = tune->Frindex;  // Write index in current fragment.
         di = tune->Dindex;   //Read index for dry signal
+
+
+        //since gain is changing (and pan, which is really just a gain)
+        //we interpolate over the time of nframes
+        tune->DryGainStep /= (float)nfram;
+        tune->DryPanStep /= (float)nfram;
+        for(l=0;l<tune->nWoosh;l++)
+        {
+            if(tune->Woosh[l].Active == -1)
+                tune->Woosh[l].GainStep = -tune->Woosh[l].Gain/(float)nfram;
+            else
+                tune->Woosh[l].GainStep /= (float)nfram;
+            tune->Woosh[l].PanStep /= (float)nfram;
+        }
+
 
 		// No assumptions are made about fragments being aligned
 		// with process() calls, so we may be in the middle of
@@ -454,7 +478,6 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
 		while (nfram)
 		{
 			int		k;
-            unsigned int l;
 			float	ph, dp, dr;
 
 			// Don't go past the end of the current fragment
@@ -487,73 +510,91 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
 			if (tune->Ipindex >= tune->Ipsize) tune->Ipindex = 0;
 
 			// Process available samples
-            *outl = .5*(1-tune->DryPan)*tune->DryGain*tune->Ipbuff[di];
-            *outr = .5*(1+tune->DryPan)*tune->DryGain*tune->Ipbuff[di];
-            di += 1 + tune->Upsamp;
-            if (di >= tune->Ipsize) di -= tune->Ipsize;
+            for(l=0;l<k;l++)
+            {
+                *outl = .5*(1-tune->DryPan)*tune->DryGain*tune->Ipbuff[di];
+                *outr = .5*(1+tune->DryPan)*tune->DryGain*tune->Ipbuff[di];
+                di += 1 + tune->Upsamp;
+                if (di >= tune->Ipsize) di -= tune->Ipsize;
+                tune->DryGain += tune->DryGainStep;
+                tune->DryPan += tune->DryPanStep;
+            }
 
             for(l=0;l<tune->nWoosh;l++)
             {
                 r1 = tune->Woosh[l].Rindex1; // Read index for current input frame.
                 r2 = tune->Woosh[l].Rindex2; // Second read index while crossfading. 
 
-                dr = tune->Woosh[l].Ratio;
-                if (tune->Upsamp) dr *= 2;
-                if (tune->Woosh[l].Xfade)
+                if(tune->Woosh[l].Active)
                 {
-                    // Interpolate and crossfade
-                    while (k--)
+                    int k2 = k;
+                    dr = tune->Woosh[l].Ratio;
+                    if (tune->Upsamp) dr *= 2;
+
+                    if (tune->Woosh[l].Xfade)
                     {
-                        int		i;
-                        float	u1, u2, v;
+                        // Interpolate and crossfade
+                        while (k2--)
+                        {
+                            int		i,f = fi;
+                            float	u1, u2, v;
 
-                        i = (int)r1;
-                        u1 = cubic(tune->Ipbuff + i, r1 - i);
-                        i = (int)r2;
-                        u2 = cubic(tune->Ipbuff + i, r2 - i);
-                        v = tune->Xffunc[fi++];
+                            i = (int)r1;
+                            u1 = cubic(tune->Ipbuff + i, r1 - i);
+                            i = (int)r2;
+                            u2 = cubic(tune->Ipbuff + i, r2 - i);
+                            v = tune->Xffunc[f++];
 
-                        v = (1 - v) * u1 + v * u2;
-                        *outl += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
-                        *outr += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            v = (1 - v) * u1 + v * u2;
+                            *outl += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            *outr += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
 
-                        r1 += dr;
-                        if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
-                        r2 += dr;
-                        if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
+                            r1 += dr;
+                            if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
+                            r2 += dr;
+                            if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
+                            tune->Woosh[l].Gain += tune->Woosh[l].GainStep;
+                            tune->Woosh[l].Pan += tune->Woosh[l].PanStep;
+                        }
+                    }
+                    else
+                    {
+                        // Interpolation only.
+                        while (k2--)
+                        {
+                            int i;
+                            float v;
+                            i = (int)r1;
+
+                            v = cubic(tune->Ipbuff + i, r1 - i);
+                            *outl += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            *outr += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            r1 += dr;
+                            if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
+                            tune->Woosh[l].Gain += tune->Woosh[l].GainStep;
+                            tune->Woosh[l].Pan += tune->Woosh[l].PanStep;
+                        }
                     }
                 }
                 else
                 {
-                    // Interpolation only.
-                    fi += k;
-                    while (k--)
-                    {
-                        int i;
-                        float v;
-                        i = (int)r1;
-
-                        v = cubic(tune->Ipbuff + i, r1 - i);
-                        *outl += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
-                        *outr += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
-                        r1 += dr;
-                        if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
-                    }
+                    r1 += k;
+                    r2 += k;
                 }
 
                 // If at end of fragment check for jump
-                if (fi >= tune->Frsize) 
+                if (fi+k >= tune->Frsize) 
                 {
-                    fi = 0;
 
                     // Estimate the pitch every 8th fragment
-                    if ( l == 0)
+                    if ( l == 0 )
                     {
+                    ////////////////////////rm
                         if (++tune->Frcount == 8)
                         {
                             tune->Frcount = 0;
                             findcycle(tune);
-                            if (tune->Cycle[tune->Ipindex>>6])
+                            if (tune->Cycle[tune->Ipindex>>11])
                             {
                                 // If the pitch estimate succeeds, find the
                                 // nearest note and required resampling ratio
@@ -568,13 +609,14 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                                 // the signal is considered unvoiced and the
                                 // pitch error is reset
                                 tune->Count = 5;
-                                tune->Cycle[tune->Ipindex>>6] = tune->Frsize;
+                                tune->Cycle[tune->Ipindex>>11] = tune->Frsize;
                                 tune->Error = 0;
                             }
 
                         
                             //tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
                         }
+                        ////////////////////////rm
                     }
                     if (tune->Frcount == 0)
                         tune->Woosh[l].Ratio = pow(2.0, (tune->Woosh[l].Corroffs / 12.0f ));
@@ -589,7 +631,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                     // the circular input buffer limits it must be at
                     // least one fragment size
                     int i = r1;
-                    i = i>>6;
+                    i = i>>11;
                     dr = tune->Cycle[i] * (int)ceil((double)(tune->Frsize / tune->Cycle[i]));//samples per fragment raised to nearest complete cycle
                     dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
                     ph = tune->Ipindex - r1;//samples that can be read /latency
@@ -621,11 +663,18 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                         //keep reading from current position
                         tune->Woosh[l].Xfade = 0;
                 }
-                
+                    
                 tune->Woosh[l].Rindex1 = r1;
                 tune->Woosh[l].Rindex2 = r2;
-			}
+            }
+            fi += k;
+            if(fi >= tune->Frsize)
+                fi = 0;
 		}
+        int i;
+        for(i=0;i<tune->nWoosh;i++)
+        if(tune->Woosh[i].Active == -1)
+            tune->Woosh[i].Active = 0;//kill wooshes that were marked to go inactive
 
 		// Save local state
 		tune->Frindex = fi;

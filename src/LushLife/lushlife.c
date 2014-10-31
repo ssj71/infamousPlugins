@@ -23,13 +23,17 @@ typedef struct _LUSHLIFE
     float *input_p;
     float *outputl_p;
     float *outputr_p;
+    float *latency_p;
+
+    float *mastergain_p
     float *dry_gain_p;
     float *dry_pan_p;
-    float *tune_p[NWOOSH];
+
+    float *active_p[NWOOSH];
+    float *shift_p[NWOOSH];
     float *delay_p[NWOOSH];
     float *gain_p[NWOOSH];
     float *pan_p[NWOOSH];
-    float *latency_p;
 }LUSHLIFE;
 
 
@@ -37,11 +41,27 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
 {
     LUSHLIFE* plug = (LUSHLIFE*)handle;
 
-    RetunerSetOffset(plug->tuner,0,1/100);
-    RetunerSetDryGain(plug->tuner,0);
-    RetunerSetLatency(plug->tuner,0,(uint32_t)*plug->delay_p);
+    RetunerSetGain(plug->tuner,-1,*plug->dry_gain_p);
+    RetunerSetPan(plug->tuner,-1,*plug->dry_pan_p);
+
+    unsigned int i;
+    for(i=0;i<NWOOSH;i++)
+    {
+        RetunerSetActive(plug->tuner,i,(int)*plug->active_p[i]);
+        RetunerSetLatency(plug->tuner,i,(uint32_t)*plug->delay_p);
+        RetunerSetOffset(plug->tuner,i,*plug->shift_p[i]);
+        RetunerSetGain(plug->tuner,i,*plug->gain_p[i]);
+        RetunerSetPan(plug->tuner,i,*plug->pan_p[i]);
+    }
 
     RetunerProcess(plug->tuner,plug->input_p,plug->outputl_p,plug->outputr_p,nframes);
+
+    //apply master gain
+    for(i=0;i<nframes;i++)
+    {
+        plug->outputl_p *= *plug->gain_p;
+        plug->outputr_p *= *plug->gain_p;
+    }
     *plug->latency_p = plug->latency;
 
 return;
@@ -50,7 +70,6 @@ return;
 LV2_Handle init_lushlife(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     LUSHLIFE* plug = malloc(sizeof(LUSHLIFE));
-    plug->count = plug->prev = 0;
     plug->tuner = RetunerAlloc(sample_freq, 1);
 
     plug->latency = RetunerGetLatency(plug->tuner,0);
@@ -66,13 +85,41 @@ void connect_lushlife_ports(LV2_Handle handle, uint32_t port, void *data)
     case IN:            plug->input_p = (float*)data;break;
     case OUTL:          plug->outputl_p = (float*)data;break;
     case OUTR:          plug->outputr_p = (float*)data;break;
+    case LATENCY:       plug->latency_p = (float*)data;break;
+
+    case GAIN:          plug->mastergain_p = (float*)data;break;
     case DRY_GAIN:      plug->dry_gain_p = (float*)data;break;
     case DRY_PAN:       plug->dry_pan_p = (float*)data;break;
-    case TUNE0:         plug->tune_p[0] = (float*)data;break;
-    case DELAY0:        plug->delay_p[0] = (float*)data;break;
-    case GAIN0:         plug->gain_p[0] = (float*)data;break;
-    case PAN0:          plug->pan_p[0] = (float*)data;break;
-    case LATENCY:       plug->latency_p = (float*)data;break;
+    
+    case SHIFT0:        (plug->shift_p[0]) = (float*)data;break;
+    case DELAY0:        (plug->delay_p[0]) = (float*)data;break;
+    case GAIN0:         (plug->gain_p[0])= (float*)data;break;
+    case PAN0:          (plug->pan_p[0])= (float*)data;break;
+    
+    case SHIFT1:        plug->shift_p[1] = (float*)data;break;
+    case DELAY1:        plug->delay_p[1] = (float*)data;break;
+    case GAIN1:         plug->gain_p[1] = (float*)data;break;
+    case PAN1:          plug->pan_p[1] = (float*)data;break;
+    
+    case SHIFT2:        plug->shift_p[2] = (float*)data;break;
+    case DELAY2:        plug->delay_p[2] = (float*)data;break;
+    case GAIN2:         plug->gain_p[2] = (float*)data;break;
+    case PAN2:          plug->pan_p[2] = (float*)data;break;
+    
+    case SHIFT3:        plug->shift_p[3] = (float*)data;break;
+    case DELAY3:        plug->delay_p[3] = (float*)data;break;
+    case GAIN3:         plug->gain_p[3] = (float*)data;break;
+    case PAN3:          plug->pan_p[3] = (float*)data;break;
+    
+    case SHIFT4:        plug->shift_p[4] = (float*)data;break;
+    case DELAY4:        plug->delay_p[4] = (float*)data;break;
+    case GAIN4:         plug->gain_p[4] = (float*)data;break;
+    case PAN4:          plug->pan_p[4] = (float*)data;break;
+    
+    case SHIFT5:        plug->shift_p[5] = (float*)data;break;
+    case DELAY5:        plug->delay_p[5] = (float*)data;break;
+    case GAIN5:         plug->gain_p[5] = (float*)data;break;
+    case PAN5:          plug->pan_p[5] = (float*)data;break;
     default:            puts("UNKNOWN PORT YO!!");
     }
 }
