@@ -29,7 +29,15 @@
     #include "fftw3.h"
     #include "c_resampler.h"
 
-
+    typedef struct
+    {
+        float          Gain;
+        float          Ratio;
+        float Rindex1, Rindex2;
+        float          Latency;//latency in fragments
+        unsigned char  Xfade;
+        float		   Corroffs;
+    } Whoosh;
 
     typedef struct
     {
@@ -51,23 +59,21 @@
         int				Frcount;
         int             Dindex;
         RESAMPLER_HANDLE resampler;
+        Whoosh*         Woosh;
+        unsigned int    nWoosh;
 
         int				Notemask;
         float			Refpitch;
         float			Notebias;
         float			Corrfilt; 
         float			Corrgain;
-        float			Corroffs;
-        float           Latency;//latency in fragments
         float           DryGain;
 
         int				Count;
-        float			Cycle;
+        float			Cycle[64];
         float			Error;
-        float			Ratio;
-        float			Rindex1, Rindex2;
         unsigned short	Notebits;
-        unsigned char	Xfade, Upsamp, Format;
+        unsigned char	Upsamp, Format;
     } Retuner;
 
     #ifndef M_PI
@@ -96,9 +102,9 @@
         ((Retuner *)tune)->Corrgain = v;
     }
 
-    void RetunerSetOffset(TUNERHANDLE tune, float v)
+    void RetunerSetOffset(TUNERHANDLE tune, int i, float v)
     {
-        ((Retuner *)tune)->Corroffs = v;
+        ((Retuner *)tune)->Woosh[i].Corroffs = v;
     }
 
     void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k)
@@ -107,16 +113,16 @@
     }
 
     //set latency in samples
-    void RetunerSetLatency(TUNERHANDLE tune, unsigned long samp)
+    void RetunerSetLatency(TUNERHANDLE tune,int i, unsigned long samp)
     {
-        ((Retuner *)tune)->Latency = samp/((Retuner *)tune)->Frsize - 2.0;
-        if(((Retuner *)tune)->Latency < 0) ((Retuner *)tune)->Latency = 0;
+        ((Retuner *)tune)->Woosh[i].Latency = samp/((Retuner *)tune)->Frsize - 2.0;
+        if(((Retuner *)tune)->Woosh[i].Latency < 0) ((Retuner *)tune)->Woosh[i].Latency = 0;
     }
 
     //get latency in samples
-    unsigned int RetunerGetLatency(TUNERHANDLE tune)
+    unsigned int RetunerGetLatency(TUNERHANDLE tune, int i)
     {
-       return (((Retuner *)tune)->Latency + 2.0)*((Retuner *)tune)->Frsize;
+       return (((Retuner *)tune)->Woosh[i].Latency + 2.0)*((Retuner *)tune)->Frsize;
     }
 
 
@@ -170,7 +176,7 @@
 
 
 
-    TUNERHANDLE RetunerAlloc(int fsamp)
+    TUNERHANDLE retuneralloc( int nwoosh, int fsamp)
     {
         register Retuner * tune;
         int   i, h;
@@ -184,8 +190,8 @@
             tune->Refpitch = 440.0f;
             tune->Corrfilt = tune->Corrgain = 1.0f;
     //		tune->Corroffs = tune->Notebias = 0.0f;
-            tune->Corroffs = 0.0f;
             tune->Notemask = 0xFFF;
+            tune->nWoosh = nwoosh;
 
             tune->resampler = ResamplerAlloc();
 
@@ -193,7 +199,7 @@
             {
                 // At 44.1 and 48 kHz resample to double rate
                 tune->Upsamp = 1;
-                tune->Ipsize = 4096;
+                tune->Ipsize = 8192;
                 //tune->Ipsize = 2048;
                 tune->Fftlen = 2048;
                 //tune->Frsize = 128;
@@ -212,7 +218,8 @@
             {
                 // 88.2 or 96 kHz.
     //			tune->Upsamp = false;
-                tune->Ipsize = tune->Fftlen = 4096;
+                tune->Ipsize =  8192;
+                tune->Fftlen =  4096;
                 //tune->Frsize = 256;
                 tune->Frsize = 128;
             }
@@ -220,7 +227,8 @@
             {
                 // 192 kHz, double time domain buffers sizes
     //			tune->Upsamp = false;
-                tune->Ipsize = tune->Fftlen = 8192;
+                tune->Ipsize =  16384;
+                tune->Fftlen = 8192;
                 //tune->Frsize = 512;
                 tune->Frsize = 256;
             }
@@ -236,6 +244,8 @@
 		tune->FftWcorr = (float *)fftwf_malloc(tune->Fftlen * sizeof (float));		// Autocorrelation of window 
 		tune->FftTdata = (float *)fftwf_malloc(tune->Fftlen * sizeof (float));		// Time domain data for FFT
 		tune->FftFdata = (fftwf_complex *) fftwf_malloc((tune->Fftlen / 2 + 1) * sizeof (fftwf_complex));
+
+        tune->Woosh = (Whoosh*)malloc(sizeof(Whoosh)*nwoosh);
 
 		if (!tune->Ipbuff || !tune->Xffunc || !tune->FftTwind || !tune->FftWcorr || !tune->FftTdata || !tune->FftFdata)
 		{
@@ -272,16 +282,22 @@
 			fftwf_execute_dft_c2r(tune->Invplan, tune->FftFdata, tune->FftWcorr);    
 			t = tune->FftWcorr[0];
 			for (i = 0; i < tune->Fftlen; i++) tune->FftWcorr[i] /= t;
+            
+            for (i = 0; i < nwoosh; i++)
+            {
+                tune->Woosh[i].Latency = 0;
+                tune->Woosh[i].Ratio = 1.0f;
+                tune->Woosh[i].Xfade = 0;
+                tune->Woosh[i].Rindex1 = tune->Ipsize - 2*tune->Frsize;
+                tune->Woosh[i].Rindex2 = 0;
+                tune->Woosh[i].Corroffs = 0.0f;
+            }
+
+            for (i = 0; i < 64; i++) tune->Cycle[i] = tune->Frsize;
 
 			// Initialise all counters and other state
             tune->Count = 0;
-			tune->Cycle = tune->Frsize;
-            tune->Latency = 0;
-			tune->Ratio = 1.0f;
-			tune->Xfade = 0;
 			tune->Ipindex = tune->Frindex = tune->Frcount = 0;
-			tune->Rindex1 = tune->Ipsize - 2*tune->Frsize;
-			tune->Rindex2 = 0;
             tune->DryGain = 0;
             tune->Dindex = tune->Ipsize - 2*tune->Frsize;
 		}
@@ -306,7 +322,8 @@ static void findcycle(register Retuner * tune)
 	k = tune->Ipsize - 1;
 	for (i = 0; i < tune->Fftlen; i++)
 	{
-		tune->FftTdata[i] = tune->FftTwind[i] * tune->Ipbuff[j++ & k];
+		tune->FftTdata[i] = tune->FftTwind[i] * tune->Ipbuff[j & k];
+        j += d;
 	}
 	fftwf_execute_dft_r2c(tune->Fwdplan, tune->FftTdata, tune->FftFdata);    
 	f = tune->Fsamp / (tune->Fftlen * 2.5e3f);
@@ -331,7 +348,8 @@ static void findcycle(register Retuner * tune)
 		x = y;
 	}
 	i -= 4;
-	tune->Cycle = 0;
+    d = tune->Ipindex>>6;
+	tune->Cycle[d] = 0;
 	if (i < tune->Ifmax)
 	{
 		if (i < tune->Ifmin) i = tune->Ifmin;
@@ -355,7 +373,7 @@ static void findcycle(register Retuner * tune)
 			x = tune->FftTdata[j - 1];
 			y = tune->FftTdata[j];
 			z = tune->FftTdata[j + 1];
-			tune->Cycle = j + 0.5f * (x - z) / (z - 2 * y + x - 1e-9f);
+			tune->Cycle[d] = j + 0.5f * (x - z) / (z - 2 * y + x - 1e-9f);
 		}
 	}
 }
@@ -396,8 +414,6 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 	if ((tune = handle))
 	{
 		fi = tune->Frindex;  // Write index in current fragment.
-		r1 = tune->Rindex1;  // Read index for current input frame.
-		r2 = tune->Rindex2;  // Second read index while crossfading. 
         di = tune->Dindex;   //Read index for dry signal
 
 		// No assumptions are made about fragments being aligned
@@ -407,6 +423,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 		while (nfram)
 		{
 			int		k;
+            unsigned int l;
 			float	ph, dp, dr;
 
 			// Don't go past the end of the current fragment
@@ -439,127 +456,141 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int n
 			if (tune->Ipindex >= tune->Ipsize) tune->Ipindex = 0;
 
 			// Process available samples
-			dr = tune->Ratio;
-			if (tune->Upsamp) dr *= 2;
-			if (tune->Xfade)
-			{
-				// Interpolate and crossfade
-				while (k--)
-				{
-					int		i;
-					float	u1, u2, v;
+            for(l=0;l<tune->nWoosh;l++)
+            {
+                r1 = tune->Woosh[l].Rindex1; // Read index for current input frame.
+                r2 = tune->Woosh[l].Rindex2; // Second read index while crossfading. 
+                *out = tune->DryGain*tune->Ipbuff[di];
+                di += 1 + tune->Upsamp;
+                if (di >= tune->Ipsize) di -= tune->Ipsize;
 
-					i = (int)r1;
-					u1 = cubic(tune->Ipbuff + i, r1 - i);
-					i = (int)r2;
-					u2 = cubic(tune->Ipbuff + i, r2 - i);
-					v = tune->Xffunc[fi++];
+                dr = tune->Woosh[l].Ratio;
+                if (tune->Upsamp) dr *= 2;
+                if (tune->Woosh[l].Xfade)
+                {
+                    // Interpolate and crossfade
+                    while (k--)
+                    {
+                        int		i;
+                        float	u1, u2, v;
 
-					*out++ =  (1 - v) * u1 + v * u2  +  tune->DryGain*tune->Ipbuff[di++];
+                        i = (int)r1;
+                        u1 = cubic(tune->Ipbuff + i, r1 - i);
+                        i = (int)r2;
+                        u2 = cubic(tune->Ipbuff + i, r2 - i);
+                        v = tune->Xffunc[fi++];
 
-					r1 += dr;
-					if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
-					r2 += dr;
-					if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
-                    if (di >= tune->Ipsize) di -= tune->Ipsize;
-				}
-			}
-			else
-			{
-				// Interpolation only.
-				fi += k;
-				while (k--)
-				{
-					int i;
-                    i = (int)r1;
+                        *out +=  (1 - v) * u1 + v * u2;
 
-                    *out++ = cubic(tune->Ipbuff + i, r1 - i)  +  tune->DryGain*tune->Ipbuff[di++];
-					r1 += dr;
-					if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
-                    if (di >= tune->Ipsize) di -= tune->Ipsize;
-				}
-			}
+                        r1 += dr;
+                        if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
+                        r2 += dr;
+                        if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
+                    }
+                }
+                else
+                {
+                    // Interpolation only.
+                    fi += k;
+                    while (k--)
+                    {
+                        int i;
+                        i = (int)r1;
 
-			// If at end of fragment check for jump
-			if (fi >= tune->Frsize) 
-			{
-				fi = 0;
+                        *out += cubic(tune->Ipbuff + i, r1 - i);
+                        r1 += dr;
+                        if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
+                    }
+                }
 
-				// Estimate the pitch every 8th fragment
-				if (++tune->Frcount == 8)
-				{
-					tune->Frcount = 0;
-					findcycle(tune);
-					if (tune->Cycle)
-					{
-						// If the pitch estimate succeeds, find the
-						// nearest note and required resampling ratio
-						tune->Count = 0;
-						//finderror(tune);
-					}
+                // If at end of fragment check for jump
+                if (fi >= tune->Frsize) 
+                {
+                    fi = 0;
 
-					else if (++tune->Count > 5)
-					{
-						// If the pitch estimate fails, the current
-						// ratio is kept for 5 fragments. After that
-						// the signal is considered unvoiced and the
-						// pitch error is reset
-						tune->Count = 5;
-						tune->Cycle = tune->Frsize;
-						tune->Error = 0;
-					}
+                    // Estimate the pitch every 8th fragment
+                    if ( l == 0)
+                    {
+                        if (++tune->Frcount == 8)
+                        {
+                            tune->Frcount = 0;
+                            findcycle(tune);
+                            if (tune->Cycle[tune->Ipindex>>6])
+                            {
+                                // If the pitch estimate succeeds, find the
+                                // nearest note and required resampling ratio
+                                tune->Count = 0;
+                                //finderror(tune);
+                            }
 
+                            else if (++tune->Count > 5)
+                            {
+                                // If the pitch estimate fails, the current
+                                // ratio is kept for 5 fragments. After that
+                                // the signal is considered unvoiced and the
+                                // pitch error is reset
+                                tune->Count = 5;
+                                tune->Cycle[tune->Ipindex>>6] = tune->Frsize;
+                                tune->Error = 0;
+                            }
+
+                        
+                            //tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
+                        }
+                    }
+                    if (tune->Frcount == 0)
+                        tune->Woosh[l].Ratio = pow(2.0, (tune->Woosh[l].Corroffs / 12.0f ));
+
+                    // If the previous fragment was crossfading,
+                    // the end of the new fragment that was faded
+                    // in becomes the current read position
+                    if (tune->Woosh[l].Xfade) r1 = r2;
+
+                    // A jump must correspond to an integer number
+                    // of pitch periods, and to avoid reading outside
+                    // the circular input buffer limits it must be at
+                    // least one fragment size
+                    int i = r1;
+                    i = i>>6;
+                    dr = tune->Cycle[i] * (int)ceil((double)(tune->Frsize / tune->Cycle[i]));//samples per fragment raised to nearest complete cycle
+                    dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
+                    ph = tune->Ipindex - r1;//samples that can be read /latency
+                    if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
+                    if (tune->Upsamp)
+                    {
+                        ph /= 2;
+                        dr *= 2;
+                    }
+
+                    //to keep latency at a minimum but still prevent reading ahead of the write buffer
+                    //we should try to make sure there is always a complete fragment left at the end of 
+                    //the current fragment. Since the number of fragments read back while a single frag
+                    // is written is == Ratio, we can just add that amount to the target and it should 
+                    //always have at least 1 fragment left to read while crossfading
+                    ph = tune->Woosh[l].Latency + 1.5*tune->Woosh[l].Ratio - ph / tune->Frsize ;//target -fragments left = latency error 
+                    i = ceil(ph/dp);//round to nearest place we can actually jump to that should leave us somewhere behind the target
+                    //int i = ceil(ph);
+                    if (i)
+                    {
+                        // Jump an integer number of 'dr' frames and crossfade.
+                        //if(i>0)i++;
+                        tune->Woosh[l].Xfade = 1;
+                        r2 = r1 - i*dr;
+                        if (r2 < 0) r2 += tune->Ipsize;
+                        else if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
+                    }
+                    else
+                        //keep reading from current position
+                        tune->Woosh[l].Xfade = 0;
+                }
                 
-					//tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
-					tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f ));
-				}
-
-				// If the previous fragment was crossfading,
-				// the end of the new fragment that was faded
-				// in becomes the current read position
-				if (tune->Xfade) r1 = r2;
-
-				// A jump must correspond to an integer number
-				// of pitch periods, and to avoid reading outside
-				// the circular input buffer limits it must be at
-				// least one fragment size
-				dr = tune->Cycle * (int)ceil((double)(tune->Frsize / tune->Cycle));//samples per fragment raised to nearest complete cycle
-				dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
-				ph = tune->Ipindex - r1;//samples that can be read /latency
-				if (ph < 0) ph += tune->Ipsize;//wrap around buffer end
-				if (tune->Upsamp)
-				{
-					ph /= 2;
-					dr *= 2;
-				}
-
-                //to keep latency at a minimum but still prevent reading ahead of the write buffer
-                //we should try to make sure there is always a complete fragment left at the end of 
-                //the current fragment. Since the number of fragments read back while a single frag
-                // is written is == Ratio, we can just add that amount to the target and it should 
-                //always have at least 1 fragment left to read while crossfading
-				ph = tune->Latency + 1.5*tune->Ratio - ph / tune->Frsize ;//target -fragments left = latency error 
-                int i = ceil(ph/dp);//round to nearest place we can actually jump to that should leave us somewhere behind the target
-                //int i = ceil(ph);
-				if (i)
-				{
-					// Jump an integer number of 'dr' frames and crossfade.
-                    //if(i>0)i++;
-					tune->Xfade = 1;
-					r2 = r1 - i*dr;
-					if (r2 < 0) r2 += tune->Ipsize;
-                    else if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
-				}
-				else
-                    //keep reading from current position
-					tune->Xfade = 0;
+                tune->Woosh[l].Rindex1 = r1;
+                tune->Woosh[l].Rindex2 = r2;
 			}
 		}
 
 		// Save local state
 		tune->Frindex = fi;
-		tune->Rindex1 = r1;
-		tune->Rindex2 = r2;
         tune->Dindex  = di;
 	}
 }

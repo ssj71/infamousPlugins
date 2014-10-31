@@ -34,15 +34,15 @@ void RetunerSetPitch(TUNERHANDLE tune, float v);
 void RetunerSetNoteBias(TUNERHANDLE tune, float v);
 void RetunerSetFilter(TUNERHANDLE tune, float v);
 void RetunerSetGain(TUNERHANDLE tune, float v);
-void RetunerSetOffset(TUNERHANDLE tune, float v);
+void RetunerSetOffset(TUNERHANDLE tune, int i, float v);
 void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k);
-void RetunerSetLatency(TUNERHANDLE tune, unsigned long samp);
-unsigned int RetunerGetLatency(TUNERHANDLE tune);
+void RetunerSetLatency(TUNERHANDLE tune, int i, unsigned long samp);
+unsigned int RetunerGetLatency(TUNERHANDLE tune, int i);
 unsigned int RetunerGetNoteset(TUNERHANDLE tune);
 void RetunerSetDryGain(TUNERHANDLE tune, float g);
 float RetunerGetError(TUNERHANDLE tune);
 void RetunerFree(TUNERHANDLE handle);
-TUNERHANDLE RetunerAlloc(int fsamp);
+TUNERHANDLE RetunerAlloc(int i, int fsamp);
 void RetunerProcess(TUNERHANDLE handle, float * inp, float * out, unsigned int nfram);
 #ifdef __cplusplus
 }
