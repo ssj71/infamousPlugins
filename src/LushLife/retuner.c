@@ -107,7 +107,7 @@
     }
 
     //set latency in samples
-    void RetunerSetLatency(TUNERHANDLE tune, unsigned int samp)
+    void RetunerSetLatency(TUNERHANDLE tune, unsigned long samp)
     {
         ((Retuner *)tune)->Latency = samp/((Retuner *)tune)->Frsize - 2.0;
         if(((Retuner *)tune)->Latency < 0) ((Retuner *)tune)->Latency = 0;

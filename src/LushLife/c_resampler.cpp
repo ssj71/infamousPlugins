@@ -117,94 +117,94 @@ VRESAMPLER_HANDLE VResamplerAlloc(){
 
 void VResamplerFree(VRESAMPLER_HANDLE r)
 {
-    free(static_cast<VRsampler*>(r));
+    delete[] static_cast<VResampler*>(r);
 }
 
 int VResamplerSetup(VRESAMPLER_HANDLE r, double ratio, unsigned int nchan, unsigned int hlen)
 {
-    return static_cast<VRsampler*>(r)->setup(ratio,nchan,hlen);
+    return static_cast<VResampler*>(r)->setup(ratio,nchan,hlen);
 }
 
 void VResamplerClear(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->clear();
+    return static_cast<VResampler*>(r)->clear();
 }
 
 int VResamplerReset(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->reset();
+    return static_cast<VResampler*>(r)->reset();
 }
 
 int VResamplerProcess(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->process();
+    return static_cast<VResampler*>(r)->process();
 }
 
 int VResamplerNChan(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->nchan();
+    return static_cast<VResampler*>(r)->nchan();
 }
 
 int VResamplerInpSize(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->inpsize();
+    return static_cast<VResampler*>(r)->inpsize();
 }
 
 double VResamplerInpDist(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->inp_dist();
+    return static_cast<VResampler*>(r)->inpdist();
 }
 
 void VResamplerSetRRatio(VRESAMPLER_HANDLE r, double ratio)
 {
-    static_cast<VRsampler*>(r)->set_rratio(ratio);
+    static_cast<VResampler*>(r)->set_rratio(ratio);
 }
 
 void VResamplerSetRRFilt(VRESAMPLER_HANDLE r, double time)
 {
-    static_cast<VRsampler*>(r)->set_rrfilt(time);
+    static_cast<VResampler*>(r)->set_rrfilt(time);
 }
 
 
 //access to public members
 unsigned int VResamplerGetInpCount(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->inp_count;
+    return static_cast<VResampler*>(r)->inp_count;
 }
 
 void VResamplerSetInpCount(VRESAMPLER_HANDLE r, unsigned int count)
 {
-    static_cast<VRsampler*>(r)->inp_count = count;
+    static_cast<VResampler*>(r)->inp_count = count;
 }
 
 unsigned int VResamplerGetOutCount(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->out_count;
+    return static_cast<VResampler*>(r)->out_count;
 }
 
-void VResamplerSetInpCount(VRESAMPLER_HANDLE r, unsigned int count)
+void VResamplerSetOutCount(VRESAMPLER_HANDLE r, unsigned int count)
 {
-    static_cast<VRsampler*>(r)->inp_count = count;
+    static_cast<VResampler*>(r)->inp_count = count;
 }
 
 float* VResamplerGetInpData(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->inp_data;
+    return static_cast<VResampler*>(r)->inp_data;
 }
 
 void VResamplerSetInpData(VRESAMPLER_HANDLE r, float * data)
 {
-    static_cast<VRsampler*>(r)->inp_data = data;
+    static_cast<VResampler*>(r)->inp_data = data;
 }
 
 float* VResamplerGetOutData(VRESAMPLER_HANDLE r)
 {
-    return static_cast<VRsampler*>(r)->out_data;
+    return static_cast<VResampler*>(r)->out_data;
 }
 
 void VResamplerSetOutData(VRESAMPLER_HANDLE r, float * data)
 {
-    static_cast<VRsampler*>(r)->out_data = data;
+    static_cast<VResampler*>(r)->out_data = data;
 }
 
 

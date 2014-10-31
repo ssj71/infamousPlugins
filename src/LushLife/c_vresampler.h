@@ -16,7 +16,7 @@ extern "C" {
 typedef void* VRESAMPLER_HANDLE;
 VRESAMPLER_HANDLE VResamplerAlloc();
   void VResamplerFree( VRESAMPLER_HANDLE );
-   int VResamplerSetup( VRESAMPLER_HANDLE , unsigned int   fs_inp, unsigned int fs_out, unsigned int nchan, unsigned int hlen );
+   int VResamplerSetup( VRESAMPLER_HANDLE , double ratio, unsigned int nchan, unsigned int hlen);
   void VResamplerClear( VRESAMPLER_HANDLE );
    int VResamplerReset( VRESAMPLER_HANDLE );
    int VResamplerProcess( VRESAMPLER_HANDLE );
