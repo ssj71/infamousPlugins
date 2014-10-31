@@ -41,7 +41,7 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
     RetunerSetDryGain(plug->tuner,0);
     RetunerSetLatency(plug->tuner,0,(uint32_t)*plug->delay_p);
 
-    RetunerProcess(plug->tuner,plug->input_p,plug->outputl_p,nframes);
+    RetunerProcess(plug->tuner,plug->input_p,plug->outputl_p,plug->outputr_p,nframes);
     *plug->latency_p = plug->latency;
 
 return;
