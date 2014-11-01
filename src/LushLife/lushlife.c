@@ -25,7 +25,7 @@ typedef struct _LUSHLIFE
     float *outputr_p;
     float *latency_p;
 
-    float *mastergain_p
+    float *mastergain_p;
     float *dry_gain_p;
     float *dry_pan_p;
 
@@ -59,8 +59,8 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
     //apply master gain
     for(i=0;i<nframes;i++)
     {
-        plug->outputl_p *= *plug->gain_p;
-        plug->outputr_p *= *plug->gain_p;
+        plug->outputl_p[i] *= *plug->mastergain_p;
+        plug->outputr_p[i] *= *plug->mastergain_p;
     }
     *plug->latency_p = plug->latency;
 
