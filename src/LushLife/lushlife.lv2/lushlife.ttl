@@ -4,6 +4,7 @@
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
 
 <http://infamousplugins.sourceforge.net/plugs.html#stuck>
         a lv2:Plugin, lv2:DelayPlugin ;
