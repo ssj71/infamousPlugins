@@ -11,40 +11,40 @@ enum stuck_ports
     DRY_GAIN,
     DRY_PAN,
 
+    ACTIVE0,
     SHIFT0,
     DELAY0,
     GAIN0,
     PAN0,
-    LATENCY0,
 
+    ACTIVE1,
     SHIFT1,
     DELAY1,
     GAIN1,
     PAN1,
-    LATENCY1,
 
+    ACTIVE2,
     SHIFT2,
     DELAY2,
     GAIN2,
     PAN2,
-    LATENCY2,
 
+    ACTIVE3,
     SHIFT3,
     DELAY3,
     GAIN3,
     PAN3,
-    LATENCY3,
 
+    ACTIVE4,
     SHIFT4,
     DELAY4,
     GAIN4,
     PAN4,
-    LATENCY4,
 
+    ACTIVE5,
     SHIFT5,
     DELAY5,
     GAIN5,
-    PAN5,
-    LATENCY5
+    PAN5
 };
 #endif

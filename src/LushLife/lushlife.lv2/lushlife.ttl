@@ -5,6 +5,7 @@
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
 
 <http://infamousplugins.sourceforge.net/plugs.html#stuck>
         a lv2:Plugin, lv2:DelayPlugin ;
@@ -27,41 +28,347 @@
         lv2:port [
                 a lv2:OutputPort, lv2:AudioPort ;
                 lv2:index 1 ;
-                lv2:symbol "OUTPUT" ;
-                lv2:name "Audio Out" ;
+                lv2:symbol "OUTPUTL" ;
+                lv2:name "Audio Out Left" ;
         ] ;
         lv2:port [
-                a lv2:InputPort, lv2:ControlPort ;
+                a lv2:OutputPort, lv2:AudioPort ;
                 lv2:index 2 ;
-                lv2:symbol "STICK_IT" ;
-                lv2:name "Stick it!" ;
-                lv2:default 0 ;
+                lv2:symbol "OUTPUTR" ;
+                lv2:name "Audio Out Right" ;
+        ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:ControlPort ;
+                lv2:index 3 ;
+                lv2:symbol "LATENCY" ;
+                lv2:name "Latency" ;
+                lv2:portProperty lv2:reportsLatency, lv2:integer, pprops:notOnGUI;
+        ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:ControlPort ;
+                lv2:index 4 ;
+                lv2:symbol "MASTERGAIN" ;
+                lv2:name "Master Gain" ;
+                lv2:default 0.8 ;
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
-		lv2:portProperty lv2:integer ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 3 ;
-                lv2:symbol "DRONE_GAIN" ;
-                lv2:name "Drone Gain" ;
-                lv2:default 0.50 ;
+                lv2:index 5 ;
+                lv2:symbol "DRYGAIN" ;
+                lv2:name "Dry Gain" ;
+                lv2:default 0.80 ;
                 lv2:minimum 0.0 ;
-                lv2:maximum 2.0 ;
-		units:unit units:coeff ;
+                lv2:maximum 1.0 ;
+                units:unit units:coeff ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 4 ;
-                lv2:symbol "RELEASE" ;
-                lv2:name "Release" ;
-                lv2:default 0.5 ;
-                lv2:minimum 0.01 ;
-                lv2:maximum 3.0 ; 
-		units:unit units:s ;
+                lv2:index 6 ;
+                lv2:symbol "DRYPAN" ;
+                lv2:name "Dry Pan" ;
+                lv2:default 0.0 ;
+                lv2:minimum -1.0 ;
+                lv2:maximum 1.0 ; 
+        ], [
+        
+        
+
+
+
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 7 ;
+                lv2:symbol "ACTIVE0" ;
+                lv2:name "Active 0" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 8 ;
+                lv2:symbol "DETUNE0" ;
+                lv2:name "Detune 0" ;
+                lv2:default 0.0 ;
+                lv2:minimum -24.0 ;
+                lv2:maximum 24.0 ;
+                units:unit units:semitone12TET ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 9 ;
+                lv2:symbol "DELAY0" ;
+                lv2:name "Delay 0" ;
+                lv2:default 70.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 150.0 ;
+                units:unit units:ms;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 10 ;
+                lv2:symbol "GAIN0" ;
+                lv2:name "Gain 0" ;
+                lv2:default 0.80 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                units:unit units:coeff ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 11 ;
+                lv2:symbol "PAN0" ;
+                lv2:name "Pan 0" ;
+                lv2:default 0.50 ;
+                lv2:minimum -1.0 ;
+                lv2:maximum 1.0 ;
+        ], [
+
+
+
+
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 12 ;
+                lv2:symbol "ACTIVE1" ;
+                lv2:name "Active 1" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 13 ;
+                lv2:symbol "DETUNE1" ;
+                lv2:name "Detune 1" ;
+                lv2:default 0.0 ;
+                lv2:minimum -24.0 ;
+                lv2:maximum 24.0 ;
+                units:unit units:semitone12TET ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 14 ;
+                lv2:symbol "DELAY1" ;
+                lv2:name "Delay 1" ;
+                lv2:default 70.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 150.0 ;
+                units:unit units:ms;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 15 ;
+                lv2:symbol "GAIN1" ;
+                lv2:name "Gain 1" ;
+                lv2:default 0.80 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                units:unit units:coeff ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 16 ;
+                lv2:symbol "PAN1" ;
+                lv2:name "Pan 1" ;
+                lv2:default 0.50 ;
+                lv2:minimum -1.0 ;
+                lv2:maximum 1.0 ;
+        ], [
+
+
+
+
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 17 ;
+                lv2:symbol "ACTIVE2" ;
+                lv2:name "Active 2" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 18 ;
+                lv2:symbol "DETUNE2" ;
+                lv2:name "Detune 2" ;
+                lv2:default 0.0 ;
+                lv2:minimum -24.0 ;
+                lv2:maximum 24.0 ;
+                units:unit units:semitone12TET ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 19 ;
+                lv2:symbol "DELAY2" ;
+                lv2:name "Delay 2" ;
+                lv2:default 70.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 150.0 ;
+                units:unit units:ms;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 20 ;
+                lv2:symbol "GAIN2" ;
+                lv2:name "Gain 2" ;
+                lv2:default 0.80 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                units:unit units:coeff ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 21 ;
+                lv2:symbol "PAN2" ;
+                lv2:name "Pan 2" ;
+                lv2:default 0.50 ;
+                lv2:minimum -1.0 ;
+                lv2:maximum 1.0 ;
+        ], [
+
+
+
+
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 22 ;
+                lv2:symbol "ACTIVE3" ;
+                lv2:name "Active 3" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 23 ;
+                lv2:symbol "DETUNE3" ;
+                lv2:name "Detune 3" ;
+                lv2:default 0.0 ;
+                lv2:minimum -24.0 ;
+                lv2:maximum 24.0 ;
+                units:unit units:semitone12TET ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 24 ;
+                lv2:symbol "DELAY3" ;
+                lv2:name "Delay 3" ;
+                lv2:default 70.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 150.0 ;
+                units:unit units:ms;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 25 ;
+                lv2:symbol "GAIN3" ;
+                lv2:name "Gain 3" ;
+                lv2:default 0.80 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                units:unit units:coeff ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 26 ;
+                lv2:symbol "PAN3" ;
+                lv2:name "Pan 3" ;
+                lv2:default 0.50 ;
+                lv2:minimum -1.0 ;
+                lv2:maximum 1.0 ;
+        ], [
+
+
+
+
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 27 ;
+                lv2:symbol "ACTIVE1" ;
+                lv2:name "Active 1" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 28 ;
+                lv2:symbol "DETUNE1" ;
+                lv2:name "Detune 1" ;
+                lv2:default 0.0 ;
+                lv2:minimum -24.0 ;
+                lv2:maximum 24.0 ;
+                units:unit units:semitone12TET ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 29 ;
+                lv2:symbol "DELAY1" ;
+                lv2:name "Delay 1" ;
+                lv2:default 70.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 150.0 ;
+                units:unit units:ms;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 30 ;
+                lv2:symbol "GAIN1" ;
+                lv2:name "Gain 1" ;
+                lv2:default 0.80 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                units:unit units:coeff ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 31 ;
+                lv2:symbol "PAN1" ;
+                lv2:name "Pan 1" ;
+                lv2:default 0.50 ;
+                lv2:minimum -1.0 ;
+                lv2:maximum 1.0 ;
+        ], [
+
+
+
+
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 12 ;
+                lv2:symbol "ACTIVE1" ;
+                lv2:name "Active 1" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 13 ;
+                lv2:symbol "DETUNE1" ;
+                lv2:name "Detune 1" ;
+                lv2:default 0.0 ;
+                lv2:minimum -24.0 ;
+                lv2:maximum 24.0 ;
+                units:unit units:semitone12TET ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 14 ;
+                lv2:symbol "DELAY1" ;
+                lv2:name "Delay 1" ;
+                lv2:default 70.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 150.0 ;
+                units:unit units:ms;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 15 ;
+                lv2:symbol "GAIN1" ;
+                lv2:name "Gain 1" ;
+                lv2:default 0.80 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                units:unit units:coeff ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 16 ;
+                lv2:symbol "PAN1" ;
+                lv2:name "Pan 1" ;
+                lv2:default 0.50 ;
+                lv2:minimum -1.0 ;
+                lv2:maximum 1.0 ;
+        ], [
+
+
+
+
+
         ] ;
-        #lv2:port [
-        #        a lv2:InputPort, lv2:AudioPort ;#CVPort ;
-        #        lv2:index 5 ;
-        #        lv2:symbol "TRIGGER" ;
-        #        lv2:name "Trigger" ;
-        #] ;
 	.
