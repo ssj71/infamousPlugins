@@ -38,7 +38,7 @@ void RetunerSetPan(TUNERHANDLE tune, int i, float v);
 void RetunerSetActive(TUNERHANDLE tune, int i, int a);
 void RetunerSetOffset(TUNERHANDLE tune, int i, float v);
 void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k);
-void RetunerSetLatency(TUNERHANDLE tune, int i, unsigned long samp);
+void RetunerSetLatency(TUNERHANDLE tune, int i, float samp);
 unsigned int RetunerGetLatency(TUNERHANDLE tune, int i);
 unsigned int RetunerGetNoteset(TUNERHANDLE tune);
 float RetunerGetError(TUNERHANDLE tune);

@@ -116,10 +116,9 @@ void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k)
 }
 
 //set latency in samples
-void RetunerSetLatency(TUNERHANDLE tune,int i, unsigned long samp)
+void RetunerSetLatency(TUNERHANDLE tune,int i, float samp)
 {
-    ((Retuner *)tune)->Woosh[i].Latency = samp/((Retuner *)tune)->Frsize - 2.0;
-    if(((Retuner *)tune)->Woosh[i].Latency < 0) ((Retuner *)tune)->Woosh[i].Latency = 0;
+    ((Retuner *)tune)->Woosh[i].Latency = samp/((Retuner *)tune)->Frsize;
 }
 
 //get latency in samples
@@ -200,6 +199,7 @@ void RetunerFree(TUNERHANDLE handle)
         if (tune->resampler) ResamplerFree(tune->resampler);
         if (tune->Ipbuff) free(tune->Ipbuff);
         if (tune->Xffunc) free(tune->Xffunc);
+        free(tune->Woosh);
         fftwf_free(tune->FftTwind);
         fftwf_free(tune->FftWcorr);
         fftwf_free(tune->FftTdata);
@@ -386,7 +386,7 @@ static void findcycle(register Retuner * tune)
 		x = y;
 	}
 	i -= 4;
-    d = tune->Ipindex>>11;
+    d = tune->Ipindex>>10;
 	tune->Cycle[d] = 0;
 	if (i < tune->Ifmax)
 	{
@@ -579,7 +579,9 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                 else
                 {
                     r1 += k;
+                    if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
                     r2 += k;
+                    if (r2 >= tune->Ipsize) r2 -= tune->Ipsize;
                 }
 
                 // If at end of fragment check for jump
@@ -594,25 +596,14 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                         {
                             tune->Frcount = 0;
                             findcycle(tune);
-                            if (tune->Cycle[tune->Ipindex>>11])
-                            {
-                                // If the pitch estimate succeeds, find the
-                                // nearest note and required resampling ratio
-                                tune->Count = 0;
-                                //finderror(tune);
-                            }
-
-                            else if (++tune->Count > 5)
+                            if (!tune->Cycle[tune->Ipindex>>10])
                             {
                                 // If the pitch estimate fails, the current
                                 // ratio is kept for 5 fragments. After that
                                 // the signal is considered unvoiced and the
                                 // pitch error is reset
-                                tune->Count = 5;
-                                tune->Cycle[tune->Ipindex>>11] = tune->Frsize;
-                                tune->Error = 0;
+                                tune->Cycle[tune->Ipindex>>10] = tune->Frsize;
                             }
-
                         
                             //tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
                         }
@@ -630,8 +621,8 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                     // of pitch periods, and to avoid reading outside
                     // the circular input buffer limits it must be at
                     // least one fragment size
-                    int i = r1;
-                    i = i>>11;
+                    int i = (int)r1;
+                    i = i>>10;
                     dr = tune->Cycle[i] * (int)ceil((double)(tune->Frsize / tune->Cycle[i]));//samples per fragment raised to nearest complete cycle
                     dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
                     ph = tune->Ipindex - r1;//samples that can be read /latency

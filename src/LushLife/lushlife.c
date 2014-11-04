@@ -48,7 +48,7 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
     for(i=0;i<NWOOSH;i++)
     {
         RetunerSetActive(plug->tuner,i,(int)*plug->active_p[i]);
-        RetunerSetLatency(plug->tuner,i,(uint32_t)*plug->delay_p);
+        RetunerSetLatency(plug->tuner,i,*plug->delay_p[i]*plug->sample_freq/1000);
         RetunerSetOffset(plug->tuner,i,*plug->shift_p[i]);
         RetunerSetGain(plug->tuner,i,*plug->gain_p[i]);
         RetunerSetPan(plug->tuner,i,*plug->pan_p[i]);
@@ -71,6 +71,7 @@ LV2_Handle init_lushlife(const LV2_Descriptor *descriptor,double sample_freq, co
 {
     LUSHLIFE* plug = malloc(sizeof(LUSHLIFE));
     plug->tuner = RetunerAlloc(NWOOSH,sample_freq);
+    plug->sample_freq = sample_freq;
 
     plug->latency = RetunerGetLatency(plug->tuner,0);
 
