@@ -70,7 +70,7 @@ return;
 LV2_Handle init_lushlife(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     LUSHLIFE* plug = malloc(sizeof(LUSHLIFE));
-    plug->tuner = RetunerAlloc(sample_freq, 1);
+    plug->tuner = RetunerAlloc(NWOOSH,sample_freq);
 
     plug->latency = RetunerGetLatency(plug->tuner,0);
 
@@ -91,31 +91,37 @@ void connect_lushlife_ports(LV2_Handle handle, uint32_t port, void *data)
     case DRY_GAIN:      plug->dry_gain_p = (float*)data;break;
     case DRY_PAN:       plug->dry_pan_p = (float*)data;break;
     
-    case SHIFT0:        (plug->shift_p[0]) = (float*)data;break;
-    case DELAY0:        (plug->delay_p[0]) = (float*)data;break;
-    case GAIN0:         (plug->gain_p[0])= (float*)data;break;
-    case PAN0:          (plug->pan_p[0])= (float*)data;break;
+    case ACTIVE0:       plug->active_p[0] = (float*)data;break;
+    case SHIFT0:        plug->shift_p[0] = (float*)data;break;
+    case DELAY0:        plug->delay_p[0] = (float*)data;break;
+    case GAIN0:         plug->gain_p[0] = (float*)data;break;
+    case PAN0:          plug->pan_p[0] = (float*)data;break;
     
+    case ACTIVE1:       plug->active_p[1] = (float*)data;break;
     case SHIFT1:        plug->shift_p[1] = (float*)data;break;
     case DELAY1:        plug->delay_p[1] = (float*)data;break;
     case GAIN1:         plug->gain_p[1] = (float*)data;break;
     case PAN1:          plug->pan_p[1] = (float*)data;break;
     
+    case ACTIVE2:       plug->active_p[2] = (float*)data;break;
     case SHIFT2:        plug->shift_p[2] = (float*)data;break;
     case DELAY2:        plug->delay_p[2] = (float*)data;break;
     case GAIN2:         plug->gain_p[2] = (float*)data;break;
     case PAN2:          plug->pan_p[2] = (float*)data;break;
     
+    case ACTIVE3:       plug->active_p[3] = (float*)data;break;
     case SHIFT3:        plug->shift_p[3] = (float*)data;break;
     case DELAY3:        plug->delay_p[3] = (float*)data;break;
     case GAIN3:         plug->gain_p[3] = (float*)data;break;
     case PAN3:          plug->pan_p[3] = (float*)data;break;
     
+    case ACTIVE4:       plug->active_p[4] = (float*)data;break;
     case SHIFT4:        plug->shift_p[4] = (float*)data;break;
     case DELAY4:        plug->delay_p[4] = (float*)data;break;
     case GAIN4:         plug->gain_p[4] = (float*)data;break;
     case PAN4:          plug->pan_p[4] = (float*)data;break;
     
+    case ACTIVE5:       plug->active_p[5] = (float*)data;break;
     case SHIFT5:        plug->shift_p[5] = (float*)data;break;
     case DELAY5:        plug->delay_p[5] = (float*)data;break;
     case GAIN5:         plug->gain_p[5] = (float*)data;break;

@@ -214,7 +214,7 @@ void RetunerFree(TUNERHANDLE handle)
 
 
 
-TUNERHANDLE retuneralloc( int nwoosh, int fsamp)
+TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
 {
     register Retuner * tune;
     int   i, h;
