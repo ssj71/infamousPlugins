@@ -196,7 +196,7 @@ void RetunerFree(TUNERHANDLE handle)
 
     if ((tune = handle))
     {
-        if (tune->resampler) ResamplerFree(tune->resampler);
+        //if (tune->resampler) ResamplerFree(tune->resampler);
         if (tune->Ipbuff) free(tune->Ipbuff);
         if (tune->Xffunc) free(tune->Xffunc);
         free(tune->Woosh);

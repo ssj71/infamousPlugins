@@ -6,6 +6,37 @@
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
 @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+@prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+
+<http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0>
+    a param:ControlGroup ;
+    lv2:symbol "WOOSH0" ;
+    lv2:name "Woosh 0" .
+
+<http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1>
+    a param:ControlGroup ;
+    lv2:symbol "WOOSH1" ;
+    lv2:name "Woosh 1" .
+
+<http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2>
+    a param:ControlGroup ;
+    lv2:symbol "WOOSH2" ;
+    lv2:name "Woosh 2" .
+
+<http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3>
+    a param:ControlGroup ;
+    lv2:symbol "WOOSH3" ;
+    lv2:name "Woosh 3" .
+
+<http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4>
+    a param:ControlGroup ;
+    lv2:symbol "WOOSH4" ;
+    lv2:name "Woosh 4" .
+
+<http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5>
+    a param:ControlGroup ;
+    lv2:symbol "WOOSH5" ;
+    lv2:name "Woosh 5" .
 
 <http://infamousplugins.sourceforge.net/plugs.html#lushlife>
         a lv2:Plugin, lv2:ModulationPlugin ;
@@ -84,6 +115,7 @@
                 lv2:maximum 1.0 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 8 ;
@@ -93,6 +125,7 @@
                 lv2:minimum -24.0 ;
                 lv2:maximum 24.0 ;
                 units:unit units:semitone12TET ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 9 ;
@@ -102,6 +135,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 150.0 ;
                 units:unit units:ms;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 10 ;
@@ -111,6 +145,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coeff ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 11 ;
@@ -119,6 +154,7 @@
                 lv2:default 0.50 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
 
 
@@ -133,6 +169,7 @@
                 lv2:maximum 1.0 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 13 ;
@@ -142,6 +179,7 @@
                 lv2:minimum -24.0 ;
                 lv2:maximum 24.0 ;
                 units:unit units:semitone12TET ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 14 ;
@@ -151,6 +189,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 150.0 ;
                 units:unit units:ms;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 15 ;
@@ -160,6 +199,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coeff ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 16 ;
@@ -168,6 +208,7 @@
                 lv2:default -0.50 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
 
 
@@ -182,6 +223,7 @@
                 lv2:maximum 1.0 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 18 ;
@@ -191,6 +233,7 @@
                 lv2:minimum -24.0 ;
                 lv2:maximum 24.0 ;
                 units:unit units:semitone12TET ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 19 ;
@@ -200,6 +243,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 150.0 ;
                 units:unit units:ms;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 20 ;
@@ -209,6 +253,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coeff ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 21 ;
@@ -217,6 +262,7 @@
                 lv2:default 0.90 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
 
 
@@ -231,6 +277,7 @@
                 lv2:maximum 1.0 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 23 ;
@@ -240,6 +287,7 @@
                 lv2:minimum -24.0 ;
                 lv2:maximum 24.0 ;
                 units:unit units:semitone12TET ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 24 ;
@@ -249,6 +297,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 150.0 ;
                 units:unit units:ms;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 25 ;
@@ -258,6 +307,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coeff ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 26 ;
@@ -266,6 +316,7 @@
                 lv2:default -0.90 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
 
 
@@ -280,6 +331,7 @@
                 lv2:maximum 1.0 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 28 ;
@@ -289,6 +341,7 @@
                 lv2:minimum -24.0 ;
                 lv2:maximum 24.0 ;
                 units:unit units:semitone12TET ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 29 ;
@@ -298,6 +351,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 150.0 ;
                 units:unit units:ms;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 30 ;
@@ -307,6 +361,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coeff ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 31 ;
@@ -315,6 +370,7 @@
                 lv2:default 0.20 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
 
 
@@ -329,6 +385,7 @@
                 lv2:maximum 1.0 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 33 ;
@@ -338,6 +395,7 @@
                 lv2:minimum -24.0 ;
                 lv2:maximum 24.0 ;
                 units:unit units:semitone12TET ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 34 ;
@@ -347,6 +405,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 150.0 ;
                 units:unit units:ms;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 35 ;
@@ -356,6 +415,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coeff ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 36 ;
@@ -364,6 +424,7 @@
                 lv2:default -0.20 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
 
 
 
