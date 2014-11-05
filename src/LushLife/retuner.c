@@ -163,7 +163,7 @@ void RetunerSetPan(TUNERHANDLE tune, int i, float p)
 
 void RetunerSetActive(TUNERHANDLE tune, int i, int a)
 {
-    if(i< ((Retuner *)tune)->nWoosh)
+    if(i< ((Retuner *)tune)->nWoosh && ((Retuner *)tune)->Woosh[i].Active != a)
     {
         if( a )
         {
@@ -672,8 +672,10 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
 		}
         int i;
         for(i=0;i<tune->nWoosh;i++)
-        if(tune->Woosh[i].Active == -1)
-            tune->Woosh[i].Active = 0;//kill wooshes that were marked to go inactive
+        {
+            if(tune->Woosh[i].Active == -1)
+                tune->Woosh[i].Active = 0;//kill wooshes that were marked to go inactive
+        }
 
 		// Save local state
 		tune->Frindex = fi;
