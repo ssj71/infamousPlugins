@@ -44,6 +44,7 @@ typedef struct
     float          PanStep;
 } Whoosh;
 
+
 typedef struct
 {
     float *			Ipbuff;
@@ -78,7 +79,7 @@ typedef struct
     float           DryPanStep;
 
     int				Count;
-    float			Cycle[8];
+    float			Cycle[16];
     float			Error;
     unsigned short	Notebits;
     unsigned char	Upsamp, Format;
@@ -333,7 +334,7 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
                 tune->Woosh[i].Corroffs = 0.0f;
             }
 
-            for (i = 0; i < 8; i++) tune->Cycle[i] = tune->Frsize;
+            for (i = 0; i < 16; i++) tune->Cycle[i] = tune->Frsize;
 
 			// Initialise all counters and other state
             tune->Count = 0;
