@@ -230,6 +230,7 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
 //		tune->Corroffs = tune->Notebias = 0.0f;
         tune->Notemask = 0xFFF;
         tune->nWoosh = nwoosh;
+        tune->Upsamp = 0;
 
         tune->resampler = ResamplerAlloc();
 
@@ -323,6 +324,7 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
             
             for (i = 0; i < nwoosh; i++)
             {
+                tune->Woosh[i].Active = 0;
                 tune->Woosh[i].Latency = 0;
                 tune->Woosh[i].Ratio = 1.0f;
                 tune->Woosh[i].Xfade = 0;
@@ -470,7 +472,6 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
             tune->Woosh[l].PanStep /= (float)nfram;
         }
 
-
 		// No assumptions are made about fragments being aligned
 		// with process() calls, so we may be in the middle of
 		// a fragment here
@@ -500,8 +501,8 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                 //copy input
                 memcpy(tune->Ipbuff + tune->Ipindex,inp,k*sizeof(float));
                 tune->Ipindex += k;
-                inp += k;
             }
+            inp += k;
 
 			// Extra samples for interpolation
 			tune->Ipbuff[tune->Ipsize + 0] = tune->Ipbuff[0];
@@ -510,16 +511,18 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
 			if (tune->Ipindex >= tune->Ipsize) tune->Ipindex = 0;
 
 			// Process available samples
+            float * ol = outl;
+            float * or = outr;
             for(l=0;l<k;l++)
             {
-                *outl = .5*(1-tune->DryPan)*tune->DryGain*tune->Ipbuff[di];
-                *outr = .5*(1+tune->DryPan)*tune->DryGain*tune->Ipbuff[di];
+                *ol++ = .5*(1-tune->DryPan)*tune->DryGain*tune->Ipbuff[di];
+                *or++ = .5*(1+tune->DryPan)*tune->DryGain*tune->Ipbuff[di];
                 di += 1 + tune->Upsamp;
-                if (di >= tune->Ipsize) di -= tune->Ipsize;
                 tune->DryGain += tune->DryGainStep;
                 tune->DryPan += tune->DryPanStep;
             }
-
+            if (di >= tune->Ipsize) di -= tune->Ipsize;
+#if(1)
             for(l=0;l<tune->nWoosh;l++)
             {
                 r1 = tune->Woosh[l].Rindex1; // Read index for current input frame.
@@ -527,6 +530,8 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
 
                 if(tune->Woosh[l].Active)
                 {
+                    float * ol = outl;
+                    float * or = outr;
                     int k2 = k;
                     dr = tune->Woosh[l].Ratio;
                     if (tune->Upsamp) dr *= 2;
@@ -546,8 +551,8 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                             v = tune->Xffunc[f++];
 
                             v = (1 - v) * u1 + v * u2;
-                            *outl += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
-                            *outr += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            *ol++ += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            *or++ += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
 
                             r1 += dr;
                             if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
@@ -567,8 +572,8 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                             i = (int)r1;
 
                             v = cubic(tune->Ipbuff + i, r1 - i);
-                            *outl += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
-                            *outr += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            *ol++ += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            *or++ += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
                             r1 += dr;
                             if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
                             tune->Woosh[l].Gain += tune->Woosh[l].GainStep;
@@ -658,6 +663,9 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                 tune->Woosh[l].Rindex1 = r1;
                 tune->Woosh[l].Rindex2 = r2;
             }
+#endif
+            outl += k;
+            outr += k;
             fi += k;
             if(fi >= tune->Frsize)
                 fi = 0;
