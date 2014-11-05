@@ -238,7 +238,7 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
         {
             // At 44.1 and 48 kHz resample to double rate
             tune->Upsamp = 1;
-            tune->Ipsize = 8192;
+            tune->Ipsize = 16384;
             //tune->Ipsize = 2048;
             tune->Fftlen = 2048;
             //tune->Frsize = 128;
@@ -257,7 +257,7 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
         {
             // 88.2 or 96 kHz.
 //			tune->Upsamp = false;
-            tune->Ipsize =  8192;
+            tune->Ipsize =  16384;
             tune->Fftlen =  4096;
             //tune->Frsize = 256;
             tune->Frsize = 128;
@@ -266,7 +266,7 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
         {
             // 192 kHz, double time domain buffers sizes
 //			tune->Upsamp = false;
-            tune->Ipsize =  16384;
+            tune->Ipsize =  32768;
             tune->Fftlen = 8192;
             //tune->Frsize = 512;
             tune->Frsize = 256;
