@@ -338,7 +338,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                 }
                             }
                         }
-                        synth->pitchbend = myPow2(bend/49152);//49152 is 12*8192/2
+                        synth->pitchbend = myPow2(bend/49152.0);//49152 is 12*8192/2
                         frame_no = event->time.frames;
                     }//message types
                 }//correct channel
