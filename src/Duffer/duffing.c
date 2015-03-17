@@ -52,7 +52,8 @@ enum duffer_ports
 float forcing_function(void* data, double t)
 {
     DUFFER* plug = (DUFFER*)data;
-    uint32_t i = 2*t*plug->sample_freq;
+    //uint32_t i = 2*t*plug->sample_freq;
+    uint32_t i = 2*t;
     return plug->buf[i];
 }
 
@@ -81,10 +82,19 @@ void run_duffer(LV2_Handle handle, uint32_t nframes)
     ResamplerSetOutData(plug->resampler,plug->buf);
     ResamplerProcess(plug->resampler);
         
-    for(t=0; t < nframes*plug->sample_time; t += plug->sample_time)
+    //for(t=0; t < nframes*plug->sample_time; t += plug->sample_time)
+    for(i=0; i<nframes; i++)
     {
-        state = rk4vecRT(t, 2, state, plug->sample_time, duffing_equation, (void*)plug, plug->intermediate);
-        plug->output_p[i++] = state[1];
+        //state = rk4vecRT(t, 2, state, plug->sample_time, duffing_equation, (void*)plug, plug->intermediate);
+        //plug->output_p[i++] = state[1];
+        state = rk4vecRT(t, 2, state, 1, duffing_equation, (void*)plug, plug->intermediate);
+        plug->output_p[i] = state[1];
+    }
+    //outout is exploding! reset state
+    if(plug->output_p[0]*plug->output_p[0] > 10 && state[1]*state[1] > 10 || state[1] == NAN )
+    {
+        state[0] = 0;
+        state[1] = 0;
     }
 
 return;
@@ -108,7 +118,7 @@ LV2_Handle init_duffer(const LV2_Descriptor *descriptor,double sample_freq, cons
 
     //get input buffersize to allocate space for upsampling
     uint8_t i,j;
-    int max=0;
+    int max=1024;//default
     struct urids
     {
         LV2_URID    atom_Float;
@@ -146,9 +156,8 @@ LV2_Handle init_duffer(const LV2_Descriptor *descriptor,double sample_freq, cons
             }
         }
     }
-    if(!max) return NULL;
 
-    plug->buf = (float*)malloc(sizeof(float)*max);
+    plug->buf = (float*)malloc(sizeof(float)*2*max);
 
     plug->state = &plug->intermediate[14];
     plug->state[0] = 0;
@@ -176,7 +185,6 @@ void connect_duffer_ports(LV2_Handle handle, uint32_t port, void *data)
 void cleanup_duffer(LV2_Handle handle)
 {
     DUFFER* plug = (DUFFER*)handle;
-    ResamplerFree(plug->resampler);
     free(plug->buf);
     free(plug);
 }

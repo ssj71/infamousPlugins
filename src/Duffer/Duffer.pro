@@ -5,6 +5,8 @@ TEMPLATE = lib
 CONFIG += shared plugin
 CONFIG -= qt
 
+LIBS += -lzita-resampler
+
 QMAKE_CFLAGS += -g \
     -msse2 \
     -mfpmath=sse \
