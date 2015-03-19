@@ -148,4 +148,9 @@ I wanted a whammy style pitchshifter and found folks weren't quite satisfied wit
     FINISH - Pitch shift amount (in semitones) when the expression is at 1
     MODE - determines if dry signal is mixed in (harmonizer) or not (classic shifter). Chorus mode makes the detune more fine grained (cents instead of semitones) so you can use the expression to dial in more or less chorus effect
     LOCK MODE - this can allow the pitch shift to go smoothly to any value, change to the nearest semitone when expression stops changing, or to jump directly from semitone to semitone
-    
+
+=================================
+TODO: add lush life
+
+duffer tips
+This is a duffing oscillator driven by the input. The duffing oscillator is interesting because it exhibits chaos. The system is simulated by a standard RK4 algorithm, but with each input sample treated as a full second to get more movement from the model. If none of that makes sense just know its not the most musical thing, but you can have a bit of fun making weird noises with it. It can be thought of a bit like a speaker but instead of moving  a paper cone, the coil drives a spring that has 2 magnets pulling it in opposite directions all the time (creating non-linear and chaotic behavior). This plugin has a check if the output begins to grow too large it will reset the state to zero and resume, to allow unstable settings. There is an output to indicate if this condition is being triggered. Its not a big deal when this is triggered, but know that you're more hearing that artificial nonlinearity than the dynamics of the actual system, and that's not as scientifically intriguing. One tip: when using negative spring nonlinearities keep the spring stiffness very large if you want to avoid triggering the instability reset.
