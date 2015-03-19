@@ -32,9 +32,8 @@ typedef struct _DUFFER
     float *delta_p;//damping 
     float *alpha_p;//spring nonlinearity
     float *beta_p;//spring stiffness
-    float *gamma_p;//input gain
-
-    float *dbg_p;
+    float *gamma_p;//input gain 
+    float *unstable_p;
 }DUFFER;
 
 enum duffer_ports
@@ -45,7 +44,7 @@ enum duffer_ports
     ALPHA,
     BETA,
     GAMMA,
-    DBG
+    UNSTABLE
 };
 
 //forcing function is just the input buffer
@@ -90,11 +89,13 @@ void run_duffer(LV2_Handle handle, uint32_t nframes)
         state = rk4vecRT(t, 2, state, 1, duffing_equation, (void*)plug, plug->intermediate);
         plug->output_p[i] = state[1];
     }
+    *plug->unstable_p = 0;
     //outout is exploding! reset state
-    if(plug->output_p[0]*plug->output_p[0] > 10 && state[1]*state[1] > 10 || state[1] == NAN )
+    if((plug->output_p[0]*plug->output_p[0] > 10 && state[1]*state[1] > 10) || isnan(state[1]) )
     {
         state[0] = 0;
         state[1] = 0;
+        *plug->unstable_p = 1;
     }
 
 return;
@@ -177,7 +178,7 @@ void connect_duffer_ports(LV2_Handle handle, uint32_t port, void *data)
     case ALPHA:      plug->alpha_p = (float*)data;break;
     case BETA:       plug->beta_p = (float*)data;break;
     case GAMMA:      plug->gamma_p = (float*)data;break; 
-    case DBG:        plug->dbg_p = (float*)data;break; 
+    case UNSTABLE:   plug->unstable_p = (float*)data;break; 
     default:         puts("UNKNOWN PORT YO!!");
     }
 }
