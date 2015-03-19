@@ -8,7 +8,7 @@ if [[ -n $1 ]]; then
 fi
 which qmake && qmake_bin="qmake" || qmake_bin="qmake-qt4"
 
-plugins="CellularAutomatonSynth EnvelopeFollower Hip2B Stuck PowerCut PowerUp EWham"
+plugins="CellularAutomatonSynth EnvelopeFollower Hip2B Stuck PowerCut PowerUp EWham Duffer"
 
 for plugin in $plugins
 do
