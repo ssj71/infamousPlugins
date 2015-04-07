@@ -8,37 +8,41 @@
 
 //TODO: maybe this whole library should use doubles at least for filter calculators
 
-void cart2polar(float re, float im, float* mag, float* ang)
+void cart2polar(double re, double im, double* mag, double* ang)
 {
 	*mag = sqrt(re*re + im*im);
 	*ang = atan2(im,re);
 }
 
-void polar2cart(float mag, float ang, float* re, float* im)
+void polar2cart(double mag, double ang, double* re, double* im)
 {
 	*re = mag*cos(ang);
 	*im = mag*sin(ang);
 }
 
 //uses pre-warped bilinear transform to map poles/zeros to the z plane
+// note that this reqires you to add a zero at (z+1) if no other zeros
 //res - real part of s-domain pole or zero
 //ims - imaginary part of s-domain pole or zero
 //Ts - sample time
-//rezn - returned real part of z-domain zero (numerator)
-//imzn - returned imaginary part of z-domain zero
-//rezd - returned real part of z-domain pole (denominator)
-//imzd - returned imaginary part of z-domain pole
-//TODO: double check against audio EQ cookbook
-void tustins2z(float res, float ims, float Ts, float* rezn, float* imzn, float* rezd, float* imzd)
+//rez - returned real part of z-domain zero (numerator)
+//imz - returned imaginary part of z-domain zero
+void tustins2z(double res, double ims, double Ts, double* rez, double* imz)
 {
-
+    double mag, ang, magd, angd;
+    cart2polar(res,ims,&mag,&ang);
+    double warp = mag/tan(mag*Ts/2.0); //w0/(tan(w0T/2))
+    //(a + warp)/(a-warp);
+    cart2polar(res+warp,ims,&mag,&ang);
+    cart2polar(res-warp,ims,&magd,&angd);
+    polar2cart(mag/magd,ang-angd,rez,imz);
 }
 
 //uses matched z transform to map poles/zeros to the z plane
-void s2z(float res, float ims, float Ts, float* rez, float* imz)
+void s2z(double res, double ims, double Ts, double* rez, double* imz)
 {
-	*rez = expf(res*Ts)*cos(ims*Ts);
-	*imz = expf(res*Ts)*sin(ims*Ts);
+	*rez = exp(res*Ts)*cos(ims*Ts);
+	*imz = exp(res*Ts)*sin(ims*Ts);
 }
 
 //good ol' fasioned convolution by the definition
@@ -96,11 +100,16 @@ void convolve_in_place(float* f, uint8_t nf, float* g, uint8_t ng)
 	_cip(f,nf,g,ng,0);
 }
 
-//return magnitude of filter at freq_hz
+//return magnitude of digital FIR filter at freq_hz
+//f - filter coefficients
+//nf - number of filter taps
+//Ts - sample time
+//freq_hz - frequency (hz) to calculate magnitude at
 float magnitude(float* f, uint8_t nf, float Ts, float freq_hz)
 {
 	uint8_t i;
-	float re, im, retmp, imtmp, ang;
+	float re, im, ang;
+    double red, imd;
 	//z^-1 = e^(-jwT);
 	//mag =  ||f[0] + f[1]e^(-jwT) + f[1]e^(-jw2T) +... f[n-1]e^(-jw(n-1)T)||
 	re = f[0];
@@ -108,31 +117,37 @@ float magnitude(float* f, uint8_t nf, float Ts, float freq_hz)
 	ang = 2*PI*freq_hz*Ts;
 	for(i=1;i<nf;i++)
 	{
-		polar2cart(f[i], ang*i, &retmp, &imtmp);
-		re += retmp;
-		im += imtmp;
+		polar2cart(f[i], ang*i, &red, &imd);
+		re += red;
+		im += imd;
 	}
-	cart2polar(re,im,&retmp,&imtmp);
-	return retmp;
+	cart2polar(re,im,&red,&imd);
+	return (float)red;
 }
 
-//shift zero for new sampling frequency
+//shift zero (z-domain) for new sampling frequency
+//this doesn't account for prewarp (yet)
 //re/im zero - zero/pole to shift
 //oldTs - sample time filter was designed to
 //newTs - new sample time
 //re/im - returned shifted zero
+//I don't know if this really works or not
 void resample_zero(float rezero, float imzero, float oldTs, float newTs, float* re, float* im)
 {
-	float ang, mag;
-	cart2polar(rezero,imzero,*ang,*mag);
-	*ang *= newTs/oldTs;
-	polar2cart(mag,ang,re,im);
+	double ang, mag, red,imd;
+	cart2polar(rezero,imzero,&mag,&ang);
+	ang *= newTs/oldTs;
+	polar2cart(mag,ang,&red,&imd);
+    *re = red;
+    *im = imd;
 }
 
-//discrete (z-plane) zero pole unity-frequency to filter coefficients conversion
+//discrete time (z-plane) zero pole unity-frequency to filter coefficients conversion
+//this does not account for prewarp
 void dzpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float zpTs, float filterTs,  float* filternum, float* filterden)
 {
 	//this function is the one I'll use, we'll "resample" the zeros/poles in the digital domain
+    // I don't think I want to do this (because of prewarp) just design analog and transform
 	uint16_t i,nn,nd;
 	float a,b,c;
 	float poly[3];
@@ -192,8 +207,8 @@ void dzpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles
 		}
 	}
 
-	b = magnitude(filternum,nn,Ts,unityfreq);
-	a = magnitude(filterden,nd,Ts,unityfreq);
+	b = magnitude(filternum,nn,filterTs,unityfreq);
+	a = magnitude(filterden,nd,filterTs,unityfreq);
 	c = a/b;//inverse of magnitude
 	//printf("%f %i %i\n",c,nn,nd);
 //printf("%f %fz^-1 %fz^-2 %fz^-3 \n-----------------------------------------------\n%f %fz^-1 %fz^-2 %fz^-3\n\n",filternum[0], filternum[1],filternum[2],filternum[3],filterden[0],filterden[1],filterden[2],filterden[3]);
@@ -205,89 +220,108 @@ void dzpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles
 	}
 }
 
-//analog(continuous or s-plane) zero pole unity-frequency to filter coefficient conversion
+//continuous time or (s-plane) zero pole unity-frequency to filter coefficient conversion
 //re/im zeros - arrays of zeros parts
 //nzeros - length of zero arrays
 //re/im poles - arrays of poles parts
 //npoles - length of pole arrays
 //unityfreq = frequency (hz) where filter should have gain == 1
 //Ts - sample time
-//filternum - returned numerator of resulting filter
-//filterden - returned denominator of resulting filter
-
-void czpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* filternum, float* filterden)
+//buf - memory buffer for working, must be as large as returned num and den
+//filternum - returned numerator coefficients of resulting filter
+//filterden - returned denominator coefficients of resulting filter 
+void czpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* buf, float* filternum, float* filterden)
 {
 	//gameplan is to convert zeros and poles to z plane, create residuals, convolve the polynomial coefficients, then set the gain to unity at the specified frequency
-	uint8_t i,nn,nd;
+	uint8_t i,j,nn,nd;
 	float a,b,c;
 	float poly[3];
-	float re, im;
+	double re, im;
 
 	nn=1;
 	filternum[0] = 1;//start with a 1 so that polynomial starts building
-	//might need to worry about prewarp someday w' = 2/T *tan(wT/2)
-    //TODO: just use the bilinear transform. Why wouldn't you?
 	for(i=0;i<nzeros;i++)
 	{
-		s2z(rezeros[i],imzeros[i],Ts,&re,&im);
+        tustins2z(rezeros[i],imzeros[i],Ts,&re,&im); //use bilinear transform
 		if(imzeros[i])
 		{//complex, adds pair
 			poly[0] = 1;
 			poly[1] = -2*re;
 			poly[2] = re*re + im*im;
 			
-			convolve_in_place(poly,3,filternum,nn);
+            convolve(poly,3,filternum,nn,buf);
+            for(j=0;j<nn;j++)
+                filternum[j] = buf[j];
 			nn+=2;
-			//printf("zero is %f %fi, poly is %f %f %f \n",rezeros[i],imzeros[i],poly[0],poly[1],poly[2]);
+			printf("zero is %f %fi, poly is %f %f %f \n",rezeros[i],imzeros[i],poly[0],poly[1],poly[2]);
 		}
 		else
 		{//real, single zero
 			poly[0] = 1;
 			poly[1] = -re;
 			
-			convolve_in_place(poly,2,filternum,nn);
+            convolve(poly,2,filternum,nn,buf);
+            for(j=0;j<nn;j++)
+                filternum[j] = buf[j];
 			nn+=1;
-			//printf("zero is %f %fi, poly is %f %f \n",rezeros[i],imzeros[i],poly[0],poly[1]);
+			printf("zero is %f %fi, poly is %f %f \n",rezeros[i],imzeros[i],poly[0],poly[1]);
 		}
 	}
+    if(!nzeros)
+    {
+        //bilinear transform always has at least a zero at (z + 1)
+        filternum[0] = 1;
+        filternum[1] = 1;
+        nn = 2;
+    }
 
 	nd=1;
 	filterden[0] = 1;//start with a 1 so that polynomial starts building
 	//might need to worry about prewarp someday w' = 2/T *tan(wT/2)
 	for(i=0;i<npoles;i++)
 	{
-		s2z(repoles[i],impoles[i],Ts,&re,&im);
+		tustins2z(repoles[i],impoles[i],Ts,&re,&im);
 		if(impoles[i])
 		{//complex, adds pair
 			poly[0] = 1;
 			poly[1] = -2*re;
 			poly[2] = re*re + im*im;
 			
-			convolve_in_place(poly,3,filterden,nd);
+            convolve(poly,3,filterden,nd,buf);
+            for(j=0;j<nd;j++)
+                filterden[j] = buf[j];
 			nd+=2;
-			//printf("pole is %f %fi, poly is %f %f %f \n",repoles[i],impoles[i],poly[0],poly[1],poly[2]);
+			printf("pole is %f %fi, poly is %f %f %f \n",repoles[i],impoles[i],poly[0],poly[1],poly[2]);
 		}
 		else
 		{//real, single zero
 			poly[0] = 1;
 			poly[1] = -re;
 			
-			convolve_in_place(poly,2,filterden,nd);
+            convolve(poly,2,filterden,nd,buf);
+            for(j=0;j<nd;j++)
+                filterden[j] = buf[j];
 			nd+=1;
-			//printf("pole is %f %fi, poly is %f %f\n",repoles[i],impoles[i],poly[0],poly[1]);
+			printf("pole is %f %fi, poly is %f %f \n",repoles[i],impoles[i],poly[0],poly[1]);
 		}
 	}
+    if(!npoles)
+    {
+        //bilinear transform always has at least a zero at (z + 1)
+        filterden[0] = 1;
+        filterden[1] = 1;
+        nd = 2;
+    }
 
+    // TODO; remove zeros and poles that cancel? will need to return ncoeff
+
+    //adjust magnitude to get correct gain
 	b = magnitude(filternum,nn,Ts,unityfreq);
 	a = magnitude(filterden,nd,Ts,unityfreq);
-	c = a/b;//inverse of magnitude
-	//printf("%f %i %i\n",c,nn,nd);
-//printf("%f %fz^-1 %fz^-2 %fz^-3 \n-----------------------------------------------\n%f %fz^-1 %fz^-2 %fz^-3\n\n",filternum[0], filternum[1],filternum[2],filternum[3],filterden[0],filterden[1],filterden[2],filterden[3]);
-
+	c = a/b;//inverse of magnitude 
 	for(i=0;i<nn;i++)
 	{
 		filternum[i]*=c;
-//printf("%f %fz^-1 %fz^-2 %fz^-3 \n-----------------------------------------------\n%f %fz^-1 %fz^-2 %fz^-3\n\n",filternum[0], filternum[1],filternum[2],filternum[3],filterden[0],filterden[1],filterden[2],filterden[3]);
 	}
 }
 
@@ -296,8 +330,24 @@ void czpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles
 //butter
 
 
+void printtf(float *num, uint8_t nnum, float* den, uint8_t nden)
+{
+    uint8_t i;
+    for(i=0;i<nnum-1;i++)
+        printf(" %f z^%i  +",num[i],nnum-i-1);
+    printf(" %f\n",num[i]);
+    for(i=0;i<nnum;i++)
+        printf("-----------");
+    printf("-----------\n");
+    for(i=0;i<nden-1;i++)
+        printf(" %f z^%i  +",den[i],nden-i-1);
+    printf(" %f\n",den[i]);
+
+}
+
 
 //for testing
+#define TEST
 #ifdef TEST
 void main()
 {
@@ -309,15 +359,23 @@ void main()
 	printf("%f %f\n",c,d);
 */
 
+  	float rezeros[] = {-2};
+	float imzeros[] = {0};
+
+	float repoles[] = {-1,3};
+	float impoles[] = {0,4};
+    /*
   	float rezeros[] = {-3.3011e+04,1.1251e+03};
 	float imzeros[] ={6.9032e+04,4.7615e+04};
 
 	float repoles[] = {-1.1661e+03,-5.8331e+03};
 	float impoles[] = {3.8233e+04,2.0143e+04};
+ */
  
 	float b[5], a[5];//5 coeff == 4 roots!
-	czpuf2filter(rezeros,imzeros,2,repoles,impoles,2,20000,1.0/44100,b,a);
-	printf("  %f %fz^-1 %fz^-2 %fz^-3 %fz^-4 \n------------------------------------------------------------------\n  %f %fz^-1 %fz^-2 %fz^-3 %fz^-4\n",b[0], b[1],b[2],b[3],b[4],a[0],a[1],a[2],a[3],a[4]);
+    float buf[5];
+	czpuf2filter(rezeros,imzeros,1,repoles,impoles,2,20000,1.0/44100,buf,b,a);
+    printtf(b,2,a,4);
 
 }
 #endif
