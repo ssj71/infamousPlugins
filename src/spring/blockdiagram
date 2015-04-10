@@ -1,0 +1,75 @@
+
+
+
+                            (1-Wet/Dry)
+ input ---- + ---------------|>-----------------------------+----> output
+            |                                               ^
+            |                                               /\  Wet/Dry
+            V Dwell                                         --
+            |        _____  High Freq.___                   |
+            +---+---| APF |-------->| EQ |-+--------------->+
+            |   ^    -----           ----  |                ^
+            |   |    ______                |                |
+            |   +---| z^-D |<--------------+             ___|____
+            |        ------                             | AI LFP |
+         ___|____                                        --------
+        | AA LPF |                                           |
+         --------                                            /\
+           _|__          Spring 1                            -- 1/nsprings
+          | D4 |              _____                  ____    |
+           ----          +-->| APF |---------+-->+--| EQ |-->+
+            |            |    -----          |   ^   ----    ^
+            |     ____   |                   |   |           |
+            +>+--| XO |->+        ______     |   |           |
+            | ^  |    |--------->| z^-D |----)---+           |
+            | |   ----            ------     |   |           ...from other springs
+            | |                              |   |
+            | |  _____    Decay  _____       |   | return through spring
+            | +-| z^-T|<--<|-+<-| APF |<-----+   |
+            |    -----       ^   -----           |
+            |                |   ______          |
+            |                +--| z^-D |<--------+
+            |                    ------
+                ... to other springs
+                
+
+APF - all pass, high side M=200 still need to figure out stretch and K
+        low side M=40 a=-.7 k=3
+        
+AA LPF - 10 pole cheby 1 5k cutoff
+D4 - downsample 4x
+XO - 8th order Linkwitz-Riley cross over tuned for each spring at the point of minimum group delay
+Z^-T - actually a multi-tap delay, T will also be different for each spring but will be approximately the time of the sound to travel through the spring back and forth.
+Z^-D - chirp straightening (Fractional) delay
+AI LPF - probably another cheby 1
+how many HF parts?
+
+what is tune-able? (why use parametric when you can't adjust parameters?)
+maybe just do 3 springs but with adjustable params
+
+
+spring reverb:
+http://recherche.ircam.fr/pub/dafx11/Papers/39_e.pdf
+http://asp.eurasipjournals.com/content/pdf/1687-6180-2011-646134.pdf 
+
+guitamp1 [700 3700] -50db  [6100] -60db fc = 4100
+guitamp2 [3400] -20db [6000] -40db fc = 4400
+reverbbox [100 4900] -50db fc = 6145
+tape delay [684 1200] -70db fc = 5100
+great [400 4500] -40db [6650 11700] -30db fc = 5800
+old synth [200 4100] -25db [5300] [6300] -10 or 60 smooth Fc =4400  2600
+amp spiral [230] -50db fc = 4500
+
+
+PARAMS
+smear [0 10]
+spring length [50 150]% delay in fb
+decay length [50 150]% gain in fb
+dwell [0 2] gain to effect
+wet/dry [0 1]
+tone [0 1]
+kick [0 1]
+preecho amplitude
+preecho time
+springs 1-5 toggle
+

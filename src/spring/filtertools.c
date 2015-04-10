@@ -32,7 +32,7 @@ void tustins2z(double res, double ims, double Ts, double* rez, double* imz)
     double mag, ang, magd, angd;
     cart2polar(res,ims,&mag,&ang);
     double warp = mag/tan(mag*Ts/2.0); //w0/(tan(w0T/2))
-    //(a + warp)/(a-warp);
+    //(a - warp)/(a + warp);
     cart2polar(res+warp,ims,&mag,&ang);
     cart2polar(res-warp,ims,&magd,&angd);
     polar2cart(mag/magd,ang-angd,rez,imz);
@@ -221,13 +221,13 @@ void dzpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles
 }
 
 //continuous time or (s-plane) zero pole unity-frequency to filter coefficient conversion
-//re/im zeros - arrays of zeros parts
+//re/im zeros - arrays of zeros parts (note to only include 1 of each complex pair)
 //nzeros - length of zero arrays
-//re/im poles - arrays of poles parts
+//re/im poles - arrays of poles parts (note to only include 1 of each complex pair)
 //npoles - length of pole arrays
 //unityfreq = frequency (hz) where filter should have gain == 1
 //Ts - sample time
-//buf - memory buffer for working, must be as large as returned num and den
+//buf - memory buffer for working, must be larger than returned num and den
 //filternum - returned numerator coefficients of resulting filter
 //filterden - returned denominator coefficients of resulting filter 
 void czpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* buf, float* filternum, float* filterden)
@@ -325,9 +325,142 @@ void czpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles
 	}
 }
 
+//apply a digital filter to a buffer
+//num - numerator coefficients
+//numsize - number of coefficients in numerator
+//den - denominator coefficients
+//densize - number of coefficients in denominator
+//in - array index for input in buf note this assumes buffer is a 2^16 array
+//out - array index for output in buf
+//buf - array containing input and output samples
+void filternate(float* num, uint8_t numsize, float*den, uint8_t densize, uint16_t in, uint16_t out, float* buf)
+{
+    uint16_t i;
+    buf[out] = 0;
+    for(i=0;i<numsize;i++)
+    {
+        buf[out] += (float)num[i]*buf[in-i];
+    }
+    for(i=1;i<densize;i++)
+    {
+        buf[out] += (float)den[i]*buf[out-i];
+    }
+}
+
+//apply a multi-tap digital delay
+//taps - gains for the taps
+//dels - delay lengths (samples) for taps
+//ntaps - number of taps
+//in - array index for input in buf note this assumes buffer is a 2^16 array
+//out - array index for output in buf
+//buf - array containing input and output samples
+void delaynate(float* taps, uint16_t* dels, uint8_t ntaps, uint16_t in uint16_t out, float* buf)
+{
+    uint16_t i;
+    buf[out] = 0;
+    for(i=0;i<ntaps;i++)
+    {
+        buf[out] += (float)taps[i]*buf[in-dels[i]];
+    } 
+}
+
 //cheby
 
 //butter
+
+//find out array sizes necessary for using butter()
+//order - number of poles
+//type - filter type (use enum)
+//bufsize - returns minimum array size required for work 
+//num - returns minimum array size for numerator of specified filter
+//den - returns minimum array size for denominator of specified filter
+void butterSize(uint8_t order, FILTERTYPE type, uint8_t *bufsize, uint8_t *numsize, uint8_t *densize)
+{
+    
+    switch(type)
+    {
+        case LPF:
+            *bufsize = order;
+            *numsize = 2;
+            *densize = order+1;
+            return;
+        case HPF:
+            *bufsize = 2*order;
+            *numsize = order;
+            *densize = order+1;
+            return;
+        default:
+            *bufsize = order;
+            *numsize = 2;
+            *densize = order+1;
+            return;
+            
+    }
+}
+
+//design an analog butterworth filter
+//order - number of poles
+//cutoff - cutoff frequency (hz)
+//type - filter type (use enum)
+//buf - memory space for work (must be > order*2)
+//num - numerator of resulting difference function (must be > 2)
+//den - denominator of resulting difference function (must be > order+1)
+void butter(uint8_t order, float cutoff, FILTERTYPE type, float Ts, float* buf, float* num, float* den)
+{
+    float *polesRe = buf;
+    float *polesIm = &buf[order/2+1];
+    float *zerosRe = &buf[order+2];
+    float *zerosIm = &buf[3*order/2 + 2];
+    float tmp1, tmp2;
+    uint8_t i;
+    switch(type)
+    {
+        case LPF:
+        {
+            for(i=1;i<=order/2;i++)
+            {
+                polesRe[i-1] = cutoff*2.0*PI*cos(PI*(2.0*k+order-1.0)/(2.0*order));
+                polesIm[i-1] = cutoff*2.0*PI*sin(PI*(2.0*k+order-1.0)/(2.0*order));
+            }
+            if(order%2)
+            {
+                //add odd pole
+                polesRe[i-1] = -cutoff*2.0*PI;
+                polesIm[i-1] = 0;
+            }
+            czpuf2filter(0,0,0,polesRe,polesIm,i,cutoff/2,Ts,buf,num,den);
+            break;
+        }
+        case HPF:
+        {
+            for(i=1;i<=order/2;i++)
+            {
+                //I'm not sure this makes sense, just add zeros for lpf->hpf
+                //tmp1 = cos(PI*(2.0*k+order-1.0)/(2.0*order));
+                //tmp2 = sin(PI*(2.0*k+order-1.0)/(2.0*order));
+                //polesRe[i-1] = -cutoff*2.0*PI*tmp1/(tmp1*tmp1-tmp2*tmp2);
+                //polesIm[i-1] = cutoff*2.0*PI*tmp2/(tmp1*tmp1-tmp2*tmp2);
+                polesRe[i-1] = cutoff*2.0*PI*cos(PI*(2.0*k+order-1.0)/(2.0*order));
+                polesIm[i-1] = cutoff*2.0*PI*sin(PI*(2.0*k+order-1.0)/(2.0*order));
+                //add 2 zeros (1 pole adds complex pair)
+                zerosRe[2*i-2] = zerosRe[2*i-1] = 0;
+                zerosIm[2*i-2] = zerosIm[2*i-1] = 0;
+            }
+            if(order%2)
+            {
+                //add odd zero & pole
+                polesRe[i-1] = -cutoff*2.0*PI;
+                polesIm[i-1] = 0;
+                zerosRe[2*i-2] = 0;
+                zerosIm[2*i-2] = 0;
+            }
+            czpuf2filter(zerosRe,zerosIm,i,polesRe,polesIm,i,cutoff/2,Ts,buf,num,den);
+            break;
+        }
+        default:
+            return;
+    }
+}
 
 
 void printtf(float *num, uint8_t nnum, float* den, uint8_t nden)
