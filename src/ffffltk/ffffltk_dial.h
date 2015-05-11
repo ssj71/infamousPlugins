@@ -26,6 +26,7 @@
 #include <FL/Fl_Dial.H>
 #include <FL/Fl_Slider.H>
 #include <FL/fl_ask.H>
+#include "ffffltk_input.h"
 
 //avtk drawing method (adapted)
 static void default_bg_drawing(cairo_t *cr, float val)
@@ -91,15 +92,28 @@ class Dial : public Fl_Slider
     int drawLabel;
     
     int mouseClickedY;
+    int mouseClickedX;
     bool mouseClicked;
     
+    nonmodal_input enterval;
 
     int drawing_w;
     int drawing_h;
     void (*drawing_f)(cairo_t*,float);//function pointer to draw function
     float floatvalue;
     char units[4];
-    int lock2int;//flag to draw onlyinteger values
+    int lock2int;//flag to draw only integer values
+
+    void set_ffffltk_value(float val)
+    {
+      if ( val > maximum() ) val = maximum();
+      if ( val < minimum() ) val = minimum();
+	  set_value(val);
+	  floatvalue = val;
+	    
+      redraw();
+	  do_callback();
+    }
 
     void draw()
     {
@@ -163,18 +177,19 @@ class Dial : public Fl_Slider
 	  if(Fl::event_button() == FL_MIDDLE_MOUSE)
 	  {
 	   // Fl_Window tmp* = new Fl_Window(Fl::event_x(),Fl::event_y(),100,200,"Enter Value");
-	    char n[20];
-	    sprintf(n,"%f",value());
-	    const char *r = fl_input("Enter Value:",n);
-	    if(r!=NULL && sscanf(r,"%f",&val))
-	    {
-              if ( val > maximum() ) val = maximum();
-              if ( val < minimum() ) val = minimum();
-	      set_value(val);
-	      floatvalue = val;
-	    }
-            redraw();
-	    do_callback();
+	    //char n[20];
+	    //sprintf(n,"%f",value()); 
+	    //const char *r = fl_input("Enter Value:",n);
+	    //if(r!=NULL && sscanf(r,"%f",&val))
+	    //{
+        //      if ( val > maximum() ) val = maximum();
+        //      if ( val < minimum() ) val = minimum();
+	    //  set_value(val);
+	    //  floatvalue = val;
+	    //}
+        //    redraw();
+	    //do_callback();
+        enterval->show(value(),units,set_ffffltk_value);
 	  }
           return 1;
         case FL_DRAG:
@@ -183,18 +198,22 @@ class Dial : public Fl_Slider
             {
                   if ( mouseClicked == false ) // catch the "click" event
                   {
+                    mouseClickedX = Fl::event_x();
                     mouseClickedY = Fl::event_y();
                     mouseClicked = true;
                   }
                   
+                  float deltaX = mouseClickedX - Fl::event_x();
                   float deltaY = mouseClickedY - Fl::event_y();
                   
                   if(step())
                   {
+                      val += deltaX *step()/100;
                       val += deltaY *step();/// 100.f*(maximum()-minimum());
                   }
                   else
                   {
+                      val += deltaX/10000.f;
                       val += deltaY/100.f;
                   }
 
