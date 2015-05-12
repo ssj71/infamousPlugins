@@ -101,18 +101,19 @@ class Dial : public Fl_Slider
     int drawing_h;
     void (*drawing_f)(cairo_t*,float);//function pointer to draw function
     float floatvalue;
-    char units[4];
+    char units[6];
     int lock2int;//flag to draw only integer values
 
-    void set_ffffltk_value(float val)
+    static void set_ffffltk_value(void* obj, float val)
     {
-      if ( val > maximum() ) val = maximum();
-      if ( val < minimum() ) val = minimum();
-	  set_value(val);
-	  floatvalue = val;
+      Dial* me = (Dial*)obj;
+      if ( val > me->maximum() ) val = me->maximum();
+      if ( val < me->minimum() ) val = me->minimum();
+	  me->set_value(val);
+	  me->floatvalue = val;
 	    
-      redraw();
-	  do_callback();
+      me->redraw();
+	  me->do_callback();
     }
 
     void draw()
@@ -174,7 +175,7 @@ class Dial : public Fl_Slider
       switch(event) {
         case FL_PUSH:
           //highlight = 1;
-	  if(Fl::event_button() == FL_MIDDLE_MOUSE)
+	  if(Fl::event_button() == FL_MIDDLE_MOUSE || Fl::event_button() == FL_RIGHT_MOUSE)
 	  {
 	   // Fl_Window tmp* = new Fl_Window(Fl::event_x(),Fl::event_y(),100,200,"Enter Value");
 	    //char n[20];
@@ -189,7 +190,7 @@ class Dial : public Fl_Slider
 	    //}
         //    redraw();
 	    //do_callback();
-        enterval->show(value(),units,set_ffffltk_value);
+        enterval.show(value(),(char*)this->tooltip(),units,(void*)this,set_ffffltk_value);
 	  }
           return 1;
         case FL_DRAG:
@@ -203,7 +204,7 @@ class Dial : public Fl_Slider
                     mouseClicked = true;
                   }
                   
-                  float deltaX = mouseClickedX - Fl::event_x();
+                  float deltaX = Fl::event_x() - mouseClickedX;
                   float deltaY = mouseClickedY - Fl::event_y();
                   
                   if(step())

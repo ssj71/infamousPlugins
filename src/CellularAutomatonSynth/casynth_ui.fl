@@ -8,7 +8,7 @@ class CaSynthUI {open
   } {
     Fl_Window ui {
       label {the infamous cellular automaton synth} open
-      xywh {222 161 460 600} type Double box UP_BOX resizable
+      xywh {325 483 460 600} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -1195,7 +1195,7 @@ value->copy_label(s);}
 char s[20];
 sprintf(s,"%19.3f",fmgain->floatvalue);
 param->copy_label("FREQ. MOD. GAIN");
-value->copy_label(s);} selected
+value->copy_label(s);}
         tooltip gain xywh {403 446 30 30} minimum -4 maximum 4 step 0.05
         code1 {\#include"draw_flatDial.h"}
         code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
@@ -1207,27 +1207,7 @@ value->copy_label(s);} selected
 float val=0;
 int i=0;
 sprintf(n,"%i",(int)rule);
-const char *r = fl_input("Enter Value:",n);
-if(r!=NULL && sscanf(r,"0x%2x",&i))
-{
-  val = i;
-  set_rule(val);
-  char s[20];
-  sprintf(s,"%18i",(int)rule);
-  value->copy_label(s);
-  param->copy_label("RULE");
-}
-else if(r!=NULL && sscanf(r,"%f",&val))
-{
-  if ( val > 255 ) val = 255;
-  if ( val < 0 ) val = 0;
-  set_rule(val);
-  char s[20];
-  sprintf(s,"%18i",(int)rule);
-  value->copy_label(s);
-  param->copy_label("RULE");
-}
-write_function(controller,RULE,sizeof(float),0,&rule);}
+nonmodal((char*)"Set rule",n)}
         tooltip {enter rule value} xywh {0 243 26 20}
         code1 {o->drawing_f = &draw_nothing_render;}
         class Button
@@ -1237,39 +1217,19 @@ write_function(controller,RULE,sizeof(float),0,&rule);}
 float val=0;
 int i=0;
 sprintf(n,"%i",(int)initial_condition);
-const char *r = fl_input("Enter Value:",n);
-if(r!=NULL && sscanf(r,"0x%4x",&i))
-{
-  val = i;
-  set_initial_condition(val);
-  char s[20];
-  sprintf(s,"%18i",(int)initial_condition);
-  value->copy_label(s);
-  param->copy_label("INIT. CONDITION");
-}
-else if(r!=NULL && sscanf(r,"%f",&val))
-{
-  if ( val > 65535 ) val = 65535;
-  if ( val < 0 ) val = 0;
-  set_initial_condition(val);
-  char s[20];
-  sprintf(s,"%18i",(int)initial_condition);
-  value->copy_label(s);
-  param->copy_label("INIT. CONDITION");
-}
-write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);}
+nonmodal((char*)"Set initial condition",n);}
         tooltip {enter initial value} xywh {0 263 26 20}
         code1 {o->drawing_f = &draw_nothing_render;}
         class Button
       }
-      Fl_Box param{
+      Fl_Box param {
         tooltip {current input value} xywh {118 22 332 28}
         code0 {\#include"draw_16seg.h"}
         code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_red16seg_render;}
         code3 {o->nchars = 18; o->periods = false;}
         class AsciiDisplay
       }
-      Fl_Box value{
+      Fl_Box value {
         tooltip {current output value} xywh {118 68 332 28}
         code0 {\#include"draw_16seg.h"}
         code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_red16seg_render;}
@@ -1352,6 +1312,83 @@ init0->value(i&0x0001);
 init0->redraw();
 cellgrid->initial_condition = i;
 cellgrid->redraw();} {}
+  }
+  Function {nonmodal(char* param, char* curval)} {open
+  } {
+    code {if(winder) delete winder;} {}
+    Fl_Window winder {
+      label {Set Exact Value} open
+      xywh {267 1215 380 115} type Double visible
+    } {
+      Fl_Button {} {
+        label OK
+        callback {char* r = (char*)inpoot->value();
+unsigned int i;
+float val;
+if(!strcmp(winder->label(),"Set rule"))
+{
+if(r!=NULL && sscanf(r,"0x%2x",&i))
+{
+  val = i;
+  set_rule(val);
+  char s[20];
+  sprintf(s,"%18i",(int)rule);
+  value->copy_label(s);
+  param->copy_label("RULE");
+}
+else if(r!=NULL && sscanf(r,"%f",&val))
+{
+  if ( val > 255 ) val = 255;
+  if ( val < 0 ) val = 0;
+  set_rule(val);
+  char s[20];
+  sprintf(s,"%18i",(int)rule);
+  value->copy_label(s);
+  param->copy_label("RULE");
+}
+write_function(controller,RULE,sizeof(float),0,&rule);
+}
+else
+{
+if(r!=NULL && sscanf(r,"0x%4x",&i))
+{
+  val = i;
+  set_initial_condition(val);
+  char s[20];
+  sprintf(s,"%18i",(int)initial_condition);
+  value->copy_label(s);
+  param->copy_label("INIT. CONDITION");
+}
+else if(r!=NULL && sscanf(r,"%f",&val))
+{
+  if ( val > 65535 ) val = 65535;
+  if ( val < 0 ) val = 0;
+  set_initial_condition(val);
+  char s[20];
+  sprintf(s,"%18i",(int)initial_condition);
+  value->copy_label(s);
+  param->copy_label("INIT. CONDITION");
+}
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
+}
 
+delete winder;
+winder = NULL;} selected
+        xywh {232 79 50 25}
+      }
+      Fl_Button {} {
+        label Cancel
+        callback {delete winder;
+winder = NULL;}
+        xywh {291 79 76 25}
+      }
+      Fl_Input inpoot {
+        label {Enter Value:}
+        xywh {116 25 250 30}
+      }
+    }
+    code {winder->label(param);
+inpoot->value(curval);
+winder->show();} {}
   }
 } 
