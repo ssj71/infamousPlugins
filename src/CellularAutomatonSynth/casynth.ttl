@@ -19,6 +19,7 @@
         ] ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:extensionData ui:idle, ui:resize ;
 
         lv2:port [
                 a lv2:InputPort, lv2atom:AtomPort ;
