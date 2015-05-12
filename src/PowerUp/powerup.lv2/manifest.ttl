@@ -10,6 +10,5 @@
 <http://infamousplugins.sourceforge.net/plugs.html#powerup_ui>
 	a ui:X11UI ;
 	ui:binary <powerup_ui.so> ;
-	lv2:extensionData ui:idle;
-	lv2:optionalFeature ui:noUserResize ;
+	lv2:extensionData ui:idle, ui:resize;
 	.

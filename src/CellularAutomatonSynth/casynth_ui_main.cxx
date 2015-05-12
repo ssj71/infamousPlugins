@@ -49,7 +49,6 @@ static LV2UI_Handle init_casynthUI(const struct _LV2UI_Descriptor * descriptor,
     // set host to change size of the window
     if (resize)
     {
-      //self->ui->size(400,200);//test different aspect ratios for when it will be resizable
       resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());
     }
     fl_embed( self->ui,(Window)parentXwindow);
@@ -160,7 +159,7 @@ resize_func(LV2UI_Feature_Handle handle, int w, int h)
 }
 
 static const LV2UI_Idle_Interface idle_iface = { idle };
-static const LV2UI_Resize resize_ui = { 0, resize_func };//ideally 1st member would be the CaSynthUI instance
+static const LV2UI_Resize resize_ui = { 0, resize_func };
 
 static const void*
 extension_data(const char* uri)

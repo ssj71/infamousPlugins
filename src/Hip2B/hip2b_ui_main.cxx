@@ -104,13 +104,13 @@ static int
 resize_func(LV2UI_Feature_Handle handle, int w, int h)
 {
   Hip2BUI* self = (Hip2BUI*)handle;
-  //self->ui->size(w,h);
+  self->ui->size(w,h);
   
   return 0;
 }
 
 static const LV2UI_Idle_Interface idle_iface = { idle };
-static const LV2UI_Resize resize_ui = { 0, resize_func };//ideally 1st member would be the Hip2BUI instance
+static const LV2UI_Resize resize_ui = { 0, resize_func };
 
 static const void*
 extension_data(const char* uri)
