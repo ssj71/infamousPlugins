@@ -80,6 +80,7 @@ typedef struct
 
     int				Count;
     float			Cycle[16];
+    unsigned int    DownShift;
     float			Error;
     unsigned short	Notebits;
     unsigned char	Upsamp, Format;
@@ -242,8 +243,9 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
             tune->Ipsize = 16384;
             //tune->Ipsize = 2048;
             tune->Fftlen = 2048;
-            //tune->Frsize = 128;
-            tune->Frsize = 64;
+            tune->Frsize = 128;
+            //tune->Frsize = 64;
+            tune->DownShift = 10;
 
             ResamplerSetup(tune->resampler,1,2,1,32);// 32 is medium quality.
             // Prefeed some input samples to remove delay.
@@ -260,8 +262,9 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
 //			tune->Upsamp = false;
             tune->Ipsize =  16384;
             tune->Fftlen =  4096;
-            //tune->Frsize = 256;
-            tune->Frsize = 128;
+            tune->Frsize = 256;
+            //tune->Frsize = 128;
+            tune->DownShift = 11;
         }
         else
         {
@@ -269,8 +272,9 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
 //			tune->Upsamp = false;
             tune->Ipsize =  32768;
             tune->Fftlen = 8192;
-            //tune->Frsize = 512;
-            tune->Frsize = 256;
+            tune->Frsize = 512;
+            //tune->Frsize = 256;
+            tune->DownShift = 12;
         }
 
         // Accepted correlation peak range, corresponding to 60..1200 Hz
@@ -389,7 +393,7 @@ static void findcycle(register Retuner * tune)
 		x = y;
 	}
 	i -= 4;
-    d = tune->Ipindex>>10;
+    d = tune->Ipindex>>tune->DownShift;
 	tune->Cycle[d] = 0;
 	if (i < tune->Ifmax)
 	{
@@ -597,23 +601,15 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                     // Estimate the pitch every 8th fragment
                     if ( l == 0 )
                     {
-                    ////////////////////////rm
-                        if (++tune->Frcount == 8)
+                        if (++tune->Frcount == 4)
                         {
                             tune->Frcount = 0;
                             findcycle(tune);
-                            if (!tune->Cycle[tune->Ipindex>>10])
+                            if (!tune->Cycle[tune->Ipindex>>tune->DownShift])
                             {
-                                // If the pitch estimate fails, the current
-                                // ratio is kept for 5 fragments. After that
-                                // the signal is considered unvoiced and the
-                                // pitch error is reset
-                                tune->Cycle[tune->Ipindex>>10] = tune->Frsize;
+                                tune->Cycle[tune->Ipindex>>tune->DownShift] = tune->Frsize;
                             }
-                        
-                            //tune->Ratio = pow(2.0, (tune->Corroffs / 12.0f - tune->Error * tune->Corrgain));
                         }
-                        ////////////////////////rm
                     }
                     if (tune->Frcount == 0)
                         tune->Woosh[l].Ratio = pow(2.0, (tune->Woosh[l].Corroffs / 12.0f ));
@@ -628,7 +624,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                     // the circular input buffer limits it must be at
                     // least one fragment size
                     int i = (int)r1;
-                    i = i>>10;
+                    i = i>>tune->DownShift;
                     dr = tune->Cycle[i] * (int)ceil((double)(tune->Frsize / tune->Cycle[i]));//samples per fragment raised to nearest complete cycle
                     dp = dr / tune->Frsize;//ratio of fragment to complete cycle (>=1)
                     ph = tune->Ipindex - r1;//samples that can be read /latency
@@ -650,7 +646,6 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                     if (i)
                     {
                         // Jump an integer number of 'dr' frames and crossfade.
-                        //if(i>0)i++;
                         tune->Woosh[l].Xfade = 1;
                         r2 = r1 - i*dr;
                         if (r2 < 0) r2 += tune->Ipsize;
@@ -659,18 +654,18 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                     else
                         //keep reading from current position
                         tune->Woosh[l].Xfade = 0;
-                }
+                }//end of fragment
                     
                 tune->Woosh[l].Rindex1 = r1;
                 tune->Woosh[l].Rindex2 = r2;
-            }
+            }//wooshes
 #endif
             outl += k;
             outr += k;
             fi += k;
             if(fi >= tune->Frsize)
                 fi = 0;
-		}
+		}//go through frames
         int i;
         for(i=0;i<tune->nWoosh;i++)
         {
