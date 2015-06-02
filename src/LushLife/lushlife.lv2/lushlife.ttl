@@ -76,7 +76,7 @@
                 lv2:portProperty lv2:reportsLatency, lv2:integer, pprops:notOnGUI;
         ] ;
         lv2:port [
-                a lv2:OutputPort, lv2:ControlPort ;
+                a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 4 ;
                 lv2:symbol "MASTERGAIN" ;
                 lv2:name "Master Gain" ;
