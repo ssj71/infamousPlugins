@@ -243,8 +243,8 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
             tune->Ipsize = 16384;
             //tune->Ipsize = 2048;
             tune->Fftlen = 2048;
-            tune->Frsize = 128;
-            //tune->Frsize = 64;
+            //tune->Frsize = 128;
+            tune->Frsize = 64;
             tune->DownShift = 10;
 
             ResamplerSetup(tune->resampler,1,2,1,32);// 32 is medium quality.
@@ -259,22 +259,20 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
         else if (fsamp < 128000)
         {
             // 88.2 or 96 kHz.
-//			tune->Upsamp = false;
             tune->Ipsize =  16384;
             tune->Fftlen =  4096;
-            tune->Frsize = 256;
-            //tune->Frsize = 128;
-            tune->DownShift = 11;
+            //tune->Frsize = 256;
+            tune->Frsize = 128;
+            tune->DownShift = 10;
         }
         else
         {
             // 192 kHz, double time domain buffers sizes
-//			tune->Upsamp = false;
             tune->Ipsize =  32768;
             tune->Fftlen = 8192;
             tune->Frsize = 512;
-            //tune->Frsize = 256;
-            tune->DownShift = 12;
+            tune->Frsize = 256;
+            tune->DownShift = 11;
         }
 
         // Accepted correlation peak range, corresponding to 60..1200 Hz
@@ -371,7 +369,7 @@ static void findcycle(register Retuner * tune)
         j += d;
 	}
 	fftwf_execute_dft_r2c(tune->Fwdplan, tune->FftTdata, tune->FftFdata);    
-	f = tune->Fsamp / (tune->Fftlen * 2.5e3f);
+	f = tune->Fsamp / (tune->Fftlen * 3e3f);
 	for (i = 0; i < h; i++)
 	{
 		x = tune->FftFdata[i][0];
@@ -601,7 +599,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                     // Estimate the pitch every 8th fragment
                     if ( l == 0 )
                     {
-                        if (++tune->Frcount == 4)
+                        if (++tune->Frcount == 8)
                         {
                             tune->Frcount = 0;
                             findcycle(tune);
