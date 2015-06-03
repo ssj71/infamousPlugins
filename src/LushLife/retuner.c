@@ -84,6 +84,8 @@ typedef struct
     float			Error;
     unsigned short	Notebits;
     unsigned char	Upsamp, Format;
+
+    float           prev;//temporary debugging var
 } Retuner;
 
 #ifndef M_PI
@@ -233,6 +235,8 @@ TUNERHANDLE RetunerAlloc( int nwoosh, int fsamp)
         tune->Notemask = 0xFFF;
         tune->nWoosh = nwoosh;
         tune->Upsamp = 0;
+
+        tune->prev = 0;
 
         tune->resampler = ResamplerAlloc();
 
@@ -526,7 +530,8 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
             }
             if (di >= tune->Ipsize) di -= tune->Ipsize;
 #if(1)
-            for(l=0;l<tune->nWoosh;l++)
+            //for(l=0;l<tune->nWoosh;l++)
+            for(l=0;l<=0;l++)
             {
                 r1 = tune->Woosh[l].Rindex1; // Read index for current input frame.
                 r2 = tune->Woosh[l].Rindex2; // Second read index while crossfading. 
@@ -541,11 +546,11 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
 
                     if (tune->Woosh[l].Xfade)
                     {
+                        int		i,f = fi;
+                        float	u1, u2, v;
                         // Interpolate and crossfade
                         while (k2--)
                         {
-                            int		i,f = fi;
-                            float	u1, u2, v;
 
                             i = (int)r1;
                             u1 = cubic(tune->Ipbuff + i, r1 - i);
@@ -556,6 +561,10 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                             v = (1 - v) * u1 + v * u2;
                             *ol++ += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
                             *or++ += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            float tmp = *(ol-1) - tune->prev;
+                            if(tmp > .5 || tmp < -.5)
+                                tmp++;
+                            tune->prev = *(ol-1);
 
                             r1 += dr;
                             if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
@@ -577,6 +586,10 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                             v = cubic(tune->Ipbuff + i, r1 - i);
                             *ol++ += .5*(1-tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
                             *or++ += .5*(1+tune->Woosh[l].Pan)*tune->Woosh[l].Gain*v;
+                            float tmp = *(ol-1) - tune->prev;
+                            if(tmp > .5 || tmp < -.5)
+                                tmp++;
+                            tune->prev = *(ol-1);
                             r1 += dr;
                             if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
                             tune->Woosh[l].Gain += tune->Woosh[l].GainStep;
@@ -586,6 +599,7 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                 }
                 else
                 {
+                    //not active, just move pointers
                     r1 += k;
                     if (r1 >= tune->Ipsize) r1 -= tune->Ipsize;
                     r2 += k;
