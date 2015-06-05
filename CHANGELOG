@@ -6,4 +6,4 @@
 0.0.15 removed all cv ports, added stuck, removed memset from casynth
 0.0.20 added powercut, fixed rms in envfollower and a few more tweaks
 0.0.25 cleaned up, fixed bugs found while making guis
-0.0.XX fixed sustain=0 bug, updated readme
+0.0.26 fixed sustain=0 bug, updated readme
