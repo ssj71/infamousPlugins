@@ -164,7 +164,10 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             synth->envelope[ENV_BREAK] = *synth->env_b_p*.9999;//scale a little so it will not immediately move to swell if b==1
                             synth->envelope[ENV_SWELL] = (*synth->env_sus_p - *synth->env_b_p)/(float)(*synth->env_swl_p*synth->sample_rate);
                             synth->envelope[ENV_SUSTAIN] = *synth->env_sus_p;
-                            synth->envelope[ENV_RELEASE] = -(*synth->env_sus_p)/(float)(*synth->env_r_p*synth->sample_rate);
+                            if(*synth->env_sus_p)
+                                synth->envelope[ENV_RELEASE] = -(*synth->env_sus_p)/(float)(*synth->env_r_p*synth->sample_rate);
+                            else
+                                synth->envelope[ENV_RELEASE] = -(*synth->env_b_p)/(float)(*synth->env_r_p*synth->sample_rate);
 
                             //set harmonic gains
                             if(*synth->harmonic_mode_p != synth->harmonic_mode)

@@ -5,4 +5,5 @@
 0.0.10 added harmonic width to casynth, cv port in envfollower, octave in hip2b, changed all urids to actual webpages
 0.0.15 removed all cv ports, added stuck, removed memset from casynth
 0.0.20 added powercut, fixed rms in envfollower and a few more tweaks
-0.0.25 advertized fundraiser, minor bugfixes made while making guis
+0.0.25 cleaned up, fixed bugs found while making guis
+0.0.XX fixed sustain=0 bug, updated readme
