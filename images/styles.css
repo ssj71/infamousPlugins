@@ -1,0 +1,27 @@
+/* STANDARD TAG REDEFINITIONS */
+BODY{ color: #DDDDDD; font-family: Arial, Helvetica, sans-serif; font-size: 10pt; background-color: Black; margin: 0; padding: 0; }
+TD {font-size: 10pt;  }
+p { font-size: 10pt;  margin-bottom: 7px; margin-top: 0; }
+a{ color: #76DEFC; text-decoration: none; }
+a:hover{	text-decoration: underline;  color: White;   }
+form{	margin:0;}
+
+#HEADER{	width:760px; margin-left:auto; margin-right:auto;}
+#HEADER ul{ margin: 0; padding-left: 0; height: 44px; line-height: 44px; display: block; list-style: none; background-color: #4D4D4D; background-image: url(bg_topnav.gif); background-repeat: no-repeat;  }
+#HEADER li{ display: inline; background-color: #222222;  float: right;  }
+#HEADER li a{ height: 44px; line-height: 44px; display: block; padding-left: 27px; padding-right: 27px; border-left: 1px solid Black;  float: left;     }
+#HEADER li a:hover{ background-color: #444444; text-decoration: none;}
+#HEADER .Visual{ height:130px; background-image: url(logow.svg);  background-repeat: no-repeat;  background-color: #000000;  border-top: 3px solid Black; background-position:center;  }
+h1{ margin: 0; padding: 0 30px 0 0; text-align:right; font-family: "trebuchet ms",arial,tahoma,verdana,sans-serif; font-weight: normal; letter-spacing: .005em; color: #707070;  font-size: 20pt;  }
+
+#CONTENT{ width:700px; margin-left:auto; margin-right:auto;   }
+h2{ margin: 0; padding: 24px 0 7px 40px; font-family: "trebuchet ms",arial,tahoma,verdana,sans-serif; font-weight: normal; letter-spacing: .005em; color: #C0C0C0; font-size: 15pt; }
+#TEXT{ padding: 35px 40px 35px 40px; border-bottom: 1px solid #484848; border-top: 1px solid #484848; background-color: #222222; }
+#TEXT p{	margin-bottom: 1em;}
+
+#FOOTER{	width:760px; margin-top:27px; margin-left:auto; margin-right:auto;  border-top: 4px solid #363636;  text-align: right;  padding-top: 5px;   }
+#FOOTER p{ font-size: 11px; line-height: 14px; margin: 0;  color: #4D4D4D; }
+#FOOTER a{ font-size: 11px;	font-weight: normal;	text-decoration: none;  color: #4D4D4D;    }
+#FOOTER a:hover{ color: white; text-decoration: underline; }
+
+

@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html><head>
+  <title>Infamous Plugins</title>
+
+  
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+  
+  <link href="images/styles.css" rel="stylesheet" type="text/css" />
+
+</head><body>
+<div id="HEADER">
+<div class="Visual"> </div>
+<h1>Plugins</h1>
+<ul>
+  <li><a href="donate.html">Donate</a></li>
+  <li><a href="about.html">About</a></li>
+  <li><a href="http://sourceforge.net/p/infamousplugins/files/">Download</a></li>
+  <li><a href="plugs.html">Plugins</a></li>
+  <li><a href="index.html">Home</a></li>
+</ul>
+</div>
+
+<div id="CONTENT">
+<h2>So famous, they're IN-famous...<br />
+</h2>
+<div id="HEADER">
+<ul style="width: 700px;">
+  <li><a href="plugs.html#cheapdist">Cheap Distoriton</a></li>
+  <li><a href="plugs.html#hip2b">Hip2B</a></li>
+  <li><a href="plugs.html#envfollower">Envelope Follower</a></li>
+  <li><a href="plugs.html#casynth">Cellular Automaton Synth</a></li>
+</ul>
+</div>
+<div id="HEADER">
+<ul style="width: 700px;">
+  <li><a href="plugs.html#next">In Development</a></li>
+  <li><a href="plugs.html#ewham">EWham</a></li>
+  <li><a href="plugs.html#powerup">Power Up</a></li>
+  <li><a href="plugs.html#powercut">Power Cut</a></li>
+  <li><a href="plugs.html#stuck">Stuck</a></li>
+</ul>
+</div>
+<div id="TEXT">
+<h1 id="casynth">The Infamous Cellular Automaton Synth</h1>
+<p align=center> <img src="images/casynth.png" height=auto width=350> </p>
+&nbsp;&nbsp;&nbsp; This synthesizer plugin is an additive synthesizer,
+where 16 harmonics are added to the fundamental according to rules of
+elementary cellular automata. A rule is created and determines whether
+a cell will survive, die, or be created based on its previous state and
+its neighbors. Thus a harmonic will either play or be silent according
+to its associated cell's state. The 16 cells are on a torus where the
+ends wrap around to meet, therefore the highest harmonic influences the
+state of the first harmonic. This synth has no filter, so harmonics
+must be controlled through the rule and initial condition.<br />
+<br />
+&nbsp;&nbsp;&nbsp; In the GUI you can select each bit of the rule and
+initial condition value, or click on the space on the left of all the
+buttons to enter a value directly. This dialog accepts hexidecimal values
+formatted as 0xFFFF. Also you can click HAL 9000 for random settings.
+As with all the infamous plugins, you can middle-click a knob or fader to enter a
+new value in directly.<br />
+<br />
+&nbsp;&nbsp;&nbsp; To assist in your sound design
+if not using the GUI there is a command line utility included in the
+source called rule that will print out the cell states in sequence (see
+the README). For more information regarding Cellular Automaton in
+general read wikipedia under <a href="http://en.wikipedia.org/wiki/Elementary_cellular_automaton">Elementary
+Cellular Automaton</a>.<br />
+<br />
+&nbsp;&nbsp;&nbsp; It is unlimitedly polyphonic and has 2 LFOs. Every
+oscillator has 5 different waveforms to select from. It also features
+an ADBSSR envelope generator for the amplitude envelope.<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; CHANNEL - Midi channel, set to 0 for all
+channels</li>
+  <li>&nbsp;&nbsp;&nbsp; MASTER_GAIN - total volume</li>
+  <li>&nbsp;&nbsp;&nbsp; RULE - rule for determining next state in
+cellular automaton</li>
+  <li>&nbsp;&nbsp;&nbsp; CELL_LIFE - length between cell states, measured 
+in beats (most hosts default to )</li>
+  <li>&nbsp;&nbsp;&nbsp; INIT_CELLS - initial condition of cells when a
+note is played</li>
+  <li>&nbsp;&nbsp;&nbsp; N HARMONICS - number of harmonics added in</li>
+  <li>&nbsp;&nbsp;&nbsp; HARM_MODE - determines gains of the harmonics </li>
+  <li>&nbsp;&nbsp;&nbsp; HARM_WIDTH - std. deviation of random detuning of harmonics in cents</li>
+  <li>&nbsp;&nbsp;&nbsp; WAVE - basic Waveform of the harmonics</li>
+  <li>&nbsp;&nbsp;&nbsp; ENV_A - attack time</li>
+  <li>&nbsp;&nbsp;&nbsp; ENV_D - decay time</li>
+  <li>&nbsp;&nbsp;&nbsp; ENV_B - break point gain (to switch between
+decay and swell)</li>
+  <li>&nbsp;&nbsp;&nbsp; ENV_SWL - swell time</li>
+  <li>&nbsp;&nbsp;&nbsp; ENV_SUS - sustain gain</li>
+  <li>&nbsp;&nbsp;&nbsp; ENV_R - release time</li>
+  <li>&nbsp;&nbsp;&nbsp; AMOD_WAV - amplitude modulation waveform</li>
+  <li>&nbsp;&nbsp;&nbsp; AMOD_FREQ - amplitude modulation frequency</li>
+  <li>&nbsp;&nbsp;&nbsp; AMOD_GAIN - amplitude modulation gain</li>
+  <li>&nbsp;&nbsp;&nbsp; FMOD_WAV - frequency modulation waveform</li>
+  <li>&nbsp;&nbsp;&nbsp; FMOD_FREQ - frequency modulation frequency</li>
+  <li>&nbsp;&nbsp;&nbsp; FMOD_GAIN - frequency modulation gain</li>
+</ul>
+<br />
+<br />
+<br />
+<h1 id="envfollower">The Infamous Envelope Follower</h1>
+<p align=center> <img src="images/envfollower.png" height=auto width=500> </p>
+&nbsp;&nbsp;&nbsp; This is a fully featured envelope follower plugin. It can be used for normal things like pumping the gain with the bass, building your own compressor. I prefer to hook up crazy things like the mid scoop of a distortion to the guitar envelope. 
+ Someone just wanted it so I made it. It sends a midi control value according to the amplitude of the input audio. You'll notice that there are several extra ports that don't appear in the fancy GUI. When this plugin was created I implemented an LV2 CV port which would provide higher resolution than a midi port, but CVs are very nearly completely unsupported at this time by LV2 hosts. If you'd like this feature (because you are using Ingen) then you can re-enable CV ports as described in the README.<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; PEAK/RMS - blend of peak and/or rms value for amplitude</li>
+  <li>&nbsp;&nbsp;&nbsp; THRESHOLD - audio low value mapped MINV</li>
+  <li>&nbsp;&nbsp;&nbsp; SATURATION - audio high value mapped to MAXV (anything greater still outputs MAXV)</li>
+  <li>&nbsp;&nbsp;&nbsp; A TIME - rise time of the output</li>
+  <li>&nbsp;&nbsp;&nbsp; D TIME - fall time of the output</li>
+  <li>&nbsp;&nbsp;&nbsp; CHANNEL - Midi channel to send output over</li>
+  <li>&nbsp;&nbsp;&nbsp; CONTROL_NO - Midi control # to change</li>
+  <li>&nbsp;&nbsp;&nbsp; MINV - minimum midi value to send</li>
+  <li>&nbsp;&nbsp;&nbsp; MAXV - maximum midi value to send</li>
+  <li>&nbsp;&nbsp;&nbsp; REVERSE - switches direction of the midi output (larger input amplitude -> smaller midi value)</li>
+  <li>&nbsp;&nbsp;&nbsp; CMINV - minimum lv2 control value to send</li>
+  <li>&nbsp;&nbsp;&nbsp; CMAXV - maximum lv2 control value to send</li>
+  <li>&nbsp;&nbsp;&nbsp; CREVERSE - switches direction of the lv2 control output</li>
+</ul>
+<br />
+<br />
+<br /><h1 id="hip2b">The Infamous Hip2B</h1>
+<p align=center> <img src="images/hip2b.png" height=auto width=300> </p>
+&nbsp;&nbsp;&nbsp; This is a distortion plugin that is even more fun than I imagined. Inspired by effect pedals by dwarfcraft, this takes your analog signal and turns it into a square wave. It gives you a glitchy type effect. It was originally meant to be pretty minimal, but I decided there wasn't a good reason to be so a simple amplifier was added to turn it down, and some basic DC offset removal was added. Its not limited in polyphony or anything, it is simply distorting your signal to be a bandlimited square wave. Basically its a switching function with hysteresis. You could roughly consider it converting everything to 1 bit audio. Play with the up and down threshold parameters to change the square wave pulse width and have some fun. You'll find lower values give more sustain, but stay away from 0.0 on those two, it gets really loud and noisy. Unless thats what you want. Be my guest. Depending on your noise floor, other low values may be problematic in the same light. The lowering the octave makes it sound much more glitchy.
+<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; UP - threshold that the input must cross for the square wave to rise</li>
+  <li>&nbsp;&nbsp;&nbsp; DOWN - threshold that the input must cross for the square wave to fall</li>
+  <li>&nbsp;&nbsp;&nbsp; OCTAVE - change the octave of the square wave output (down to -2)</li>
+  <li>&nbsp;&nbsp;&nbsp; IN GAIN - input gain, also affects the output signal in the mix, use to get your signal passing the thresholds</li>
+  <li>&nbsp;&nbsp;&nbsp; WET/DRY - mix of the original signal with the square signal</li>
+  <li>&nbsp;&nbsp;&nbsp; OUT GAIN - output gain</li>
+</ul>
+<br />
+<br />
+<br />
+<br /><h1 id="cheapdist">The Infamous Cheap Distortion</h1>
+<p align=center> <img src="images/cheapdist.png" height=auto width=300> </p>
+&nbsp;&nbsp;&nbsp; Another distortion plugin, but this one I wanted to use as little processing as possible. Using some hackery on the bits I accomplished a pretty nice saturation function waveshaper using only a bitshift and an integer add. Thats right, not a single floating point operation! It isn't actually much lower useage than other simple distortion algorithms, but it was a fun exercize. Becuase the goal was super cheap computation, there is no input or output gains, so make use of your simple amplifier plugins. All in all though it worked out better than I dreamed though. It even has 3 different waveshapes of increasing "aggression". On the 2 or 3 setting, you'll probably want a gate, because it has really high gain for values near zero. 
+<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; AGGRESSION - high, really high, or rediculously high gain</li>
+</ul>
+<br />
+<br />
+<br />
+<br /><h1 id="stuck">The Infamous Stuck</h1>
+<p align=center> <img src="images/stuck.png" height=auto width=300> </p>
+&nbsp;&nbsp;&nbsp;This is a clone of the electro-harmonix freeze. It drones the note being played when the "Stick It!" port is set to 1 (or the CV port input goes above 1), causing the note to be "stuck". Once the port falls below 1 the drone is released with a decay set in seconds. The drone is added to the dry signal (so original signal is passed through at all times un-processed). This plugin is pretty useless except in live situations, though I'd love someone to creatively prove me wrong. 
+<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; STICK IT - trigger the drone being sampled and held or off (if less than 1)</li>
+  <li>&nbsp;&nbsp;&nbsp; DRONE GAIN - gain of the drone</li>
+  <li>&nbsp;&nbsp;&nbsp; RELEASE - time of drone decay when released in seconds</li>
+</ul>
+<br />
+<br />
+<br />
+<br /><h1 id="powercut">The Infamous Power Cut</h1>
+<p align=center> <img src="images/powercut.png" height=auto width=500> </p>
+&nbsp;&nbsp;&nbsp;This effect is commonly called tape stop. Another one I might not actually use, but the DSP was fun anyway. It just copies the audio through until the "Pull the Plug!" port is toggled to 1 (or the CV trigger port goes above 1). Then it slows the audio down gradually to a complete stop and outputs silence until the trigger is released, much like unplugging the power chord of a record player or maybe tape player. I've never heard this happen to a tape player. A turntable actually has enough inertia. Anyway, you can adjust the length of the decay and the curve. Its pretty fun. With some automation this can make some crazy glitch type effects.
+<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; PULL THE PLUG - start the decay or turn it off/reset it (if less than 1)</li>
+  <li>&nbsp;&nbsp;&nbsp; DECAY TIME - length of decay in seconds</li>
+  <li>&nbsp;&nbsp;&nbsp; DECAY CURVE - adjusts the "shape" of the decay. Convex (log), linear, or concave (exponential) curves, Try them all</li>
+</ul>
+<br />
+<br />
+<br />
+<br /><h1 id="powerup">The Infamous Power Up</h1>
+<p align=center> <img src="images/powerup.png" height=auto width=500> </p>
+&nbsp;&nbsp;&nbsp;This is the opposite of the power cut. It outputs silence until the "Fire it Up!" port is set to 1. Then it slowly climbs up to full playback speed. Its completely useless for live use as it introduces nearly 10 seconds of latency. But in a modern daw with latency compensation it should work fine.
+<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; FIRE IT UP - start the "windup" or turn it off/reset it (if less than 1)</li>
+  <li>&nbsp;&nbsp;&nbsp; START UP TIME - length of decay in seconds</li>
+  <li>&nbsp;&nbsp;&nbsp; START UP CURVE - adjusts the "shape" of the windup. Convex (log), linear, or concave (exponential) curves, Try them all</li>
+</ul>
+<br />
+<br />
+<br />
+<br /><h1 id="ewham">The Infamous EWham</h1>
+&nbsp;&nbsp;&nbsp;This plugin is my version of a pitch shifter, meant more for live use than for recording. Its my implementation of the digitech whammy peda. It gives a convenient control to bind to a midi CC to go between shift amounts and lets you pick arbitrary intervals between 3 octaves down and 2 octaves up (in half steps). Its based on the algorithm used in the zita AT1 pitch corrector and seems reasonably light and accurate. You will find it doesn't work well on polyphonic sounds, but is great for leads.
+<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; EXPRESSION - controls pitch shift amount, blending between the start and finish values </li>
+  <li>&nbsp;&nbsp;&nbsp; START - shift amount in semitones when expression is 0 </li>
+  <li>&nbsp;&nbsp;&nbsp; FINISH - shift amount in semitones when expression it 1 </li>
+  <li>&nbsp;&nbsp;&nbsp; MODE - classic means just shift pitch, harmonizer mixes in the dry signal as well, chorus also does a mix but changes start and finish to be measured in cents rather than semitones, allowing you to dial in a nice chorus effect</li>
+  <li>&nbsp;&nbsp;&nbsp; LOCK MODE - decides what happens as you change expression, none will let it stay exactly at the value set by expression, land on semitone makes it slide to the nearest semitone if you stop moving expression while its in between half steps, lock to semitone makes the shift value jump from one half step to another (can make you sound like you're playing crazy fast licks!) </li>
+</ul>
+<br />
+<br />
+<br />
+<h1 id="next">Coming Eventually...</h1>
+&nbsp;&nbsp;&nbsp; I'm always tinkering. I have a lengthy list of things that would be useful or interesting plugins as well as a notebook full of algorithms I developed on paper because the dsp was challenging and interesting. Now with the GUIs behind me I'm excited to do some more DSP. Too much to do and so little time... Another synth is in order, but that takes a lot of time and its nice to have small simple projects. I might go work a bit to help some plugin hosts and get the CV situation a little better. If you'd like to contribute to the community, that would be a great way. As always if you really need something let me know I love to help, but time is expensive.
+<br />
+</div>
+</div>
+
+<div id="FOOTER">
+<p>Last Updated 10-14</p>
+<p>Infamous Plugins<br />
+</p>
+<p><a href="http://www.gettemplate.com">Designed by GetTemplate.com</a></p>
+</div>
+
+</body></html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html><head>
+  <title>Home of the Infamous Plugins</title>
+
+  
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+  
+  <link href="images/styles.css" rel="stylesheet" type="text/css" />
+  <style>
+  /**
+ * author: Thierry Koblentz
+ * Copyright 2011 - css-101.org 
+ * http://www.css-101.org/articles/ken-burns_effect/css-transition.php
+ */
+#slideshow {
+  position:relative;
+  margin-left: auto;
+  margin-right: auto;
+  width:600px!important;
+  height:400px;
+  overflow:hidden;
+  border:8px solid #111;
+  -webkit-box-shadow:1px 1px 5px #ddd;
+  -moz-box-shadow:1px 1px 5px #ddd;
+  -o-box-shadow:1px 1px 5px #ddd;
+  box-shadow:1px 1px 5px #ddd;
+}
+#slideshow img {
+  max-width: none;
+  position:absolute;
+  width:700px;
+  height:auto;
+  top:50%;
+  left:50%;
+  opacity:0;
+  -webkit-transition-property: opacity, -webkit-transform;
+  -webkit-transition-duration: 3s, 8s;
+  -moz-transition-property: opacity, -moz-transform;
+  -moz-transition-duration: 3s, 8s;
+  -o-transition-property: opacity, -o-transform;
+  -o-transition-duration: 3s, 8s;
+  transition-property: opacity, transform;
+  transition-duration: 1s, 7s;
+}
+#slideshow .fx:first-child + img ~ img {
+	z-index:-1;
+}
+
+#slideshow .fx {
+  margin-left:-350px;
+  margin-top:-220px;
+  scale(.8)
+  -webkit-transform-origin: bottom left;
+  -moz-transform-origin: bottom left;
+  -o-transform-origin: bottom left;
+  transform-origin: top right;
+  -webkit-transform: scale(1.1) translate(50px);
+  -moz-transform: scale(1.1) translate(50px);
+  -o-transform: scale(1.1) translate(50px);
+  transform: scale(1.1) translate(-40px);
+  opacity:1;
+}
+#slideshow .fx-0 {
+  margin-left:-350px;
+  margin-top:-220px;
+  scale(.8)
+  -webkit-transform-origin: bottom left;
+  -moz-transform-origin: bottom left;
+  -o-transform-origin: bottom left;
+  transform-origin: top right;
+  -webkit-transform: scale(1.1) translate(50px);
+  -moz-transform: scale(1.1) translate(50px);
+  -o-transform: scale(1.1) translate(50px);
+  transform: scale(1.1) translate(-40px);
+  opacity:1;
+}
+#slideshow .fx-1 {/*casynth*/
+  margin-left:-350px;
+  margin-top:-480px;
+  scale(2);
+  -webkit-transform-origin: top center;
+  -moz-transform-origin: top center;
+  -o-transform-origin: top center;
+  transform-origin: bottom center;
+  -webkit-transform: scale(1) translate(70px);
+  -moz-transform: scale(1) translate(70px);
+  -o-transform: scale(1) translate(70px);
+  transform: scale(1) translate(50px,240px);
+  opacity:1;
+}
+#slideshow .fx-2 {
+  margin-left:-250px;
+  margin-top:-720px;
+  -webkit-transform-origin: bottom right;
+  -moz-transform-origin: bottom right;
+  -o-transform-origin: bottom right;
+  transform-origin: bottom right;
+  -webkit-transform: scale(1.5) translate(-70px);
+  -moz-transform: scale(1.5) translate(-70px);
+  -o-transform: scale(1.5) translate(-70px);
+  transform: scale(1.5) translate(-70px);
+  opacity:1;
+}
+#slideshow .fx-3 {/*env*/
+  margin-left:-350px;
+  margin-top:-220px;
+  scale(.8)
+  -webkit-transform-origin: bottom right;
+  -moz-transform-origin: bottom right;
+  -o-transform-origin: bottom right;
+  transform-origin: bottom right;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.5) translate(30px,-20px);
+  opacity:1;
+}
+#slideshow .fx-4 {
+  margin-left:-290px;
+  margin-top:-220px;
+  scale(1.8)
+  -webkit-transform-origin: top right;
+  -moz-transform-origin: top right;
+  -o-transform-origin: top right;
+  transform-origin: top right;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.1) translate(30px);
+  transform: scale(1.1) translate(-100px);
+  opacity:1;
+}
+#slideshow .fx-5 {/*cut*/
+  margin-left:-350px;
+  margin-top:-220px;
+  -webkit-transform-origin: bottom right;
+  -moz-transform-origin: bottom right;
+  -o-transform-origin: bottom right;
+  transform-origin: bottom right;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.5) translate(30px);
+  opacity:1;
+}
+#slideshow .fx-6 {
+  margin-left:-400px;
+  margin-top:-280px;
+  -webkit-transform-origin: top left;
+  -moz-transform-origin: top left;
+  -o-transform-origin: top left;
+  transform-origin: top left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.4) translate(50px,20px);
+  opacity:1;
+}
+#slideshow .fx-7 {/*cheap*/
+  margin-left:-280px;
+  margin-top:-250px;
+  -webkit-transform-origin: top left;
+  -moz-transform-origin: top left;
+  -o-transform-origin: top left;
+  transform-origin: top left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.5) translate(-150px,-270px);
+  opacity:1;
+}
+#slideshow .fx-8 {
+  margin-left:-325px;
+  margin-top:-320px;
+  scale(3)
+  -webkit-transform-origin: bottom left;
+  -moz-transform-origin: bottom left;
+  -o-transform-origin: bottom left;
+  transform-origin: bottom left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(.85) translate(30px,30px);
+  opacity:1;
+}
+#slideshow .fx-9 {/*stuck*/
+  margin-left:-410px;
+  margin-top:-220px;
+  scale(1.5)
+  -webkit-transform-origin: bottom left;
+  -moz-transform-origin: bottom left;
+  -o-transform-origin: bottom left;
+  transform-origin: bottom left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.0) translate(80px, -550px);
+  opacity:1;
+}
+#slideshow .fx-10 {
+  margin-left:-340px;
+  margin-top:-620px;
+  -webkit-transform-origin: top left;
+  -moz-transform-origin: top left;
+  -o-transform-origin: top left;
+  transform-origin: top left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.2) translate(-70px);
+  opacity:1;
+}
+#slideshow .fx-11 {/*up*/
+  margin-left:-350px;
+  margin-top:-270px;
+  -webkit-transform-origin: bottom left;
+  -moz-transform-origin: bottom left;
+  -o-transform-origin: bottom left;
+  transform-origin: bottom left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.5) translate(0px,200px);
+  opacity:1;
+}
+#slideshow .fx-12 {/*hip*/
+  margin-left:-350px;
+  margin-top:-220px;
+  scale(.7)
+  -webkit-transform-origin: bottom left;
+  -moz-transform-origin: bottom left;
+  -o-transform-origin: bottom left;
+  transform-origin: bottom left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.8) translate(30px, 70px);
+  opacity:1;
+}
+#slideshow .fx-13 {
+  margin-left:-400px;
+  margin-top:-220px;
+  -webkit-transform-origin: bottom left;
+  -moz-transform-origin: bottom left;
+  -o-transform-origin: bottom left;
+  transform-origin: bottom left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.2) translate(-110px,-250px);
+  opacity:1;
+}
+#slideshow .fx-14 {/*logo*/
+  margin-left:-350px;
+  margin-top:-820px;
+  -webkit-transform-origin: bottom left;
+  -moz-transform-origin: bottom left;
+  -o-transform-origin: bottom left;
+  transform-origin: bottom left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1.5) translate(-110px, 800px);
+  opacity:1;
+}
+
+</style>
+
+</head><body>
+<div id="HEADER">
+<div class="Visual"> </div>
+<h1>Plugins</h1>
+<ul>
+  <li><a href="donate.html">Donate</a></li>
+  <li><a href="about.html">About</a></li>
+  <li><a href="http://sourceforge.net/p/infamousplugins/files/">Download</a></li>
+  <li><a href="plugs.html">Plugins</a></li>
+  <li><a href="index.html">Home</a></li>
+</ul>
+</div>
+
+<div id="CONTENT">
+<h2>Get Creative...<br />
+</h2>
+
+<div id="TEXT">
+	<div id="slideshow">
+		<img src="images/all-plugs-screenshot.png"
+			 alt="">
+		<img src="images/casynth.png"
+			 alt="">
+		<img src="images/casynth.png"
+			 alt="">
+		<img src="images/envfollower.png"
+			 alt="">
+		<img src="images/envfollower.png"
+			 alt="">
+		<img src="images/powercut.png"
+			 alt="">
+		<img src="images/powercut.png"
+			 alt="">
+		<img src="images/cheapdist.png"
+			 alt="">
+		<img src="images/cheapdist.png"
+			 alt="">
+		<img src="images/stuck.png"
+			 alt="">
+		<img src="images/stuck.png"
+			 alt="">
+		<img src="images/powerup.png"
+			 alt="">
+		<img src="images/hip2b.png"
+			 alt="">
+		<img src="images/hip2b.png"
+			 alt="">
+		<img src="images/infamous_logo.png"
+			 alt="">
+	</div>
+
+<br/>
+&nbsp;&nbsp;&nbsp; Infamous Plugins is a collection of
+open-source LV2
+plugins. It hopefully helps fill some holes, supplying non-existing plugins for
+linux audio. There is little interest in creating ANOTHER compressor,
+or ANOTHER EQ when myriad other excellent lv2 versions of such already
+exist. At least until I become interested in making one of
+those things and feel I can do something different...<br />
+<br />
+&nbsp;&nbsp;&nbsp; The plugins are currently only available with no user interface (LV2 hosts generate
+the interface). To learn about the release of the GUI versions pictured here see the <a href="donate.html">donate page</a>.
+<ul>
+<li>To see and learn about the current plugins go <a href="plugs.html">here</a>...</li>
+<li>To download/file bug reports/get support go <a href="http://sourceforge.net/projects/infamousplugins/">here</a>...</li>
+<li>To learn about who this infamous developer is go <a href="about.html">here</a>...</li>
+<li>And if you want to donate to help free these plugins, go <a href="donate.html">here</a>...</li>
+</ul>
+
+<br/>
+<p align=center>
+<iframe margin-left=auto width="300" height="200" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/169985331&amp;auto_play=true&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true">
+</iframe>
+</p>
+</div>
+</div>
+
+<div id="FOOTER">
+<p>Last Updated 9-14</p>
+<p>Infamous Plugins<br />
+</p>
+<p><a href="http://www.gettemplate.com">Designed by GetTemplate.com</a></p>
+</div>
+
+<script>
+/**
+ * author: Thierry Koblentz
+ * Copyright 2011 - css-101.org 
+ * http://www.css-101.org/articles/ken-burns_effect/css-transition.php
+ */
+!function(){
+  function e()  
+  {
+    m==a&&(m=0),
+	0===m&&(s[a-3].className=""),
+	0===m&&(s[a-2].className=""),
+	0===m&&(s[a-1].className=""),
+	1===m&&(s[a-1].className=""),
+	m>1&&(s[m-2].className=""),
+    s[m].className="fx-"+m,
+	m++
+  }
+  document.getElementById("slideshow").getElementsByTagName("img")[0].className="fx",window.setInterval(e,8e3);
+  var s=document.getElementById("slideshow").getElementsByTagName("img"),a=s.length,m=1
+}();
+</script>
+
+
+</body></html>
