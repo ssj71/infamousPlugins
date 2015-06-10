@@ -28,7 +28,7 @@ typedef struct _DUFFER
 
     float *input_p;
     float *output_p;
-    // /ddot{x} + /delta*/dot{x} + /beta*x + alpha*x^3 = /gamma/text{forcing function}
+    // /ddot{x} + /delta*/dot{x} + /beta*x + /alpha*x^3 = /gamma/text{forcing function}
     float *delta_p;//damping 
     float *alpha_p;//spring nonlinearity
     float *beta_p;//spring stiffness
@@ -81,12 +81,9 @@ void run_duffer(LV2_Handle handle, uint32_t nframes)
     ResamplerSetOutData(plug->resampler,plug->buf);
     ResamplerProcess(plug->resampler);
         
-    //for(t=0; t < nframes*plug->sample_time; t += plug->sample_time)
     for(i=0; i<nframes; i++)
     {
-        //state = rk4vecRT(t, 2, state, plug->sample_time, duffing_equation, (void*)plug, plug->intermediate);
-        //plug->output_p[i++] = state[1];
-        state = rk4vecRT(t, 2, state, 1, duffing_equation, (void*)plug, plug->intermediate);
+        state = rk4vecRT(t, 2, state, 44100*plug->sample_time, duffing_equation, (void*)plug, plug->intermediate);
         plug->output_p[i] = state[1];
     }
     *plug->unstable_p = 0;
