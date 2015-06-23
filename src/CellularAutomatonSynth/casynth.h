@@ -1,5 +1,6 @@
 //Spencer Jackson
 //casynth.h
+
 #include<lv2.h>
 #include<lv2/lv2plug.in/ns/ext/urid/urid.h>
 #include<lv2/lv2plug.in/ns/ext/midi/midi.h>
@@ -82,45 +83,6 @@ typedef struct _CASYNTH
 
 
 }CASYNTH;
-
-
-//lv2 stuff
-LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features);
-void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data);
-void run_casynth( LV2_Handle handle, uint32_t nframes);
-void cleanup_casynth(LV2_Handle handle);
-
-/*LV2_Descriptor casynth_Descriptor = {
-.URI="urn:ssj71:plugins:Cellular Automation Synth",
-.instantiate=init_casynth,
-.connect_port=connect_casynth_ports,
-.activate=NULL,
-.run=run_casynth,
-.deactivate=NULL,
-.cleanup=cleanup_casynth,
-.extension_data=NULL,
-};*/
-static const LV2_Descriptor casynth_descriptor={
-    CASYNTH_URI,
-    init_casynth,
-    connect_casynth_ports,
-    NULL,//activate
-    run_casynth,
-    NULL,//deactivate
-    cleanup_casynth,
-    NULL//extension
-};
-
-LV2_SYMBOL_EXPORT
-const LV2_Descriptor* lv2_descriptor(uint32_t index)
-{
-    switch (index) {
-    case 0:
-        return &casynth_descriptor;
-    default:
-        return NULL;
-    }
-}
 
 enum casynth_ports
 {

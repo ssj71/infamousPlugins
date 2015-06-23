@@ -5,8 +5,8 @@
 #include<stdio.h>
 #include<string.h>
 #include<math.h>
+#include"powerup.h"
 
-#define POWERUP_URI "http://infamousplugins.sourceforge.net/plugs.html#powerup"
 //#define CV_PORTS
 
 typedef struct _POWERUP
@@ -36,17 +36,6 @@ typedef struct _POWERUP
     float *dbg_p;
 }POWERUP;
 
-enum _POWERUP_PORTS
-{
-    IN =0,
-    OUT,
-    FIRE_IT_UP,
-    STARTUP_TIME,
-    STARTUP_CURVE,
-    LATENCY,
-    TRIGGER,
-    DBG
-};
 
 void run_powerup(LV2_Handle handle, uint32_t nframes)
 {

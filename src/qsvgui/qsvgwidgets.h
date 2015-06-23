@@ -1,0 +1,4 @@
+#ifndef QSVGWIDGETS_H
+#define QSVGWIDGETS_H
+
+#endif // QSVGWIDGETS_H

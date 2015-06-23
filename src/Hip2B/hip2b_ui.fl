@@ -1,0 +1,79 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {.h} 
+code_name {.cxx}
+class Hip2BUI {open
+} {
+  Function {show()} {open
+  } {
+    Fl_Window ui {
+      label {the infamous hip2b} open
+      xywh {312 258 400 400} type Double box UP_BOX resizable
+      code0 {\#include"ffffltk.h"}
+      code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
+      code2 {using namespace ffffltk;}
+      code3 {o->show();} visible
+    } {
+      Fl_Group bg {open
+        xywh {0 0 400 400} resizable
+        code0 {\#include"hip2b.h"}
+        code1 {\#include"draw_hip2bg.h"}
+        code2 {o->drawing_h = cairo_code_draw_hip2bg_get_height(); o->drawing_w = cairo_code_draw_hip2bg_get_width(); o->drawing_f = &cairo_code_draw_hip2bg_render;}
+        class Aspect_Group
+      } {
+        Fl_Dial up {
+          callback {write_function(controller,UPP,sizeof(float),0,&up->floatvalue);}
+          tooltip {Switch Up Threshold} xywh {35 33 89 89} minimum -0.5 maximum 0.5 step 0.01 value 0.2
+          code1 {\#include"draw_squareDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialr_render;}
+          class Dial
+        }
+        Fl_Dial down {
+          callback {write_function(controller,DOWNN,sizeof(float),0,&down->floatvalue);}
+          tooltip {Switch Down Threshold} xywh {162 33 89 89} minimum -0.5 maximum 0.5 step 0.01 value 0.2
+          code1 {\#include"draw_squareDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialbccw_render;}
+          class Dial
+        }
+        Fl_Dial input {
+          callback {write_function(controller,INGAIN,sizeof(float),0,&input->floatvalue);}
+          tooltip {Input Gain} xywh {35 146 89 89} maximum 2 step 0.01 value 1
+          code1 {\#include"draw_squareDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialy_render;}
+          class Dial
+        }
+        Fl_Dial output {
+          callback {write_function(controller,OUTGAIN,sizeof(float),0,&output->floatvalue);}
+          tooltip {Output Gain} xywh {162 146 89 89} maximum 2 step 0.01 value 1
+          code1 {\#include"draw_squareDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialgccw_render;}
+          class Dial
+        }
+        Fl_Dial octave {
+          callback {write_function(controller,OCTAVE,sizeof(float),0,&octave->floatvalue);} selected
+          tooltip {Octave/Dirt} xywh {35 258 89 89} minimum -2 maximum 0 step 0.05
+          code1 {\#include"draw_squareDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialo_render;}
+          code3 {o->lock2int = 1;}
+          class Dial
+        }
+        Fl_Dial wetdry {
+          callback {write_function(controller,WETDRY,sizeof(float),0,&wetdry->floatvalue);}
+          tooltip {Wet/Dry Mix} xywh {162 258 89 89} step 0.01 value 0.7
+          code1 {\#include"draw_squareDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_squareDial_get_height(); o->drawing_w = cairo_code_draw_squareDial_get_width(); o->drawing_f = &cairo_code_draw_squareDialpccw_render;}
+          class Dial
+        }
+      }
+    }
+  }
+  decl {LV2UI_Write_Function write_function;} {public local
+  }
+  decl {LV2UI_Controller controller;} {public local
+  }
+  Function {idle()} {open return_type void
+  } {
+    code {Fl::check();
+Fl::flush();} {}
+  }
+} 

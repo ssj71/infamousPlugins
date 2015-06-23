@@ -6,8 +6,66 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<math.h>
+#include<lv2.h>
+#include<lv2/lv2plug.in/ns/ext/urid/urid.h>
+#include<lv2/lv2plug.in/ns/ext/midi/midi.h>
+#include<lv2/lv2plug.in/ns/ext/atom/util.h>
+#include "lv2/lv2plug.in/ns/ext/time/time.h"
+#include "lv2/lv2plug.in/ns/ext/atom/forge.h"
+#include "rms_calc.h"
 
 //#define CV_PORTS
+
+typedef struct _ENVFOLLOWER{
+    float sample_time;
+
+    float current;
+    float prev;
+    unsigned char mout;
+    unsigned char mprev;
+
+    uint64_t nsum;
+    double sum;
+    float out;
+
+    float atime;
+    float up[3];
+    float dtime;
+    float dn[3];
+
+    RMS_CALC rms_calc;
+
+    //midi
+    LV2_URID_Map* urid_map;
+    LV2_URID midi_event_type;
+    LV2_Atom_Forge forge;
+    LV2_Atom_Forge_Frame frame;
+
+    //ports
+    float* input_p;
+    float* output_p;
+    float* cv_out_p;
+    LV2_Atom_Sequence* midi_out_p;
+    float* ctl_in_p;
+    float* ctl_out_p;
+
+    float* channel_p;
+    float* control_p; 
+    float* cv_p;
+    float* min_p;
+    float* max_p;
+    float* rev_p;
+
+    float* cmin_p;
+    float* cmax_p;
+    float* crev_p;
+
+    float* peakrms_p;
+    float* threshold_p;
+    float* saturation_p;
+    float* atime_p;
+    float* dtime_p;
+}ENVFOLLOWER;
 
 //main functions
 LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
@@ -108,7 +166,9 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
         cmax = *plug->cmin_p;
     }
     float mapping = (max - *plug->min_p)/(sat - *plug->threshold_p);
+#ifdef CV_PORTS
     float cmapping = (cmax - *plug->cmin_p)/(sat - *plug->threshold_p);
+#endif
 
 
     //get midi port ready
@@ -123,8 +183,8 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     {
         plug->atime = *plug->atime_p;
         float tmp = 2.2*plug->sample_time;
-        float den = 2*plug->atime + tmp;
-        plug->up[0] = (2 - plug->sample_time)*plug->atime/den;
+        float den = 2.0*plug->atime + tmp;
+        plug->up[0] = (2.0 - plug->sample_time)*plug->atime/den;
         plug->up[1] = tmp/den;
         plug->up[2] = plug->sample_time*plug->atime/den;
     }
@@ -132,8 +192,8 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     {
         plug->dtime = *plug->dtime_p;
         float tmp = 2.2*plug->sample_time;
-        float den = 2*plug->dtime + tmp;
-        plug->dn[0] = (2 - plug->sample_time)*plug->dtime/den;
+        float den = 2.0*plug->dtime + tmp;
+        plug->dn[0] = (2.0 - plug->sample_time)*plug->dtime/den;
         plug->dn[1] = tmp/den;
         plug->dn[2] = plug->sample_time*plug->dtime/den;
     }
@@ -146,7 +206,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
 	rms = rms_shift(&plug->rms_calc,buf[i]);
 
         plug->prev = plug->current;
-        plug->current = (1 - *plug->peakrms_p)*peak + *plug->peakrms_p*rms;
+        plug->current = (1.0 - *plug->peakrms_p)*peak + *plug->peakrms_p*rms;
 
         if(plug->current >= plug->out)
         {
@@ -193,7 +253,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
         plug->mprev = plug->mout;
 
 	//now handle the Control Voltage port
-#ifdef CV_PORT
+#ifdef CV_PORTS
         if(plug->out <= *plug->threshold_p)
         {
             plug->cv_out_p[i] = *plug->cmin_p;
@@ -217,23 +277,8 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     }
 
     //do last value to output ctl port, should maybe do average but meh...
-    if(plug->out <= *plug->threshold_p)
-    {
-	*plug->ctl_out_p = 0;
-    }
-    else if(plug->out >= *plug->saturation_p)
-    {
-        *plug->ctl_out_p = 1;
-    }
-    else
-    {
-        *plug->ctl_out_p = (plug->out - *plug->threshold_p)/(*plug->saturation_p  - *plug->threshold_p);
-    }
-    if(*plug->crev_p)
-    {
-        *plug->ctl_out_p = 1 - *plug->ctl_out_p;
-    }
     *plug->ctl_in_p = plug->out;
+    *plug->ctl_out_p = plug->mout/127.0;//when CV ports are supported this will show the CV value
 }
 
 
@@ -244,3 +289,31 @@ void cleanup_envfollower(LV2_Handle handle)
     free(plug);
 }
 
+
+//lv2 stuff
+LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features);
+void connect_envfollower_ports(LV2_Handle handle, uint32_t port, void *data);
+void run_envfollower( LV2_Handle handle, uint32_t nframes);
+void cleanup_envfollower(LV2_Handle handle);
+
+static const LV2_Descriptor envfollower_descriptor={
+    ENVFOLLOWER_URI,
+    init_envfollower,
+    connect_envfollower_ports,
+    NULL,//activate
+    run_envfollower,
+    NULL,//deactivate
+    cleanup_envfollower,
+    NULL//extension
+};
+
+LV2_SYMBOL_EXPORT
+const LV2_Descriptor* lv2_descriptor(uint32_t index)
+{
+    switch (index) {
+    case 0:
+        return &envfollower_descriptor;
+    default:
+        return NULL;
+    }
+}

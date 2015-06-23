@@ -6,8 +6,8 @@
 #include<string.h>
 #include<math.h>
 #include"rms_calc.h"
+#include"stuck.h"
 
-#define STUCK_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck"
 //#define CV_PORTS
 
 enum states
@@ -51,17 +51,6 @@ typedef struct _STUCK
     float *release_p;
     float *dbg_p;
 }STUCK;
-
-enum stuck_ports
-{
-    IN =0,
-    OUT,
-    STICKIT,
-    DRONEGAIN,
-    RELEASE,
-    TRIGGER,
-    DBG
-};
 
 void run_stuck(LV2_Handle handle, uint32_t nframes)
 {

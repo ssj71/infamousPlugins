@@ -2,7 +2,8 @@
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+@prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
+@prefix pprops: <http://lv2plug.in/ns/ext/port-props> .
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 
@@ -16,7 +17,7 @@
         ] ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
-
+        ui:ui <http://infamousplugins.sourceforge.net/plugs.html#hip2b_ui> ;
 
         lv2:port [
                 a lv2:InputPort, lv2:AudioPort ;

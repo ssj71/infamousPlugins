@@ -1,29 +1,61 @@
 Welcome to the INFAMOUS Plugins README
 
-Things are just firing up. So far we have exactly 8 plugins. But hey, its gettin there right?
+These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use. So far I have exactly 7 plugins. Installation is discussed first here then the plugins below.
 
-IF YOU HAVE SEEN THESE PLUGINS PICTURED ON OUR WEBSITE YOU WILL NOTICE THAT THERE ARE NO GUIs IN THIS VERSION! The GUIs are in version 0.1.0, which shall be released when either adequate donations, or sufficient time has elapsed. Please visit http://infamousplugins.sourceforge.net/donations.html to learn more.
-The GUIs are in version 0.1.0, which shall be released when either adequate donations, or sufficient
-time has elapsed. Please visit http://infamousplugins.sourceforge.net/donations.html to learn more.
+To install, fulfill the dependencies, then run the commands:
+    mkdir build
+    cd build 
+    cmake ..
+    make
+    sudo make install
 
-
-To install this version, make sure you have the dependencies and then just run the script install.sh:
-    ./install.sh
-    
-    
-This will ask for your password using su or sudo, so be prepared. If you are not a sudoer, then pass the argument --no-sudo when you call the install script. Once its complete all the plugins will be installed in the correct directory to be used by your favorite LV2 host. There are also several utilities generated in the utils/ folder that must be executed locally.
-
+Once this is complete you can already start using the plugins in your favorite LV2 host
 
 Dependencies:
+    cmake
+    ntk
+    ntk-fluid
+    cairo
+    lv2-dev
+
+
+If you do not have ntk and ntk-fluid already installed use the commands:
+    git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
+    cd ntk
+    ./waf configure
+    ./waf
+    sudo ./waf install
+
+If you are anti-GUI the plugins are designed to be completely functional with a host generated UI. You can build and install the plugins without GUIs. To install without GUIs, use the legacy qmake files. Make sure you have the dependencies and then just run the script install.sh:
+    ./install_no_gui.sh
+This will ask for your password using sudo, so be prepared. If you are not a sudoer, run the script with the option --no-sudo and it will use su instead.
+Since I am moving the project to a new build system this legacy install method will not be as tested, but if you have trouble, post an issue on my sourceforge project page and I will be happy to help out.
+
+No GUI Build Dependencies:
     qmake (qt4-dev-tools package on ubuntu)
     lv2-dev
     gcc
     fftw3
-
-
+    
 A NOTE ABOUT CV PORTS!:
-I have commented out all the cv ports (envfollower and stuck) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they we frequently interpreted as second port of a stereo pair.
+I have commented out all the cv ports (envfollower, stuck, and the powercut/up plugins) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they were frequently interpreted as second port of a stereo pair.
 If you want to re-enable the ports, in envfollower.c and stuck.c uncomment the line "//#define CV_PORTS" (remove the "//") and in the respective .ttl files, uncomment the blocks at the bottom. If you wish to use the CV ports as audio ports (required for any host but ingen at the time of writing), open the *.ttl file for that plugin and find the line with "lv2:AudioPort ; #CvPort ;" and remove "AudioPort ; #" which will cause the port to be declared as Cv rather than audio.
+
+A NOTE TO PACKAGERS:
+Each plugin can be built individually by navigating to the directory src/$pluginName. If you are using guis you can do an out of source build by performing:
+    mkdir build
+    cd build
+    cmake ..
+    make
+    cp $plugin.so ../$plugin.lv2/
+    cp $plugin_ui.so ../$plugin_ui.lv2/
+    cd ..
+
+The plugin bundle to be packaged is the $plugin.lv2 directory. Each plugin is in a separate folder; repeat this in every plugin's subdirectory.
+
+If you wish to package the GUI-less versions, run these commands instead:
+    qmake
+    make
 
 Now lets talk about what you're installing:
 
@@ -32,7 +64,7 @@ Now lets talk about what you're installing:
 
 This synthesizer plugin is an additive synthesizer, where 16 harmonics are added according to rules of elementary cellular automata. A rule is created and determines whether a cell will survive, die, or be created based on its previous state and its neighbors. Thus a harmonic will either play or be silent according to its associated cell's state. The 16 cells are on a torus where the ends wrap around to meet, therefore the highest harmonic influences the state of the first harmonic. This synth has no filter, so harmonics must be controlled through the rule and initial condition. To assist in your sound design there is a command line utility included called rule that will print out the cell states in sequence (see rule on line 53). For more information regarding Cellular Automaton in general read wikipedia under Elementary Cellular Automaton.
 
-It is unlimitedly polyphonic and has 2 LFOs. It also features an ADBSSR envelope generator for the amplitude envelope.
+It is unlimitedly polyphonic and has 2 LFOs. It also features an ADBSSR envelope generator for the amplitude envelope. Using the GUI you get to select each bit of the rule and initial condition. You can also click to the right of the row of buttons to set the value directly. Also if you click on HAL 9000 it will randomize all the parameters (except master gain and channel).
 
 Parameter Description:
     CHANNEL - Midi channel, set to 0 for all channels
@@ -61,11 +93,12 @@ Parameter Description:
 
 
 ==========================================
-1b. rule
+1b. infamous-rule
 
-This visulizes cell automata on a torus. Run it by opening a terminal, navigating to the utils folder and run 
+This program is less necessary as the new GUI shows the first 20 states of the cells. The source is still there and you can still install it with the legacy install.sh script.
+This visualizes cell automata on a torus. Run it by opening a terminal run 
 
-    ./rule <rule number> <initial condition>
+    infamous-rule <rule number> <initial condition>
     
 The least significant digit corresponds to the first harmonic
 
@@ -74,6 +107,7 @@ The least significant digit corresponds to the first harmonic
 2. Envelope Follower
 
 This is a fully featured envelope follower plugin. It can be used for pumping the gain with the bass or all sorts of other things that I don't really know about. Someone just wanted it so I made it. It sends a midi control value according to the amplitude of the input audio.
+Because CV ports are not supported in hosts the parameters effecting CVs are not on the GUI. If you enable the port when you build you will need to use the host generated GUI to adjust them.
 
 Parameter Description: 
     PEAKRMS - blend of peak and/or rms value for amplitude

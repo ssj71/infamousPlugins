@@ -38,22 +38,16 @@ typedef struct _NOTE
     float envelope[6];//slope/slope/val/slope/val/slope of envelope ADBSSR
     bool note_dead;
 
-    double (*amod_func)(double);
     unsigned char amod_wave;
     float* amod_gain;
     double amod_step;
     double amod_phase;
-    double amod_func_min;//domain of function i.e. [-pi,pi]
-    double amod_func_max;
     HYSTERESIS ahyst;
 
-    double (*fmod_func)(double);
     unsigned char fmod_wave;
     float* fmod_gain;//gain 1 mods \pm 1 semitone
     double fmod_step;
     double fmod_phase;
-    double fmod_func_min;//domain of function i.e. [-pi,pi]
-    double fmod_func_max;
     HYSTERESIS fhyst;
 }NOTE;
 

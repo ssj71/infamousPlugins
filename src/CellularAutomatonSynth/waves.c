@@ -6,6 +6,8 @@
 #include<time.h>
 #include<math.h>
 
+#define _GNU_SOURCE
+
 void init_waves(WAVESOURCE* self)
 {
     unsigned short i =0;

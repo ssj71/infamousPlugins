@@ -1,0 +1,67 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {.h} 
+code_name {.cxx}
+class StuckUI {open
+} {
+  Function {show()} {open
+  } {
+    Fl_Window ui {
+      label {the infamous stuck} open
+      xywh {306 258 256 400} type Double box UP_BOX resizable
+      code0 {\#include"ffffltk.h"}
+      code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
+      code2 {using namespace ffffltk;}
+      code3 {o->show();} visible
+    } {
+      Fl_Group bg {open
+        xywh {0 0 256 400} resizable
+        code0 {\#include"stuck.h"}
+        code1 {\#include"draw_stuckbg.h"}
+        code2 {o->drawing_h = cairo_code_draw_stuckbg_get_height(); o->drawing_w = cairo_code_draw_stuckbg_get_width(); o->drawing_f = &cairo_code_draw_stuckbg_render;}
+        class Aspect_Group
+      } {
+        Fl_Button stickit {
+          callback {led->value(stickit->value());
+write_function(controller,STICKIT,sizeof(float),0,&stickit->floatvalue);}
+          tooltip {Stick It!} xywh {43 191 22 72}
+          code1 {\#include"draw_toggleSwitch.h"}
+          code2 {o->type(FL_TOGGLE_BUTTON);}
+          code3 {o->drawing_h = cairo_code_draw_toggleSwitch_get_height(); o->drawing_w = cairo_code_draw_toggleSwitch_get_width(); o->drawing_f = &cairo_code_draw_toggleSwitch_render;}
+          class Button
+        }
+        Fl_Button led {
+          xywh {77 217 18 18} deactivate
+          code1 {\#include"draw_LED.h"}
+          code2 {o->type(FL_TOGGLE_BUTTON);}
+          code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_blueLED_render;}
+          class Button
+        }
+        Fl_Dial volume {
+          callback {write_function(controller,DRONEGAIN,sizeof(float),0,&volume->floatvalue);}
+          tooltip {Drone Gain} xywh {50 280 71 71} maximum 2 step 0.01 value 0.5
+          code1 {\#include"draw_tabDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_tabDial_get_height(); o->drawing_w = cairo_code_draw_tabDial_get_width(); o->drawing_f = &cairo_code_draw_tabDial_render;}
+          class Dial
+        }
+        Fl_Dial time {
+          callback {write_function(controller,RELEASE,sizeof(float),0,&time->floatvalue);} selected
+          tooltip Release xywh {147 280 71 71} minimum 0.01 maximum 3 step 0.01 value 0.5
+          code1 {\#include"draw_tabDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_tabDial_get_height(); o->drawing_w = cairo_code_draw_tabDial_get_width(); o->drawing_f = &cairo_code_draw_tabDial_render;}
+          code3 {sprintf(o->units,"s");}
+          class Dial
+        }
+      }
+    }
+  }
+  decl {LV2UI_Write_Function write_function;} {public local
+  }
+  decl {LV2UI_Controller controller;} {public local
+  }
+  Function {idle()} {open return_type void
+  } {
+    code {Fl::check();
+Fl::flush();} {}
+  }
+} 

@@ -338,7 +338,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                 }
                             }
                         }
-                        synth->pitchbend = myPow2(bend/49152);//49152 is 12*8192/2
+                        synth->pitchbend = myPow2(bend/49152.0);//49152 is 12*8192/2
                         frame_no = event->time.frames;
                     }//message types
                 }//correct channel
@@ -429,3 +429,24 @@ void cleanup_casynth(LV2_Handle handle)
     free(synth);
 }
 
+static const LV2_Descriptor casynth_descriptor={
+    CASYNTH_URI,
+    init_casynth,
+    connect_casynth_ports,
+    NULL,//activate
+    run_casynth,
+    NULL,//deactivate
+    cleanup_casynth,
+    NULL//extension
+}; 
+
+LV2_SYMBOL_EXPORT
+const LV2_Descriptor* lv2_descriptor(uint32_t index)
+{
+    switch (index) {
+    case 0:
+        return &casynth_descriptor;
+    default:
+        return NULL;
+    }
+}
