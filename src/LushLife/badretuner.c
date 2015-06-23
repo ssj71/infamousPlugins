@@ -530,8 +530,8 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
             }
             if (di >= tune->Ipsize) di -= tune->Ipsize;
 #if(1)
-            //for(l=0;l<tune->nWoosh;l++)
-            for(l=0;l<=0;l++)
+            for(l=0;l<tune->nWoosh;l++)
+            //for(l=0;l<=0;l++)
             {
                 r1 = tune->Woosh[l].Rindex1; // Read index for current input frame.
                 r2 = tune->Woosh[l].Rindex2; // Second read index while crossfading. 
@@ -617,10 +617,21 @@ void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr,
                         {
                             tune->Frcount = 0;
                             findcycle(tune);
-                            if (!tune->Cycle[tune->Ipindex>>tune->DownShift])
+                            int i = tune->Ipindex>>tune->DownShift;
+                            if (!tune->Cycle[i])
+                            if( tune->Count++>5 )
                             {
-                                tune->Cycle[tune->Ipindex>>tune->DownShift] = tune->Frsize;
+                                tune->Cycle[i] = tune->Frsize;
+                                tune->Count = 0;
                             }
+                            else
+                            {
+                                if(i)
+                                    tune->Cycle[i] = tune->Cycle[i-1];
+                                else
+                                    tune->Cycle[15] = tune->Cycle[0];
+                            }
+                                
                         }
                     }
                     if (tune->Frcount == 0)

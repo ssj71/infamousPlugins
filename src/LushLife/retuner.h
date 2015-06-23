@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
 //
-//  Copyright (C) 2014-2111 Spencer Jackson <ssjackson71@gmail.com>
+//  Copyright (C) 2009-2011 Fons Adriaensen <fons@linuxaudio.org>
 //    
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -19,34 +19,110 @@
 // -----------------------------------------------------------------------
 
 
-//  This code is mostly written by Jeff Glatt based on original code from Fons Adriaensen
-
 #ifndef __RETUNER_H
 #define __RETUNER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
-typedef void* TUNERHANDLE;
+#include <fftw3.h>
+#include <zita-resampler/resampler.h>
 
-void RetunerSetPitch(TUNERHANDLE tune, float v);
-void RetunerSetNoteBias(TUNERHANDLE tune, float v);
-void RetunerSetFilter(TUNERHANDLE tune, float v);
-void RetunerSetGain(TUNERHANDLE tune, int i, float v);
-void RetunerSetPan(TUNERHANDLE tune, int i, float v);
-void RetunerSetActive(TUNERHANDLE tune, int i, int a);
-void RetunerSetOffset(TUNERHANDLE tune, int i, float v);
-void RetunerSetNoteMask(TUNERHANDLE tune, unsigned int k);
-void RetunerSetLatency(TUNERHANDLE tune, int i, float samp);
-unsigned int RetunerGetLatency(TUNERHANDLE tune, int i);
-unsigned int RetunerGetNoteset(TUNERHANDLE tune);
-float RetunerGetError(TUNERHANDLE tune);
-void RetunerFree(TUNERHANDLE handle);
-TUNERHANDLE RetunerAlloc(int i, int fsamp);
-void RetunerProcess(TUNERHANDLE handle, float * inp, float * outl, float * outr, unsigned int nfram);
-#ifdef __cplusplus
-}
-#endif
+
+class Retuner
+{
+public:
+
+    Retuner (int fsamp);
+    ~Retuner (void);
+
+    int process (int nfram, float *inp, float *out);
+
+    void set_refpitch (float v)
+    {
+        _refpitch = v;
+    }
+
+    void set_notebias (float v)
+    {
+        _notebias = v / 13.0f;
+    }
+
+    void set_corrfilt (float v)
+    {
+        _corrfilt = (4 * _frsize) / (v * _fsamp);
+    }
+
+    void set_corrgain (float v)
+    {
+        _corrgain = v;
+    }
+
+    void set_corroffs (float v)
+    {
+        _corroffs = v;
+    }
+
+    void set_notemask (int k)
+    {
+        _notemask = k;
+    }
+   
+    int get_noteset (void)
+    {
+        int k;
+
+        k = _notebits;
+        _notebits = 0;
+        return k;
+    }
+
+    float get_error (void)
+    {
+        return 12.0f * _error;
+    }
+
+
+private:
+
+    void  findcycle (void);
+    void  finderror (void);
+    float cubic (float *v, float a);
+
+    int              _fsamp;
+    int              _ifmin;
+    int              _ifmax;
+    bool             _upsamp;
+    int              _fftlen;
+    int              _ipsize;
+    int              _frsize;
+    int              _ipindex;
+    int              _frindex;
+    int              _frcount;
+    float            _refpitch;
+    float            _notebias;
+    float            _corrfilt; 
+    float            _corrgain;
+    float            _corroffs;
+    int              _notemask;
+    int              _notebits;
+    int              _lastnote;
+    int              _count;
+    float            _cycle;
+    float            _error;
+    float            _ratio;
+    float            _phase;
+    bool             _xfade;
+    float            _rindex1;
+    float            _rindex2;
+    float           *_ipbuff;
+    float           *_xffunc;
+    float           *_fftTwind;
+    float           *_fftWcorr;
+    float           *_fftTdata;
+    fftwf_complex   *_fftFdata;
+    fftwf_plan       _fwdplan;
+    fftwf_plan       _invplan;
+    Resampler        _resampler;
+};
+
 
 #endif
