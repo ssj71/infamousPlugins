@@ -74,6 +74,8 @@ Retuner::Retuner (int fsamp) :
     _ifmin = _fsamp / 1200;
     _ifmax = _fsamp / 60;
 
+    _ipsize*=4;//ssj71
+
     // Various buffers
     _ipbuff = new float[_ipsize + 3];  // Resampled or filtered input
     _xffunc = new float[_frsize];      // Crossfade function
@@ -246,7 +248,7 @@ int Retuner::process (int nfram, float *inp, float *out)
             {
                 _frcount = 0;
                 findcycle ();
-                if (_cycle)
+                if (_cycle && _corrgain)//ssj don't bother finding error if just pitch shifting
                 {
                     // If the pitch estimate succeeds, find the
                     // nearest note and required resampling ratio.

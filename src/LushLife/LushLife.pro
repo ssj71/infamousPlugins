@@ -14,12 +14,10 @@ QMAKE_CFLAGS += -g \
     -ffast-math
 
 SOURCES += lushlife.c \
-    retuner.c \
-    c_resampler.cpp
+    retuner.cc 
     
 HEADERS += lushlife.h \
-    retuner.h \
-    c_resampler.h
+    retuner.h 
 
 OTHER_FILES += \
     lushlife.lv2/manifest.ttl \
