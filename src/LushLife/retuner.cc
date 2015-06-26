@@ -251,6 +251,7 @@ int Retuner::process (int nfram, float *inp, float *out)
                     // If the pitch estimate succeeds, find the
                     // nearest note and required resampling ratio.
                     _count = 0;
+                    if(_corrgain)//ssj don't bother calculating if just shifting
                     finderror ();
                 }
                 else if (++_count > 5)
