@@ -26,7 +26,7 @@
 #include "retuner.h"
 
 
-Retuner::Retuner (int fsamp) :
+Retuner::Retuner (int fsamp, int nshift) :
     _fsamp (fsamp),
     _refpitch (440.0f),
     _notebias (0.0f),
@@ -69,6 +69,8 @@ Retuner::Retuner (int fsamp) :
         _fftlen = 8192;
         _frsize = 512;
     }
+    
+    _ipsize *= 4; //ssj add buffer space to allow delays
 
     // Accepted correlation peak range, corresponding to 60..1200 Hz.
     _ifmin = _fsamp / 1200;
@@ -133,6 +135,9 @@ Retuner::Retuner (int fsamp) :
     _frcount = 0;
     _rindex1 = _ipsize / 2;
     _rindex2 = 0;
+
+    //ssj initialize shifts
+    _shift = new Shifter[nshift];
 }
 
 
@@ -146,6 +151,7 @@ Retuner::~Retuner (void)
     fftwf_free (_fftFdata);
     fftwf_destroy_plan (_fwdplan);
     fftwf_destroy_plan (_invplan);
+    delete[] _shift;
 }
 
 

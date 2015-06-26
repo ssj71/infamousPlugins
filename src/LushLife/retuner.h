@@ -45,8 +45,7 @@ class Retuner
 {
 public:
 
-    //Retuner (int fsamp, int nshift = 1);
-    Retuner (int fsamp);
+    Retuner (int fsamp, int nshift = 1);
     ~Retuner (void);
 
     int process (int nfram, float *inp, float *out);
