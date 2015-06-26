@@ -25,12 +25,14 @@
 #include <math.h>
 #include "retuner.h"
 
-Retuner::Retuner (int fsamp, int nshift) :
+
+Retuner::Retuner (int fsamp) :
     _fsamp (fsamp),
     _refpitch (440.0f),
     _notebias (0.0f),
     _corrfilt (1.0f),
     _corrgain (1.0f),
+    _corroffs (0.0f),
     _notemask (0xFFF)
 {
     int   i, h;
@@ -71,8 +73,6 @@ Retuner::Retuner (int fsamp, int nshift) :
     // Accepted correlation peak range, corresponding to 60..1200 Hz.
     _ifmin = _fsamp / 1200;
     _ifmax = _fsamp / 60;
-
-    _ipsize*=4;//ssj71 enlarge buffer to allow delays
 
     // Various buffers
     _ipbuff = new float[_ipsize + 3];  // Resampled or filtered input
@@ -126,29 +126,13 @@ Retuner::Retuner (int fsamp, int nshift) :
     _count = 0;
     _cycle = _frsize;
     _error = 0.0f;
-    //_ratio = 1.0f;
-    //_xfade = false;
+    _ratio = 1.0f;
+    _xfade = false;
     _ipindex = 0;
     _frindex = 0;
     _frcount = 0;
-    //_rindex1 = _ipsize / 2;
-    //_rindex2 = 0;
-
-    _shift = new Shifter[nshift];
-    for(i=0;i<nshift;i++)
-    {
-        _shift[i].active = 1;
-        _shift[i].gain = 0.5;
-        _shift[i].pan = 0.5;
-        _shift[i].ratio = 1.0f;
-        _shift[i].rindex1 = _ipsize/2;
-        _shift[i].rindex2 = 0;
-        _shift[i].delay = 0;
-        _shift[i].xfade = false;
-        _shift[i].corroffs = 0.0f;
-        _shift[i].gainstep = 0.0f;
-        _shift[i].panstep = 0.0f; 
-    }
+    _rindex1 = _ipsize / 2;
+    _rindex2 = 0;
 }
 
 
@@ -162,22 +146,13 @@ Retuner::~Retuner (void)
     fftwf_free (_fftFdata);
     fftwf_destroy_plan (_fwdplan);
     fftwf_destroy_plan (_invplan);
-    delete[] _shift;
 }
 
 
-//mono version for backward compatibility
 int Retuner::process (int nfram, float *inp, float *out)
-{
-    process(nfram,inp,out,out);
-}
-
-int Retuner::process (int nfram, float *inp, float *outl, float* outr)
 {
     int    i, k, fi;
     float  ph, dp, r1, r2, dr, u1, u2, v;
-
-    float* out = outl;//ssj
 
     // Pitch shifting is done by resampling the input at the
     // required ratio, and eventually jumping forward or back
@@ -271,7 +246,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float* outr)
             {
                 _frcount = 0;
                 findcycle ();
-                if (_cycle && _corrgain)//ssj don't bother finding error if just pitch shifting
+                if (_cycle)
                 {
                     // If the pitch estimate succeeds, find the
                     // nearest note and required resampling ratio.

@@ -45,7 +45,8 @@ class Retuner
 {
 public:
 
-    Retuner (int fsamp, int nshift = 1);
+    //Retuner (int fsamp, int nshift = 1);
+    Retuner (int fsamp);
     ~Retuner (void);
 
     int process (int nfram, float *inp, float *out);
@@ -126,18 +127,18 @@ private:
     float            _notebias;
     float            _corrfilt; 
     float            _corrgain;
-    //float            _corroffs;
+    float            _corroffs;//
     int              _notemask;
     int              _notebits;
     int              _lastnote;
     int              _count;
     float            _cycle;
     float            _error;
-    //float            _ratio;
+    float            _ratio;//
     //float            _phase;//ssj not used
-    //bool             _xfade;
-    //float            _rindex1;
-    //float            _rindex2;
+    bool             _xfade;//
+    float            _rindex1;//
+    float            _rindex2;//
     float           *_ipbuff;
     float           *_xffunc;
     float           *_fftTwind;
