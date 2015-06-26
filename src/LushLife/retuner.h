@@ -74,7 +74,8 @@ public:
 
     void set_corroffs (float v, int i=0)
     {
-        _shift[i].corroffs = v;
+        //_shift[i].corroffs = v;
+        _corroffs = v;
     }
 
     void set_notemask (int k)

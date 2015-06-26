@@ -44,6 +44,8 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
 
     //RetunerSetGain(plug->tuner,-1,*plug->dry_gain_p);
     //RetunerSetPan(plug->tuner,-1,*plug->dry_pan_p);
+    plug->tuner->set_corroffs(*plug->shift_p[0]);
+    plug->tuner->set_corrgain(0);
 
     unsigned int i;
     for(i=0;i<NWOOSH;i++)
@@ -59,11 +61,13 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
     plug->tuner->process(nframes,plug->input_p,plug->outputr_p);
 
     //apply master gain
+    /*
     for(i=0;i<nframes;i++)
     {
         plug->outputl_p[i] *= *plug->mastergain_p;
         plug->outputr_p[i] *= *plug->mastergain_p;
     }
+    */
     *plug->latency_p = 0;//plug->latency;
 
 return;
@@ -77,6 +81,8 @@ LV2_Handle init_lushlife(const LV2_Descriptor *descriptor,double sample_freq, co
     plug->sample_freq = sample_freq;
 
     //plug->latency = RetunerGetLatency(plug->tuner,0);
+
+    plug->tuner->set_corrgain(0);
 
     return plug;
 }
