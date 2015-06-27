@@ -73,8 +73,8 @@ public:
 
     void set_corroffs (float v, int i=0)
     {
-        //_shift[i].corroffs = v;
-        _corroffs = v;
+        _shift[i].corroffs = v;
+        //_corroffs = v;
     }
 
     void set_notemask (int k)
@@ -127,18 +127,18 @@ private:
     float            _notebias;
     float            _corrfilt; 
     float            _corrgain;
-    float            _corroffs;//
+    //float            _corroffs;//
     int              _notemask;
     int              _notebits;
     int              _lastnote;
     int              _count;
     float            _cycle;
     float            _error;
-    float            _ratio;//
+    //float            _ratio;//
     //float            _phase;//ssj not used
-    bool             _xfade;//
-    float            _rindex1;//
-    float            _rindex2;//
+    //bool             _xfade;//
+    //float            _rindex1;//
+    //float            _rindex2;//
     float           *_ipbuff;
     float           *_xffunc;
     float           *_fftTwind;
