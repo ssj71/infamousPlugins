@@ -101,6 +101,21 @@ public:
     {
         return 1.5 * _frsize;
     }
+
+    void set_active(int a, int i)
+    {
+        _shift[i].active = a;
+    }
+
+    void set_gain(float g, int i)
+    {
+        _shift[i].gain = g;
+    }
+
+    void set_pan(float p, int i)
+    {
+        _shift[i].pan = p;
+    }
     
     void set_delay(float ms, int i)
     {

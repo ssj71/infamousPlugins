@@ -55,6 +55,11 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
         //RetunerSetOffset(plug->tuner,i,*plug->shift_p[i]);
         //RetunerSetGain(plug->tuner,i,*plug->gain_p[i]);
         //RetunerSetPan(plug->tuner,i,*plug->pan_p[i]);
+        plug->tuner->set_active((int)*plug->active_p[i],i);
+        //plug->tuner->set_delay(plug->delay_p[i]*plug->sample_freq/1000,i);
+        plug->tuner->set_corroffs(*plug->shift_p[i],i);
+        plug->tuner->set_gain(*plug->gain_p[i],i);
+        plug->tuner->set_pan(*plug->pan_p[i],i);
     }
 
     //RetunerProcess(plug->tuner,plug->input_p,plug->outputl_p,plug->outputr_p,nframes);

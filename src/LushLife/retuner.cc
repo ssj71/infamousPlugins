@@ -139,7 +139,7 @@ Retuner::Retuner (int fsamp, int nshift) :
     //ssj initialize shifts
     _shift = new Shifter[nshift];
     _nshift = nshift;
-    for(i=0;i<nshift;i++)
+    for (i = 0; i < nshift; i++)
     {
         _shift[i].active = 0;
         _shift[i].gain = 1.0f;
@@ -177,10 +177,9 @@ int Retuner::process (int nfram, float *inp, float *out)
 
 int Retuner::process (int nfram, float *inp, float *outl, float *outr)
 {
-    int    i, k, fi, shftdx=0;
+    int    i, k, k2, fi;
     float  ph, dp, r1, r2, dr, u1, u2, v;
 
-    float* out = outr;
 
     // Pitch shifting is done by resampling the input at the
     // required ratio, and eventually jumping forward or back
@@ -193,8 +192,12 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
     // by 1/4 of the FFT length.
 
     fi = _frindex;  // Write index in current fragment.
-    r1 = _shift[shftdx].rindex1;  // Read index for current input frame.
-    r2 = _shift[shftdx].rindex2;  // Second read index while crossfading. 
+    //initialize output
+    for ( i = 0; i < nfram; i++)
+    {
+        outl[i] = 0;
+        outr[i] = 0;
+    }
 
     // No assumptions are made about fragments being aligned
     // with process() calls, so we may be in the middle of
@@ -233,37 +236,53 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
         if (_ipindex == _ipsize) _ipindex = 0;
 
         // Process available samples.
-        dr = _shift[shftdx].ratio;
-        if (_upsamp) dr *= 2;
-        if (_shift[shftdx].xfade)
+        for (int shftdx = 0; shftdx < _nshift; shftdx++)
         {
-            // Interpolate and crossfade.
-            while (k--)
+            float* out1 = outr;
+            float* out2 = outl;
+            k2 = k;
+            r1 = _shift[shftdx].rindex1;  // Read index for current input frame.
+            r2 = _shift[shftdx].rindex2;  // Second read index while crossfading. 
+            dr = _shift[shftdx].ratio;
+            if (_upsamp) dr *= 2;
+            if (_shift[shftdx].xfade)
             {
-                i = (int) r1;
-                u1 = cubic (_ipbuff + i, r1 - i);
-                i = (int) r2;
-                u2 = cubic (_ipbuff + i, r2 - i);
-                v = _xffunc [fi++];
-                *out++ = (1 - v) * u1 + v * u2;
-                r1 += dr;
-                if (r1 >= _ipsize) r1 -= _ipsize;
-                r2 += dr;
-                if (r2 >= _ipsize) r2 -= _ipsize;
+                // Interpolate and crossfade.
+                while (k2--)
+                {
+                    i = (int) r1;
+                    u1 = cubic (_ipbuff + i, r1 - i);
+                    i = (int) r2;
+                    u2 = cubic (_ipbuff + i, r2 - i);
+                    v = _xffunc [fi++];
+                    //TODO: add pan and gain interp
+                    *out1++ += (1 - v) * u1 + v * u2;
+                    *out2++ += (1 - v) * u1 + v * u2;
+                    r1 += dr;
+                    if (r1 >= _ipsize) r1 -= _ipsize;
+                    r2 += dr;
+                    if (r2 >= _ipsize) r2 -= _ipsize;
+                }
             }
-        }
-        else
-        {
-            // Interpolation only.
-            fi += k;
-            while (k--)
+            else
             {
-                i = (int) r1;
-                *out++ = cubic (_ipbuff + i, r1 - i);
-                r1 += dr;
-                if (r1 >= _ipsize) r1 -= _ipsize;
+                // Interpolation only.
+                fi += k2;
+                while (k2--)
+                {
+                    i = (int) r1;
+                    *out1++ += cubic (_ipbuff + i, r1 - i);
+                    *out2++ += cubic (_ipbuff + i, r1 - i);
+                    r1 += dr;
+                    if (r1 >= _ipsize) r1 -= _ipsize;
+                }
             }
+            // Save local state.
+            _shift[shftdx].rindex1 = r1;
+            _shift[shftdx].rindex2 = r2;
         }
+        outl += k;
+        outr += k;
  
         // If at end of fragment check for jump.
         if (fi == _frsize) 
@@ -298,50 +317,59 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     _lastnote = -1;
                 }
                 
-                _shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs / 12.0f - _error * _corrgain);
+                //update ratios
+                for (int shftdx = 0; shftdx < _nshift; shftdx++)
+                    _shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs / 12.0f - _error * _corrgain);
             }
 
-            // If the previous fragment was crossfading,
-            // the end of the new fragment that was faded
-            // in becomes the current read position.
-            if (_shift[shftdx].xfade) r1 = r2;
+            for (int shftdx = 0; shftdx < _nshift; shftdx++)
+            {
+                r1 = _shift[shftdx].rindex1;  // Read index for current input frame.
+                r2 = _shift[shftdx].rindex2;  // Second read index while crossfading. 
+                // If the previous fragment was crossfading,
+                // the end of the new fragment that was faded
+                // in becomes the current read position.
+                if (_shift[shftdx].xfade) r1 = r2;
 
-            // A jump must correspond to an integer number
-            // of pitch periods, and to avoid reading outside
-            // the circular input buffer limits it must be at
-            // least one fragment size.
-            dr = _cycle * (int)(ceilf (_frsize / _cycle));
-            dp = dr / _frsize;
-            ph = r1 - _ipindex;
-            if (ph < 0) ph += _ipsize;
-            if (_upsamp)
-            {
-                ph /= 2;
-                dr *= 2;
+                // A jump must correspond to an integer number
+                // of pitch periods, and to avoid reading outside
+                // the circular input buffer limits it must be at
+                // least one fragment size.
+                dr = _cycle * (int)(ceilf (_frsize / _cycle));
+                dp = dr / _frsize;
+                ph = r1 - _ipindex;
+                if (ph < 0) ph += _ipsize;
+                if (_upsamp)
+                {
+                    ph /= 2;
+                    dr *= 2;
+                }
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10;
+                if (ph > 0.5f)
+                {
+                    // Jump back by 'dr' frames and crossfade.
+                    _shift[shftdx].xfade = true;
+                    r2 = r1 - dr;
+                    if (r2 < 0) r2 += _ipsize;
+                }
+                else if (ph + dp < 0.5f)
+                {
+                    // Jump forward by 'dr' frames and crossfade.
+                    _shift[shftdx].xfade = true;
+                    r2 = r1 + dr;
+                    if (r2 >= _ipsize) r2 -= _ipsize;
+                }
+                else _shift[shftdx].xfade = false;
+                // Save local state.
+                _shift[shftdx].rindex1 = r1;
+                _shift[shftdx].rindex2 = r2;
             }
-            ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10;
-            if (ph > 0.5f)
-            {
-                // Jump back by 'dr' frames and crossfade.
-                _shift[shftdx].xfade = true;
-                r2 = r1 - dr;
-                if (r2 < 0) r2 += _ipsize;
-            }
-            else if (ph + dp < 0.5f)
-            {
-                // Jump forward by 'dr' frames and crossfade.
-                _shift[shftdx].xfade = true;
-                r2 = r1 + dr;
-                if (r2 >= _ipsize) r2 -= _ipsize;
-            }
-            else _shift[shftdx].xfade = false;
+            //TODO: recalculate gain/pan stepsize
         }
     }
 
     // Save local state.
     _frindex = fi;
-    _shift[shftdx].rindex1 = r1;
-    _shift[shftdx].rindex2 = r2;
 
     return 0;
 }
