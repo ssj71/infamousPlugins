@@ -25,6 +25,8 @@
 #include <math.h>
 #include "retuner.h"
 
+#define DENORMAL 1.42e-45
+
 
 Retuner::Retuner (int fsamp, int nshift) :
     _fsamp (fsamp),
@@ -142,16 +144,18 @@ Retuner::Retuner (int fsamp, int nshift) :
     for (i = 0; i < nshift; i++)
     {
         _shift[i].active = 0;
+        _shift[i].g = 1.0f;
         _shift[i].gain = 1.0f;
+        _shift[i].gainstep = 0.0f;
+        _shift[i].p = 0.5;
         _shift[i].pan = 0.5;
+        _shift[i].panstep = 0.0f;
         _shift[i].ratio = 1.0f;
         _shift[i].rindex1 =  _ipsize / 2;
         _shift[i].rindex2 = 0;
         _shift[i].delay = 0;
         _shift[i].xfade = false; 
         _shift[i].corroffs = 0.0f; 
-        _shift[i].gainstep = 0; 
-        _shift[i].panstep = 0; 
     }
     _shift[0].active = 1;
 }
@@ -238,48 +242,68 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
         // Process available samples.
         for (int shftdx = 0; shftdx < _nshift; shftdx++)
         {
-            float* out1 = outr;
-            float* out2 = outl;
-            k2 = k;
-            r1 = _shift[shftdx].rindex1;  // Read index for current input frame.
-            r2 = _shift[shftdx].rindex2;  // Second read index while crossfading. 
-            dr = _shift[shftdx].ratio;
-            if (_upsamp) dr *= 2;
-            if (_shift[shftdx].xfade)
+            if (_shift[shftdx].active)
             {
-                // Interpolate and crossfade.
-                while (k2--)
+                float* out1 = outl;
+                float* out2 = outr;
+                k2 = k;
+                r1 = _shift[shftdx].rindex1;  // Read index for current input frame.
+                r2 = _shift[shftdx].rindex2;  // Second read index while crossfading. 
+                dr = _shift[shftdx].ratio;
+                if (_upsamp) dr *= 2;
+                if (_shift[shftdx].xfade)
                 {
-                    i = (int) r1;
-                    u1 = cubic (_ipbuff + i, r1 - i);
-                    i = (int) r2;
-                    u2 = cubic (_ipbuff + i, r2 - i);
-                    v = _xffunc [fi++];
-                    //TODO: add pan and gain interp
-                    *out1++ += (1 - v) * u1 + v * u2;
-                    *out2++ += (1 - v) * u1 + v * u2;
-                    r1 += dr;
-                    if (r1 >= _ipsize) r1 -= _ipsize;
-                    r2 += dr;
-                    if (r2 >= _ipsize) r2 -= _ipsize;
+                    // Interpolate and crossfade.
+                    while (k2--)
+                    {
+                        i = (int) r1;
+                        u1 = cubic (_ipbuff + i, r1 - i);
+                        i = (int) r2;
+                        u2 = cubic (_ipbuff + i, r2 - i);
+                        v = _xffunc [fi++];
+                        v = (1 - v) * u1 + v * u2;
+                        *out1++ += v*_shift[shftdx].g*(1.0f-_shift[shftdx].p);
+                        *out2++ += v*_shift[shftdx].g*(_shift[shftdx].p-1.0f);
+                        _shift[shftdx].g += _shift[shftdx].gainstep;
+                        _shift[shftdx].p += _shift[shftdx].panstep;
+                        r1 += dr;
+                        if (r1 >= _ipsize) r1 -= _ipsize;
+                        r2 += dr;
+                        if (r2 >= _ipsize) r2 -= _ipsize;
+                    }
                 }
+                else
+                {
+                    // Interpolation only.
+                    fi += k2;
+                    while (k2--)
+                    {
+                        i = (int) r1;
+                        v =  cubic (_ipbuff + i, r1 - i);
+                        *out1++ += v*_shift[shftdx].g*(1.0f-_shift[shftdx].p);
+                        *out2++ += v*_shift[shftdx].g*(_shift[shftdx].p-1.0f);
+                        _shift[shftdx].g += _shift[shftdx].gainstep;
+                        _shift[shftdx].p += _shift[shftdx].panstep;
+                        r1 += dr;
+                        if (r1 >= _ipsize) r1 -= _ipsize;
+                    }
+                }
+                // Save local state.
+                _shift[shftdx].rindex1 = r1;
+                _shift[shftdx].rindex2 = r2;
             }
             else
             {
-                // Interpolation only.
-                fi += k2;
-                while (k2--)
-                {
-                    i = (int) r1;
-                    *out1++ += cubic (_ipbuff + i, r1 - i);
-                    *out2++ += cubic (_ipbuff + i, r1 - i);
-                    r1 += dr;
-                    if (r1 >= _ipsize) r1 -= _ipsize;
-                }
+                r1 = _shift[shftdx].rindex1;  // Read index for current input frame.
+                r2 = _shift[shftdx].rindex2;  // Second read index while crossfading. 
+                r1 += k;
+                r2 += k;
+                if (r1 >= _ipsize) r1 -= _ipsize;
+                if (r2 >= _ipsize) r2 -= _ipsize;
+                // Save local state.
+                _shift[shftdx].rindex1 = r1;
+                _shift[shftdx].rindex2 = r2;
             }
-            // Save local state.
-            _shift[shftdx].rindex1 = r1;
-            _shift[shftdx].rindex2 = r2;
         }
         outl += k;
         outr += k;
@@ -360,11 +384,39 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     if (r2 >= _ipsize) r2 -= _ipsize;
                 }
                 else _shift[shftdx].xfade = false;
+                //toggle active
+                /*
+                if (_shift[shftdx].active == -1)
+                {
+                    //fade out this shifter
+                    _shift[shftdx].active = -2;
+                    _shift[shftdx].gain = 0;
+                }
+                else if (_shift[shftdx].active == -2)
+                {
+                    //shifter is faded out, deactivate
+                    _shift[shftdx].active = 0;
+                    _shift[shftdx].g = 0;
+                }
+                */
+                // recalculate gain/pan stepsize
+                _shift[shftdx].gainstep = (_shift[shftdx].gain - _shift[shftdx].g)/_frsize;
+                _shift[shftdx].panstep = (_shift[shftdx].pan - _shift[shftdx].p)/_frsize;
+                if (_shift[shftdx].gainstep < DENORMAL || _shift[shftdx].gainstep > -DENORMAL)
+                {
+                    _shift[shftdx].gainstep = 0;
+                    _shift[shftdx].g = _shift[shftdx].gain;
+                }
+                if (_shift[shftdx].panstep < DENORMAL || _shift[shftdx].panstep > -DENORMAL)
+                {
+                    _shift[shftdx].panstep = 0;
+                    _shift[shftdx].p = _shift[shftdx].pan;
+                } 
                 // Save local state.
                 _shift[shftdx].rindex1 = r1;
                 _shift[shftdx].rindex2 = r2;
             }
-            //TODO: recalculate gain/pan stepsize
+            
         }
     }
 

@@ -37,8 +37,8 @@ typedef struct
     bool           xfade;
     float		   corroffs;
 
-    float          gainstep;
-    float          panstep;
+    float          g, gainstep;
+    float          p, panstep;
 } Shifter;
 
 class Retuner
@@ -104,12 +104,16 @@ public:
 
     void set_active(int a, int i)
     {
-        _shift[i].active = a;
+        //if (_shift[i].active == 1 && a == 0)
+        //    a = -1;
+        //if (_shift[i].active >= 0)
+            _shift[i].active = a;
     }
 
     void set_gain(float g, int i)
     {
-        _shift[i].gain = g;
+        if (_shift[i].active == 1)
+            _shift[i].gain = g;
     }
 
     void set_pan(float p, int i)
