@@ -28,7 +28,7 @@
 
 typedef struct
 {
-    char           active;
+    int           active;
     float          gain;
     float          pan;
     float          ratio;
@@ -104,9 +104,9 @@ public:
 
     void set_active(int a, int i)
     {
-        //if (_shift[i].active == 1 && a == 0)
-        //    a = -1;
-        //if (_shift[i].active >= 0)
+        if (_shift[i].active == 1 && a == 0)
+            _shift[i].active = -1;
+        if (_shift[i].active >= 0)
             _shift[i].active = a;
     }
 

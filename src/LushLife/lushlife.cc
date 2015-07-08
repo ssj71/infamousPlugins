@@ -63,7 +63,7 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
     }
 
     //RetunerProcess(plug->tuner,plug->input_p,plug->outputl_p,plug->outputr_p,nframes);
-    plug->tuner->process(nframes,plug->input_p,plug->outputr_p);
+    plug->tuner->process(nframes,plug->input_p,plug->outputl_p,plug->outputr_p);
 
     //apply master gain
     /*
@@ -82,7 +82,7 @@ LV2_Handle init_lushlife(const LV2_Descriptor *descriptor,double sample_freq, co
 {
     LUSHLIFE* plug = (LUSHLIFE*)malloc(sizeof(LUSHLIFE));
     //plug->tuner = RetunerAlloc(NWOOSH,sample_freq);
-    plug->tuner = new Retuner(sample_freq);
+    plug->tuner = new Retuner(sample_freq, NWOOSH+1);
     plug->sample_freq = sample_freq;
 
     //plug->latency = RetunerGetLatency(plug->tuner,0);
