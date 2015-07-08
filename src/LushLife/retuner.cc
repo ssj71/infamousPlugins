@@ -263,8 +263,8 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                         u2 = cubic (_ipbuff + i, r2 - i);
                         v = _xffunc [fi2++];
                         v = (1 - v) * u1 + v * u2;
-                        *out1++ += v*_shift[shftdx].g*(1.0f-_shift[shftdx].p);
-                        *out2++ += v*_shift[shftdx].g*(_shift[shftdx].p-1.0f);
+                        *out1++ += v * _shift[shftdx].g * (0.5 - 0.5 * _shift[shftdx].p);
+                        *out2++ += v * _shift[shftdx].g * (0.5 + 0.5 * _shift[shftdx].p);
                         _shift[shftdx].g += _shift[shftdx].gainstep;
                         _shift[shftdx].p += _shift[shftdx].panstep;
                         r1 += dr;
@@ -280,8 +280,8 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     {
                         i = (int) r1;
                         v =  cubic (_ipbuff + i, r1 - i);
-                        *out1++ += v*_shift[shftdx].g*(1.0f-_shift[shftdx].p);
-                        *out2++ += v*_shift[shftdx].g*(_shift[shftdx].p-1.0f);
+                        *out1++ += v * _shift[shftdx].g * (0.5 - 0.5 * _shift[shftdx].p);
+                        *out2++ += v * _shift[shftdx].g * (0.5 + 0.5 * _shift[shftdx].p);
                         _shift[shftdx].g += _shift[shftdx].gainstep;
                         _shift[shftdx].p += _shift[shftdx].panstep;
                         r1 += dr;
@@ -406,7 +406,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     _shift[shftdx].g = _shift[shftdx].gain;
                 }
                 _shift[shftdx].gainstep = dr;
-                _shift[shftdx].panstep = (_shift[shftdx].pan - _shift[shftdx].p)/_frsize;
+                dr = (_shift[shftdx].pan - _shift[shftdx].p)/_frsize;
                 if (dr != 0 && (dr < DENORMAL || dr > -DENORMAL))
                 {
                     dr = 0;
