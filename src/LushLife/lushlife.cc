@@ -44,8 +44,8 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
 
     //RetunerSetGain(plug->tuner,-1,*plug->dry_gain_p);
     //RetunerSetPan(plug->tuner,-1,*plug->dry_pan_p);
-    plug->tuner->set_corroffs(*plug->shift_p[0]);
-    plug->tuner->set_corrgain(0);
+    plug->tuner->set_gain(*plug->dry_gain_p,NWOOSH);
+    plug->tuner->set_pan(*plug->dry_pan_p,NWOOSH);
 
     unsigned int i;
     for(i=0;i<NWOOSH;i++)
@@ -66,14 +66,12 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
     plug->tuner->process(nframes,plug->input_p,plug->outputl_p,plug->outputr_p);
 
     //apply master gain
-    /*
     for(i=0;i<nframes;i++)
     {
         plug->outputl_p[i] *= *plug->mastergain_p;
         plug->outputr_p[i] *= *plug->mastergain_p;
     }
-    */
-    *plug->latency_p = 0;//plug->latency;
+    *plug->latency_p = plug->latency;
 
 return;
 }
@@ -81,13 +79,16 @@ return;
 LV2_Handle init_lushlife(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     LUSHLIFE* plug = (LUSHLIFE*)malloc(sizeof(LUSHLIFE));
-    //plug->tuner = RetunerAlloc(NWOOSH,sample_freq);
     plug->tuner = new Retuner(sample_freq, NWOOSH+1);
     plug->sample_freq = sample_freq;
 
-    //plug->latency = RetunerGetLatency(plug->tuner,0);
+    plug->latency = plug->tuner->get_latency();
 
     plug->tuner->set_corrgain(0);
+    //set last woosh as dry signal
+    plug->tuner->set_active(1,NWOOSH);
+    //plug->tuner->set_delay(plug->delay_p[i]*plug->sample_freq/1000,i);
+    plug->tuner->set_corroffs(0,NWOOSH);
 
     return plug;
 }
