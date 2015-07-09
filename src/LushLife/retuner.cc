@@ -360,31 +360,35 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 // of pitch periods, and to avoid reading outside
                 // the circular input buffer limits it must be at
                 // least one fragment size.
-                dr = _cycle * (int)(ceilf (_frsize / _cycle));
-                dp = dr / _frsize;
-                ph = r1 - _ipindex;
-                if (ph < 0) ph += _ipsize;
+                dr = _cycle * (int)(ceilf (_frsize / _cycle));//samples per ncycles  >= 1 fragment
+                dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
+                ph = r1 - _ipindex; //samples available to read (latency)
+                if (ph < 0) ph += _ipsize; //wrap around buffer end
                 if (_upsamp)
                 {
                     ph /= 2;
                     dr *= 2;
                 }
-                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10;
+                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10 + _shift[shftdx].delay; //error in fragments
                 if (ph > 0.5f)
                 {
                     // Jump back by 'dr' frames and crossfade.
                     _shift[shftdx].xfade = true;
-                    r2 = r1 - dr;
+                    r2 = r1 - ceil (ph) * dr;
+                    //r2 = r1 - dr;
                     if (r2 < 0) r2 += _ipsize;
                 }
                 else if (ph + dp < 0.5f)
                 {
                     // Jump forward by 'dr' frames and crossfade.
                     _shift[shftdx].xfade = true;
-                    r2 = r1 + dr;
+                    r2 = r1 - floor (ph) * dr;
+                    //r2 = r1 + dr;
                     if (r2 >= _ipsize) r2 -= _ipsize;
                 }
                 else _shift[shftdx].xfade = false;
+
                 //toggle active
                 if (_shift[shftdx].active == -1)
                 {

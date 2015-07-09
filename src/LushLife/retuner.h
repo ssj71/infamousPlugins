@@ -123,7 +123,7 @@ public:
     
     void set_delay(float ms, int i)
     {
-        _shift[i].delay = (1000 * ms / _fsamp) / _frsize;//delay in fragments
+        _shift[i].delay = ms * _fsamp / (1000 * _frsize);//delay in fragments
     }
 
 private:

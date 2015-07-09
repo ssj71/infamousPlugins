@@ -42,8 +42,6 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
 {
     LUSHLIFE* plug = (LUSHLIFE*)handle;
 
-    //RetunerSetGain(plug->tuner,-1,*plug->dry_gain_p);
-    //RetunerSetPan(plug->tuner,-1,*plug->dry_pan_p);
     plug->tuner->set_gain(*plug->dry_gain_p,NWOOSH);
     plug->tuner->set_pan(*plug->dry_pan_p,NWOOSH);
 
@@ -56,13 +54,12 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
         //RetunerSetGain(plug->tuner,i,*plug->gain_p[i]);
         //RetunerSetPan(plug->tuner,i,*plug->pan_p[i]);
         plug->tuner->set_active((int)*plug->active_p[i],i);
-        //plug->tuner->set_delay(plug->delay_p[i]*plug->sample_freq/1000,i);
+        plug->tuner->set_delay(*plug->delay_p[i],i);
         plug->tuner->set_corroffs(*plug->shift_p[i],i);
         plug->tuner->set_gain(*plug->gain_p[i],i);
         plug->tuner->set_pan(*plug->pan_p[i],i);
     }
 
-    //RetunerProcess(plug->tuner,plug->input_p,plug->outputl_p,plug->outputr_p,nframes);
     plug->tuner->process(nframes,plug->input_p,plug->outputl_p,plug->outputr_p);
 
     //apply master gain
@@ -87,7 +84,6 @@ LV2_Handle init_lushlife(const LV2_Descriptor *descriptor,double sample_freq, co
     plug->tuner->set_corrgain(0);
     //set last woosh as dry signal
     plug->tuner->set_active(1,NWOOSH);
-    //plug->tuner->set_delay(plug->delay_p[i]*plug->sample_freq/1000,i);
     plug->tuner->set_corroffs(0,NWOOSH);
 
     return plug;
