@@ -362,7 +362,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 // least one fragment size.
                 dr = _cycle * (int)(ceilf (_frsize / _cycle));//samples per ncycles  >= 1 fragment
                 dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
-                ph = r1 - _ipindex; //samples available to read (latency)
+                ph = r1 - _ipindex; //old samples in buffer that have been read
                 if (ph < 0) ph += _ipsize; //wrap around buffer end
                 if (_upsamp)
                 {
@@ -370,12 +370,13 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     dr *= 2;
                 }
                 //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments
-                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10 + _shift[shftdx].delay; //error in fragments
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + _shift[shftdx].delay; //error in fragments of how much old buffer is kept target is to keep it so that each fragment period ends with around ph = 4*16-2=62 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
                 if (ph > 0.5f)
                 {
                     // Jump back by 'dr' frames and crossfade.
+                    //dr could actually be several fragments while ph will be number of fragments needed
                     _shift[shftdx].xfade = true;
-                    r2 = r1 - ceil (ph) * dr;
+                    r2 = r1 - ceil (ph / dp) * dr;
                     //r2 = r1 - dr;
                     if (r2 < 0) r2 += _ipsize;
                 }
@@ -383,7 +384,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 {
                     // Jump forward by 'dr' frames and crossfade.
                     _shift[shftdx].xfade = true;
-                    r2 = r1 - floor (ph) * dr;
+                    r2 = r1 - ceil (ph / dp) * dr; // ph < 0
                     //r2 = r1 + dr;
                     if (r2 >= _ipsize) r2 -= _ipsize;
                 }
