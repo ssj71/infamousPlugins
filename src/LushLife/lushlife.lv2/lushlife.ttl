@@ -101,8 +101,17 @@
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ; 
         ], [
-        
-        
+
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 7 ;
+                lv2:symbol "LFOSHAPE" ;
+                lv2:name "LFO Shape" ;
+                lv2:default 0.5 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ; 
+                lv2:scalePoint [ rdfs:label "Noise"; rdf:value 0 ] ;
+                lv2:scalePoint [ rdfs:label "Sine"; rdf:value 0 ] ;
+        ], [
 
 
 
@@ -135,6 +144,26 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 150.0 ;
                 units:unit units:ms;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 8 ;
+                lv2:symbol "DLFOAMT" ;
+                lv2:name "Delay LFO Amount" ;
+                lv2:default 0.5 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ; 
+                units:unit units:hz ;
+                pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 8 ;
+                lv2:symbol "DLFOFREQ" ;
+                lv2:name "Delay LFO Frequency" ;
+                lv2:default 0.5 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ; 
+                units:unit units:hz ;
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
