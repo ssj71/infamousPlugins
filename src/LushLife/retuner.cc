@@ -376,16 +376,19 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     // Jump back by 'dr' frames and crossfade.
                     //dr could actually be several fragments while ph will be number of fragments needed
                     _shift[shftdx].xfade = true;
-                    r2 = r1 - ceil (ph / dp) * dr;
-                    //r2 = r1 - dr;
+                    ph = ceil (ph / dp);
+                    if(ph<1) ph=1; 
+                    r2 = r1 - ph * dr;
                     if (r2 < 0) r2 += _ipsize;
                 }
                 else if (ph + dp < 0.5f)
                 {
                     // Jump forward by 'dr' frames and crossfade.
                     _shift[shftdx].xfade = true;
-                    r2 = r1 - ceil (ph / dp) * dr; // ph < 0
-                    //r2 = r1 + dr;
+                    ph = ceil (ph / dp);
+                    if(ph>=0)ph=-1; 
+                    else if(ph < -32) ph = -32;
+                    r2 = r1 - ph * dr; // ph < 0
                     if (r2 >= _ipsize) r2 -= _ipsize;
                 }
                 else _shift[shftdx].xfade = false;
