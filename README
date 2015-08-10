@@ -26,17 +26,6 @@ If you do not have ntk and ntk-fluid already installed use the commands:
     ./waf
     sudo ./waf install
 
-If you are anti-GUI the plugins are designed to be completely functional with a host generated UI. You can build and install the plugins without GUIs. To install without GUIs, use the legacy qmake files. Make sure you have the dependencies and then just run the script install.sh:
-    ./install_no_gui.sh
-This will ask for your password using sudo, so be prepared. If you are not a sudoer, run the script with the option --no-sudo and it will use su instead.
-Since I am moving the project to a new build system this legacy install method will not be as tested, but if you have trouble, post an issue on my sourceforge project page and I will be happy to help out.
-
-No GUI Build Dependencies:
-    qmake (qt4-dev-tools package on ubuntu)
-    lv2-dev
-    gcc
-    fftw3
-    
 A NOTE ABOUT CV PORTS!:
 I have commented out all the cv ports (envfollower, stuck, and the powercut/up plugins) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they were frequently interpreted as second port of a stereo pair.
 If you want to re-enable the ports, in envfollower.c and stuck.c uncomment the line "//#define CV_PORTS" (remove the "//") and in the respective .ttl files, uncomment the blocks at the bottom. If you wish to use the CV ports as audio ports (required for any host but ingen at the time of writing), open the *.ttl file for that plugin and find the line with "lv2:AudioPort ; #CvPort ;" and remove "AudioPort ; #" which will cause the port to be declared as Cv rather than audio.
@@ -53,9 +42,6 @@ Each plugin can be built individually by navigating to the directory src/$plugin
 
 The plugin bundle to be packaged is the $plugin.lv2 directory. Each plugin is in a separate folder; repeat this in every plugin's subdirectory.
 
-If you wish to package the GUI-less versions, run these commands instead:
-    qmake
-    make
 
 Now lets talk about what you're installing:
 
@@ -157,7 +143,7 @@ This is a clone of the electro-harmonix freeze. It drones the note being played 
 =============================================
 6. power cut
 
-This plugin is commonly called tape stop. Another one I might not actually use, but the DSP was fun anyway. It just copies the audio through until the "Pull the Plug!" port is toggled to 1 (or the CV trigger port goes above 1). Then it slows the audio down gradually to a complete stop and outputs silence until the trigger is released, much like unplugging the power chord of a record player or maybe tape player. I've never heard this happen to a tape player. A turntable actually has enough inertia. Anyway, you can adjust the length of the decay and the curve. Its pretty fun. With some automation this can make some crazy glitch type effects.
+This effect is commonly called tape stop. Another one I might not actually use, but the DSP was fun anyway. It just copies the audio through until the "Pull the Plug!" port is toggled to 1 (or the CV trigger port goes above 1). Then it slows the audio down gradually to a complete stop and outputs silence until the trigger is released, much like unplugging the power chord of a record player or maybe tape player. I've never heard this happen to a tape player. A turntable actually has enough inertia. Anyway, you can adjust the length of the decay and the curve. Its pretty fun. With some automation this can make some crazy glitch type effects.
 
     PULL THE PLUG - start the decay (>=1) or turn it off/reset it(<1)
     DECAY TIME - length of decay in seconds
@@ -184,7 +170,16 @@ I wanted a whammy style pitchshifter and found folks weren't quite satisfied wit
     LOCK MODE - this can allow the pitch shift to go smoothly to any value, slide to the nearest semitone when expression stops changing, or to jump directly from semitone to semitone
 
 =================================
-TODO: add lush life
+9. duffer
 
-duffer tips
 This is a duffing oscillator driven by the input. The duffing oscillator is interesting because it exhibits chaos. The system is simulated by a standard RK4 algorithm, but with each input sample treated as a full second to get more movement from the model. If none of that makes sense just know its not the most musical thing, but you can have a bit of fun making weird noises with it. It can be thought of a bit like a speaker but instead of moving a paper cone, the coil drives a spring side to side that has 2 magnets pulling it in opposite directions all the time (creating non-linear and chaotic behavior). This plugin has a check; if the output begins to grow too large it will reset the state to zero and resume, to allow unstable settings. There is an output to indicate if this condition is being triggered. Its not a big deal when this is triggered, but know that you're more hearing that artificial nonlinearity of the reset than the dynamics of the actual system, and that's not as scientifically intriguing. One tip: when using negative spring nonlinearities keep the spring stiffness very large if you want to avoid triggering the instability reset.
+
+    DAMPING - damps the "spring"
+    SPRING NONLINEARITY - changes the nature of the "spring"
+    INPUT GAIN - adjust how hard the "spring" is driven
+    UNSTABLE! - output to tell if the system is diverging (and artificially reset)
+
+=================================
+10. lushlife
+
+TODO: add lush life
