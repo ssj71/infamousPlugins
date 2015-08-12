@@ -32,7 +32,11 @@ typedef struct _LUSHLIFE
 
     float *active_p[NWOOSH];
     float *shift_p[NWOOSH];
+    float *slfoa_p[NWOOSH];
+    float *slfof_p[NWOOSH];
     float *delay_p[NWOOSH];
+    float *dlfoa_p[NWOOSH];
+    float *dlfof_p[NWOOSH];
     float *gain_p[NWOOSH];
     float *pan_p[NWOOSH];
 }LUSHLIFE;
@@ -105,7 +109,11 @@ void connect_lushlife_ports(LV2_Handle handle, uint32_t port, void *data)
     
     case ACTIVE0:       plug->active_p[0] = (float*)data;break;
     case SHIFT0:        plug->shift_p[0] = (float*)data;break;
+    case SFLOA0:        plug->slfoa_p[0] = (float*)data;break;
+    case SFLOF0:        plug->slfof_p[0] = (float*)data;break;
     case DELAY0:        plug->delay_p[0] = (float*)data;break;
+    case DFLOA0:        plug->dlfoa_p[0] = (float*)data;break;
+    case DFLOF0:        plug->dlfof_p[0] = (float*)data;break;
     case GAIN0:         plug->gain_p[0] = (float*)data;break;
     case PAN0:          plug->pan_p[0] = (float*)data;break;
     

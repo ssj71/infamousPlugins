@@ -13,7 +13,11 @@ enum stuck_ports
 
     ACTIVE0,
     SHIFT0,
+    SLFOA0,
+    SLFOF0, 
     DELAY0,
+    DLFOA0,
+    DLFOF0,
     GAIN0,
     PAN0,
 
