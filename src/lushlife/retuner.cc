@@ -141,6 +141,7 @@ Retuner::Retuner (int fsamp, int nshift) :
     //ssj initialize shifts
     _shift = new Shifter[nshift];
     _nshift = nshift;
+    _lfo = new Lfo[2*nshift](_fsamp,_frsize);
     for (i = 0; i < nshift; i++)
     {
         _shift[i].active = 0;
@@ -156,6 +157,14 @@ Retuner::Retuner (int fsamp, int nshift) :
         _shift[i].delay = 0;
         _shift[i].xfade = false; 
         _shift[i].corroffs = 0.0f; 
+
+        _lfo[i].shape = 1;
+        _lfo[i].gain = 0;
+        _lfo[i].freq = 1;
+        _lfo[i+_nshift].shape = 1;
+        _lfo[i+_nshift].gain = 0;
+        _lfo[i+_nshift].freq = 1;
+
     }
     _shift[0].active = 1;
 }

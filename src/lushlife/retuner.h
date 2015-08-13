@@ -25,6 +25,7 @@
 
 #include <fftw3.h>
 #include <zita-resampler/resampler.h>
+#include "lfo.h"
 
 typedef struct
 {
@@ -102,6 +103,11 @@ public:
         return 1.5 * _frsize;
     }
 
+    void plug->tuner->set_lfo_shape(float f)
+    {
+        _lfoshape = f;//0 rand, 1 sine
+    }
+
     void set_active(int a, int i)
     {
         if (_shift[i].active == 1 && a == 0)
@@ -124,6 +130,26 @@ public:
     void set_delay(float ms, int i)
     {
         _shift[i].delay = ms * _fsamp / (1000 * _frsize);//delay in fragments
+    }
+
+    void plug->tuner->set_offs_lfo_amount(float g, int i)
+    {
+        _lfo[i].gain = g;
+    }
+
+    void plug->tuner->set_offs_lfo_freq(float f, int i)
+    {
+        _lfo[i].freq = f;
+    }
+
+    void plug->tuner->set_delay_lfo_amount(float g, int i)
+    {
+        _lfo[i+_nshift].gain = g;
+    }
+
+    void plug->tuner->set_delay_lfo_freq(float f, int i)
+    {
+        _lfo[i+_nshift].freq = f;
     }
 
 private:
@@ -168,7 +194,9 @@ private:
     fftwf_plan       _invplan;
     Resampler        _resampler;
     Shifter*         _shift;
+    Lfo*             _lfo;
     int              _nshift;
+    float            _lfoshape;
 };
 
 

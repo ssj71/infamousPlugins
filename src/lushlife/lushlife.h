@@ -10,6 +10,7 @@ enum stuck_ports
     GAIN,
     DRY_GAIN,
     DRY_PAN,
+    LFOSHAPE,
 
     ACTIVE0,
     SHIFT0,

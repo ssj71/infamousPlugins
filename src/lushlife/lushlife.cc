@@ -29,6 +29,7 @@ typedef struct _LUSHLIFE
     float *mastergain_p;
     float *dry_gain_p;
     float *dry_pan_p;
+    float *lfo_shape_p;
 
     float *active_p[NWOOSH];
     float *shift_p[NWOOSH];
@@ -52,17 +53,20 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
     unsigned int i;
     for(i=0;i<NWOOSH;i++)
     {
-        //RetunerSetActive(plug->tuner,i,(int)*plug->active_p[i]);
-        //RetunerSetLatency(plug->tuner,i,*plug->delay_p[i]*plug->sample_freq/1000);
-        //RetunerSetOffset(plug->tuner,i,*plug->shift_p[i]);
-        //RetunerSetGain(plug->tuner,i,*plug->gain_p[i]);
-        //RetunerSetPan(plug->tuner,i,*plug->pan_p[i]);
         plug->tuner->set_active((int)*plug->active_p[i],i);
         plug->tuner->set_delay(*plug->delay_p[i],i);
         plug->tuner->set_corroffs(*plug->shift_p[i],i);
         plug->tuner->set_gain(*plug->gain_p[i],i);
         plug->tuner->set_pan(*plug->pan_p[i],i);
+        if(!i)
+        {
+            plug->tuner->set_offs_lfo_amount(*plug->dlfoa_p[i],i);
+            plug->tuner->set_offs_lfo_freq(*plug->dlfoa_p[i],i);
+            plug->tuner->set_delay_lfo_amount(*plug->dlfoa_p[i],i);
+            plug->tuner->set_delay_lfo_freq(*plug->dlfoa_p[i],i);
+        }
     }
+    plug->tuner->set_lfo_shape(*plug->lfo_shape_p);
 
     plug->tuner->process(nframes,plug->input_p,plug->outputl_p,plug->outputr_p);
 
@@ -89,6 +93,7 @@ LV2_Handle init_lushlife(const LV2_Descriptor *descriptor,double sample_freq, co
     //set last woosh as dry signal
     plug->tuner->set_active(1,NWOOSH);
     plug->tuner->set_corroffs(0,NWOOSH);
+    plug->tuner->init_lfo();
 
     return plug;
 }
@@ -106,6 +111,7 @@ void connect_lushlife_ports(LV2_Handle handle, uint32_t port, void *data)
     case GAIN:          plug->mastergain_p = (float*)data;break;
     case DRY_GAIN:      plug->dry_gain_p = (float*)data;break;
     case DRY_PAN:       plug->dry_pan_p = (float*)data;break;
+    case LFOSHAPE:      plug->lfo_shape_p = (float*)data;break;
     
     case ACTIVE0:       plug->active_p[0] = (float*)data;break;
     case SHIFT0:        plug->shift_p[0] = (float*)data;break;
