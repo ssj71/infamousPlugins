@@ -1,5 +1,6 @@
 #ifndef LUSHLIFE_H
 #define LUSHLIFE_H
+
 enum stuck_ports
 {
     IN =0,

@@ -30,16 +30,18 @@
 typedef struct
 {
     int           active;
-    float          gain;
-    float          pan;
-    float          ratio;
-    float          rindex1, rindex2;
-    float          delay;//latency in fragments
-    bool           xfade;
-    float		   corroffs;
+    float         gain;
+    float         pan;
+    float         ratio;
+    float         rindex1, rindex2;
+    float         delay;//latency in fragments
+    bool          xfade;
+    float		  corroffs;
+    Lfo*          clfo;
+    Lfo*          dlfo;
 
-    float          g, gainstep;
-    float          p, panstep;
+    float         g, gainstep;
+    float         p, panstep;
 } Shifter;
 
 class Retuner
@@ -100,10 +102,10 @@ public:
     //ssj
     unsigned long get_latency (void)
     {
-        return 1.5 * _frsize;
+        return 2 * _frsize;
     }
 
-    void plug->tuner->set_lfo_shape(float f)
+    void set_lfo_shape(float f)
     {
         _lfoshape = f;//0 rand, 1 sine
     }
@@ -132,24 +134,24 @@ public:
         _shift[i].delay = ms * _fsamp / (1000 * _frsize);//delay in fragments
     }
 
-    void plug->tuner->set_offs_lfo_amount(float g, int i)
+    void set_offs_lfo_amount(float g, int i)
     {
-        _lfo[i].gain = g;
+        _shift[i].clfo->gain = g;
     }
 
-    void plug->tuner->set_offs_lfo_freq(float f, int i)
+    void set_offs_lfo_freq(float f, int i)
     {
-        _lfo[i].freq = f;
+        _shift[i].clfo->freq = f;
     }
 
-    void plug->tuner->set_delay_lfo_amount(float g, int i)
+    void set_delay_lfo_amount(float g, int i)
     {
-        _lfo[i+_nshift].gain = g;
+        _shift[i].dlfo->gain = g * _fsamp / (1000 * _frsize);
     }
 
-    void plug->tuner->set_delay_lfo_freq(float f, int i)
+    void set_delay_lfo_freq(float f, int i)
     {
-        _lfo[i+_nshift].freq = f;
+        _shift[i].dlfo->freq = f;
     }
 
 private:
@@ -194,7 +196,6 @@ private:
     fftwf_plan       _invplan;
     Resampler        _resampler;
     Shifter*         _shift;
-    Lfo*             _lfo;
     int              _nshift;
     float            _lfoshape;
 };

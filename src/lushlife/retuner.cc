@@ -141,7 +141,7 @@ Retuner::Retuner (int fsamp, int nshift) :
     //ssj initialize shifts
     _shift = new Shifter[nshift];
     _nshift = nshift;
-    _lfo = new Lfo[2*nshift](_fsamp,_frsize);
+    _lfoshape = .5;
     for (i = 0; i < nshift; i++)
     {
         _shift[i].active = 0;
@@ -158,12 +158,12 @@ Retuner::Retuner (int fsamp, int nshift) :
         _shift[i].xfade = false; 
         _shift[i].corroffs = 0.0f; 
 
-        _lfo[i].shape = 1;
-        _lfo[i].gain = 0;
-        _lfo[i].freq = 1;
-        _lfo[i+_nshift].shape = 1;
-        _lfo[i+_nshift].gain = 0;
-        _lfo[i+_nshift].freq = 1;
+        _shift[i].clfo = new Lfo(_fsamp,4*_frsize);
+        _shift[i].dlfo = new Lfo(_fsamp,_frsize);
+        _shift[i].clfo->gain = 0;
+        _shift[i].clfo->freq = 1;
+        _shift[i].dlfo->gain = 0;
+        _shift[i].dlfo->freq = 1;
 
     }
     _shift[0].active = 1;
@@ -180,6 +180,11 @@ Retuner::~Retuner (void)
     fftwf_free (_fftFdata);
     fftwf_destroy_plan (_fwdplan);
     fftwf_destroy_plan (_invplan);
+    for(int i;i<_nshift;i++)
+    {
+        delete _shift[i].clfo;
+        delete _shift[i].dlfo;
+    }
     delete[] _shift;
 }
 
@@ -353,7 +358,12 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 
                 //update ratios
                 for (int shftdx = 0; shftdx < _nshift; shftdx++)
-                    _shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs / 12.0f - _error * _corrgain);
+                {
+                    float a = _shift[shftdx].clfo->out(_lfoshape) + _shift[shftdx].corroffs;
+                    if(a>24)a=24;
+                    else if(a<-24)a=-24;
+                    _shift[shftdx].ratio = powf (2.0f, a - _error * _corrgain);
+                }
             }
 
             for (int shftdx = 0; shftdx < _nshift; shftdx++)
@@ -379,7 +389,10 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     dr *= 2;
                 }
                 //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments
-                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + _shift[shftdx].delay; //error in fragments of how much old buffer is kept target is to keep it so that each fragment period ends with around ph = 4*16-2=62 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
+                float d = _shift[shftdx].dlfo->out(_lfoshape) + _shift[shftdx].delay;
+                if(d>86)d=86;
+                else if(d<0)d=0;
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + d; //error in fragments of how much old buffer is kept target is to keep it so that each fragment period ends with around ph = 4*16-2=62 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
                 if (ph > 0.5f)
                 {
                     // Jump back by 'dr' frames and crossfade.

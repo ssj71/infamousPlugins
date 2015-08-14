@@ -3,12 +3,13 @@
 //gpl v2 and all that
 
 //a simple and kinda boring lfo implementation
+#include<stdint.h>
 
 class Lfo
 {
 public:
-    lfo(double sample_rate, uint32_t fragsize);
-    ~lfo();
+    Lfo(double sample_rate, uint32_t fragsize);
+    ~Lfo();
     float out(float _shape);
     float out();
     float shape;
@@ -20,4 +21,4 @@ private:
     float prev_y;
     float coeff;
     float phastep;
-}
+};

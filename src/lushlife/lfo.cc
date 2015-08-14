@@ -23,7 +23,7 @@ Lfo::Lfo(double sample_rate, uint32_t fragsize)
 }
 
 void
-Lfo::~lfo()
+Lfo::~Lfo()
 {
 }
 

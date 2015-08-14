@@ -93,7 +93,6 @@ LV2_Handle init_lushlife(const LV2_Descriptor *descriptor,double sample_freq, co
     //set last woosh as dry signal
     plug->tuner->set_active(1,NWOOSH);
     plug->tuner->set_corroffs(0,NWOOSH);
-    plug->tuner->init_lfo();
 
     return plug;
 }
@@ -115,11 +114,11 @@ void connect_lushlife_ports(LV2_Handle handle, uint32_t port, void *data)
     
     case ACTIVE0:       plug->active_p[0] = (float*)data;break;
     case SHIFT0:        plug->shift_p[0] = (float*)data;break;
-    case SFLOA0:        plug->slfoa_p[0] = (float*)data;break;
-    case SFLOF0:        plug->slfof_p[0] = (float*)data;break;
+    case SLFOA0:        plug->slfoa_p[0] = (float*)data;break;
+    case SLFOF0:        plug->slfof_p[0] = (float*)data;break;
     case DELAY0:        plug->delay_p[0] = (float*)data;break;
-    case DFLOA0:        plug->dlfoa_p[0] = (float*)data;break;
-    case DFLOF0:        plug->dlfof_p[0] = (float*)data;break;
+    case DLFOA0:        plug->dlfoa_p[0] = (float*)data;break;
+    case DLFOF0:        plug->dlfof_p[0] = (float*)data;break;
     case GAIN0:         plug->gain_p[0] = (float*)data;break;
     case PAN0:          plug->pan_p[0] = (float*)data;break;
     
