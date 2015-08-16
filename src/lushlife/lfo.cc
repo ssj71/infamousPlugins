@@ -5,10 +5,10 @@
 //a simple and kinda boring lfo implementation
 #include<stdlib.h>
 #include<time.h>
+#include"lfo.h"
 
 #define PI 3.1415926535897932384626433832795
 
-void
 Lfo::Lfo(double sample_rate, uint32_t fragsize)
 {
     shape = 0;
@@ -19,10 +19,9 @@ Lfo::Lfo(double sample_rate, uint32_t fragsize)
     phase = 2*PI*rand() / (float)RAND_MAX ;
     prev_x = prev_y = 0;
     coeff = 1/(2*sample_rate);
-    phastep = 2*pi*fragsize/sample_rate;//w = 2*pi*f sin(wt) = sin(2*pi*f*t) = sin(2*pi*f*n/fs)
+    phastep = 2*PI*fragsize/sample_rate;//w = 2*pi*f sin(wt) = sin(2*pi*f*t) = sin(2*pi*f*n/fs)
 }
 
-void
 Lfo::~Lfo()
 {
 }
@@ -48,6 +47,6 @@ Lfo::out()
     prev_y = coeff*(x + prev_x) + prev_y;
     prev_x = x;
     //blend shapes
-    return (s-prev_y)*shape + prev_y;
+    return gain*((s-prev_y)*shape + prev_y);
 
 }

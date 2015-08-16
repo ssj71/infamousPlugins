@@ -180,7 +180,7 @@ Retuner::~Retuner (void)
     fftwf_free (_fftFdata);
     fftwf_destroy_plan (_fwdplan);
     fftwf_destroy_plan (_invplan);
-    for(int i;i<_nshift;i++)
+    for(int i=0;i<_nshift;i++)
     {
         delete _shift[i].clfo;
         delete _shift[i].dlfo;

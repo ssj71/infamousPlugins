@@ -32,6 +32,8 @@ add_library(${PLUGIN} SHARED
   lushlife.h
   retuner.cc
   retuner.h
+  lfo.cc
+  lfo.h
 )
 
 #add_library(${PLUGIN}_ui SHARED

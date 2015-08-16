@@ -146,7 +146,7 @@ public:
 
     void set_delay_lfo_amount(float g, int i)
     {
-        _shift[i].dlfo->gain = g * _fsamp / (1000 * _frsize);
+        _shift[i].dlfo->gain = g;// * _fsamp / (1000 * _frsize);
     }
 
     void set_delay_lfo_freq(float f, int i)
