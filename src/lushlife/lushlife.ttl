@@ -46,7 +46,6 @@
                 foaf:homepage <http://infamousplugins.sourceforge.net> ;
                 foaf:mbox <ssjackson71@gmail.com> ;
         ] ;
-        lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
 
 
