@@ -40,6 +40,7 @@ Retuner::Retuner (int fsamp, int nshift) :
     int   i, h;
     float t, x, y;
 
+    _ds = 8;
     if (_fsamp < 64000)
     {
         // At 44.1 and 48 kHz resample to double rate.
@@ -70,6 +71,7 @@ Retuner::Retuner (int fsamp, int nshift) :
         _ipsize = 8192;
         _fftlen = 8192;
         _frsize = 512;
+        _ds ++;
     }
     
     _ipsize *= 4; //ssj add buffer space to allow delays
@@ -128,7 +130,7 @@ Retuner::Retuner (int fsamp, int nshift) :
     _notebits = 0;
     _lastnote = -1;
     _count = 0;
-    _cycle = _frsize;
+    //_cycle = _frsize;
     _error = 0.0f;
     //_ratio = 1.0f;
     //_xfade = false;
@@ -137,6 +139,10 @@ Retuner::Retuner (int fsamp, int nshift) :
     _frcount = 0;
     //_rindex1 = _ipsize / 2;
     //_rindex2 = 0;
+
+    //ssj initialize cycles
+    for(i = 0; i < 16; i++)
+        _cycle[i] = _frsize;
 
     //ssj initialize shifts
     _shift = new Shifter[nshift];
@@ -332,7 +338,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
             {
                 _frcount = 0;
                 findcycle ();
-                if (_cycle)
+                if (_cycle[(_ipindex-1)>>_ds])
                 {
                     // If the pitch estimate succeeds, find the
                     // nearest note and required resampling ratio.
@@ -347,7 +353,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     // the signal is considered unvoiced and the
                     // pitch error is reset.
                     _count = 5;
-                    _cycle = _frsize;
+                    _cycle[(_ipindex-1)>>_ds] = _frsize;
                     _error = 0;
                 }
                 else if (_count == 2)
@@ -380,7 +386,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 // of pitch periods, and to avoid reading outside
                 // the circular input buffer limits it must be at
                 // least one fragment size.
-                dr = _cycle * (int)(ceilf (_frsize / _cycle));//samples per ncycles  >= 1 fragment
+                dr = _cycle[(int)r1>>_ds] * (int)(ceilf (_frsize / _cycle[(int)r1>>_ds]));//samples per ncycles  >= 1 fragment
                 dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
                 ph = r1 - _ipindex; //old samples in buffer that have been read
                 if (ph < 0) ph += _ipsize; //wrap around buffer end
@@ -464,11 +470,13 @@ void Retuner::findcycle (void)
 {
     int    d, h, i, j, k;
     float  f, m, t, x, y, z;
+    int p;  
 
     d = _upsamp ? 2 : 1;
     h = _fftlen / 2;
     j = _ipindex-1-d*_fftlen;
     k = _ipsize - 1;
+    p = (_ipindex - 1)>>_ds;
     for (i = 0; i < _fftlen; i++)
     {
         _fftTdata [i] = _fftTwind [i] * _ipbuff [j & k];
@@ -497,7 +505,7 @@ void Retuner::findcycle (void)
         x = y;
     }
     i -= 4;
-    _cycle = 0;
+    _cycle[p] = 0;
     if (i >= _ifmax) return;
     if (i <  _ifmin) i = _ifmin;
     x = _fftTdata [--i];
@@ -521,7 +529,7 @@ void Retuner::findcycle (void)
         x = _fftTdata [j - 1];
         y = _fftTdata [j];
         z = _fftTdata [j + 1];
-        _cycle = j + 0.5f * (x - z) / (z - 2 * y + x - 1e-9f);
+        _cycle[p] = j + 0.5f * (x - z) / (z - 2 * y + x - 1e-9f);
     }
 }
 
@@ -538,7 +546,8 @@ void Retuner::finderror (void)
         return;
     }
 
-    f = log2f (_fsamp / (_cycle * _refpitch));
+    i = (int)_shift[0].rindex1>>_ds;
+    f = log2f (_fsamp / (_cycle[i] * _refpitch));
     dm = 0;
     am = 1;
     im = -1;

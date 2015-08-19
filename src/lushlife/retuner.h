@@ -146,7 +146,7 @@ public:
 
     void set_delay_lfo_amount(float g, int i)
     {
-        _shift[i].dlfo->gain = g;// * _fsamp / (1000 * _frsize);
+        _shift[i].dlfo->gain = g * _fsamp / (1000 * _frsize);
     }
 
     void set_delay_lfo_freq(float f, int i)
@@ -179,7 +179,7 @@ private:
     int              _notebits;
     int              _lastnote;
     int              _count;
-    float            _cycle;
+    float            _cycle[16];
     float            _error;
     //float            _ratio;//
     //float            _phase;//ssj not used
@@ -197,6 +197,7 @@ private:
     Resampler        _resampler;
     Shifter*         _shift;
     int              _nshift;
+    int              _ds;//downshift amount for cycle idex
     float            _lfoshape;
 };
 
