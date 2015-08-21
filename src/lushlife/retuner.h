@@ -198,6 +198,7 @@ private:
     Shifter*         _shift;
     int              _nshift;
     int              _ds;//downshift amount for cycle idex
+    float            _pc;//previous successful cycle val
     float            _lfoshape;
 };
 
