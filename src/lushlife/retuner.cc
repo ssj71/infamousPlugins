@@ -338,12 +338,14 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
             {
                 _frcount = 0;
                 findcycle ();
-                if (_cycle[(_ipindex)>>_ds])
+                p = (_ipindex>>_ds)-3;//estimate corresponds to middle of the fft window
+                p &= 0x0f;
+                if (_cycle[p])
                 {
                     // If the pitch estimate succeeds, find the
                     // nearest note and required resampling ratio.
                     _count = 0;
-                    _pc = _cycle[(_ipindex)>>_ds];
+                    _pc = _cycle[p];
                     if(_corrgain)//ssj don't bother calculating if just shifting
                     finderror ();
                 }
@@ -354,17 +356,17 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     // the signal is considered unvoiced and the
                     // pitch error is reset.
                     _count = 5;
-                    _cycle[(_ipindex)>>_ds] = _frsize;
+                    _cycle[p] = _frsize;
                     _error = 0;
                 }
                 else if (_count == 2)
                 {
                     // Bias is removed after two unvoiced fragments.
                     _lastnote = -1;
-                    _cycle[(_ipindex)>>_ds] = _pc;
+                    _cycle[p] = _pc;
                 }
                 else
-                    _cycle[(_ipindex)>>_ds] = _pc; 
+                    _cycle[p] = _pc; 
                 
                 //update ratios
                 for (int shftdx = 0; shftdx < _nshift; shftdx++)
@@ -373,7 +375,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     //if(a>24)a=24;
                     //else if(a<-24)a=-24;
                     //_shift[shftdx].ratio = powf (2.0f, a - _error * _corrgain);
-                    _shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs - _error * _corrgain);
+                    _shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs/12 - _error * _corrgain);
                 }
             }
 
@@ -390,7 +392,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 // of pitch periods, and to avoid reading outside
                 // the circular input buffer limits it must be at
                 // least one fragment size.
-                p = (int)r1;
+                p = (int)r1;//TODO: there may be some improvement available through using the cycle value closer to the target, rather than at the current position. Maybe.
                 p >>= _ds;
                 dr = _cycle[p] * (int)(ceilf (_frsize / _cycle[p]));//samples per ncycles  >= 1 fragment
                 dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
@@ -482,7 +484,8 @@ void Retuner::findcycle (void)
     h = _fftlen / 2;
     j = _ipindex - d*_fftlen;
     k = _ipsize - 1;
-    p = (_ipindex)>>_ds;
+    p = (_ipindex>>_ds)-3;//estimate corresponds to middle of fft window
+    p &= 0x0f;
     for (i = 0; i < _fftlen; i++)
     {
         _fftTdata [i] = _fftTwind [i] * _ipbuff [j & k];
