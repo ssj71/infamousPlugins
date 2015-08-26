@@ -392,9 +392,10 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 // of pitch periods, and to avoid reading outside
                 // the circular input buffer limits it must be at
                 // least one fragment size.
-                p = (int)r1;
-                p >>= _ds;
-                p = (((int)(_ipindex - _shift[shftdx].delay * _frsize)) >> _ds)+0;//use cycle estimate near target latency
+                //p = (int)r1;
+                //p >>= _ds;
+                //p = (((int)(_ipindex - _shift[shftdx].delay * _frsize)) >> _ds)+0;//use cycle estimate near target latency
+                p = ((int)_ipindex >> _ds)+0;//use cycle estimate near target latency
                 p &= 0x0f;
                 dr = _cycle[p] * (int)(ceilf (_frsize / _cycle[p]));//samples per ncycles  >= 1 fragment
                 dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
