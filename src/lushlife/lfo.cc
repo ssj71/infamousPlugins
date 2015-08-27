@@ -37,7 +37,7 @@ float
 Lfo::out()
 {
     phase += phastep*freq;
-    if(phase > 2*PI)
+    if(phase > PI)
         phase -= 2*PI;
     // sin approx based on an algorithm by Nicolas Capens
     double y = 1.27323954474*phase - 0.40528473456*phase*(phase>0?phase:-phase);

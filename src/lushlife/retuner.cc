@@ -371,11 +371,11 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 //update ratios
                 for (int shftdx = 0; shftdx < _nshift; shftdx++)
                 {
-                    //float a =  _shift[shftdx].corroffs;// + _shift[shftdx].clfo->out(_lfoshape);
-                    //if(a>24)a=24;
-                    //else if(a<-24)a=-24;
-                    //_shift[shftdx].ratio = powf (2.0f, a - _error * _corrgain);
-                    _shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs/12 - _error * _corrgain);
+                    float a =  _shift[shftdx].corroffs + _shift[shftdx].clfo->out(_lfoshape);
+                    if(a>24)a=24;
+                    else if(a<-24)a=-24;
+                    _shift[shftdx].ratio = powf (2.0f, a/12 - _error * _corrgain);
+                    //_shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs/12 - _error * _corrgain);
                 }
             }
 
@@ -392,11 +392,10 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 // of pitch periods, and to avoid reading outside
                 // the circular input buffer limits it must be at
                 // least one fragment size.
-                //p = (int)r1;
-                //p >>= _ds;
-                //p = (((int)(_ipindex - _shift[shftdx].delay * _frsize)) >> _ds)+0;//use cycle estimate near target latency
-                p = ((int)_ipindex >> _ds) + _shift[shftdx].delay/4;//use cycle estimate near target latency
-                p &= 0x0f;
+                p = -_shift[shftdx].delay/4;//delay determines how far to offset the cycle index
+                if(p > 0) p = 0;
+                p += ((int)_ipindex >> _ds);//move to current position of cycle index
+                p &= 0x0f;//wrap around the buffer
                 dr = _cycle[p] * (int)(ceilf (_frsize / _cycle[p]));//samples per ncycles  >= 1 fragment
                 dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
                 ph = r1 - _ipindex; //old samples in buffer that have been read
@@ -407,11 +406,11 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     dr *= 2;
                 }
                 //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments
-                //float d =  _shift[shftdx].delay;// + _shift[shftdx].dlfo->out(_lfoshape);
-                //if(d>86)d=86;
-                //else if(d<0)d=0;
-                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + _shift[shftdx].delay;
-                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + d; //error in fragments of how much old buffer is kept target is to keep it so that each fragment period ends with around ph = 4*16-2=62 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
+                float d =  _shift[shftdx].delay + _shift[shftdx].dlfo->out(_lfoshape);
+                if(d>86)d=86;
+                else if(d<0)d=0;
+                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + _shift[shftdx].delay;
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + d; //error in fragments of how much old buffer is kept target is to keep it so that each fragment period ends with around ph = 4*16-2=62 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
                 if (ph > 0.5f)
                 {
                     // Jump back by 'dr' frames and crossfade.
