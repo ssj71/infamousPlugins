@@ -11,15 +11,19 @@
 
 Lfo::Lfo(double sample_rate, uint32_t fragsize)
 {
+    //init public vars that callers will set
     shape = 0;
     gain = 0;
     freq = 0;
 
+    //init states
     srand ((unsigned int) time (NULL));
-    phase = 2*PI*rand() / (float)RAND_MAX ;
+    phase = 2*PI*rand() / (float)RAND_MAX - PI;
     prev_x = prev_y = 0;
-    coeff = 1/(2*sample_rate);
-    phastep = 2*PI*fragsize/sample_rate;//w = 2*pi*f sin(wt) = sin(2*pi*f*t) = sin(2*pi*f*n/fs)
+    
+    //const vars
+    coeff = 1/(2*sample_rate);// pinking filter coeff
+    phastep = 2*PI*fragsize/sample_rate;//w = 2*pi*f; sin(wt) = sin(2*pi*f*t) = sin(2*pi*f*n/fs)
 }
 
 Lfo::~Lfo()
@@ -36,10 +40,12 @@ Lfo::out(float _shape)
 float 
 Lfo::out()
 {
+    //step
     phase += phastep*freq;
     if(phase > PI)
         phase -= 2*PI;
-    // sin approx based on an algorithm by Nicolas Capens domain [-pi,pi]
+    // sin approx based on an algorithm by Nicolas Capens
+    // domain [-pi,pi]
     double y = 1.27323954474*phase - 0.40528473456*phase*(phase>0?phase:-phase);
     float s =  0.225*(y*(y>0?y:-y) - y) + y;
     //pink noise
