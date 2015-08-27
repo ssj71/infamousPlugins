@@ -410,7 +410,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 if(d>86)d=86;
                 else if(d<0)d=0;
                 //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + _shift[shftdx].delay;
-                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + d; //error in fragments of how much old buffer is kept target is to keep it so that each fragment period ends with around ph = 4*16-2=62 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 56 + d; //error in fragments of how much old buffer is kept target is to keep it so that each fragment period ends with around ph = 4*16-2=62 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
                 if (ph > 0.5f)
                 {
                     // Jump back by 'dr' frames and crossfade.

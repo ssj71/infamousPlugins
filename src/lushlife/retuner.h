@@ -102,7 +102,7 @@ public:
     //ssj
     unsigned long get_latency (void)
     {
-        return 2 * _frsize;
+        return 8 * _frsize;
     }
 
     void set_lfo_shape(float f)

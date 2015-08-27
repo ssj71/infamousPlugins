@@ -39,7 +39,7 @@ Lfo::out()
     phase += phastep*freq;
     if(phase > PI)
         phase -= 2*PI;
-    // sin approx based on an algorithm by Nicolas Capens
+    // sin approx based on an algorithm by Nicolas Capens domain [-pi,pi]
     double y = 1.27323954474*phase - 0.40528473456*phase*(phase>0?phase:-phase);
     float s =  0.225*(y*(y>0?y:-y) - y) + y;
     //pink noise
