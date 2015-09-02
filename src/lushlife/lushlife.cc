@@ -61,9 +61,9 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
         if(!i)
         {
             plug->tuner->set_offs_lfo_amount(*plug->slfoa_p[i],i);
-            plug->tuner->set_offs_lfo_freq(*plug->slfoa_p[i],i);
+            plug->tuner->set_offs_lfo_freq(*plug->slfof_p[i],i);
             plug->tuner->set_delay_lfo_amount(*plug->dlfoa_p[i],i);
-            plug->tuner->set_delay_lfo_freq(*plug->dlfoa_p[i],i);
+            plug->tuner->set_delay_lfo_freq(*plug->dlfof_p[i],i);
         }
     }
     plug->tuner->set_lfo_shape(*plug->lfo_shape_p);
