@@ -110,6 +110,15 @@ public:
         _lfoshape = f;//0 rand, 1 sine
     }
 
+    void sync_lfos(void)
+    {
+        for(int i=0;i<_nshift;i++)
+        {
+            _shift[i].clfo->reset();
+            _shift[i].dlfo->reset();
+        }
+    }
+
     void set_active(int a, int i)
     {
         if (_shift[i].active == 1 && a == 0)

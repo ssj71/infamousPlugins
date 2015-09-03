@@ -12,6 +12,7 @@ public:
     ~Lfo();
     float out(float _shape);
     float out();
+    void  reset();
     float shape;
     float gain;
     float freq;

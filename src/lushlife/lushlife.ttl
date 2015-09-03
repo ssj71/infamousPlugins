@@ -111,7 +111,7 @@
                 lv2:scalePoint [ rdfs:label "Sine"; rdf:value 1 ] ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 7 ;
+                lv2:index 8 ;
                 lv2:symbol "LFOSYNC" ;
                 lv2:name "Sync LFOs" ;
                 lv2:default 0.0 ;
@@ -124,7 +124,7 @@
 
 
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 8 ;
+                lv2:index 9 ;
                 lv2:symbol "ACTIVE0" ;
                 lv2:name "Active 0" ;
                 lv2:default 1.0 ;
@@ -135,7 +135,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 9 ;
+                lv2:index 10 ;
                 lv2:symbol "DETUNE0" ;
                 lv2:name "Detune 0" ;
                 lv2:default 3.9 ;
@@ -145,7 +145,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
+                lv2:index 11 ;
                 lv2:symbol "DTLFOAMT0" ;
                 lv2:name "Detune LFO Amount" ;
                 lv2:default 0.1 ;
@@ -155,7 +155,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
+                lv2:index 12 ;
                 lv2:symbol "DTLFOFREQ0" ;
                 lv2:name "Detune LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -165,7 +165,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 12 ;
+                lv2:index 13 ;
                 lv2:symbol "DELAY0" ;
                 lv2:name "Delay 0" ;
                 lv2:default 0.0 ;
@@ -175,7 +175,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 13 ;
+                lv2:index 14 ;
                 lv2:symbol "DLLFOAMT0" ;
                 lv2:name "Delay LFO Amount" ;
                 lv2:default 1.0 ;
@@ -185,7 +185,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 14 ;
+                lv2:index 15 ;
                 lv2:symbol "DLLFOFREQ0" ;
                 lv2:name "Delay LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -195,7 +195,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 15 ;
+                lv2:index 16 ;
                 lv2:symbol "GAIN0" ;
                 lv2:name "Gain 0" ;
                 lv2:default 0.80 ;
@@ -205,7 +205,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh0> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 16 ;
+                lv2:index 17 ;
                 lv2:symbol "PAN0" ;
                 lv2:name "Pan 0" ;
                 lv2:default 0.50 ;
@@ -218,7 +218,7 @@
 
 
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 17 ;
+                lv2:index 18 ;
                 lv2:symbol "ACTIVE1" ;
                 lv2:name "Active 1" ;
                 lv2:default 0.0 ;
@@ -229,7 +229,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 18 ;
+                lv2:index 19 ;
                 lv2:symbol "DETUNE1" ;
                 lv2:name "Detune 1" ;
                 lv2:default -0.1 ;
@@ -239,7 +239,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
+                lv2:index 20 ;
                 lv2:symbol "DTLFOAMT1" ;
                 lv2:name "Detune LFO Amount" ;
                 lv2:default 0.1 ;
@@ -249,7 +249,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
+                lv2:index 21 ;
                 lv2:symbol "DTLFOFREQ1" ;
                 lv2:name "Detune LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -259,7 +259,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 19 ;
+                lv2:index 22 ;
                 lv2:symbol "DELAY1" ;
                 lv2:name "Delay 1" ;
                 lv2:default 70.0 ;
@@ -269,7 +269,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 13 ;
+                lv2:index 23 ;
                 lv2:symbol "DLLFOAMT1" ;
                 lv2:name "Delay LFO Amount" ;
                 lv2:default 1.0 ;
@@ -279,7 +279,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 14 ;
+                lv2:index 24 ;
                 lv2:symbol "DLLFOFREQ1" ;
                 lv2:name "Delay LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -289,7 +289,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 20 ;
+                lv2:index 25 ;
                 lv2:symbol "GAIN1" ;
                 lv2:name "Gain 1" ;
                 lv2:default 0.80 ;
@@ -299,7 +299,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh1> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 21 ;
+                lv2:index 26 ;
                 lv2:symbol "PAN1" ;
                 lv2:name "Pan 1" ;
                 lv2:default -0.50 ;
@@ -312,7 +312,7 @@
 
 
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 22 ;
+                lv2:index 27 ;
                 lv2:symbol "ACTIVE2" ;
                 lv2:name "Active 2" ;
                 lv2:default 0.0 ;
@@ -323,7 +323,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 23 ;
+                lv2:index 28 ;
                 lv2:symbol "DETUNE2" ;
                 lv2:name "Detune 2" ;
                 lv2:default 0.2 ;
@@ -333,7 +333,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
+                lv2:index 29 ;
                 lv2:symbol "DTLFOAMT2" ;
                 lv2:name "Detune LFO Amount" ;
                 lv2:default 0.1 ;
@@ -343,7 +343,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
+                lv2:index 30 ;
                 lv2:symbol "DTLFOFREQ2" ;
                 lv2:name "Detune LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -353,7 +353,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 24 ;
+                lv2:index 31 ;
                 lv2:symbol "DELAY2" ;
                 lv2:name "Delay 2" ;
                 lv2:default 110.0 ;
@@ -363,7 +363,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 13 ;
+                lv2:index 32 ;
                 lv2:symbol "DLLFOAMT2" ;
                 lv2:name "Delay LFO Amount" ;
                 lv2:default 1.0 ;
@@ -373,7 +373,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 14 ;
+                lv2:index 33 ;
                 lv2:symbol "DLLFOFREQ2" ;
                 lv2:name "Delay LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -383,7 +383,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 25 ;
+                lv2:index 34 ;
                 lv2:symbol "GAIN2" ;
                 lv2:name "Gain 2" ;
                 lv2:default 0.40 ;
@@ -393,7 +393,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh2> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 26 ;
+                lv2:index 35 ;
                 lv2:symbol "PAN2" ;
                 lv2:name "Pan 2" ;
                 lv2:default 0.90 ;
@@ -406,7 +406,7 @@
 
 
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 27 ;
+                lv2:index 36 ;
                 lv2:symbol "ACTIVE3" ;
                 lv2:name "Active 3" ;
                 lv2:default 0.0 ;
@@ -417,7 +417,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 28 ;
+                lv2:index 37 ;
                 lv2:symbol "DETUNE3" ;
                 lv2:name "Detune 3" ;
                 lv2:default -0.2 ;
@@ -427,7 +427,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
+                lv2:index 38 ;
                 lv2:symbol "DTLFOAMT3" ;
                 lv2:name "Detune LFO Amount" ;
                 lv2:default 0.1 ;
@@ -437,7 +437,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
+                lv2:index 39 ;
                 lv2:symbol "DTLFOFREQ3" ;
                 lv2:name "Detune LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -447,7 +447,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 29 ;
+                lv2:index 40 ;
                 lv2:symbol "DELAY3" ;
                 lv2:name "Delay 3" ;
                 lv2:default 120.0 ;
@@ -457,7 +457,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 13 ;
+                lv2:index 41 ;
                 lv2:symbol "DLLFOAMT3" ;
                 lv2:name "Delay LFO Amount" ;
                 lv2:default 1.0 ;
@@ -467,7 +467,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 14 ;
+                lv2:index 42 ;
                 lv2:symbol "DLLFOFREQ3" ;
                 lv2:name "Delay LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -477,7 +477,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 30 ;
+                lv2:index 43 ;
                 lv2:symbol "GAIN3" ;
                 lv2:name "Gain 3" ;
                 lv2:default 0.40 ;
@@ -487,7 +487,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh3> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 31 ;
+                lv2:index 44 ;
                 lv2:symbol "PAN3" ;
                 lv2:name "Pan 3" ;
                 lv2:default -0.90 ;
@@ -500,7 +500,7 @@
 
 
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 32 ;
+                lv2:index 45 ;
                 lv2:symbol "ACTIVE4" ;
                 lv2:name "Active 4" ;
                 lv2:default 0.0 ;
@@ -511,7 +511,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 33 ;
+                lv2:index 46 ;
                 lv2:symbol "DETUNE4" ;
                 lv2:name "Detune 4" ;
                 lv2:default 0.05 ;
@@ -521,7 +521,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
+                lv2:index 47 ;
                 lv2:symbol "DTLFOAMT4" ;
                 lv2:name "Detune LFO Amount" ;
                 lv2:default 0.1 ;
@@ -531,7 +531,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
+                lv2:index 48 ;
                 lv2:symbol "DTLFOFREQ4" ;
                 lv2:name "Detune LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -541,7 +541,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 34 ;
+                lv2:index 49 ;
                 lv2:symbol "DELAY4" ;
                 lv2:name "Delay 4" ;
                 lv2:default 40.0 ;
@@ -551,7 +551,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 13 ;
+                lv2:index 50 ;
                 lv2:symbol "DLLFOAMT4" ;
                 lv2:name "Delay LFO Amount" ;
                 lv2:default 1.0 ;
@@ -561,7 +561,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 14 ;
+                lv2:index 51 ;
                 lv2:symbol "DLLFOFREQ4" ;
                 lv2:name "Delay LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -571,7 +571,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 35 ;
+                lv2:index 52 ;
                 lv2:symbol "GAIN4" ;
                 lv2:name "Gain 4" ;
                 lv2:default 0.30 ;
@@ -581,7 +581,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh4> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 36 ;
+                lv2:index 53 ;
                 lv2:symbol "PAN4" ;
                 lv2:name "Pan 4" ;
                 lv2:default 0.20 ;
@@ -594,7 +594,7 @@
 
 
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 37 ;
+                lv2:index 54 ;
                 lv2:symbol "ACTIVE5" ;
                 lv2:name "Active 5" ;
                 lv2:default 0.0 ;
@@ -605,7 +605,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 38 ;
+                lv2:index 55 ;
                 lv2:symbol "DETUNE5" ;
                 lv2:name "Detune 5" ;
                 lv2:default -0.05 ;
@@ -615,7 +615,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
+                lv2:index 56 ;
                 lv2:symbol "DTLFOAMT5" ;
                 lv2:name "Detune LFO Amount" ;
                 lv2:default 0.1 ;
@@ -625,7 +625,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
+                lv2:index 57 ;
                 lv2:symbol "DTLFOFREQ5" ;
                 lv2:name "Detune LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -635,7 +635,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 39 ;
+                lv2:index 58 ;
                 lv2:symbol "DELAY5" ;
                 lv2:name "Delay 5" ;
                 lv2:default 30.0 ;
@@ -645,7 +645,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 13 ;
+                lv2:index 59 ;
                 lv2:symbol "DLLFOAMT5" ;
                 lv2:name "Delay LFO Amount" ;
                 lv2:default 1.0 ;
@@ -655,7 +655,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 14 ;
+                lv2:index 60 ;
                 lv2:symbol "DLLFOFREQ5" ;
                 lv2:name "Delay LFO Frequency" ;
                 lv2:default 0.5 ;
@@ -665,7 +665,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 40 ;
+                lv2:index 61 ;
                 lv2:symbol "GAIN5" ;
                 lv2:name "Gain 5" ;
                 lv2:default 0.30 ;
@@ -675,7 +675,7 @@
                 pg:group <http://infamousplugins.sourceforge.net/plugs.html#lushlife:groups:woosh5> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 41 ;
+                lv2:index 62 ;
                 lv2:symbol "PAN5" ;
                 lv2:name "Pan 5" ;
                 lv2:default -0.20 ;

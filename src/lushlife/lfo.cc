@@ -58,3 +58,9 @@ Lfo::out()
     return gain*((s-prev_y)*shape + prev_y);
 
 }
+
+void
+Lfo::reset()
+{
+    phase = 0;
+}
