@@ -22,7 +22,7 @@ Lfo::Lfo(double sample_rate, uint32_t fragsize)
     prev_x = prev_y = 0;
     
     //const vars
-    coeff = 1/(2*sample_rate);// pinking filter coeff
+    coeff = fragsize/(2*sample_rate);// pinking filter coeff
     phastep = 2*PI*fragsize/sample_rate;//w = 2*pi*f; sin(wt) = sin(2*pi*f*t) = sin(2*pi*f*n/fs)
 }
 
@@ -43,13 +43,15 @@ Lfo::out()
     //step
     phase += phastep*freq;
     if(phase > PI)
+    {
         phase -= 2*PI;
+    }
     // sin approx based on an algorithm by Nicolas Capens
     // domain [-pi,pi]
     double y = 1.27323954474*phase - 0.40528473456*phase*(phase>0?phase:-phase);
     float s =  0.225*(y*(y>0?y:-y) - y) + y;
     //pink noise
-    float x = 2*PI*rand() / (float)RAND_MAX ;
+    float x = 2.0*rand() / (float)RAND_MAX -1.0;
     prev_y = coeff*(x + prev_x) + prev_y;
     prev_x = x;
     //blend shapes
