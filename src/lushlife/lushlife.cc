@@ -112,7 +112,7 @@ void connect_lushlife_ports(LV2_Handle handle, uint32_t port, void *data)
     case DRY_GAIN:      plug->dry_gain_p = (float*)data;break;
     case DRY_PAN:       plug->dry_pan_p = (float*)data;break;
     case LFOSHAPE:      plug->lfo_shape_p = (float*)data;break;
-    case SYNCLFO:       plug->lfo_shape_p = (float*)data;break;
+    case SYNCLFO:       plug->sync_lfo_p = (float*)data;break;
     
     case ACTIVE0:       plug->active_p[0] = (float*)data;break;
     case SHIFT0:        plug->shift_p[0] = (float*)data;break;
