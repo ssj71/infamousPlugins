@@ -7,7 +7,7 @@
 #include "powerup_ui.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
-#define POWERUPUI_URI "http://infamousplugins.sourceforge.net/plugs.html#powerup_ui"
+#define POWERUPUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#powerup_ui"
 
 static LV2UI_Handle init_powerupUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,

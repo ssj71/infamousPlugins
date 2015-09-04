@@ -6,9 +6,9 @@
 @prefix state: <http://lv2plug.in/ns/ext/state#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:00Dfault>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:00Dfault>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "00 Dfault" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -75,9 +75,9 @@
 		pset:value 0.0
 	] .
 
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:01RawSaw>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:01RawSaw>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "01 RawSaw" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -144,9 +144,9 @@
 		pset:value 1.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:02RawSqr>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:02RawSqr>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "02 RawSqr" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -214,9 +214,9 @@
 	] .
 	
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:03Rule30>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:03Rule30>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "03 Rule30" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -283,9 +283,9 @@
 		pset:value 3.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:04Rule110>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:04Rule110>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "04 Rule110" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -352,9 +352,9 @@
 		pset:value 3.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:05Chimin>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:05Chimin>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "05 Chimin" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -421,9 +421,9 @@
 		pset:value 2.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:06Downer>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:06Downer>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "06 Downer" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -490,9 +490,9 @@
 		pset:value 3.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:07Growe>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:07Growe>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "07 Growe" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -559,9 +559,9 @@
 		pset:value 0.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:08HapE>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:08HapE>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "08 HapE" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -628,9 +628,9 @@
 		pset:value 3.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:09Jangley>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:09Jangley>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "09 Jangley" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -697,9 +697,9 @@
 		pset:value 1.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:10Phazour>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:10Phazour>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "10 Phazour" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -766,9 +766,9 @@
 		pset:value 3.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:11Phoney>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:11Phoney>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "11 Phoney" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -836,9 +836,9 @@
 	] .
 	
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:12Roar>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:12Roar>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "12 Roar" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -905,9 +905,9 @@
 		pset:value 5.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:13Shiny>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:13Shiny>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "13 Shiny" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -974,9 +974,9 @@
 		pset:value 1.0
 	] .
 	
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:14Soothe>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:14Soothe>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "14 Soothe" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;
@@ -1043,9 +1043,9 @@
 		pset:value 2.04109597
 	] .
 
-<http://infamousplugins.sourceforge.net/plugs.html#casynth:preset:15ClarkKentSaw>
+<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:15ClarkKentSaw>
 	a pset:Preset ;
-	lv2:appliesTo <http://infamousplugins.sourceforge.net/plugs.html#casynth> ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
         rdfs:label "15 ClarkKentSaw" ;
 	lv2:port [
 		lv2:symbol "AMOD_FREQ" ;

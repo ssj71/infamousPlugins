@@ -7,7 +7,7 @@
 #include "powercut_ui.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
-#define POWERCUTUI_URI "http://infamousplugins.sourceforge.net/plugs.html#powercut_ui"
+#define POWERCUTUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#powercut_ui"
 
 static LV2UI_Handle init_powercutUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,

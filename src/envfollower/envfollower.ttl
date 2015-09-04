@@ -13,23 +13,23 @@
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
-<http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio>
+<http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio>
 a param:ControlGroup ;
 lv2:name "Audio Signal" ;
 lv2:symbol "Audio_Signal" .
 
-<http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi>
+<http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi>
 a param:ControlGroup ;
 lv2:name "MIDI Signal" ;
 lv2:symbol "MIDI Signal" .
 
-<http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl>
+<http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl>
 a param:ControlGroup ;
 lv2:name "Control Signal" ;
 lv2:symbol "Control_Signal" .
 
 
-<http://infamousplugins.sourceforge.net/plugs.html#envfollower>
+<http://ssj71.github.io/infamousPlugins/plugs.html#envfollower>
         a lv2:Plugin, lv2:EnvelopePlugin ;
         doap:name "the infamous envelope follower" ;
         doap:maintainer [
@@ -39,7 +39,7 @@ lv2:symbol "Control_Signal" .
         ] ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
-        ui:ui <http://infamousplugins.sourceforge.net/plugs.html#envfollower_ui> ;
+        ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui> ;
 
         lv2:port [
                 a lv2:InputPort, lv2:AudioPort ;
@@ -87,7 +87,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 6 ;
@@ -96,7 +96,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 7 ;
@@ -105,7 +105,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 1.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 2.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 8 ;
@@ -115,7 +115,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 0.01 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 9 ;
@@ -125,7 +125,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 10.0 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 30.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:audio> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index  10 ;
@@ -135,7 +135,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 1.0 ;
                 lv2:minimum 1.0 ;
                 lv2:maximum 16.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 11 ;
@@ -145,7 +145,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 127.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 12 ;
@@ -155,7 +155,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 126.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 13 ;
@@ -165,7 +165,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 127.0 ;
                 lv2:minimum 1.0 ;
                 lv2:maximum 127.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 14 ;
@@ -177,7 +177,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:midi> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 15 ;
@@ -186,7 +186,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 0.0 ;
                 lv2:minimum -10000.0 ;
                 lv2:maximum 10000.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 16 ;
@@ -195,7 +195,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 1.0 ;
                 lv2:minimum -10000.0 ;
                 lv2:maximum 10000.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 17 ;
@@ -207,7 +207,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                pg:group <http://infamousplugins.sourceforge.net/plugs.html#envfollower:group:ctl> ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
         ] ;
         #lv2:port [
         #        a lv2:OutputPort, lv2:AudioPort ; #CVPort ;

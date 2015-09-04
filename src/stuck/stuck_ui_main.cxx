@@ -7,7 +7,7 @@
 #include "stuck_ui.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
-#define STUCKUI_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck_ui"
+#define STUCKUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#stuck_ui"
 
 static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,

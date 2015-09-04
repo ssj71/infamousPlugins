@@ -3,7 +3,7 @@
 #ifndef ENVFOLLOWER_H
 #define ENVFOLLOWER_H
 
-#define ENVFOLLOWER_URI "http://infamousplugins.sourceforge.net/plugs.html#envfollower"
+#define ENVFOLLOWER_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollower"
 
 enum envfollower_ports
 {

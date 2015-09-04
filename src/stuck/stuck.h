@@ -1,7 +1,7 @@
 #ifndef STUCK_H
 #define STUCK_H
 
-#define STUCK_URI "http://infamousplugins.sourceforge.net/plugs.html#stuck"
+#define STUCK_URI "http://ssj71.github.io/infamousPlugins/plugs.html#stuck"
 
 enum stuck_ports
 {

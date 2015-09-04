@@ -7,7 +7,7 @@
 #include"lushlife.h"
 #include"retuner.h"
 
-#define LUSHLIFE_URI "http://infamousplugins.sourceforge.net/plugs.html#lushlife"
+#define LUSHLIFE_URI "http://ssj71.github.io/infamousPlugins/plugs.html#lushlife"
 
 #define NWOOSH 6
 

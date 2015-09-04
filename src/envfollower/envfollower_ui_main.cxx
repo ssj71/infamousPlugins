@@ -5,7 +5,7 @@
 #include "envfollower_ui.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
-#define ENVFOLLOWERUI_URI "http://infamousplugins.sourceforge.net/plugs.html#envfollower_ui"
+#define ENVFOLLOWERUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui"
 
 static LV2UI_Handle init_envfollowerUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,

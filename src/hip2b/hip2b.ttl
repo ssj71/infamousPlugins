@@ -7,16 +7,16 @@
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 
-<http://infamousplugins.sourceforge.net/plugs.html#hip2b>
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b>
         a lv2:Plugin, lv2:DistortionPlugin ;
         doap:name "the infamous Hip2B" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
-                foaf:homepage <http://infamousplugins.sourceforge.net> ;
+                foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
                 foaf:mbox <ssjackson71@gmail.com> ;
         ] ;
         lv2:optionalFeature lv2:hardRTCapable ;
-        ui:ui <http://infamousplugins.sourceforge.net/plugs.html#hip2b_ui> ;
+        ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b_ui> ;
 
         lv2:port [
                 a lv2:InputPort, lv2:AudioPort ;

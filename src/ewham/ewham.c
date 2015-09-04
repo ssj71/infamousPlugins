@@ -7,7 +7,7 @@
 #include"ewham.h"
 #include"retuner.h"
 
-#define EWHAM_URI "http://infamousplugins.sourceforge.net/plugs.html#ewham"
+#define EWHAM_URI "http://ssj71.github.io/infamousPlugins/plugs.html#ewham"
 
 typedef struct _EWHAM
 {

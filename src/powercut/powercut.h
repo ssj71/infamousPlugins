@@ -1,7 +1,7 @@
 #ifndef POWERCUT_H
 #define POWERCUT_H
 
-#define POWERCUT_URI "http://infamousplugins.sourceforge.net/plugs.html#powercut"
+#define POWERCUT_URI "http://ssj71.github.io/infamousPlugins/plugs.html#powercut"
 
 enum _POWERCUT_PORTS
 {

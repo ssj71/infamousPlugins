@@ -8,7 +8,7 @@
 #include "casynth_ui.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
-#define CASYNTHUI_URI "http://infamousplugins.sourceforge.net/plugs.html#casynth_ui"
+#define CASYNTHUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#casynth_ui"
 
 static LV2UI_Handle init_casynthUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,

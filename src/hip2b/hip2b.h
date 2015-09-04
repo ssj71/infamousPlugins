@@ -1,7 +1,7 @@
 #ifndef HIP2B_H
 #define HIP2B_H
 
-#define HIP2B_URI "http://infamousplugins.sourceforge.net/plugs.html#hip2b"
+#define HIP2B_URI "http://ssj71.github.io/infamousPlugins/plugs.html#hip2b"
 
 enum square_ports
 {

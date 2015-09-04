@@ -8,7 +8,7 @@
 #include<lv2/lv2plug.in/ns/ext/time/time.h>
 #include<note.h>
 
-#define CASYNTH_URI "http://infamousplugins.sourceforge.net/plugs.html#casynth"
+#define CASYNTH_URI "http://ssj71.github.io/infamousPlugins/plugs.html#casynth"
 
 
 typedef struct _CASYNTH

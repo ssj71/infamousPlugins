@@ -5,7 +5,7 @@
 #include "cheapdist_ui.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
-#define CHEAPDISTUI_URI "http://infamousplugins.sourceforge.net/plugs.html#cheapdist_ui"
+#define CHEAPDISTUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#cheapdist_ui"
 
 static LV2UI_Handle init_cheapdistUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,

@@ -1,7 +1,7 @@
 #ifndef POWERUP_H
 #define POWERUP_h
 
-#define POWERUP_URI "http://infamousplugins.sourceforge.net/plugs.html#powerup"
+#define POWERUP_URI "http://ssj71.github.io/infamousPlugins/plugs.html#powerup"
 
 enum _POWERUP_PORTS
 {

@@ -12,7 +12,7 @@
 #include"rk4.h"
 #include"c_resampler.h"
 
-#define DUFFER_URI "http://infamousplugins.sourceforge.net/plugs.html#duffer"
+#define DUFFER_URI "http://ssj71.github.io/infamousPlugins/plugs.html#duffer"
 
 typedef struct _DUFFER
 {

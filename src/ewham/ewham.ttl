@@ -6,12 +6,12 @@
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 
-<http://infamousplugins.sourceforge.net/plugs.html#ewham>
+<http://ssj71.github.io/infamousPlugins/plugs.html#ewham>
         a lv2:Plugin, lv2:PitchPlugin ;
         doap:name "the infamous ewham" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
-                foaf:homepage <http://infamousplugins.sourceforge.net> ;
+                foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
                 foaf:mbox <ssjackson71@gmail.com> ;
         ] ;
         lv2:optionalFeature lv2:hardRTCapable ;
