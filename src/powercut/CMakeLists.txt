@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.6)
 set(PLUGIN "powercut")
 project (${PLUGIN})
 
-set(LV2_INSTALL_DIR lib/lv2/${PLUGIN}.lv2 ) # CACHE PATH "Specifies where the LV2 libraries should be installed")
+set(LV2_INSTALL_DIR lib/lv2/ ) # CACHE PATH "Specifies where the LV2 libraries should be installed")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -msse2 -mfpmath=sse -ffast-math")
 
 # check for our various libraries
@@ -45,9 +45,9 @@ target_link_libraries(${PLUGIN}_ui ${LV2_LIBRARIES} ${NTK_LIBRARIES} ${CAIRO_LIB
 # config install
 install(TARGETS ${PLUGIN} ${PLUGIN}_ui
   LIBRARY
-  DESTINATION ${LV2_INSTALL_DIR}
+  DESTINATION ${LV2_INSTALL_DIR}${PLUGIN}.lv2
 )
 
 install (FILES manifest.ttl ${PLUGIN}.ttl 
-  DESTINATION ${LV2_INSTALL_DIR}
+  DESTINATION ${LV2_INSTALL_DIR}${PLUGIN}.lv2
 )

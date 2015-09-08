@@ -6,7 +6,7 @@ set(PLUGIN "lushlife")
 project (${PLUGIN})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/")
 
-set(LV2_INSTALL_DIR lib/lv2/${PLUGIN}.lv2 ) # CACHE PATH "Specifies where the LV2 libraries should be installed")
+set(LV2_INSTALL_DIR lib/lv2/ ) # CACHE PATH "Specifies where the LV2 libraries should be installed")
 set(CMAKE_CXX_FLAGS "-Wall -g -msse2 -mfpmath=sse -ffast-math")
 #SET( CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS} -lzita-resampler")
 
@@ -54,9 +54,9 @@ target_link_libraries(${PLUGIN} ${LV2_LIBRARIES} ${FFTW_LIBRARIES} m zita-resamp
 # config install
 install(TARGETS ${PLUGIN} # ${PLUGIN}_ui
   LIBRARY
-  DESTINATION ${LV2_INSTALL_DIR}
+  DESTINATION ${LV2_INSTALL_DIR}${PLUGIN}.lv2
 )
 
 install (FILES manifest.ttl ${PLUGIN}.ttl 
-  DESTINATION ${LV2_INSTALL_DIR}
+  DESTINATION ${LV2_INSTALL_DIR}${PLUGIN}.lv2
 )

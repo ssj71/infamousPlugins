@@ -17,6 +17,8 @@ Dependencies:
     ntk-fluid
     cairo
     lv2-dev
+    zita-resampler
+    fftw3
 
 
 If you do not have ntk and ntk-fluid already installed use the commands:
