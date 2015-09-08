@@ -6,3 +6,4 @@
 0.0.15 removed all cv ports, added stuck, removed memset from casynth
 0.0.20 added powercut, fixed rms in envfollower and a few more tweaks
 0.0.26 fixed sustain=0 bug, updated readme
+0.1.0  Cmake and GUIs 7 Sept 15

@@ -1,8 +1,8 @@
 Welcome to the INFAMOUS Plugins README
 
-These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use. So far I have exactly 7 plugins. Installation is discussed first here then the plugins below.
+These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use. Installation is discussed first here then the plugins below.
 
-To install, fulfill the dependencies, then run the commands:
+To install, fulfill the dependencies (below), then run the commands:
     mkdir build
     cd build 
     cmake ..
@@ -182,4 +182,4 @@ This is a duffing oscillator driven by the input. The duffing oscillator is inte
 =================================
 10. lushlife
 
-TODO: add lush life
+coming soon...
