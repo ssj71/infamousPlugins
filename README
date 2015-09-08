@@ -9,6 +9,13 @@ To install, fulfill the dependencies (below), then run the commands:
     make
     sudo make install
 
+To install the package under a specific library path, use LIBDIR cmake variabe:
+    mkdir build
+    cd build
+    cmake -DLIBDIR=lib64 ..
+    make
+    sudo make install
+
 Once this is complete you can already start using the plugins in your favorite LV2 host
 
 Dependencies:
