@@ -1,11 +1,7 @@
 #CMake file for infamous stuck
 
-cmake_minimum_required(VERSION 2.6)
-
 set(PLUGIN "duffer")
-project (${PLUGIN})
 
-set(LV2_INSTALL_DIR lib/lv2/ ) # CACHE PATH "Specifies where the LV2 libraries should be installed")
 #set(CMAKE_C_FLAGS "-Wall -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
 
@@ -27,7 +23,6 @@ add_library(${PLUGIN} SHARED
   c_resampler.cpp
   duffing.c
   rk4.c
-
 )
 
 #add_library(${PLUGIN}_ui SHARED
@@ -47,9 +42,9 @@ target_link_libraries(${PLUGIN} ${LV2_LIBRARIES} m zita-resampler)
 # config install
 install(TARGETS ${PLUGIN} #${PLUGIN}_ui
   LIBRARY
-  DESTINATION ${LV2_INSTALL_DIR}${PLUGIN}.lv2
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
 
 install (FILES manifest.ttl ${PLUGIN}.ttl 
-  DESTINATION ${LV2_INSTALL_DIR}${PLUGIN}.lv2
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
