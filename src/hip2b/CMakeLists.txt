@@ -2,18 +2,8 @@
 
 set(PLUGIN "hip2b")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -msse2 -mfpmath=sse -ffast-math")
+include_directories(.)
 
-# check for our various libraries
-find_package(PkgConfig)
-pkg_check_modules(CAIRO cairo)
-pkg_check_modules(NTK ntk)
-pkg_check_modules(LV2 REQUIRED lv2>=.0.1.0)
-
-include_directories (${LV2_INCLUDE_DIRS} ${NTK_INCLUDE_DIRS} ${CAIRO_INCLUDE_DIRS} ../ffffltk ../draw . )
-link_directories (${LV2_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS} ${CAIRO_LIBRARY_DIRS})
-
-find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
 fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
 
 # config libraries
