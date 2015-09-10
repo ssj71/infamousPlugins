@@ -2,24 +2,8 @@
 
 set(PLUGIN "lushlife")
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/")
+include_directories(.)
 
-set(CMAKE_CXX_FLAGS "-Wall -g -msse2 -mfpmath=sse -ffast-math")
-#SET( CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS} -lzita-resampler")
-
-# check for our various libraries
-find_package(PkgConfig)
-pkg_check_modules(CAIRO cairo)
-pkg_check_modules(NTK ntk)
-pkg_check_modules(FFTW fftw3f)
-#pkg_check_modules(ZRESAMPLER zitaresampler)
-pkg_check_modules(LV2 REQUIRED lv2>=.0.1.0)
-#find_package(ZRESAMPLER zita-resampler)
-
-include_directories (${LV2_INCLUDE_DIRS} ${FFTW_INCLUDE_DIRS} ${NTK_INCLUDE_DIRS} ${CAIRO_INCLUDE_DIRS} ../ffffltk ../draw . )
-link_directories (${LV2_LIBRARY_DIRS} ${FFTW_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS} ${CAIRO_LIBRARY_DIRS})
-
-find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
 #fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
 
 # config libraries
