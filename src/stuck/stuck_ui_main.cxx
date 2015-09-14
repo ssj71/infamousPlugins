@@ -51,6 +51,10 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
       resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());
     }
     fl_embed( self->ui,(Window)parentXwindow);
+    //Fl_X *temp = Fl_X::i(self->ui);
+    //widget = fl_xid((void**)self->ui->as_window());
+    //widget = fl_xid_((const Fl_Window*)self->ui);
+    widget = (LV2UI_Widget*)fl_xid_(self->ui);
 
     return (LV2UI_Handle)self;
 }
