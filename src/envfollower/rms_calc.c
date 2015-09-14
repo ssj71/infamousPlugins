@@ -3,11 +3,12 @@
 #include<math.h>
 #include<string.h>
 #include<stdlib.h>
+#include<stdint.h>
 #include"rms_calc.h"
 
-void rms_init(RMS_CALC* calc, unsigned short size)
+void rms_init(RMS_CALC* calc, uint16_t size)
 {
-    unsigned short i;
+    uint16_t i;
     calc->buf = (float*)malloc(sizeof(float)*size);
     calc->size = size;
     calc->indx = 0;
@@ -46,58 +47,12 @@ float rms_calculate(RMS_CALC* calc)
     return calc->rms = sqrt(calc->sum/(float)calc->size);
 }
 
-float rms_block_fill(RMS_CALC* calc, float x[], unsigned short nframes)
+float rms_block_fill(RMS_CALC* calc, float x[], uint32_t nframes)
 {  
-    //unsigned short i = calc->size - calc->indx;
-    //unsigned short j;
-    unsigned short i;
+    uint32_t i;
     for(i=0;i<nframes-1;i++)
     {
         rms_shift_no_out(calc,x[i]);
     }
     return rms_shift(calc,x[i]);
-    /*
-    if(nframes>=calc->size)
-    {
-        memcpy(calc->buf,&(x[nframes-calc->size]),sizeof(float)*calc->size);
-        calc->sum = 0;
-        for(j=0;j<calc->size;j++)
-        {
-            calc->sum += calc->buf[j] = calc->buf[j]*calc->buf[j];
-        }
-        calc->indx = 0;
-    }
-    else if(calc->indx+nframes >= calc->size)
-    { 
-        memcpy(&(calc->buf[calc->indx]),x,sizeof(float)*(i));
-        memcpy(calc->buf,&(x[i-1]),sizeof(float)*(nframes-i));
-        for(j=0;j<nframes-i;j++)
-        { 
-            calc->sum += calc->buf[j] = calc->buf[j]*calc->buf[j];
-        }
-        for(;j<calc->indx;j++)
-        {
-            calc->sum += calc->buf[j];
-        }
-        for(;j<calc->size;j++)
-        {
-            calc->sum += calc->buf[j] = calc->buf[j]*calc->buf[j];
-        }
-        calc->indx = nframes - i;
-    }
-    else
-    {
-        memcpy(&(calc->buf[calc->indx]),x,sizeof(float)*(nframes));
-        for(j=0;j<calc->indx;j++)
-        {
-            calc->sum += calc->buf[j];
-        }
-        for(;j<calc->size;j++)
-        {
-            calc->sum += calc->buf[j] = calc->buf[j]*calc->buf[j];
-        }
-        calc->indx += nframes;
-    }
-    return calc->rms = sqrt(calc->sum/(float)calc->size);
-    */
 } 

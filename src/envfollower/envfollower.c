@@ -24,7 +24,6 @@ typedef struct _ENVFOLLOWER{
     unsigned char mout;
     unsigned char mprev;
 
-    uint64_t nsum;
     double sum;
     float out;
 

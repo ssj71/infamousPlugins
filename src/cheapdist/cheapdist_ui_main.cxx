@@ -49,6 +49,7 @@ static LV2UI_Handle init_cheapdistUI(const struct _LV2UI_Descriptor * descriptor
       resize->ui_resize(resize->handle, self->ui->w(), self->ui->h());
     }
     fl_embed( self->ui,(Window)parentXwindow);
+    widget = (LV2UI_Widget*)fl_xid(self->ui);
 
     return (LV2UI_Handle)self;
 }

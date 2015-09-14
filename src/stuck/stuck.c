@@ -315,13 +315,13 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     if(sample_freq<100000)//88.1 or 96.1kHz
         tmp = tmp>>1;//14 bits
     if(sample_freq<50000)//44.1 or 48kHz
-        tmp = tmp>>1;//13 bits
+        tmp = tmp>>1;//13 bits //8192
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
-    plug->acorr_size = tmp>>3; 
-    plug->xfade_size = tmp>>7;
-    plug->wave_max = (tmp - plug->xfade_size)>>1;
-    plug->wave_min = tmp>>6;
+    plug->acorr_size = tmp>>3;//1024
+    plug->xfade_size = tmp>>7;//64
+    plug->wave_max = (tmp - plug->xfade_size)>>1;//4064
+    plug->wave_min = tmp>>6;//128
     plug->wavesize = plug->wave_max;
     plug->indx = 0;
     plug->indx2 = plug->wave_min;
