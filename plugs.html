@@ -35,11 +35,17 @@
 </div>
 <div id="HEADER">
 <ul style="width: 700px;">
-  <li><a href="plugs.html#next">In Development</a></li>
+  <li><a href="plugs.html#lushlife">Lush Life</a></li>
+  <li><a href="plugs.html#duffer">Duffer</a></li>
   <li><a href="plugs.html#ewham">EWham</a></li>
   <li><a href="plugs.html#powerup">Power Up</a></li>
   <li><a href="plugs.html#powercut">Power Cut</a></li>
   <li><a href="plugs.html#stuck">Stuck</a></li>
+</ul>
+</div>
+<div id="HEADER">
+<ul style="width: 700px;">
+  <li><a href="plugs.html#next">In Development</a></li>
 </ul>
 </div>
 <div id="TEXT">
@@ -70,7 +76,7 @@ general read wikipedia under <a href="http://en.wikipedia.org/wiki/Elementary_ce
 Cellular Automaton</a>.<br />
 <br />
 &nbsp;&nbsp;&nbsp; It is unlimitedly polyphonic and has 2 LFOs. Every
-oscillator has 5 different waveforms to select from. It also features
+oscillator has 6 different waveforms to select from. It also features
 an ADBSSR envelope generator for the amplitude envelope.<br />
 <br />
 Parameter Description:<br />
@@ -214,14 +220,39 @@ Parameter Description:<br />
 <br />
 <br />
 <br />
+<br /><h1 id="duffer">The Infamous Duffer</h1>
+&nbsp;&nbsp;&nbsp;This is a duffing oscillator driven by the input. The duffing oscillator is interesting because it exhibits chaos. The system is simulated by a standard RK4 algorithm, but with each input sample treated as a full second to get more movement from the model. If none of that makes sense just know its not the most musical thing, but you can have a bit of fun making weird noises with it. It can be thought of a bit like a speaker but instead of moving a paper cone, the coil drives a spring side to side that has 2 magnets pulling it in opposite directions all the time (creating non-linear and chaotic behavior). This plugin has a check; if the output begins to grow too large it will reset the state to zero and resume, to allow unstable settings. There is an output to indicate if this condition is being triggered. Its not a big deal when this is triggered, but know that you're more hearing that artificial nonlinearity of the reset than the dynamics of the actual system, and that's not as scientifically intriguing. One tip: when using negative spring nonlinearities keep the spring stiffness very large if you want to avoid triggering the instability reset.
+<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; DAMPING - damps the "spring" </li>
+  <li>&nbsp;&nbsp;&nbsp; SPRING NONLINEARITY - changes the nature of the "spring" </li>
+  <li>&nbsp;&nbsp;&nbsp; INPUT GAIN - adjust how hard the "spring" is driven </li>
+  <li>&nbsp;&nbsp;&nbsp; UNSTABLE! - output to show if the system is diverging (and arbitrarily reset) </li>
+</ul>
+<br />
+<br />
+<br />
+<br /><h1 id="lushlife">The Infamous Lush Life</h1>
+&nbsp;&nbsp;&nbsp;This is an artificial double tracking plugin capable of everything from a thin beatle effect to thick lush choruses to weird outlandish effects. It is primarily for vocals though it works on any monophonic signal. It is fully modulation ready and includes lfos for the delay and pitch shifting of each double. Its not released yet, so stay tuned for an announcement.
+<br />
+<br />
+Parameter Description:<br />
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; PARAM - description </li>
+</ul>
+<br />
+<br />
+<br />
 <h1 id="next">Coming Eventually...</h1>
-&nbsp;&nbsp;&nbsp; I'm always tinkering. I have a lengthy list of things that would be useful or interesting plugins as well as a notebook full of algorithms I developed on paper because the dsp was challenging and interesting. Now with the GUIs behind me I'm excited to do some more DSP. Too much to do and so little time... Another synth is in order, but that takes a lot of time and its nice to have small simple projects. I might go work a bit to help some plugin hosts and get the CV situation a little better. If you'd like to contribute to the community, that would be a great way. As always if you really need something let me know I love to help, but time is expensive.
+&nbsp;&nbsp;&nbsp; I'm always tinkering. I have a lengthy list of things that would be useful or interesting plugins as well as a notebook full of algorithms I developed on paper because the dsp was challenging and interesting. Now with the GUIs behind me I'm excited to do some more DSP. Too much to do and so little time... Another synth is in order, but that takes a lot of time and its nice to have small simple projects. I might go work a bit to help some plugin hosts and get the CV situation a little better. If you'd like to contribute to the community, that would be a great way. As always if you really need something let me know. I love to help, but time is expensive.
 <br />
 </div>
 </div>
 
 <div id="FOOTER">
-<p>Last Updated 10-14</p>
+<p>Last Updated 9-15</p>
 <p>Infamous Plugins<br />
 </p>
 <p><a href="http://www.gettemplate.com">Designed by GetTemplate.com</a></p>
