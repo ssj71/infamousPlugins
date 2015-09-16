@@ -10,11 +10,16 @@
 <http://ssj71.github.io/infamousPlugins/plugs.html#stuck>
         a lv2:Plugin, lv2:DelayPlugin ;
         doap:name "the infamous stuck" ;
+        doap:license <http://opensource.org/licenses/GPL-2.0> ;
+        doap:description "a sound retainer/sample and overlay effect";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
-                foaf:mbox <ssjackson71@gmail.com> ;
+                foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
+        lv2:minorVersion 0 ;
+        lv2:microVersion 1 ;
+        rdfs:comment "This effect samples the input, detects the primary waveform, and creates a drone of the note played when triggered. It is polyphonic and matches your tone." ;
         lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#stuck_ui> ;
 
@@ -47,7 +52,7 @@
                 lv2:default 0.50 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 2.0 ;
-		units:unit units:coeff ;
+		units:unit units:coef ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 4 ;

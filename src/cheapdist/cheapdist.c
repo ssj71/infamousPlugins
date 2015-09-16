@@ -37,10 +37,6 @@ typedef struct _CHEAPDIST
     float *aggression_p;
 }CHEAPDIST;
 
-//starting again.
-//just look 1 transition ahead, keep track of space to next trans.
-//circular buffer holds input*gain
-//index c (check) is always the transition or the lookahead limit
 void run_cheapdist(LV2_Handle handle, uint32_t nframes)
 {
     CHEAPDIST* plug = (CHEAPDIST*)handle;

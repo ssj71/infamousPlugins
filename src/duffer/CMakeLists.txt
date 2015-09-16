@@ -5,6 +5,10 @@ set(PLUGIN "duffer")
 #set(CMAKE_C_FLAGS "-Wall -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
 
+if(NOT LIBDIR)
+  set(LIBDIR "lib")
+endif(NOT LIBDIR)
+
 # check for our various libraries
 find_package(PkgConfig)
 pkg_check_modules(CAIRO cairo)

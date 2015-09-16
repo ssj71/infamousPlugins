@@ -31,11 +31,16 @@ lv2:symbol "Modulation" .
 <http://ssj71.github.io/infamousPlugins/plugs.html#casynth>
         a lv2:Plugin, lv2:InstrumentPlugin ;
         doap:name "the infamous cellular automaton synth" ;
+        doap:license <http://opensource.org/licenses/GPL-2.0> ;
+        doap:description "Additive synth controlled by an automaton";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
-                foaf:mbox <ssjackson71@gmail.com> ;
+                foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
+        lv2:minorVersion 0 ;
+        lv2:microVersion 1 ;
+        rdfs:comment "This additive synth is controlled by a elementary cellular automaton which determines which partials sound and which are silent. It is tempo sync'd and is excellent for pulsating sounds." ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
         lv2ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#casynth_ui> ;
@@ -61,9 +66,9 @@ lv2:symbol "Modulation" .
                 lv2:symbol "CHANNEL" ;
                 lv2:name "MIDI Channel" ;
                 lv2:portProperty lv2:integer ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 16.0 ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 16 ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 3 ;
@@ -72,16 +77,16 @@ lv2:symbol "Modulation" .
                 lv2:default 1.0 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 2.0 ;
-                units:unit units:coeff ;
+                units:unit units:coef ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 4 ;
                 lv2:symbol "RULE" ;
                 lv2:name "Cell Automaton Rule" ;
                 lv2:portProperty lv2:integer ;
-                lv2:default 30.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 255.0 ;
+                lv2:default 30 ;
+                lv2:minimum 0 ;
+                lv2:maximum 255 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -101,9 +106,9 @@ lv2:symbol "Modulation" .
                 lv2:symbol "INIT_CELLS" ;
                 lv2:name "Initial Condition" ;
                 lv2:portProperty lv2:integer ;
-                lv2:default 1.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 65535.0 ;
+                lv2:default 1 ;
+                lv2:minimum 0 ;
+                lv2:maximum 65535 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -111,9 +116,9 @@ lv2:symbol "Modulation" .
                 lv2:symbol "NHARMONICS" ;
                 lv2:name "Harmonics" ;
                 lv2:portProperty lv2:integer ;
-                lv2:default 12.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 16.0 ;
+                lv2:default 12 ;
+                lv2:minimum 0 ;
+                lv2:maximum 16 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -126,9 +131,9 @@ lv2:symbol "Modulation" .
                 lv2:scalePoint [ rdfs:label "Saw"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Square"; rdf:value 2 ] ;
                 lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 3 ] ;
-                lv2:default 1.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 3.0 ;
+                lv2:default 1 ;
+                lv2:minimum 0 ;
+                lv2:maximum 3 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -153,9 +158,9 @@ lv2:symbol "Modulation" .
                 lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 3 ] ;
                 lv2:scalePoint [ rdfs:label "White Noise"; rdf:value 4 ] ;
                 lv2:scalePoint [ rdfs:label "Random"; rdf:value 5 ] ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 5.0 ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 5 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:auto> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -187,7 +192,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.5 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                units:unit units:coeff ;
+                units:unit units:coef ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -208,7 +213,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.75 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                units:unit units:coeff ;
+                units:unit units:coef ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:env> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -234,9 +239,9 @@ lv2:symbol "Modulation" .
                 lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 3 ] ;
                 lv2:scalePoint [ rdfs:label "White Noise"; rdf:value 4 ] ;
                 lv2:scalePoint [ rdfs:label "Random"; rdf:value 5 ] ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 5.0 ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 5 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -257,7 +262,7 @@ lv2:symbol "Modulation" .
                 lv2:default 0.10 ;
                 lv2:minimum -1.00 ;
                 lv2:maximum 1.00 ;
-                units:unit units:coeff ;
+                units:unit units:coef ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -272,9 +277,9 @@ lv2:symbol "Modulation" .
                 lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 3 ] ;
                 lv2:scalePoint [ rdfs:label "White Noise"; rdf:value 4 ] ;
                 lv2:scalePoint [ rdfs:label "Random"; rdf:value 5 ] ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 5.0 ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 5 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:mod> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;

@@ -32,11 +32,16 @@ lv2:symbol "Control_Signal" .
 <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower>
         a lv2:Plugin, lv2:EnvelopePlugin ;
         doap:name "the infamous envelope follower" ;
+        doap:license <http://opensource.org/licenses/GPL-2.0> ;
+        doap:description "Fully featured envelope follower";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://infamounsplugins.sourceforge.net> ;
-                foaf:mbox <ssjackson71@gmail.com> ;
+                foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
+        lv2:minorVersion 0 ;
+        lv2:microVersion 1 ;
+        rdfs:comment "This envelope follower follows the volume envelope of an audio signal and produces a midi control signal. It can be used for things like a sidechained filter cutoff, ducking, or making any other effects volume responsive.";
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui> ;
@@ -74,8 +79,8 @@ lv2:symbol "Control_Signal" .
                 lv2:index 4 ;
                 lv2:symbol "CTL_OUT";
                 lv2:name "Control Out";
-		lv2:scalePoint [ rdfs:label "Min"; rdf:value 0 ] ;
-		lv2:scalePoint [ rdfs:label "Max"; rdf:value 1 ] ;
+                lv2:scalePoint [ rdfs:label "Min"; rdf:value 0.0 ] ;
+                lv2:scalePoint [ rdfs:label "Max"; rdf:value 1.0 ] ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
         ] ;
@@ -132,9 +137,9 @@ lv2:symbol "Control_Signal" .
                 lv2:symbol "CHANNEL" ;
                 lv2:name "MIDI Channel" ;
                 lv2:portProperty lv2:integer ;
-                lv2:default 1.0 ;
-                lv2:minimum 1.0 ;
-                lv2:maximum 16.0 ;
+                lv2:default 1 ;
+                lv2:minimum 1 ;
+                lv2:maximum 16 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -142,9 +147,9 @@ lv2:symbol "Control_Signal" .
                 lv2:symbol "CONTROL_NO" ;
                 lv2:name "MIDI Control Number" ;
                 lv2:portProperty lv2:integer ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 127.0 ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 127 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -152,9 +157,9 @@ lv2:symbol "Control_Signal" .
                 lv2:symbol "MMINV" ;
                 lv2:name "MIDI Minimum Value" ;
                 lv2:portProperty lv2:integer ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 126.0 ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 126 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -162,9 +167,9 @@ lv2:symbol "Control_Signal" .
                 lv2:symbol "MMAXV" ;
                 lv2:name "MIDI Maximum Value" ;
                 lv2:portProperty lv2:integer ;
-                lv2:default 127.0 ;
-                lv2:minimum 1.0 ;
-                lv2:maximum 127.0 ;
+                lv2:default 127 ;
+                lv2:minimum 1 ;
+                lv2:maximum 127 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -174,9 +179,9 @@ lv2:symbol "Control_Signal" .
                 lv2:portProperty lv2:integer ;
                 lv2:scalePoint [ rdfs:label "Normal"; rdf:value 0 ] ;
                 lv2:scalePoint [ rdfs:label "Reverse"; rdf:value 1 ] ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 1.0 ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -184,8 +189,8 @@ lv2:symbol "Control_Signal" .
                 lv2:symbol "CMINV" ;
                 lv2:name "CV Port Minimum Value" ;
                 lv2:default 0.0 ;
-                lv2:minimum -10000.0 ;
-                lv2:maximum 10000.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -193,8 +198,8 @@ lv2:symbol "Control_Signal" .
                 lv2:symbol "CMAXV" ;
                 lv2:name "CV Port Maximum Value" ;
                 lv2:default 1.0 ;
-                lv2:minimum -10000.0 ;
-                lv2:maximum 10000.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -204,9 +209,9 @@ lv2:symbol "Control_Signal" .
                 lv2:portProperty lv2:integer ;
                 lv2:scalePoint [ rdfs:label "Normal"; rdf:value 0 ] ;
                 lv2:scalePoint [ rdfs:label "Reverse"; rdf:value 1 ] ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 1.0 ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
         ] ;
         #lv2:port [
@@ -214,7 +219,7 @@ lv2:symbol "Control_Signal" .
         #        lv2:index 18 ;
         #        lv2:symbol "CV_OUT";
         #        lv2:name "CV Out";
-        #        lv2:minimum -10000.0 ;
-        #        lv2:maximum 10000.0 ;
+        #        lv2:minimum 0.0 ;
+        #        lv2:maximum 1.0 ;
         #] ;
-	.
+    .

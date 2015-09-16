@@ -10,11 +10,16 @@
 <http://ssj71.github.io/infamousPlugins/plugs.html#cheapdist>
         a lv2:Plugin, lv2:DistortionPlugin ;
         doap:name "the infamous cheap distortion" ;
+        doap:license <http://opensource.org/licenses/GPL-2.0> ;
+        doap:description "a simple waveshaping distortion";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
-                foaf:mbox <ssjackson71@gmail.com> ;
+                foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
+        lv2:minorVersion 0 ;
+        lv2:microVersion 1 ;
+        rdfs:comment "This experimental distortion is a simple waveshaper approximating a reflected square, fourth, or eighth root. It does this through bit twiddling, and therefore uses no floating point operations. Its useful to have a simple amplifier to adjust input and output levels.";
         lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#cheapdist_ui> ;
 
@@ -35,6 +40,9 @@
                 lv2:index 2 ;
                 lv2:symbol "AGGRESSION" ;
                 lv2:name "aggression" ;
+                lv2:default 1 ;
+                lv2:minimum 1 ;
+                lv2:maximum 3 ;
                 lv2:portProperty lv2:integer ;
         ] ;
           .

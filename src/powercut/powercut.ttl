@@ -10,11 +10,16 @@
 <http://ssj71.github.io/infamousPlugins/plugs.html#powercut>
         a lv2:Plugin, lv2:ModulationPlugin ;
         doap:name "the infamous power cut" ;
+        doap:license <http://opensource.org/licenses/GPL-2.0> ;
+        doap:description "A tape stop effect";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
-                foaf:mbox <ssjackson71@gmail.com> ;
+                foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
+        lv2:minorVersion 0 ;
+        lv2:microVersion 1 ;
+        rdfs:comment "This is a tape stop with up to 10 seconds of decay time. Curvature can be added for full customization of the effect."
         lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#powercut_ui> ;
 
@@ -39,7 +44,7 @@
                 lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
-		lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:integer ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 3 ;
@@ -48,16 +53,16 @@
                 lv2:default 0.50 ;
                 lv2:minimum 0.01 ;
                 lv2:maximum 10.0 ;
-		units:unit units:s ;
+                units:unit units:s ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 4 ;
                 lv2:symbol "DCURVE" ;
                 lv2:name "Decay Curve" ;
-		lv2:scalePoint [ rdfs:label "Concave" ; rdf:value -10.0 ] ;
-		lv2:scalePoint [ rdfs:label "Linear" ; rdf:value 0.0 ] ;
-		lv2:scalePoint [ rdfs:label "Convex" ; rdf:value 10 ] ;
-                lv2:default 0 ;
+                lv2:scalePoint [ rdfs:label "Concave" ; rdf:value -10.0 ] ;
+                lv2:scalePoint [ rdfs:label "Linear" ; rdf:value 0.0 ] ;
+                lv2:scalePoint [ rdfs:label "Convex" ; rdf:value 10.0 ] ;
+                lv2:default 0.0 ;
                 lv2:minimum -10.0 ;
                 lv2:maximum 10.0 ; 
         ] ;
@@ -67,4 +72,4 @@
         #        lv2:symbol "TRIGGER" ;
         #        lv2:name "Trigger" ;
         #] ;
-	.
+    .

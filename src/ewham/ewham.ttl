@@ -3,17 +3,23 @@
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#ewham>
         a lv2:Plugin, lv2:PitchPlugin ;
         doap:name "the infamous ewham" ;
+        doap:license <http://opensource.org/licenses/GPL-2.0> ;
+        doap:description "a low-latency monophonic pitch shifter";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
-                foaf:mbox <ssjackson71@gmail.com> ;
+                foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
+        lv2:minorVersion 0 ;
+        lv2:microVersion 1 ;
+        rdfs:comment "This shifter works well for monophonic sounds, allowing an easy control to change the shifting interval. Any interval between 2 octaves down and 3 octaves up is available. It also has controls that will slide to the nearest semitone after being adjusted, or to jump directly from semitone to semitone. It also provides a dry mix for chorus effects." ;
         lv2:optionalFeature lv2:hardRTCapable ;
 
 
@@ -34,9 +40,9 @@
                 lv2:index 2 ;
                 lv2:symbol "EXPRESSION" ;
                 lv2:name "Expression" ;
-                lv2:default 0 ;
-                lv2:minimum 0 ;
-                lv2:maximum 1 ;
+                lv2:default 0.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 3 ;
@@ -103,6 +109,8 @@
                 lv2:index 7 ;
                 lv2:symbol "LATENCY" ;
                 lv2:name "Latency" ;
+                lv2:minimum 0 ;
+                lv2:maximum 2048 ; 
                 lv2:portProperty lv2:reportsLatency, lv2:integer, pprops:notOnGUI;
         ] ;
 	.

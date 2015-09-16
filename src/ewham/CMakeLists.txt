@@ -7,6 +7,10 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/")
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall -g -msse2 -mfpmath=sse -ffast-math")
 #SET( CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS} -lzita-resampler")
 
+if(NOT LIBDIR)
+  set(LIBDIR "lib")
+endif(NOT LIBDIR)
+
 # check for our various libraries
 find_package(PkgConfig)
 pkg_check_modules(CAIRO cairo)
