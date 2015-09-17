@@ -2,7 +2,7 @@
 #define DRAW_BLUELED_H
 inline int cairo_code_draw_LED_get_width() { return 19; }
 inline int cairo_code_draw_LED_get_height() { return 19; }
-inline void cairo_code_draw_LED_render(cairo_t *cr, int val, unsigned char color) {
+inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;

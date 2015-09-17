@@ -53,7 +53,7 @@ class EnvBounds: public Fl_Widget
     }
 
     int x, y, w, h;
-    //const char* label;
+    //const int8_t* label;
 
     int drawing_w;
     int drawing_h;
@@ -116,19 +116,6 @@ class EnvBounds: public Fl_Widget
         //scalex = w/(double)(drawing_w);
         scalex = w/(double)(drawing_w);
         scaley = h/(double)drawing_h;
-        /*
-        if(scalex > scaley)
-        {
-            scalex = scaley;
-            shiftx = (w - scalex*drawing_w*nchars)/2.f;
-            //shiftx = (w - scalex*drawing_w)/2.f;
-        }
-        else
-        {
-            scaley = scalex;
-            shifty = h - scaley*drawing_h;
-        }
-        */
         cairo_save( cr );
 
         //move

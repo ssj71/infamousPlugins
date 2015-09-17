@@ -3,8 +3,8 @@
 #include"blur.h"
 inline int cairo_code_draw_16seg_get_width() { return 30; }
 inline int cairo_code_draw_16seg_get_height() { return 45; }
-inline short char2seg(char c);
-inline void cairo_code_draw_16seg_render(cairo_t *cr, char num, unsigned char color) {
+inline int16_t char2seg(char c);
+inline void cairo_code_draw_16seg_render(cairo_t *cr, char num, uint8_t color) {
 //r = 0;
 //o = 1;
 //y = 2;
@@ -33,7 +33,7 @@ switch(color)
     break;
 }
 
-unsigned short val = char2seg(num);
+uint16_t val = char2seg(num);
 
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
@@ -729,7 +729,7 @@ inline void   cairo_code_draw_red16seg_render(cairo_t *cr, char num){cairo_code_
 inline void cairo_code_draw_green16seg_render(cairo_t *cr, char num){cairo_code_draw_16seg_render(cr, num, 3);}
 inline void  cairo_code_draw_blue16seg_render(cairo_t *cr, char num){cairo_code_draw_16seg_render(cr, num, 4);}
 
-static unsigned char Font5x7[][5]  = {
+static uint8_t Font5x7[][5]  = {
     {0x00, 0x00, 0x00, 0x00, 0x00},// (space)
     {0x00, 0x00, 0x5F, 0x00, 0x00},// !
     {0x00, 0x07, 0x00, 0x07, 0x00},// "
@@ -830,7 +830,7 @@ static unsigned char Font5x7[][5]  = {
 
 //light versions require custom widget
 
-inline void cairo_code_draw_16segbg_render(cairo_t *cr, unsigned char color) {
+inline void cairo_code_draw_16segbg_render(cairo_t *cr, uint8_t color) {
 //r = 0;
 //o = 1;
 //y = 2;
@@ -1204,7 +1204,7 @@ cairo_fill_preserve(cr);
 /********************/
 }
 
-inline void cairo_code_draw_16seglt_render(cairo_t *cr, char num, unsigned char color) {
+inline void cairo_code_draw_16seglt_render(cairo_t *cr, char num, uint8_t color) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -1227,7 +1227,7 @@ switch(color)
     break;
 }
 
-unsigned short val = char2seg(num);
+uint16_t val = char2seg(num);
 
 //blur
 temp_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,30,45);

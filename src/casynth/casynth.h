@@ -16,17 +16,17 @@ typedef struct _CASYNTH
     double sample_rate;
     WAVESOURCE waves;
     NOTE note[127];
-    unsigned char active[127];
-    unsigned char nactive;
+    uint8_t active[127];
+    uint8_t nactive;
     bool sus;
-    unsigned char sustained[127];
-    unsigned char nsustained;
+    uint8_t sustained[127];
+    uint8_t nsustained;
     float ibpm;
 
     double pitchbend;
 
-    unsigned char harmonic_mode;
-    unsigned char ncells;
+    uint8_t harmonic_mode;
+    uint8_t ncells;
     float cell_lifetime;
     float harm_gain_sinc[MAX_N_HARMONICS+1];
     float harm_gain_saw[MAX_N_HARMONICS+1];

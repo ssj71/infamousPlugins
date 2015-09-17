@@ -65,8 +65,8 @@ class CellGrid: public Fl_Widget
     int drawing_h;
     void (*drawing_f)(cairo_t*,int);//pointer to draw function
 
-    unsigned char rule;
-    unsigned short initial_condition;
+    uint8_t rule;
+    uint16_t initial_condition;
     
     void draw()
     {
@@ -92,7 +92,7 @@ class CellGrid: public Fl_Widget
 
         //call the draw function for each character
         int nrows = h/offset;
-        unsigned short cells = initial_condition,
+        uint16_t cells = initial_condition,
           temp=0;
         for (int i=0; i<nrows; i++)
         {
@@ -114,7 +114,7 @@ class CellGrid: public Fl_Widget
 
             //calculate cells
             temp = 0;
-            for(unsigned char index=0;index<=15;index++)
+            for(uint8_t index=0;index<=15;index++)
             {
                 //the idea is to shift the rule mask (w/rollover) according to the 3
                 //bits in the neighborhood at $index, mask that bit in the rule to

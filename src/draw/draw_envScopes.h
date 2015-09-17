@@ -3,7 +3,7 @@
 #include"blur.h"
 inline int cairo_code_draw_envScope_get_width() { return 600; }
 inline int cairo_code_draw_envScope_get_height() { return 200; }
-inline void cairo_code_draw_blue_envScope_render(cairo_t *cr, float *data, unsigned short start) {
+inline void cairo_code_draw_blue_envScope_render(cairo_t *cr, float *data, uint16_t start) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr = cr;
 cairo_pattern_t *pattern;
@@ -25,7 +25,7 @@ cairo_new_path(cr);
 start = (start-1)&0x7FF;
 //cairo_move_to(cr,598,183.33*data[start]+16.66);
 cairo_move_to(cr,598,-183.33*data[start]+183.33);
-for(unsigned short i=1;i<596;i++)
+for(uint16_t i=1;i<596;i++)
 {
     cairo_line_to(cr,598-i,183.33-183.33*data[(start - i)&0x7FF]);
 }
@@ -45,7 +45,7 @@ cairo_destroy(cr);
 
 }
 
-inline void cairo_code_draw_green_envScope_render(cairo_t *cr, float *data, unsigned short start) {
+inline void cairo_code_draw_green_envScope_render(cairo_t *cr, float *data, uint16_t start) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr = cr;
 cairo_pattern_t *pattern;
@@ -66,7 +66,7 @@ cairo_new_path(cr);
 
 start = (start-1)&0x7FF;
 cairo_move_to(cr,598,-183.33*data[start]+183.33);
-for(unsigned short i=1;i<596;i++)
+for(uint16_t i=1;i<596;i++)
 {
     cairo_line_to(cr,598-i,183.33-183.33*data[(start - i)&0x7FF]);
 }
