@@ -1,22 +1,22 @@
 /*
  * Author: spencer jackson 2014
  *         ssjackson71@gmail.com
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
- * 
+ *
  */
 
 
@@ -33,23 +33,23 @@ namespace ffffltk
 
 class EnvBounds: public Fl_Widget
 {
-  public:
+public:
     EnvBounds(int _x, int _y, int _w, int _h, const char *_label = ""):
         Fl_Widget(_x, _y, _w, _h, _label)
     {
-      x = _x;
-      y = _y;
-      w = _w;
-      h = _h;
-      
-      //label = _label;
+        x = _x;
+        y = _y;
+        w = _w;
+        h = _h;
 
-      drawing_w = 600;
-      drawing_h = 202;
+        //label = _label;
 
-      min = 0;
-      max = 1;
-      drawlines = blue = false;
+        drawing_w = 600;
+        drawing_h = 202;
+
+        min = 0;
+        max = 1;
+        drawlines = blue = false;
     }
 
     int x, y, w, h;
@@ -63,7 +63,7 @@ class EnvBounds: public Fl_Widget
 
     void default_drawing(cairo_t *cr)
     {
-                
+
         cairo_pattern_t *pattern;
         cairo_matrix_t matrix;
 
@@ -88,7 +88,7 @@ class EnvBounds: public Fl_Widget
             cairo_line_to(cr,598,-183.33*min+188.33);
         else
             cairo_line_to(cr,14,-183.33*min+188.33);
-            
+
         cairo_move_to(cr,4,-183.33*max+188.33);
         if(drawlines)
             cairo_line_to(cr,598,-183.33*max+188.33);
@@ -105,38 +105,38 @@ class EnvBounds: public Fl_Widget
     void draw()
     {
 
-      if (damage() & FL_DAMAGE_ALL)
-      {
-        cairo_t *cr = Fl::cairo_cc();
-        
+        if (damage() & FL_DAMAGE_ALL)
+        {
+            cairo_t *cr = Fl::cairo_cc();
 
-        //calcluate scale and centering
-        double scalex,
-        scaley;
-        //scalex = w/(double)(drawing_w);
-        scalex = w/(double)(drawing_w);
-        scaley = h/(double)drawing_h;
-        cairo_save( cr );
 
-        //move
-        cairo_translate(cr,x,y);
-        //scale
-        cairo_scale(cr,scalex,scaley);
-        default_drawing(cr);
+            //calcluate scale and centering
+            double scalex,
+                   scaley;
+            //scalex = w/(double)(drawing_w);
+            scalex = w/(double)(drawing_w);
+            scaley = h/(double)drawing_h;
+            cairo_save( cr );
 
-        cairo_restore(cr);
+            //move
+            cairo_translate(cr,x,y);
+            //scale
+            cairo_scale(cr,scalex,scaley);
+            default_drawing(cr);
 
-      }
+            cairo_restore(cr);
+
+        }
     }
-    
+
     void resize(int X, int Y, int W, int H)
     {
-      Fl_Widget::resize(X,Y,W,H);
-      x = X;
-      y = Y;
-      w = W;
-      h = H;
-      redraw();
+        Fl_Widget::resize(X,Y,W,H);
+        x = X;
+        y = Y;
+        w = W;
+        h = H;
+        redraw();
     }
 };
 

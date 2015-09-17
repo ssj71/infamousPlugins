@@ -15,7 +15,7 @@ typedef struct _HYSTERESIS
     double prev_phase;
     double prev_val;
 
-}HYSTERESIS;
+} HYSTERESIS;
 
 struct _WAVESOURCE;
 typedef struct _WAVESOURCE WAVESOURCE;

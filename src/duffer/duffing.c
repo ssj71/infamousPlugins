@@ -20,7 +20,7 @@ typedef struct _DUFFER
     float p2; //previous samples for cubic interpolation
     double sample_freq;
     double sample_time;
-    
+
     float *buf;
     double intermediate[16];
     double* state;
@@ -29,12 +29,12 @@ typedef struct _DUFFER
     float *input_p;
     float *output_p;
     // /ddot{x} + /delta*/dot{x} + /beta*x + /alpha*x^3 = /gamma/text{forcing function}
-    float *delta_p;//damping 
+    float *delta_p;//damping
     float *alpha_p;//spring nonlinearity
     float *beta_p;//spring stiffness
-    float *gamma_p;//input gain 
+    float *gamma_p;//input gain
     float *unstable_p;
-}DUFFER;
+} DUFFER;
 
 enum duffer_ports
 {
@@ -56,7 +56,7 @@ float forcing_function(void* data, double t)
     return plug->buf[i];
 }
 
-//returns the derivative of the state according to a duffing oscillator 
+//returns the derivative of the state according to a duffing oscillator
 // /ddot{x} + /delta*/dot{x} + /beta*x + alpha*x^3 = /gamma/text{forcing function}
 double* duffing_equation(double t, int n, double u[], void* data, double buf[])
 {
@@ -80,7 +80,7 @@ void run_duffer(LV2_Handle handle, uint32_t nframes)
     ResamplerSetOutCount(plug->resampler,2*nframes);
     ResamplerSetOutData(plug->resampler,plug->buf);
     ResamplerProcess(plug->resampler);
-        
+
     for(i=0; i<nframes; i++)
     {
         state = rk4vecRT(t, 2, state, 44100*plug->sample_time, duffing_equation, (void*)plug, plug->intermediate);
@@ -95,17 +95,17 @@ void run_duffer(LV2_Handle handle, uint32_t nframes)
         *plug->unstable_p = 1;
     }
 
-return;
+    return;
 }
 
 LV2_Handle init_duffer(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     DUFFER* plug = malloc(sizeof(DUFFER));
 
-    plug->sample_freq = sample_freq; 
+    plug->sample_freq = sample_freq;
     plug->sample_time = 1/sample_freq;
-    
-    plug->resampler = ResamplerAlloc(); 
+
+    plug->resampler = ResamplerAlloc();
     ResamplerSetup(plug->resampler,1,2,1,32);// 32 is medium quality.
     // Prefeed some input samples to remove delay.
     ResamplerSetInpCount(plug->resampler,ResamplerInpSize(plug->resampler)-1);
@@ -141,7 +141,7 @@ LV2_Handle init_duffer(const LV2_Descriptor *descriptor,double sample_freq, cons
                     }
                     //other types?
                 }
-            } 
+            }
         }
         else if(!strcmp(host_features[i]->URI,LV2_URID__map))
         {
@@ -169,14 +169,29 @@ void connect_duffer_ports(LV2_Handle handle, uint32_t port, void *data)
     DUFFER* plug = (DUFFER*)handle;
     switch(port)
     {
-    case IN:         plug->input_p = (float*)data;break;
-    case OUT:        plug->output_p = (float*)data;break;
-    case DELTA:      plug->delta_p = (float*)data;break;
-    case ALPHA:      plug->alpha_p = (float*)data;break;
-    case BETA:       plug->beta_p = (float*)data;break;
-    case GAMMA:      plug->gamma_p = (float*)data;break; 
-    case UNSTABLE:   plug->unstable_p = (float*)data;break; 
-    default:         puts("UNKNOWN PORT YO!!");
+    case IN:
+        plug->input_p = (float*)data;
+        break;
+    case OUT:
+        plug->output_p = (float*)data;
+        break;
+    case DELTA:
+        plug->delta_p = (float*)data;
+        break;
+    case ALPHA:
+        plug->alpha_p = (float*)data;
+        break;
+    case BETA:
+        plug->beta_p = (float*)data;
+        break;
+    case GAMMA:
+        plug->gamma_p = (float*)data;
+        break;
+    case UNSTABLE:
+        plug->unstable_p = (float*)data;
+        break;
+    default:
+        puts("UNKNOWN PORT YO!!");
     }
 }
 
@@ -187,7 +202,8 @@ void cleanup_duffer(LV2_Handle handle)
     free(plug);
 }
 
-static const LV2_Descriptor duffer_descriptor={
+static const LV2_Descriptor duffer_descriptor=
+{
     DUFFER_URI,
     init_duffer,
     connect_duffer_ports,
@@ -201,7 +217,8 @@ static const LV2_Descriptor duffer_descriptor={
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {
-    switch (index) {
+    switch (index)
+    {
     case 0:
         return &duffer_descriptor;
     default:

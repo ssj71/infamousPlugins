@@ -20,31 +20,31 @@ void init_waves(WAVESOURCE* self)
     self->phase_offset = TABLE_LENGTH/2;
 
     //saw
-    for(i=0;i<TABLE_LENGTH;i++)
+    for(i=0; i<TABLE_LENGTH; i++)
     {
         self->saw_table[i] = 0;
         k=1;
-        for(j=1;j<=MAX_N_HARMONICS;j++)
+        for(j=1; j<=MAX_N_HARMONICS; j++)
         {
             self->saw_table[i] += k*sin(j*phase)/(j);
             k = -k;
         }
         phase += self->saw_step;
-	self->saw_table[i] *=.56694;
+        self->saw_table[i] *=.56694;
     }
 
     //tri
-    for(i=0;i<TABLE_LENGTH;i++)
+    for(i=0; i<TABLE_LENGTH; i++)
     {
         self->tri_table[i] = 0;
         k=1;
-        for(j=1;j<=MAX_N_HARMONICS;j+=2)
+        for(j=1; j<=MAX_N_HARMONICS; j+=2)
         {
             self->tri_table[i] += k*sin(j*phase)/(j*j);
             k = -k;
         }
         phase += self->saw_step;
-	self->tri_table[i] *= .82922;
+        self->tri_table[i] *= .82922;
     }
 
     //white and random
@@ -82,12 +82,17 @@ void init_hysteresis(HYSTERESIS *self)
 //8th order series approximation of pow(2,x) suggested by benjamin guihaire
 double myPow2(double x)
 {
-    double p;  
+    double p;
     if(x>=0) p = (1+x *0.00270760617406228636491106297445); //LN2/256 = 0.00270760617406228636491106297445
-    else p = 1/(1-x*0.00270760617406228636491106297445); 
-    p *=p;p *=p;p *=p;p *=p;
-    p *=p;p *=p;p *=p;
-    return p*p; 
+    else p = 1/(1-x*0.00270760617406228636491106297445);
+    p *=p;
+    p *=p;
+    p *=p;
+    p *=p;
+    p *=p;
+    p *=p;
+    p *=p;
+    return p*p;
 }
 
 //based on an algorithm by Nicolas Capens
@@ -133,31 +138,32 @@ double white(WAVESOURCE* self, HYSTERESIS *mem, double phase)
     float U = 2.0* rand() / (float)RAND_MAX - 1;//rand E(-1,1)
     float S = U*U + self->V2;//map 2 random vars to unit circle
 
-   if(S>=1)//repull RV if outside unit circle
-   {
-       U = 2.0* rand() / (float)RAND_MAX - 1;
-       S = U*U + self->V2;
-       if(S>=1)
-       {
-           U = 2.0* rand() / (float)RAND_MAX - 1;
-           S = U*U + self->V2;
-           if(S>=1)
-           {//guarantee an exit, value will be unchanged
-               U=0;
-           }
-       }
-   }
+    if(S>=1)//repull RV if outside unit circle
+    {
+        U = 2.0* rand() / (float)RAND_MAX - 1;
+        S = U*U + self->V2;
+        if(S>=1)
+        {
+            U = 2.0* rand() / (float)RAND_MAX - 1;
+            S = U*U + self->V2;
+            if(S>=1)
+            {
+                //guarantee an exit, value will be unchanged
+                U=0;
+            }
+        }
+    }
 
-   if(U)
-   {
-       self->V = U;//store V for next round
-       self->V2 = U*U;
-       return U*sqrt(-2*log(S)/S);
-   }
-   else
-   {
-       return self->V;
-   }
+    if(U)
+    {
+        self->V = U;//store V for next round
+        self->V2 = U*U;
+        return U*sqrt(-2*log(S)/S);
+    }
+    else
+    {
+        return self->V;
+    }
 
 
 }

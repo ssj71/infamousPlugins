@@ -15,24 +15,24 @@ extern "C" {
 //VVResampler Functions
 typedef void* VRESAMPLER_HANDLE;
 VRESAMPLER_HANDLE VResamplerAlloc();
-  void VResamplerFree( VRESAMPLER_HANDLE );
-   int VResamplerSetup( VRESAMPLER_HANDLE , double ratio, unsigned int nchan, unsigned int hlen);
-  void VResamplerClear( VRESAMPLER_HANDLE );
-   int VResamplerReset( VRESAMPLER_HANDLE );
-   int VResamplerProcess( VRESAMPLER_HANDLE );
-   int VResamplerNChan( VRESAMPLER_HANDLE );
-   int VResamplerInpSize( VRESAMPLER_HANDLE );
+void VResamplerFree( VRESAMPLER_HANDLE );
+int VResamplerSetup( VRESAMPLER_HANDLE , double ratio, unsigned int nchan, unsigned int hlen);
+void VResamplerClear( VRESAMPLER_HANDLE );
+int VResamplerReset( VRESAMPLER_HANDLE );
+int VResamplerProcess( VRESAMPLER_HANDLE );
+int VResamplerNChan( VRESAMPLER_HANDLE );
+int VResamplerInpSize( VRESAMPLER_HANDLE );
 double VResamplerInpDist( VRESAMPLER_HANDLE );
 
 //access to public members
 unsigned int VResamplerGetInpCount( VRESAMPLER_HANDLE );
-        void VResamplerSetInpCount( VRESAMPLER_HANDLE , unsigned int count);
+void VResamplerSetInpCount( VRESAMPLER_HANDLE , unsigned int count);
 unsigned int VResamplerGetOutCount( VRESAMPLER_HANDLE );
-        void VResamplerSetOutCount( VRESAMPLER_HANDLE , unsigned int count);
-      float* VResamplerGetInpData ( VRESAMPLER_HANDLE );
-        void VResamplerSetInpData ( VRESAMPLER_HANDLE , float * data);
-      float* VResamplerGetOutData ( VRESAMPLER_HANDLE );
-        void VResamplerSetOutData ( VRESAMPLER_HANDLE , float * data);
+void VResamplerSetOutCount( VRESAMPLER_HANDLE , unsigned int count);
+float* VResamplerGetInpData ( VRESAMPLER_HANDLE );
+void VResamplerSetInpData ( VRESAMPLER_HANDLE , float * data);
+float* VResamplerGetOutData ( VRESAMPLER_HANDLE );
+void VResamplerSetOutData ( VRESAMPLER_HANDLE , float * data);
 
 #ifdef __cplusplus
 }

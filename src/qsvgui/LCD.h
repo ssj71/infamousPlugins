@@ -38,78 +38,83 @@
 
 class LCDDigit : public QWidget//, public Object
 {
-	Q_OBJECT
-	public:
-		enum LCDType {
-			SMALL_BLUE,
-			SMALL_RED,
-			LARGE_GRAY,
-			SMALL_GRAY
-		};
+    Q_OBJECT
+public:
+    enum LCDType
+    {
+        SMALL_BLUE,
+        SMALL_RED,
+        LARGE_GRAY,
+        SMALL_GRAY
+    };
 
-		LCDDigit( QWidget * pParent, LCDType type );
-                LCDDigit( QWidget * pParent, QString file );
-		~LCDDigit();
+    LCDDigit( QWidget * pParent, LCDType type );
+    LCDDigit( QWidget * pParent, QString file );
+    ~LCDDigit();
 
-                void set( QChar ch );
+    void set( QChar ch );
 
-                //void setSmallRed();
-                //void setSmallBlue();
+    //void setSmallRed();
+    //void setSmallBlue();
 
-	signals:
-		void digitClicked();
+signals:
+    void digitClicked();
 
-	private:
+private:
 //		static QPixmap *m_pSmallBlueFontSet;
 //		static QPixmap *m_pSmallRedFontSet;
 //		static QPixmap *m_pLargeGrayFontSet;
 //		static QPixmap *m_pSmallGrayFontSet;
-                QImage fontSet;
-		bool m_bChanged;
-                //QPixmap m_temp;
-                //QPainter tmppntr;
-		int m_nCol;
-		int m_nRow;
-                int d_w;
-                int d_h;
-		LCDType m_type;
+    QImage fontSet;
+    bool m_bChanged;
+    //QPixmap m_temp;
+    //QPainter tmppntr;
+    int m_nCol;
+    int m_nRow;
+    int d_w;
+    int d_h;
+    LCDType m_type;
 
-		virtual void paintEvent(QPaintEvent *ev);
-		virtual void mouseReleaseEvent(QMouseEvent* ev);
+    virtual void paintEvent(QPaintEvent *ev);
+    virtual void mouseReleaseEvent(QMouseEvent* ev);
 
 };
 
 
 
-class LCDDisplay : public QWidget{
-	Q_OBJECT
-	public:
-		LCDDisplay( QWidget * pParent, LCDDigit::LCDType type, int nDigits );
-                LCDDisplay( QWidget * pParent, LCDDigit::LCDType type );
-                LCDDisplay( QWidget * pParent, bool large, QString file );
-		~LCDDisplay();
+class LCDDisplay : public QWidget
+{
+    Q_OBJECT
+public:
+    LCDDisplay( QWidget * pParent, LCDDigit::LCDType type, int nDigits );
+    LCDDisplay( QWidget * pParent, LCDDigit::LCDType type );
+    LCDDisplay( QWidget * pParent, bool large, QString file );
+    ~LCDDisplay();
 
-                void setText( QString sMsg );
-                QString getText() {	return m_sMsg;	}
+    void setText( QString sMsg );
+    QString getText()
+    {
+        return m_sMsg;
+    }
 
-		void setSmallRed();
-		void setSmallBlue();
-                void resizeEvent(QResizeEvent* ev);
+    void setSmallRed();
+    void setSmallBlue();
+    void resizeEvent(QResizeEvent* ev);
 
-                bool padded;
-                QString imgfile;
+    bool padded;
+    QString imgfile;
 
-	public slots:
-                void digitClicked( void );
+public slots:
+    void digitClicked( void );
 
-	signals:
-		void displayClicked( LCDDisplay* pRef );
+signals:
+    void displayClicked( LCDDisplay* pRef );
 
-	private:
-		std::vector<LCDDigit*> m_pDisplay;
-                QString m_sMsg;
-                double ratio;
-                LCDDigit::LCDType m_type;
+private:
+    std::vector<LCDDigit*> m_pDisplay;
+    QString m_sMsg;
+    double ratio;
+    LCDDigit::LCDType m_type;
 };
 
 /*

@@ -16,7 +16,8 @@
 
 //#define CV_PORTS
 
-typedef struct _ENVFOLLOWER{
+typedef struct _ENVFOLLOWER
+{
     float sample_time;
 
     float current;
@@ -49,7 +50,7 @@ typedef struct _ENVFOLLOWER{
     float* ctl_out_p;
 
     float* channel_p;
-    float* control_p; 
+    float* control_p;
     float* cv_p;
     float* min_p;
     float* max_p;
@@ -64,7 +65,7 @@ typedef struct _ENVFOLLOWER{
     float* saturation_p;
     float* atime_p;
     float* dtime_p;
-}ENVFOLLOWER;
+} ENVFOLLOWER;
 
 //main functions
 LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
@@ -198,11 +199,11 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     }
 
     //process data
-    for(i=0;i<nframes;i++)
+    for(i=0; i<nframes; i++)
     {
         //get values
         peak = buf[i]>0?buf[i]:-buf[i];
-	rms = rms_shift(&plug->rms_calc,buf[i]);
+        rms = rms_shift(&plug->rms_calc,buf[i]);
 
         plug->prev = plug->current;
         plug->current = (1.0 - *plug->peakrms_p)*peak + *plug->peakrms_p*rms;
@@ -247,11 +248,11 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
             lv2_atom_forge_frame_time(&plug->forge,i);
             lv2_atom_forge_raw(&plug->forge,&midiatom,sizeof(LV2_Atom));
             lv2_atom_forge_raw(&plug->forge,msg,3);
-            lv2_atom_forge_pad(&plug->forge,3+sizeof(LV2_Atom)); 
+            lv2_atom_forge_pad(&plug->forge,3+sizeof(LV2_Atom));
         }
         plug->mprev = plug->mout;
 
-	//now handle the Control Voltage port
+        //now handle the Control Voltage port
 #ifdef CV_PORTS
         if(plug->out <= *plug->threshold_p)
         {
@@ -263,7 +264,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
         }
         else
         {
-             plug->cv_out_p[i] = cmapping*(plug->out - *plug->threshold_p) + *plug->cmin_p;
+            plug->cv_out_p[i] = cmapping*(plug->out - *plug->threshold_p) + *plug->cmin_p;
         }
         if(*plug->crev_p)
         {
@@ -289,8 +290,9 @@ void cleanup_envfollower(LV2_Handle handle)
 }
 
 
-//lv2 stuff 
-static const LV2_Descriptor envfollower_descriptor={
+//lv2 stuff
+static const LV2_Descriptor envfollower_descriptor=
+{
     ENVFOLLOWER_URI,
     init_envfollower,
     connect_envfollower_ports,
@@ -304,7 +306,8 @@ static const LV2_Descriptor envfollower_descriptor={
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {
-    switch (index) {
+    switch (index)
+    {
     case 0:
         return &envfollower_descriptor;
     default:

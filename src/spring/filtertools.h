@@ -68,7 +68,7 @@ void dzpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles
 //Ts - sample time
 //buf - memory buffer for working, must be larger than returned num and den
 //filternum - returned numerator coefficients of resulting filter
-//filterden - returned denominator coefficients of resulting filter 
+//filterden - returned denominator coefficients of resulting filter
 void czpuf2filter(float* rezeros, float*imzeros,  uint8_t nzeros, float* repoles, float* impoles,  uint8_t npoles, float unityfreq, float Ts,  float* buf, float* filternum, float* filterden);
 
 //apply a digital filter to a buffer
@@ -94,7 +94,7 @@ typedef enum bandtypes
 //find out array sizes necessary for using butter()
 //order - number of poles
 //type - filter type (use enum)
-//bufsize - returns minimum array size required for work 
+//bufsize - returns minimum array size required for work
 //num - returns minimum array size for numerator of specified filter
 //den - returns minimum array size for denominator of specified filter
 void butterSize(uint8_t order, FILTERTYPE type, uint8_t *bufsize, uint8_t *numsize, uint8_t *densize);

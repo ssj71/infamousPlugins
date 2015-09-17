@@ -15,7 +15,7 @@ class qSVGSlider : public QSlider
 public:
     explicit qSVGSlider(QWidget *parent = 0);
     explicit qSVGSlider(QString slideFile = "defaultSlide.svg", QWidget *parent = 0);
-    explicit qSVGSlider(QString slideFile = "defaultSlide.svg", QString slotFile = "defaultslot.svg", QWidget *parent = 0); 
+    explicit qSVGSlider(QString slideFile = "defaultSlide.svg", QString slotFile = "defaultslot.svg", QWidget *parent = 0);
     void setOrientation(Qt::Orientation);
     ~qSVGSlider();
 

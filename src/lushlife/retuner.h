@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------
 //
 //  Copyright (C) 2009-2011 Fons Adriaensen <fons@linuxaudio.org>
-//    
+//
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
 //  the Free Software Foundation; either version 2 of the License, or
@@ -84,7 +84,7 @@ public:
     {
         _notemask = k;
     }
-   
+
     int get_noteset (void)
     {
         int k;
@@ -112,7 +112,7 @@ public:
 
     void sync_lfos(void)
     {
-        for(int i=0;i<_nshift;i++)
+        for(int i=0; i<_nshift; i++)
         {
             _shift[i].clfo->reset();
             _shift[i].dlfo->reset();
@@ -137,7 +137,7 @@ public:
     {
         _shift[i].pan = p;
     }
-    
+
     void set_delay(float ms, int i)
     {
         _shift[i].delay = ms * _fsamp / (1000 * _frsize);//delay in fragments
@@ -181,7 +181,7 @@ private:
     int              _frcount;
     float            _refpitch;
     float            _notebias;
-    float            _corrfilt; 
+    float            _corrfilt;
     float            _corrgain;
     //float            _corroffs;//
     int              _notemask;

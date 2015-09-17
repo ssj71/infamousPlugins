@@ -13,72 +13,81 @@
 
 namespace ffffltk
 {
-class nonmodal_input {
+class nonmodal_input
+{
 public:
 
-  Fl_Double_Window *winder;
-  Fl_Input *inpoot;
-  void* caller;
-  void (*setcallback)(void*,float);//function pointer to set calling widget's value 
+    Fl_Double_Window *winder;
+    Fl_Input *inpoot;
+    void* caller;
+    void (*setcallback)(void*,float);//function pointer to set calling widget's value
 
 //  void cb_OK_i(Fl_Button*, void*);
 //  static void cb_OK(Fl_Button*, void*);
 //  void cb_Cancel_i(Fl_Button*, void*);
 //  static void cb_Cancel(Fl_Button*, void*);
-    void cb_OK_i(Fl_Button*, void* v) {
-      float val;
-      if(sscanf(inpoot->value(),"%f",&val))
+    void cb_OK_i(Fl_Button*, void* v)
+    {
+        float val;
+        if(sscanf(inpoot->value(),"%f",&val))
         {
-          setcallback(caller,val);
+            setcallback(caller,val);
         };
-      winder->hide();
-      delete winder;
-      winder = NULL;
+        winder->hide();
+        delete winder;
+        winder = NULL;
     }
-    static void cb_OK(Fl_Button* o, void* v) {
-      ((nonmodal_input*)(o->parent()->user_data()))->cb_OK_i(o,v);
+    static void cb_OK(Fl_Button* o, void* v)
+    {
+        ((nonmodal_input*)(o->parent()->user_data()))->cb_OK_i(o,v);
     }
 
-    void cb_Cancel_i(Fl_Button*, void*) {
-      winder->hide();
-      delete winder;
-      winder = NULL;
+    void cb_Cancel_i(Fl_Button*, void*)
+    {
+        winder->hide();
+        delete winder;
+        winder = NULL;
     }
-    static void cb_Cancel(Fl_Button* o, void* v) {
-      ((nonmodal_input*)(o->parent()->user_data()))->cb_Cancel_i(o,v);
+    static void cb_Cancel(Fl_Button* o, void* v)
+    {
+        ((nonmodal_input*)(o->parent()->user_data()))->cb_Cancel_i(o,v);
     }
 
     /**
        function for other widgets to call this dialog
     */
-    Fl_Double_Window* show(float cur_val, char* param, char* units, void* obj, void(*set_val_callback)(void*,float)) {
-      char s[80];
-      if(!winder)
-      {
-        sprintf(s,"Set %s",param);
-        winder = new Fl_Double_Window(376, 99, s);
-        winder->user_data((void*)(this));
-        { Fl_Button* o = new Fl_Button(199, 60, 75, 25, "OK");
-          o->callback((Fl_Callback*)cb_OK);
-        } // Fl_Button* o
-        { Fl_Button* o = new Fl_Button(286, 60, 75, 25, "Cancel");
-          o->callback((Fl_Callback*)cb_Cancel);
-        } // Fl_Button* o
-        { inpoot = new Fl_Input(130, 20, 250, 30, "Enter Value:");
-        } // Fl_Input* inpoot
-        winder->end();
-      } // Fl_Double_Window* winder
+    Fl_Double_Window* show(float cur_val, char* param, char* units, void* obj, void(*set_val_callback)(void*,float))
+    {
+        char s[80];
+        if(!winder)
+        {
+            sprintf(s,"Set %s",param);
+            winder = new Fl_Double_Window(376, 99, s);
+            winder->user_data((void*)(this));
+            {
+                Fl_Button* o = new Fl_Button(199, 60, 75, 25, "OK");
+                o->callback((Fl_Callback*)cb_OK);
+            } // Fl_Button* o
+            {
+                Fl_Button* o = new Fl_Button(286, 60, 75, 25, "Cancel");
+                o->callback((Fl_Callback*)cb_Cancel);
+            } // Fl_Button* o
+            {
+                inpoot = new Fl_Input(130, 20, 250, 30, "Enter Value:");
+            } // Fl_Input* inpoot
+            winder->end();
+        } // Fl_Double_Window* winder
         winder->show();
-      sprintf(s,"%f",cur_val);
-      inpoot->value(s);
-      if(units[0] != 0)
-      {
-        sprintf(s,"Enter Value (%s):",units);
-        inpoot->label(s);
-      }
-      setcallback = set_val_callback;
-      caller = obj;
-      return winder;
+        sprintf(s,"%f",cur_val);
+        inpoot->value(s);
+        if(units[0] != 0)
+        {
+            sprintf(s,"Enter Value (%s):",units);
+            inpoot->label(s);
+        }
+        setcallback = set_val_callback;
+        caller = obj;
+        return winder;
     }
 
 };

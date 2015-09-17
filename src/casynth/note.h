@@ -25,7 +25,7 @@ typedef struct _NOTE
 
     double step[MAX_N_HARMONICS+1];//step size between frames
     double phase[MAX_N_HARMONICS+1];//phase of all waves + fundamental
-    
+
     double (*base_func)(WAVESOURCE*, HYSTERESIS*, double); //sin, tri, sqr, white, rand, other?
     uint8_t base_wave;
     //double base_func_min;//domain of function i.e. [-pi,pi]
@@ -49,7 +49,7 @@ typedef struct _NOTE
     double fmod_step;
     double fmod_phase;
     HYSTERESIS fhyst;
-}NOTE;
+} NOTE;
 
 void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, uint8_t value, uint8_t* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain);
 void start_note(NOTE *self, WAVESOURCE* waves, uint8_t velocity, uint32_t start_frame, float harmonic_gain[], uint16_t harmonics, float width, float envelope[]);

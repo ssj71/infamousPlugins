@@ -27,7 +27,7 @@ void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, uint8_t value,
     self->nharmonics = nharmonics;
     self->harm_length = harmonic_length;
     step = (waves->func_domain)*(440/sample_rate)*powf(2,(float)(value-69)/12);//leave this using more accurate pow since during init
-    for(i=0;i<MAX_N_HARMONICS;i++)
+    for(i=0; i<MAX_N_HARMONICS; i++)
     {
         self->phase[i] = 0;
         self->step[i] = (i+1)*step;
@@ -39,7 +39,7 @@ void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, uint8_t value,
 
     self->env_gain = 0;
     self->note_dead = true;
-    for(i=0;i<6;i++)
+    for(i=0; i<6; i++)
     {
         self->envelope[i] = 1;
     }
@@ -60,7 +60,7 @@ void start_note(NOTE*           self,
                 uint8_t   velocity,
                 uint32_t        start_frame,
                 float           harmonic_gain[],
-                uint16_t  harmonics, 
+                uint16_t  harmonics,
                 float           width,
                 float           envelope[])
 {
@@ -73,11 +73,11 @@ void start_note(NOTE*           self,
     //harmonics
     self->nframes_since_harm_change = 0;
     self->cells = harmonics;
-    for(i=0;i<MAX_N_HARMONICS;i++)
+    for(i=0; i<MAX_N_HARMONICS; i++)
     {
         self->harm_gain[i] = self->velocity*harmonic_gain[i];
         self->harmonic[i] = harmonics&(1<<i);
-        self->fwidth[i] = myPow2(width*white(waves,0,0)); 
+        self->fwidth[i] = myPow2(width*white(waves,0,0));
     }
     //and the root
     i = MAX_N_HARMONICS;
@@ -88,7 +88,7 @@ void start_note(NOTE*           self,
     //self->env_gain = 0;
     self->env_state = ENV_ATTACK;
     self->note_dead = false;
-    for(i=0;i<6;i++)
+    for(i=0; i<6; i++)
         self->envelope[i] = envelope[i];
 
     //modulations
@@ -193,7 +193,7 @@ void play_note(NOTE *self,
 
         //now handle the current chunk
         stop_frame = chunk+start_frame;
-        for(i=start_frame;i<stop_frame;i++ )
+        for(i=start_frame; i<stop_frame; i++ )
         {
             //modulation
             fmod_coeff = pitchbend*myPow2( (*self->fmod_gain) * (waves->wave_func[fmod_wave](waves, &(self->fhyst), self->fmod_phase))/12 );
@@ -206,13 +206,14 @@ void play_note(NOTE *self,
             self->amod_phase += amod_step;
             if(self->amod_phase >= waves->func_max)
             {
-                self->amod_phase -= waves->func_domain; }
+                self->amod_phase -= waves->func_domain;
+            }
 
             self->env_gain += env_slope;
             total_gain = gain*self->env_gain*amod_coeff;
 
             //harmonics
-            for(j=0;j<*self->nharmonics;j++)//could unroll this but... it'd get ugly
+            for(j=0; j<*self->nharmonics; j++) //could unroll this but... it'd get ugly
             {
                 if(self->harmonic[j])//if cell is alive
                 {
@@ -251,7 +252,7 @@ void play_note(NOTE *self,
         }
         if( self->note_dead )
         {
-            for(j=0;j<=*self->nharmonics;j++)
+            for(j=0; j<=*self->nharmonics; j++)
             {
                 self->phase[j] = 0;
             }
@@ -263,7 +264,7 @@ void play_note(NOTE *self,
         {
             //calculate next state
             self->cells = torus_of_life(rule,self->cells,MAX_N_HARMONICS);
-            for(j=0;j<MAX_N_HARMONICS;j++)//harmonics
+            for(j=0; j<MAX_N_HARMONICS; j++) //harmonics
             {
                 self->harmonic[j] = self->cells&(1<<j);
             }
@@ -288,7 +289,7 @@ uint16_t torus_of_life(uint8_t rule, uint16_t cells, uint8_t ncells)
     uint8_t index;
     ncells--;
     temp=0;
-    for(index=0;index<=ncells;index++)
+    for(index=0; index<=ncells; index++)
     {
         //the idea is to shift the rule mask (w/rollover) according to the 3
         //bits in the neighborhood at $index, mask that bit in the rule to

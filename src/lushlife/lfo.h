@@ -17,7 +17,7 @@ public:
     float gain;
     float freq;
 private:
-    float phase; 
+    float phase;
     float y0,y1,y2;
     float phastep;
 };

@@ -3,8 +3,9 @@
 
 #include <QWidget>
 
-namespace Ui {
-    class Form;
+namespace Ui
+{
+class Form;
 }
 
 class Form : public QWidget

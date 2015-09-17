@@ -82,7 +82,7 @@ typedef struct _CASYNTH
     float* fmod_gain_p;
 
 
-}CASYNTH;
+} CASYNTH;
 
 enum casynth_ports
 {

@@ -25,7 +25,8 @@ private:
     float mywidth;
     float scale;
     int effectNumber
-    ;QGraphicsSvgItem *box;
+    ;
+    QGraphicsSvgItem *box;
     QGraphicsView view;
     QGraphicsScene scene;
     int numItems;

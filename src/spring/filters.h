@@ -11,7 +11,7 @@ typedef enum sakfabdkja
     ELLIPTIC,
     ALLPASS,
     DELAY
-}FILTERTYPE;
+} FILTERTYPE;
 
 //TODO: move to .c
 typedef struct flielter
@@ -24,7 +24,7 @@ typedef struct flielter
     uint16_t out;//array index
     uint8_t stages;
     float* buf;
-}_FILTER;
+} _FILTER;
 //for a delay just set the in index delay samples behind the previous out index
 
 //initialize a filter
@@ -40,7 +40,7 @@ typedef struct feilleter
     float buf[0xFFFF];
     FILTER* filters;
     uint8_t nfilters;
-}_FILTERBANK
+} _FILTERBANK
 
 void addFilter(FILTERBANK bank, FILTER filter);
 void changeFilter(FILTERBANK bank, uint8_t index, FILTER newfilter);

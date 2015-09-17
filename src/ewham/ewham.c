@@ -15,7 +15,7 @@ typedef struct _EWHAM
     double sample_freq;
     float prev;
     unsigned int count;
-    
+
     float *input_p;
     float *output_p;
     float *expression_p;
@@ -24,15 +24,17 @@ typedef struct _EWHAM
     float *mode_p;
     float *lock_p;
     float *latency_p;
-}EWHAM;
+} EWHAM;
 
-enum _MODES{
+enum _MODES
+{
     CLASSIC = 0,
     HARMONIZER,
     CHORUS
 };
 
-enum _LOCK{
+enum _LOCK
+{
     NONE = 0,
     LAND_ON_SEMITONE,
     LOCK_TO_SEMITONE
@@ -61,7 +63,7 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
             currint = current + .5;
             current = currint;
         }
-        else 
+        else
         {
             plug->prev = current;
             plug->count = 0;
@@ -73,10 +75,10 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
     {
         RetunerSetOffset(plug->tuner,current/100.0);
     }
-    
+
     if(*plug->mode_p != CLASSIC)
     {
-        RetunerSetDryGain(plug->tuner,.9); 
+        RetunerSetDryGain(plug->tuner,.9);
     }
     else
     {
@@ -86,7 +88,7 @@ void run_ewham(LV2_Handle handle, uint32_t nframes)
     RetunerProcess(plug->tuner,plug->input_p,plug->output_p,nframes);
     *plug->latency_p = RetunerGetLatency(plug->tuner);
 
-return;
+    return;
 }
 
 LV2_Handle init_ewham(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
@@ -103,15 +105,32 @@ void connect_ewham_ports(LV2_Handle handle, uint32_t port, void *data)
     EWHAM* plug = (EWHAM*)handle;
     switch(port)
     {
-    case IN:            plug->input_p = (float*)data;break;
-    case OUT:           plug->output_p = (float*)data;break;
-    case EXPRESSION:    plug->expression_p = (float*)data;break;
-    case START:         plug->start_p = (float*)data;break;
-    case FINISH:        plug->finish_p = (float*)data;break;
-    case MODE:          plug->mode_p = (float*)data;break;
-    case LOCK:          plug->lock_p = (float*)data;break;
-    case LATENCY:       plug->latency_p = (float*)data;break;
-    default:            puts("UNKNOWN PORT YO!!");
+    case IN:
+        plug->input_p = (float*)data;
+        break;
+    case OUT:
+        plug->output_p = (float*)data;
+        break;
+    case EXPRESSION:
+        plug->expression_p = (float*)data;
+        break;
+    case START:
+        plug->start_p = (float*)data;
+        break;
+    case FINISH:
+        plug->finish_p = (float*)data;
+        break;
+    case MODE:
+        plug->mode_p = (float*)data;
+        break;
+    case LOCK:
+        plug->lock_p = (float*)data;
+        break;
+    case LATENCY:
+        plug->latency_p = (float*)data;
+        break;
+    default:
+        puts("UNKNOWN PORT YO!!");
     }
 }
 
@@ -122,7 +141,8 @@ void cleanup_ewham(LV2_Handle handle)
     free(plug);
 }
 
-static const LV2_Descriptor ewham_descriptor={
+static const LV2_Descriptor ewham_descriptor=
+{
     EWHAM_URI,
     init_ewham,
     connect_ewham_ports,
@@ -136,7 +156,8 @@ static const LV2_Descriptor ewham_descriptor={
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {
-    switch (index) {
+    switch (index)
+    {
     case 0:
         return &ewham_descriptor;
     default:

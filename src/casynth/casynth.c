@@ -23,7 +23,7 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
     synth->nsustained = 0;
     synth->pitchbend = 1;
     synth->ibpm = .5;//60/120
-    for(i=0;i<127;i++)
+    for(i=0; i<127; i++)
     {
         init_note(&(synth->note[i]),
                   &(synth->waves),
@@ -38,7 +38,7 @@ LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, con
     }
 
     synth->harmonic_mode = HARMONIC_MODE_SINC;
-    for(i=0;i<MAX_N_HARMONICS;i++)
+    for(i=0; i<MAX_N_HARMONICS; i++)
     {
         synth->harm_gain_sinc[i] = 1/(float)(MAX_N_HARMONICS +1);//(nharmonics+1);
         synth->harm_gain_saw[i] = .29/(float)(i+2);//.29 makes it so gain=1 if all harmonics play
@@ -84,30 +84,77 @@ void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
     CASYNTH* synth = (CASYNTH*)handle;
     switch(port)
     {
-    case MIDI_IN:       synth->midi_in_p = (LV2_Atom_Sequence*)data;break;
-    case OUTPUT:        synth->output_p = (float*)data;break;
-    case CHANNEL:       synth->channel_p = (float*)data;break;
-    case MASTER_GAIN:   synth->master_gain_p = (float*)data;break;
-    case RULE:          synth->rule_p = (float*)data;break;
-    case CELL_LIFE:     synth->cell_life_p = (float*)data;break;
-    case INIT_CELLS:    synth->init_cells_p = (float*)data;break;
-    case NHARMONICS:    synth->nharmonics_p = (float*)data;break;
-    case HARM_MODE:     synth->harmonic_mode_p = (float*)data;break;
-    case HARM_WIDTH:    synth->harmonic_width_p = (float*)data;break;
-    case WAVE:          synth->wave_p = (float*)data;break;
-    case ENV_A:         synth->env_a_p = (float*)data;break;
-    case ENV_D:         synth->env_d_p = (float*)data;break;
-    case ENV_B:         synth->env_b_p = (float*)data;break;
-    case ENV_SWL:       synth->env_swl_p = (float*)data;break;
-    case ENV_SUS:       synth->env_sus_p = (float*)data;break;
-    case ENV_R:         synth->env_r_p = (float*)data;break;
-    case AMOD_WAV:      synth->amod_wave_p = (float*)data;break;
-    case AMOD_FREQ:     synth->amod_freq_p = (float*)data;break;
-    case AMOD_GAIN:     synth->amod_gain_p = (float*)data;break;
-    case FMOD_WAV:      synth->fmod_wave_p = (float*)data;break;
-    case FMOD_FREQ:     synth->fmod_freq_p = (float*)data;break;
-    case FMOD_GAIN:     synth->fmod_gain_p = (float*)data;break;
-    default:            puts("UNKNOWN PORT YO!!");
+    case MIDI_IN:
+        synth->midi_in_p = (LV2_Atom_Sequence*)data;
+        break;
+    case OUTPUT:
+        synth->output_p = (float*)data;
+        break;
+    case CHANNEL:
+        synth->channel_p = (float*)data;
+        break;
+    case MASTER_GAIN:
+        synth->master_gain_p = (float*)data;
+        break;
+    case RULE:
+        synth->rule_p = (float*)data;
+        break;
+    case CELL_LIFE:
+        synth->cell_life_p = (float*)data;
+        break;
+    case INIT_CELLS:
+        synth->init_cells_p = (float*)data;
+        break;
+    case NHARMONICS:
+        synth->nharmonics_p = (float*)data;
+        break;
+    case HARM_MODE:
+        synth->harmonic_mode_p = (float*)data;
+        break;
+    case HARM_WIDTH:
+        synth->harmonic_width_p = (float*)data;
+        break;
+    case WAVE:
+        synth->wave_p = (float*)data;
+        break;
+    case ENV_A:
+        synth->env_a_p = (float*)data;
+        break;
+    case ENV_D:
+        synth->env_d_p = (float*)data;
+        break;
+    case ENV_B:
+        synth->env_b_p = (float*)data;
+        break;
+    case ENV_SWL:
+        synth->env_swl_p = (float*)data;
+        break;
+    case ENV_SUS:
+        synth->env_sus_p = (float*)data;
+        break;
+    case ENV_R:
+        synth->env_r_p = (float*)data;
+        break;
+    case AMOD_WAV:
+        synth->amod_wave_p = (float*)data;
+        break;
+    case AMOD_FREQ:
+        synth->amod_freq_p = (float*)data;
+        break;
+    case AMOD_GAIN:
+        synth->amod_gain_p = (float*)data;
+        break;
+    case FMOD_WAV:
+        synth->fmod_wave_p = (float*)data;
+        break;
+    case FMOD_FREQ:
+        synth->fmod_freq_p = (float*)data;
+        break;
+    case FMOD_GAIN:
+        synth->fmod_gain_p = (float*)data;
+        break;
+    default:
+        puts("UNKNOWN PORT YO!!");
     }
 }
 
@@ -133,7 +180,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     synth->amod_g = *synth->amod_gain_p;
     synth->fmod_g = *synth->fmod_gain_p;
 
-    for(t=0;t<nframes;t++)//start by filling buffer with 0s, we'll add to this
+    for(t=0; t<nframes; t++) //start by filling buffer with 0s, we'll add to this
     {
         buf[t] = 0;
     }
@@ -223,7 +270,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                         }
                         else//velocity zero == note off
                         {
-                            for(i=0;i<synth->nactive;i++)
+                            for(i=0; i<synth->nactive; i++)
                             {
                                 if(synth->active[i] == num)
                                 {
@@ -246,7 +293,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                     else if(type == MIDI_NOTE_OFF)
                     {
                         num = message[1]&MIDI_DATA_MASK;
-                        for(i=0;i<synth->nactive;i++)
+                        for(i=0; i<synth->nactive; i++)
                         {
                             if(synth->active[i] == num)
                             {
@@ -276,7 +323,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             {
                                 synth->sus = false;
                                 //end all sus. notes
-                                for(i=0;i<synth->nsustained;i++)
+                                for(i=0; i<synth->nsustained; i++)
                                 {
                                     if(synth->note[synth->sustained[i]].sus)
                                     {
@@ -296,7 +343,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             {
                                 event->time.frames++;
                             }
-                            for(i=0;i<synth->nactive;i++)
+                            for(i=0; i<synth->nactive; i++)
                             {
                                 num = synth->active[i];
                                 end_note(&(synth->note[num]),t);
@@ -312,7 +359,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                         bend = (message[1]&MIDI_DATA_MASK) + ((message[2]&MIDI_DATA_MASK)<<7) - MIDI_PITCH_CENTER;
                         //run and update current position because this blocks (affects all notes)
                         //run_active_notes
-                        for(j=0;j<synth->nactive;j++)
+                        for(j=0; j<synth->nactive; j++)
                         {
                             note = &(synth->note[synth->active[j]]);
                             play_note( note,
@@ -332,7 +379,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                             if(note->note_dead)
                             {
                                 synth->nactive--;
-                                for(k=j;k<synth->nactive;k++)
+                                for(k=j; k<synth->nactive; k++)
                                 {
                                     synth->active[k] = synth->active[k+1];
                                 }
@@ -391,7 +438,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     if(frame_no != nframes-1)
     {
         //run_active_notes
-        for(j=0;j<synth->nactive;j++)
+        for(j=0; j<synth->nactive; j++)
         {
             note = &(synth->note[synth->active[j]]);
             play_note( note,
@@ -411,7 +458,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
             if(note->note_dead)
             {
                 synth->nactive--;
-                for(k=j;k<synth->nactive;k++)
+                for(k=j; k<synth->nactive; k++)
                 {
                     synth->active[k] = synth->active[k+1];
                 }
@@ -429,7 +476,8 @@ void cleanup_casynth(LV2_Handle handle)
     free(synth);
 }
 
-static const LV2_Descriptor casynth_descriptor={
+static const LV2_Descriptor casynth_descriptor=
+{
     CASYNTH_URI,
     init_casynth,
     connect_casynth_ports,
@@ -438,12 +486,13 @@ static const LV2_Descriptor casynth_descriptor={
     NULL,//deactivate
     cleanup_casynth,
     NULL//extension
-}; 
+};
 
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {
-    switch (index) {
+    switch (index)
+    {
     case 0:
         return &casynth_descriptor;
     default:

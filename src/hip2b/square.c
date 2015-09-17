@@ -45,7 +45,7 @@ typedef struct _SQUARE
     float *ingain_p;
     float *wetdry_p;
     float *outgain_p;
-}SQUARE;
+} SQUARE;
 
 //starting again.
 //just look 1 transition ahead, keep track of space to next trans.
@@ -61,45 +61,46 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     w = plug->w;
     r = plug->r;
     c = plug->c;
-    for(i=0;i<nframes;i++)
+    for(i=0; i<nframes; i++)
     {
         //fill buffer
         plug->circularbuf[w++] = *plug->ingain_p*plug->input_p[i];
         CIRCULATE(w);
-        
+
         //at this point, headway is known, pos is prev. value, step is current
         //1 write buffer, 2 update pos 3. update headway 4. write out
         //change position
         if(plug->headway == 0)
-        {//on the transition point, search for next one
+        {
+            //on the transition point, search for next one
             plug->pos = 0;//(uint8_t)plug->headway;
             if(plug->skip++>=nskip)
-            { 
+            {
                 plug->skip = 1;
                 plug->outstate = (!plug->outstate)*plug->nextstate - plug->outstate;
-		//this implements the following table (necessary for octaves)
-		//    \out
-		// next\ _dn_|_0__|_up_
-		//   dn | up | dn | dn
-		//   up | up | up | dn
-            } 
+                //this implements the following table (necessary for octaves)
+                //    \out
+                // next\ _dn_|_0__|_up_
+                //   dn | up | dn | dn
+                //   up | up | up | dn
+            }
             plug->state = plug->nextstate;
             //update headway
-            for(j=0;j<=HALF;j++)
+            for(j=0; j<=HALF; j++)
             {
                 if(plug->state != DOWN && plug->circularbuf[c] <= *plug->down_p)
                 {
                     c++;
                     CIRCULATE(c);
-                    plug->nextstate = DOWN; 
-                    break; 
-                }   
+                    plug->nextstate = DOWN;
+                    break;
+                }
                 else if (plug->state != UP && plug->circularbuf[c] >= *plug->up_p)
                 {
                     c++;
-                    CIRCULATE(c); 
-                    plug->nextstate = UP; 
-                    break; 
+                    CIRCULATE(c);
+                    plug->nextstate = UP;
+                    break;
                 }
                 else
                 {
@@ -111,28 +112,30 @@ void run_square(LV2_Handle handle, uint32_t nframes)
             plug->step = 1;//start moving up the table
         }
         else if(plug->headway < plug->pos)
-        {//need to start decrementing
+        {
+            //need to start decrementing
             plug->pos = (uint8_t)plug->headway;
             //update headway
             plug->headway--;
         }
         else if(plug->headway > HALF)
-        {//increment to end of table and stay, check for headway change
+        {
+            //increment to end of table and stay, check for headway change
             plug->pos += plug->step;
             if(plug->pos == HALF)
             {
                 plug->step = 0;
             }
             //update headway
-            if(plug->state != DOWN 
-               && plug->circularbuf[c] <= *plug->down_p 
-               && plug->nextstate != DOWN)
+            if(plug->state != DOWN
+                    && plug->circularbuf[c] <= *plug->down_p
+                    && plug->nextstate != DOWN)
             {
                 plug->headway = HALF;
                 plug->nextstate = DOWN;
             }
-            else if (plug->state != UP 
-                     && plug->circularbuf[c] >= *plug->up_p 
+            else if (plug->state != UP
+                     && plug->circularbuf[c] >= *plug->up_p
                      && plug->nextstate != UP)
             {
                 plug->headway = HALF;
@@ -140,23 +143,24 @@ void run_square(LV2_Handle handle, uint32_t nframes)
             }
             c++;
             CIRCULATE(c);
-            
+
         }
         else
-        {//know headway, increment pos, dec. headway
-	    if(plug->pos == plug->headway)
-		plug->step = 0;
+        {
+            //know headway, increment pos, dec. headway
+            if(plug->pos == plug->headway)
+                plug->step = 0;
             plug->pos += plug->step;
             //update headway
             plug->headway--;
         }
-        
-	//dc removal (hpf)
-	temp = .999*plug->dcprevout + plug->outstate*plug->table[plug->pos] - plug->dcprevin;
-	plug->dcprevin = plug->outstate*plug->table[plug->pos];
+
+        //dc removal (hpf)
+        temp = .999*plug->dcprevout + plug->outstate*plug->table[plug->pos] - plug->dcprevin;
+        plug->dcprevin = plug->outstate*plug->table[plug->pos];
         plug->dcprevout = temp;
 
-        //write out the frame 
+        //write out the frame
         plug->output_p[i] = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*temp;
         CIRCULATE(r);
         plug->output_p[i] *= *plug->outgain_p;
@@ -183,18 +187,18 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
     uint8_t i,j;
     int8_t k;
     double s = PI/NHARMONICS;
-    
-    for(i=0;i<=HALF;i++)
+
+    for(i=0; i<=HALF; i++)
     {
         plug->table[i] = 0;
     }
     k=1;
-    for(i=1;i<NHARMONICS;i+=2)//harmonics
+    for(i=1; i<NHARMONICS; i+=2) //harmonics
     {
-        for(j=0;j<=HALF;j++)//samples
+        for(j=0; j<=HALF; j++) //samples
         {
             plug->table[HALF-j] += (k/(float)i)*sin(PI/2 + (float)i*j*s);
-     	}
+        }
         k = -k;
     }
 
@@ -204,19 +208,19 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
     plug->nextstate = 0;
     plug->headway = HALF + 1;
     plug->skip = 1;
-    
+
     plug->w = HALF;
     plug->r = 0;
     plug->c = HALF;
-    
-    for(i=0;i<NHARMONICS;i++)
+
+    for(i=0; i<NHARMONICS; i++)
     {
         plug->circularbuf[i] = 0;
     }
 
     plug->dcprevin = 0;
     plug->dcprevout = 0;
-  
+
     return plug;
 }
 
@@ -225,16 +229,35 @@ void connect_square_ports(LV2_Handle handle, uint32_t port, void *data)
     SQUARE* plug = (SQUARE*)handle;
     switch(port)
     {
-    case IN:      plug->input_p = (float*)data;break;
-    case OUT:     plug->output_p = (float*)data;break;
-    case LATENCY: plug->latency_p = (float*)data;break;
-    case UPP:     plug->up_p = (float*)data;break;
-    case DOWNN:   plug->down_p = (float*)data;break;
-    case OCTAVE:  plug->octave_p = (float*)data;break;
-    case INGAIN:  plug->ingain_p = (float*)data;break;
-    case WETDRY:  plug->wetdry_p = (float*)data;break;
-    case OUTGAIN: plug->outgain_p = (float*)data;break;
-    default:      puts("UNKNOWN PORT YO!!");
+    case IN:
+        plug->input_p = (float*)data;
+        break;
+    case OUT:
+        plug->output_p = (float*)data;
+        break;
+    case LATENCY:
+        plug->latency_p = (float*)data;
+        break;
+    case UPP:
+        plug->up_p = (float*)data;
+        break;
+    case DOWNN:
+        plug->down_p = (float*)data;
+        break;
+    case OCTAVE:
+        plug->octave_p = (float*)data;
+        break;
+    case INGAIN:
+        plug->ingain_p = (float*)data;
+        break;
+    case WETDRY:
+        plug->wetdry_p = (float*)data;
+        break;
+    case OUTGAIN:
+        plug->outgain_p = (float*)data;
+        break;
+    default:
+        puts("UNKNOWN PORT YO!!");
     }
 }
 
@@ -244,7 +267,8 @@ void cleanup_square(LV2_Handle handle)
     free(plug);
 }
 
-static const LV2_Descriptor hip2b_descriptor={
+static const LV2_Descriptor hip2b_descriptor=
+{
     HIP2B_URI,
     init_square,
     connect_square_ports,
@@ -258,7 +282,8 @@ static const LV2_Descriptor hip2b_descriptor={
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {
-    switch (index) {
+    switch (index)
+    {
     case 0:
         return &hip2b_descriptor;
     default:
