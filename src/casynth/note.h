@@ -13,6 +13,7 @@ typedef struct _NOTE
     uint32_t start_frame;
     uint32_t release_frame;
     bool sus;
+    float gain;//master gain
 
     //harmonics stuff
     uint8_t* nharmonics;

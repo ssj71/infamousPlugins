@@ -60,11 +60,8 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     uint8_t j, w, r, c;
     uint8_t nskip = 1<<-(int)*plug->octave_p;
     float gstep = *plug->outgain_p - plug->gain;
-    if(nframes>64)
-        gstep /= nframes;
-    else
-        gstep /= 64;
-    if(gtep<PRACTICALLYZERO/10000)//avoid denormals
+    gstep /= nframes>64?nframes:64;
+    if(gstep<1e-15 && gstep>-1e-15)//avoid denormals
     {
         gstep = 0;
         plug->gain = *plug->output_p;

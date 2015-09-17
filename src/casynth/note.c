@@ -19,6 +19,7 @@ void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, uint8_t value,
     self->start_frame = 0;
     self->release_frame = 0;
     self->sus = 0;
+    self->gain = 1;
 
     //currently hardcoding in function, may use optimised or selectable versions later
     self->base_wave = FUNC_SIN;
@@ -121,6 +122,13 @@ void play_note(NOTE *self,
     float env_slope;
     bool newcells = false;
     float env_end_gain;
+    float gainstep = gain - self->gain;
+    gainstep /= nframes>64?nframes:64;
+    if (gainstep < 1e-15 && gainstep > -1e-15)//avoid denormals
+    {
+        gainstep = 0;
+        self->gain = gain;
+    }
 
     //go through all the chunks in this period
     for(chunk = nframes - start_frame; start_frame<nframes; chunk = nframes - start_frame)
@@ -210,7 +218,8 @@ void play_note(NOTE *self,
             }
 
             self->env_gain += env_slope;
-            total_gain = gain*self->env_gain*amod_coeff;
+            total_gain = self->gain*self->env_gain*amod_coeff;
+            self->gain += gainstep;
 
             //harmonics
             for(j=0; j<*self->nharmonics; j++) //could unroll this but... it'd get ugly
