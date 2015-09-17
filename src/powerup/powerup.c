@@ -11,11 +11,11 @@
 
 typedef struct _POWERUP
 {
-    unsigned long w;//current write point in buffer
-    unsigned long r;//current read point in buffer
-    unsigned long t;//nframes processed after trigger
-    unsigned long bufmask;//size of buffer 
-    unsigned long latency;
+    uint32_t w;//current write point in buffer
+    uint32_t r;//current read point in buffer
+    uint32_t t;//nframes processed after trigger
+    uint32_t bufmask;//size of buffer 
+    uint32_t latency;
     double sample_freq;
     
     float *buf;
@@ -99,7 +99,7 @@ void run_powerup(LV2_Handle handle, uint32_t nframes)
 	    }
 
 	    //now figure the real starting read position (wrap to within buffer size)
-	    plug->r = (unsigned long)plug->indx;
+	    plug->r = (uint32_t)plug->indx;
 	    tmp = plug->indx - plug->r;
 	    plug->r &= plug->bufmask;
 	    plug->indx = plug->r + tmp; //from here on out w, r, & indx will grow until startup completes (no wrapping)
@@ -130,9 +130,9 @@ void run_powerup(LV2_Handle handle, uint32_t nframes)
 	    {
 		plug->indx += (exp2(-plug->startup_curve*plug->t/startup_length) - 1)/(exp_curve - 1);
 	    }
-	    if(plug->r < (unsigned long)plug->indx)
+	    if(plug->r < (uint32_t)plug->indx)
 	    {
-		plug->r = (unsigned long)plug->indx;
+		plug->r = (uint32_t)plug->indx;
 		a = b; b=c; c=d;
 		d = plug->buf[(plug->r+2)&plug->bufmask];
 	    }
@@ -188,7 +188,7 @@ LV2_Handle init_powerup(const LV2_Descriptor *descriptor,double sample_freq, con
 {
     POWERUP* plug = malloc(sizeof(POWERUP));
 
-    unsigned long tmp;
+    uint32_t tmp;
     plug->sample_freq = sample_freq; 
     tmp = 0x200000;//21 bits
     if(sample_freq<100000)//88.2 or 96kHz

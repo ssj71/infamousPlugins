@@ -6,12 +6,12 @@
 
 
 //private function prototypes
-unsigned short torus_of_life(unsigned char rule, unsigned short cells, unsigned char ncells);
+uint16_t torus_of_life(uint8_t rule, uint16_t cells, uint8_t ncells);
 
 
-void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, unsigned char value, unsigned char* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
+void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, uint8_t value, uint8_t* nharmonics, float* harmonic_length, float* amod_gain, float* fmod_gain)
 {
-    unsigned char i;
+    uint8_t i;
     double step;
     self->value = value;
     self->velocity = .8;
@@ -57,14 +57,14 @@ void init_note(NOTE *self, WAVESOURCE* waves, double sample_rate, unsigned char 
 
 void start_note(NOTE*           self,
                 WAVESOURCE* waves,
-                unsigned char   velocity,
+                uint8_t   velocity,
                 uint32_t        start_frame,
                 float           harmonic_gain[],
-                unsigned short  harmonics, 
+                uint16_t  harmonics, 
                 float           width,
                 float           envelope[])
 {
-    unsigned char i;
+    uint8_t i;
     self->velocity = (float)velocity/127;//currently linear which is lame
     self->start_frame = start_frame;
     self->release_frame = 0;
@@ -102,16 +102,16 @@ void play_note(NOTE *self,
                float buffer[],
                double pitchbend,
                float gain,
-               unsigned short rule,
-               unsigned char base_wave,
-               unsigned char fmod_wave,
+               uint16_t rule,
+               uint8_t base_wave,
+               uint8_t fmod_wave,
                double fmod_step,
-               unsigned char amod_wave,
+               uint8_t amod_wave,
                double amod_step)
 
 {
-    unsigned short i;
-    unsigned char j;
+    uint16_t i;
+    uint8_t j;
     float total_gain;
     float fmod_coeff = pitchbend;
     float amod_coeff = 1;
@@ -282,10 +282,10 @@ void end_note(NOTE *self, uint32_t release_frame)
 }
 
 
-unsigned short torus_of_life(unsigned char rule, unsigned short cells, unsigned char ncells)
+uint16_t torus_of_life(uint8_t rule, uint16_t cells, uint8_t ncells)
 {
-    unsigned short temp;
-    unsigned char index;
+    uint16_t temp;
+    uint8_t index;
     ncells--;
     temp=0;
     for(index=0;index<=ncells;index++)

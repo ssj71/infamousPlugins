@@ -21,8 +21,8 @@ typedef struct _ENVFOLLOWER{
 
     float current;
     float prev;
-    unsigned char mout;
-    unsigned char mprev;
+    uint8_t mout;
+    uint8_t mprev;
 
     double sum;
     float out;
@@ -146,7 +146,7 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     LV2_Atom midiatom;
     uint32_t i;
     float *buf = plug->input_p;
-    unsigned char msg[3];
+    uint8_t msg[3];
     float peak;
     float rms;
     float sat = *plug->saturation_p;
@@ -238,8 +238,8 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
         if(plug->mout!=plug->mprev)
         {
             //make event
-            msg[0] = MIDI_CONTROL_CHANGE + (unsigned char)(*plug->channel_p - 1);
-            msg[1] = MIDI_DATA_MASK & (unsigned char)*plug->control_p;
+            msg[0] = MIDI_CONTROL_CHANGE + (uint8_t)(*plug->channel_p - 1);
+            msg[1] = MIDI_DATA_MASK & (uint8_t)*plug->control_p;
             msg[2] = MIDI_DATA_MASK & plug->mout;
 
             midiatom.type = plug->midi_event_type;
@@ -289,12 +289,7 @@ void cleanup_envfollower(LV2_Handle handle)
 }
 
 
-//lv2 stuff
-LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features);
-void connect_envfollower_ports(LV2_Handle handle, uint32_t port, void *data);
-void run_envfollower( LV2_Handle handle, uint32_t nframes);
-void cleanup_envfollower(LV2_Handle handle);
-
+//lv2 stuff 
 static const LV2_Descriptor envfollower_descriptor={
     ENVFOLLOWER_URI,
     init_envfollower,

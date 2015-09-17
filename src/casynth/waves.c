@@ -10,9 +10,9 @@
 
 void init_waves(WAVESOURCE* self)
 {
-    unsigned short i =0;
-    unsigned char j;
-    char k=0;
+    uint16_t i =0;
+    uint8_t j;
+    int8_t k=0;
     double phase = 0;
     self->half_phase = PI;
     self->saw_step = 2*PI/TABLE_LENGTH;
@@ -48,7 +48,7 @@ void init_waves(WAVESOURCE* self)
     }
 
     //white and random
-    srand ((unsigned int) time (NULL));
+    srand ((uint16_t) time (NULL));
     self->V = 2*rand() / (float)RAND_MAX - 1;
     self->V2 = self->V*self->V;
 
@@ -100,8 +100,8 @@ double mySin(WAVESOURCE *self, HYSTERESIS *mem, double x)
 double saw(WAVESOURCE* self, HYSTERESIS* mem, double phase)
 {
     phase = phase*self->phase_coeff + self->phase_offset;
-    unsigned short hi,lo;
-    lo = (unsigned short) phase;
+    uint16_t hi,lo;
+    lo = (uint16_t) phase;
     hi = lo +1;
     return self->saw_table[lo] + (phase - lo)*(self->saw_table[hi] - self->saw_table[lo]);
 }
@@ -121,8 +121,8 @@ double square(WAVESOURCE* self, HYSTERESIS* mem, double phase)
 double triangle(WAVESOURCE* self, HYSTERESIS *mem, double phase)
 {
     phase = phase*self->phase_coeff + self->phase_offset;
-    unsigned short hi,lo;
-    lo = (unsigned short) phase;
+    uint16_t hi,lo;
+    lo = (uint16_t) phase;
     hi = lo +1;
     return self->tri_table[lo] + (phase - lo)*(self->tri_table[hi] - self->tri_table[lo]);
 }

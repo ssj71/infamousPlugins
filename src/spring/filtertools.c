@@ -58,7 +58,7 @@ void convolve(float* f, uint8_t nf, float* g, uint8_t ng, float* h)
 	for(t=0;t<ng+nf-1;t++)
 	{
 		h[t] = 0;
-		lbound = ((1+(long)t-ng)<=0)?0:(t-ng+1);
+		lbound = ((1+(int32_t)t-ng)<=0)?0:(t-ng+1);
 		ubound = (t<(nf-1))?t:(nf-1);
 		//printf("%i %i %i, ",t,lbound,ubound);
 		for(tau=lbound;tau<=ubound;tau++)
@@ -78,7 +78,7 @@ void _cip(float* f, uint8_t nf, float* g, uint8_t ng, uint8_t t)
 	float tmp = 0;
 	uint16_t tau;
 	uint8_t ubound, lbound;
-	lbound = ((1+(long)t-ng)<=0)?0:(t-ng+1);
+	lbound = ((1+(int32_t)t-ng)<=0)?0:(t-ng+1);
 	ubound = (t<(nf-1))?t:(nf-1);
 	for(tau=lbound;tau<=ubound;tau++)
 	{

@@ -24,15 +24,15 @@ enum states
 
 typedef struct _STUCK
 {
-    unsigned short indx;//current write point in buffer
-    unsigned short indx2;//working/read point in buffer
-    unsigned short bufsize;//size of buffer 
-    unsigned short wavesize;//size of waveform
-    unsigned short acorr_size;//size of autocorrelation 
-    unsigned short xfade_size;
-    unsigned short wave_min;//shortest allowed wavesize
-    unsigned short wave_max;//longest allowed wavesize
-    unsigned char state;
+    uint16_t indx;//current write point in buffer
+    uint16_t indx2;//working/read point in buffer
+    uint16_t bufsize;//size of buffer 
+    uint16_t wavesize;//size of waveform
+    uint16_t acorr_size;//size of autocorrelation 
+    uint16_t xfade_size;
+    uint16_t wave_min;//int16_test allowed wavesize
+    uint16_t wave_max;//int32_test allowed wavesize
+    uint8_t state;
     double sample_freq;
     
     float *buf;
@@ -311,7 +311,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
 {
     STUCK* plug = malloc(sizeof(STUCK));
 
-    unsigned short tmp;
+    uint16_t tmp;
     plug->sample_freq = sample_freq; 
     tmp = 0x8000;//15 bits
     if(sample_freq<100000)//88.1 or 96.1kHz

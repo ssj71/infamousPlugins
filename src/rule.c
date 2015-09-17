@@ -1,9 +1,9 @@
 #include<unistd.h> 
 #include<stdio.h>
 
-void ruleprint(unsigned char x)
+void ruleprint(uint8_t x)
 {
-    unsigned char i;
+    uint8_t i;
     printf("\n111 110 101 100 011 010 001 000\n");
     for(i=128;i>0;i=i>>1)
     {
@@ -12,9 +12,9 @@ void ruleprint(unsigned char x)
     printf("\n");
 }
     
-void binprint(unsigned long x, unsigned char n)
+void binprint(uint32_t x, uint8_t n)
 {
-    unsigned long i;
+    uint32_t i;
     for(i=1<<n;i>0;i=i>>1)
     {
         printf("%c",(x&i)?'0':' ');
@@ -41,14 +41,14 @@ void useage()
     return;
 } 
 
-int main(int argc, char **argv)
+int main(int argc, int8_t **argv)
 {
-unsigned char rule=0xD0;//0x7c;
-unsigned char t;
-unsigned long cells = 1;
-unsigned long temp;
-unsigned char index;
-unsigned char ncells = 16;
+uint8_t rule=0xD0;//0x7c;
+uint8_t t;
+uint32_t cells = 1;
+uint32_t temp;
+uint8_t index;
+uint8_t ncells = 16;
 
 if (argc > 1) 
 {
@@ -56,7 +56,7 @@ if (argc > 1)
     {
         unsigned int a;
         sscanf(argv[1],"%x",&a);
-        rule = (unsigned char)a;
+        rule = (uint8_t)a;
     }
     else
     {
@@ -68,7 +68,7 @@ if (argc > 1)
         {
             unsigned int a;
             sscanf(argv[2],"%x",&a);
-            cells = (unsigned short)a;
+            cells = (uint16_t)a;
         }
         else
         {

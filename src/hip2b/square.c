@@ -22,17 +22,17 @@
 
 typedef struct _SQUARE
 {
-    char step;
-    char state;
-    char outstate;
-    char nextstate;
-    unsigned char pos;
+    int8_t step;
+    int8_t state;
+    int8_t outstate;
+    int8_t nextstate;
+    uint8_t pos;
     float table[HALFPLUS];//one quarter of a square wave
 
     float circularbuf[NHARMONICS];
-    unsigned char w,r,c;//read, write & check pointers
-    unsigned char headway;//distance to next transition
-    unsigned char skip;
+    uint8_t w,r,c;//read, write & check pointers
+    uint8_t headway;//distance to next transition
+    uint8_t skip;
     float dcprevin;
     float dcprevout;
 
@@ -56,8 +56,8 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     SQUARE* plug = (SQUARE*)handle;
     float temp;
     uint32_t i;
-    unsigned char j, w, r, c;
-    unsigned char nskip = 1<<-(int)*plug->octave_p;
+    uint8_t j, w, r, c;
+    uint8_t nskip = 1<<-(int)*plug->octave_p;
     w = plug->w;
     r = plug->r;
     c = plug->c;
@@ -72,7 +72,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         //change position
         if(plug->headway == 0)
         {//on the transition point, search for next one
-            plug->pos = 0;//(unsigned char)plug->headway;
+            plug->pos = 0;//(uint8_t)plug->headway;
             if(plug->skip++>=nskip)
             { 
                 plug->skip = 1;
@@ -112,7 +112,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         }
         else if(plug->headway < plug->pos)
         {//need to start decrementing
-            plug->pos = (unsigned char)plug->headway;
+            plug->pos = (uint8_t)plug->headway;
             //update headway
             plug->headway--;
         }
@@ -180,8 +180,8 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
 {
     SQUARE* plug = malloc(sizeof(SQUARE));
 
-    unsigned char i,j;
-    char k;
+    uint8_t i,j;
+    int8_t k;
     double s = PI/NHARMONICS;
     
     for(i=0;i<=HALF;i++)

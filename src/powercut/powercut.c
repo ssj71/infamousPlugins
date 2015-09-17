@@ -11,10 +11,10 @@
 
 typedef struct _POWERCUT
 {
-    unsigned long w;//current write point in buffer
-    unsigned long r;//current read point in buffer
-    unsigned long t;//nframes processed after trigger
-    unsigned long bufmask;//size of buffer 
+    uint32_t w;//current write point in buffer
+    uint32_t r;//current read point in buffer
+    uint32_t t;//nframes processed after trigger
+    uint32_t bufmask;//size of buffer 
     double sample_freq;
     
     float *buf;
@@ -81,9 +81,9 @@ void run_powercut(LV2_Handle handle, uint32_t nframes)
 		//plug->indx += exp2(-10.0*plug->t/decay_length);
 		plug->indx += (exp_decay*exp2(plug->t**plug->decay_curve_p/decay_length) - 1)/(exp_decay - 1);
 	    }
-	    if(plug->r < (unsigned long)plug->indx)
+	    if(plug->r < (uint32_t)plug->indx)
 	    {
-		plug->r = (unsigned long)plug->indx;
+		plug->r = (uint32_t)plug->indx;
 		a = b; b=c; c=d;
 		if(plug->r+2 < plug->w)
 		{
@@ -143,7 +143,7 @@ LV2_Handle init_powercut(const LV2_Descriptor *descriptor,double sample_freq, co
 {
     POWERCUT* plug = malloc(sizeof(POWERCUT));
 
-    unsigned long tmp;
+    uint32_t tmp;
     plug->sample_freq = sample_freq; 
     tmp = 0x40000;//19 bits
     if(sample_freq<100000)//88.2 or 96kHz

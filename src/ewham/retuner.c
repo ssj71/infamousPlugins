@@ -67,8 +67,8 @@ typedef struct
 	float			Error;
 	float			Ratio;
 	float			Rindex1, Rindex2;
-	unsigned short	Notebits;
-	unsigned char	Xfade, Upsamp, Format;
+	uint16_t	Notebits;
+	uint8_t	Xfade, Upsamp, Format;
 } Retuner;
 
 #ifndef M_PI

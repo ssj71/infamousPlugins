@@ -12,7 +12,7 @@
 LV2_Handle init_casynth(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     CASYNTH* synth = malloc(sizeof(CASYNTH));
-    unsigned char i;
+    uint8_t i;
 
     synth->sample_rate = sample_rate;
 
@@ -114,15 +114,15 @@ void connect_casynth_ports(LV2_Handle handle, uint32_t port, void *data)
 void run_casynth( LV2_Handle handle, uint32_t nframes)
 {
     CASYNTH* synth = (CASYNTH*)handle;
-    unsigned char i,j,k;
+    uint8_t i,j,k;
     float* buf = synth->output_p;
     LV2_Atom_Event event;
     uint32_t frame_no = 0;
     uint32_t t = 0;
-    unsigned char* message;
-    unsigned char type;
-    unsigned char num, val;
-    short bend;
+    uint8_t* message;
+    uint8_t type;
+    uint8_t num, val;
+    int16_t bend;
     bool firstnote = true;
     NOTE* note;
     double astep = synth->waves.func_domain*(*synth->amod_freq_p)/synth->sample_rate;
@@ -145,7 +145,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
         {
             if(event->body.type == synth->midi_event_type)//make sure its a midi event
             {
-                message = (unsigned char*) LV2_ATOM_BODY(&(event->body));
+                message = (uint8_t*) LV2_ATOM_BODY(&(event->body));
                 if( !(*synth->channel_p) || ((message[0]&MIDI_CHANNEL_MASK) == (*synth->channel_p)+1) )
                 {
                     type = message[0]&MIDI_TYPE_MASK;
@@ -205,7 +205,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                            &(buf[frame_no]),
                                            synth->pitchbend,
                                            *synth->master_gain_p,
-                                           (unsigned char)*synth->rule_p,
+                                           (uint8_t)*synth->rule_p,
                                            *synth->wave_p,
                                            *synth->fmod_wave_p,
                                            fstep,
@@ -321,7 +321,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                                        &(buf[frame_no]),
                                        synth->pitchbend,
                                        *synth->master_gain_p,
-                                       (unsigned char)*synth->rule_p,
+                                       (uint8_t)*synth->rule_p,
                                        *synth->wave_p,
                                        *synth->fmod_wave_p,
                                        fstep,
@@ -400,7 +400,7 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
                        &(buf[frame_no]),
                        synth->pitchbend,
                        *synth->master_gain_p,
-                       (unsigned char)*synth->rule_p,
+                       (uint8_t)*synth->rule_p,
                        *synth->wave_p,
                        *synth->fmod_wave_p,
                        fstep,
