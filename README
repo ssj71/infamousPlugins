@@ -40,16 +40,13 @@ I have commented out all the cv ports (envfollower, stuck, and the powercut/up p
 If you want to re-enable the ports, in envfollower.c and stuck.c uncomment the line "//#define CV_PORTS" (remove the "//") and in the respective .ttl files, uncomment the blocks at the bottom. If you wish to use the CV ports as audio ports (required for any host but ingen at the time of writing), open the *.ttl file for that plugin and find the line with "lv2:AudioPort ; #CvPort ;" and remove "AudioPort ; #" which will cause the port to be declared as Cv rather than audio.
 
 A NOTE TO PACKAGERS:
-Each plugin can be built individually by navigating to the directory src/$pluginName. If you are using guis you can do an out of source build by performing:
+Each plugin can be built and installed individually by navigating to the directory src/$pluginName. If you are using guis you can do an out of source build by performing:
     mkdir build
     cd build
     cmake ..
     make
-    cp $plugin.so ../$plugin.lv2/
-    cp $plugin_ui.so ../$plugin_ui.lv2/
-    cd ..
+    sudo make install
 
-The plugin bundle to be packaged is the $plugin.lv2 directory. Each plugin is in a separate folder; repeat this in every plugin's subdirectory.
 
 
 Now lets talk about what you're installing:
