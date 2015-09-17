@@ -35,6 +35,7 @@ typedef struct _SQUARE
     uint8_t skip;
     float dcprevin;
     float dcprevout;
+    float gain;
 
     float *input_p;
     float *output_p;
@@ -58,6 +59,18 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     uint32_t i;
     uint8_t j, w, r, c;
     uint8_t nskip = 1<<-(int)*plug->octave_p;
+    float gstep = *plug->outgain_p - plug->gain;
+    if(nframes>64)
+        gstep /= nframes;
+    else
+        gstep /= 64;
+    if(gtep<PRACTICALLYZERO/10000)//avoid denormals
+    {
+        gstep = 0;
+        plug->gain = *plug->output_p;
+    }
+
+
     w = plug->w;
     r = plug->r;
     c = plug->c;
@@ -163,7 +176,8 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         //write out the frame
         plug->output_p[i] = (1-*plug->wetdry_p)*plug->circularbuf[r++] + *plug->wetdry_p*temp;
         CIRCULATE(r);
-        plug->output_p[i] *= *plug->outgain_p;
+        plug->gain += gstep;
+        plug->output_p[i] *= plug->gain;
     }
     *plug->latency_p = HALF;
     plug->w = w;
