@@ -57,10 +57,12 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     STUCK* plug = (STUCK*)handle;
     uint32_t i,j,k,t,chunk=0;
     double slope = 0;
+    double interp;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float)); 
     //for(i=0;i<nframes;i++) plug->output_p[i] = 0;	
     
+    interp = nframes>64?nframes:64;
     
     if(plug->state == INACTIVE)
     {//decide if triggered 
@@ -184,7 +186,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         }
         else if(plug->state == LOADING_XFADE)//xfade end of buffer with start (loop it) over an entire wave and fade in drone
         {
-            slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
+            slope = (*plug->drone_gain_p-plug->gain)/interp;
             //decide if xfade ends in this period
             if(plug->indx2+chunk >= plug->wavesize)
                 //if(plug->indx2+chunk >= 10)
@@ -217,7 +219,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         }
         else if(plug->state == XFADE_ONLY)//xfade after buffer is full
         {
-            slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
+            slope = (*plug->drone_gain_p-plug->gain)/interp;
             //decide if xfade ends in this period
             if(plug->indx2+chunk >= plug->wavesize)
             {
@@ -241,7 +243,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         }
         else if(plug->state == PLAYING)//just loop buffer and track gain changes
         {
-            slope = (*plug->drone_gain_p-plug->gain)/(double)nframes;
+            slope = (*plug->drone_gain_p-plug->gain)/interp;
             for(j=0;j<chunk;j++)
             { 
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
