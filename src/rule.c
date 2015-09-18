@@ -25,7 +25,7 @@ void binprint(uint32_t x, uint8_t n)
 
 void useage()
 {
-    printf("\nrule, a constrained cellular automation visualizer\n");
+    printf("\nrule, a constrained cellular automaton visualizer\n");
     printf("\n");
     printf("USEAGE:\n");
     printf(" rule <rule number> [<initial condition>]\n");
@@ -37,7 +37,7 @@ void useage()
     printf("NOTES:\n");
     printf(" There are 16 cells on a torus. Arguments can be hex or decimal.\n");
     printf(" If no initial condition is supplied, default is 1. For more\n");
-    printf(" information read 'elementary cellular automation' on wikipedia\n");
+    printf(" information read 'elementary cellular automaton' on wikipedia\n");
     printf("\n");
     return;
 }
