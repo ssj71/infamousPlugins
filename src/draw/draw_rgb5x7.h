@@ -10,25 +10,6 @@ inline int cairo_code_draw_rgb5x7_get_height()
 {
     return cairo_code_draw_rgbLED_get_height()*7*1.3;
 }
-inline void cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, uint8_t r, uint8_t g, uint8_t b)
-{
-
-    int offset = 1.3*cairo_code_draw_rgbLED_get_width();//1.3 so there is a space between
-    for (int i=0; i<7; i++)
-    {
-        for (int j=0; j<5; j++)
-        {
-            cairo_save( cr );
-            //move
-            cairo_translate(cr,j*offset,i*offset);//origin is left upper corner
-            //draw led
-            cairo_code_draw_rgbLED_render(cr, Font5x7[num-32][j]&(0x01<<i), r,g,b);
-            cairo_restore(cr);
-        }
-    }
-    //todo bounding box?
-
-}
 
 //just subtract 32 from the char and you get the index here
 //each byte is a column and msb to lsb is bottom to top row, msb not used
@@ -128,8 +109,56 @@ static uint8_t Font5x7[][5]  =
     {0x00, 0x08, 0x36, 0x41, 0x00},// {
     {0x00, 0x00, 0x7F, 0x00, 0x00},// |
     {0x00, 0x41, 0x36, 0x08, 0x00},// }
-    {0x08, 0x08, 0x2A, 0x1C, 0x08},// ->
+    {0x08, 0x08, 0x2A, 0x1C, 0x08},// ->//should be tilde
     {0x08, 0x1C, 0x2A, 0x08, 0x08} // <-
 };
 
+inline void cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, uint8_t r, uint8_t g, uint8_t b)
+{
+
+    float offset = 1.3*cairo_code_draw_rgbLED_get_width();//1.3 so there is a space between
+    for (int i=0; i<7; i++)
+    {
+        for (int j=0; j<5; j++)
+        {
+            cairo_save( cr );
+            //move
+            cairo_translate(cr,j*offset,i*offset);//origin is left upper corner
+            //draw led
+            cairo_code_draw_rgbLED_render(cr, Font5x7[num-32][j]&(0x01<<i), r,g,b);
+            cairo_restore(cr);
+        }
+    }
+    //todo bounding box?
+
+}
+
+inline void cairo_code_draw_red5x7_render(cairo_t *cr, char num)
+{
+    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 1, 0, 0);
+}
+inline void cairo_code_draw_blue5x7_render(cairo_t *cr, char num)
+{
+    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 0, 0, 1);
+}
+inline void cairo_code_draw_green5x7_render(cairo_t *cr, char num)
+{
+    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 1, 0.88235, 0);
+}
+inline void cairo_code_draw_orange5x7_render(cairo_t *cr, char num)
+{
+    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 1, .33333, 0);
+}
+inline void cairo_code_draw_yellow5x7_render(cairo_t *cr, char num)
+{
+    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 0.92157, 0.92157, 0);
+}
+inline void cairo_code_draw_purple5x7_render(cairo_t *cr, char num)
+{
+    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 0.78431, 0, 1);
+}
+inline void cairo_code_draw_white5x7_render(cairo_t *cr, char num)
+{
+    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 1, 1, 1);
+}
 #endif
