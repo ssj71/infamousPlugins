@@ -64,7 +64,7 @@ public:
     int drawing_h;
     void (*drawing_f)(cairo_t*,char);//pointer to draw function
     int nchars;
-    bool periods;
+    bool periods;//flag, states that periods are treated as a full character (monospace)
 
     void draw()
     {
