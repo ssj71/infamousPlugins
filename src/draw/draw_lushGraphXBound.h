@@ -26,4 +26,34 @@ cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
 }
+
+inline void cairo_code_draw_lushGraphXBoundr_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphXBound_render(cr, 1, 0, 0);
+}
+
+inline void cairo_code_draw_lushGraphXBoundb_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphXBound_render(cr, 0, 0, 1);
+}
+
+inline void cairo_code_draw_lushGraphXBoundg_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphXBound_render(cr, 0, 0.88235, 0);
+}
+
+inline void cairo_code_draw_lushGraphXBoundo_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphXBound_render(cr, 1, .33333, 0);
+}
+
+inline void cairo_code_draw_lushGraphXBoundy_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphXBound_render(cr, 0.92157, 0.92157, 0);
+}
+
+inline void cairo_code_draw_lushGraphXBoundp_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphXBound_render(cr, 0.78431, 0, 1);
+}
 #endif

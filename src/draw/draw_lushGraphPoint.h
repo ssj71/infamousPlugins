@@ -2,7 +2,7 @@
 #define DRAW_LUSHGRAPHPOINT_H
 inline int cairo_code_draw_lushGraphPoint_get_width() { return 21; }
 inline int cairo_code_draw_lushGraphPoint_get_height() { return 21; }
-inline void cairo_code_draw_lushGraphPoint_render(cairo_t *cr) {
+inline void cairo_code_draw_lushGraphPoint_render(cairo_t *cr, float r, float g, float b) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -30,5 +30,40 @@ cairo_matrix_init(&matrix, 0.952449,0,0,0.952449,318.921679,-179.030695);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
+}
+
+inline void cairo_code_draw_lushGraphPointr_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphPoint_render(cr, 1, 0, 0);
+}
+
+inline void cairo_code_draw_lushGraphPointb_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphPoint_render(cr, 0, 0, 1);
+}
+
+inline void cairo_code_draw_lushGraphPointg_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphPoint_render(cr, 0, 0.88235, 0);
+}
+
+inline void cairo_code_draw_lushGraphPointo_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphPoint_render(cr, 1, .33333, 0);
+}
+
+inline void cairo_code_draw_lushGraphPointy_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphPoint_render(cr, 0.92157, 0.92157, 0);
+}
+
+inline void cairo_code_draw_lushGraphPointp_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphPoint_render(cr, 0.78431, 0, 1);
+}
+
+inline void cairo_code_draw_lushGraphPointw_render(cairo_t *cr)
+{
+    cairo_code_draw_lushGraphPoint_render(cr, 0.164, 0.164, 0.164);
 }
 #endif

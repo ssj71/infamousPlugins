@@ -2,12 +2,14 @@
 #define DRAW_WHITETINYBUTTON_H
 inline int cairo_code_draw_whiteTinyButton_get_width() { return 22; }
 inline int cairo_code_draw_whiteTinyButton_get_height() { return 22; }
-inline void cairo_code_draw_whiteTinyButton_render(cairo_t *cr) {
+inline void cairo_code_draw_whiteTinyButton_render(cairo_t *cr, int val) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
+    if(val)
+    {
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.164706,0.164706,0.164706,1);
 cairo_set_source(cr, pattern);
@@ -107,6 +109,9 @@ cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 cairo_matrix_init(&matrix, 1,0,0,1,-281.81076,-163.33714);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
+    }
+    else
+    {
 /********************/
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.164706,0.164706,0.164706,1);
@@ -188,6 +193,7 @@ cairo_set_tolerance(cr, 0.1);
 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
 cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
+}
  /********************/
 }
 #endif

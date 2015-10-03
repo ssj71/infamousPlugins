@@ -2,7 +2,7 @@
 #define DRAW_REDDIAL_H
 inline int cairo_code_draw_redDial_get_width() { return 50; }
 inline int cairo_code_draw_redDial_get_height() { return 50; }
-inline void cairo_code_draw_redDial_render(cairo_t *cr) {
+inline void cairo_code_draw_redDial_render(cairo_t *cr, float val) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -63,6 +63,11 @@ cairo_pattern_set_extend(pattern, CAIRO_EXTEND_PAD);
 cairo_pattern_set_filter(pattern, CAIRO_FILTER_GOOD);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
+
+    cairo_translate(cr,45.5,45.5);
+    cairo_rotate(cr,3*PI/2*val - 3*PI/4);
+    cairo_translate(cr,-45.5,-45.5);
+
 cairo_new_path(cr);
 cairo_move_to(cr, 31.828125, 46.628906);
 cairo_curve_to(cr, 31.28125, 50.324219, 18.722656, 50.421875, 18.175781, 46.734375);
