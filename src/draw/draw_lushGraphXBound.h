@@ -1,8 +1,8 @@
 #ifndef DRAW_LUSHGRAPHXBOUND_H
 #define DRAW_LUSHGRAPHXBOUND_H
-inline int cairo_code_draw_lushgraphxbound_get_width() { return 3; }
-inline int cairo_code_draw_lushgraphxbound_get_height() { return 21; }
-inline void cairo_code_draw_lushgraphxbound_render(cairo_t *cr) {
+inline int cairo_code_draw_lushGraphXBound_get_width() { return 3; }
+inline int cairo_code_draw_lushGraphXBound_get_height() { return 21; }
+inline void cairo_code_draw_lushGraphXBound_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;

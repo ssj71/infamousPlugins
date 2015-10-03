@@ -1,8 +1,8 @@
-#ifndef DRAW_LUSHBGND_H
-#define DRAW_LUSHBGND_H
-inline int cairo_code_draw_lushbgnd_get_width() { return 630; }
-inline int cairo_code_draw_lushbgnd_get_height() { return 400; }
-inline void cairo_code_draw_lushbgnd_render(cairo_t *cr) {
+#ifndef DRAW_LUSHBG_H
+#define DRAW_LUSHBG_H
+inline int cairo_code_draw_lushbg_get_width() { return 630; }
+inline int cairo_code_draw_lushbg_get_height() { return 400; }
+inline void cairo_code_draw_lushbg_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;

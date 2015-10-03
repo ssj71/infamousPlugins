@@ -1,8 +1,8 @@
 #ifndef DRAW_WHITETINYBUTTON_H
 #define DRAW_WHITETINYBUTTON_H
-inline int cairo_code_draw_whitetinybutton_get_width() { return 22; }
-inline int cairo_code_draw_whitetinybutton_get_height() { return 22; }
-inline void cairo_code_draw_whitetinybutton_render(cairo_t *cr) {
+inline int cairo_code_draw_whiteTinyButton_get_width() { return 22; }
+inline int cairo_code_draw_whiteTinyButton_get_height() { return 22; }
+inline void cairo_code_draw_whiteTinyButton_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;

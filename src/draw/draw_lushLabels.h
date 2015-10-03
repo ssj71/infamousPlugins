@@ -1,8 +1,8 @@
 #ifndef DRAW_LUSHAXISLABEL_H
 #define DRAW_LUSHAXISLABEL_H
-inline int cairo_code_draw_lushaxislabel_get_width() { return 80; }
-inline int cairo_code_draw_lushaxislabel_get_height() { return 92; }
-inline void cairo_code_draw_lushaxislabel_render(cairo_t *cr) {
+inline int cairo_code_draw_lushAxisLabel_get_width() { return 80; }
+inline int cairo_code_draw_lushAxisLabel_get_height() { return 92; }
+inline void cairo_code_draw_lushAxisLabel_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -781,9 +781,9 @@ cairo_fill_preserve(cr);
 }
 
 
-inline int cairo_code_draw_lushfreqlabel_get_width() { return 42; }
-inline int cairo_code_draw_lushfreqlabel_get_height() { return 12; }
-inline void cairo_code_draw_lushfreqlabel_render(cairo_t *cr) {
+inline int cairo_code_draw_lushFreqLabel_get_width() { return 42; }
+inline int cairo_code_draw_lushFreqLabel_get_height() { return 12; }
+inline void cairo_code_draw_lushFreqLabel_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -966,9 +966,9 @@ cairo_fill_preserve(cr);
 }
 
 
-inline int cairo_code_draw_lushlabel_get_width() { return 273; }
-inline int cairo_code_draw_lushlabel_get_height() { return 41; }
-inline void cairo_code_draw_lushlabel_render(cairo_t *cr) {
+inline int cairo_code_draw_lushLabel_get_width() { return 273; }
+inline int cairo_code_draw_lushLabel_get_height() { return 41; }
+inline void cairo_code_draw_lushLabel_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -1853,9 +1853,9 @@ cairo_fill_preserve(cr);
 }
 
 
-inline int cairo_code_draw_lushshapelabel_get_width() { return 52; }
-inline int cairo_code_draw_lushshapelabel_get_height() { return 39; }
-inline void cairo_code_draw_lushshapelabel_render(cairo_t *cr) {
+inline int cairo_code_draw_lushShapeLabel_get_width() { return 52; }
+inline int cairo_code_draw_lushShapeLabel_get_height() { return 39; }
+inline void cairo_code_draw_lushShapeLabel_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -2298,9 +2298,9 @@ cairo_fill_preserve(cr);
 }
 
 
-inline int cairo_code_draw_lushsyncabel_get_width() { return 43; }
-inline int cairo_code_draw_lushsyncabel_get_height() { return 10; }
-inline void cairo_code_draw_lushsyncabel_render(cairo_t *cr) {
+inline int cairo_code_draw_lushSyncLabel_get_width() { return 43; }
+inline int cairo_code_draw_lushSyncLabel_get_height() { return 10; }
+inline void cairo_code_draw_lushSyncLabel_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -2502,7 +2502,4 @@ cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
 cairo_fill_preserve(cr);
  /********************/
 }
-
-
 #endif
-

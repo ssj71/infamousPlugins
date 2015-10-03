@@ -1,8 +1,8 @@
 #ifndef DRAW_REDDIAL_H
 #define DRAW_REDDIAL_H
-inline int cairo_code_draw_reddial_get_width() { return 50; }
-inline int cairo_code_draw_reddial_get_height() { return 50; }
-inline void cairo_code_draw_reddial_render(cairo_t *cr) {
+inline int cairo_code_draw_redDial_get_width() { return 50; }
+inline int cairo_code_draw_redDial_get_height() { return 50; }
+inline void cairo_code_draw_redDial_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;

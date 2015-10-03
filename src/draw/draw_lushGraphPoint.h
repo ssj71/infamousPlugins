@@ -1,8 +1,8 @@
 #ifndef DRAW_LUSHGRAPHPOINT_H
 #define DRAW_LUSHGRAPHPOINT_H
-inline int cairo_code_draw_lushgraphpoint_get_width() { return 21; }
-inline int cairo_code_draw_lushgraphpoint_get_height() { return 21; }
-inline void cairo_code_draw_lushgraphpoint_render(cairo_t *cr) {
+inline int cairo_code_draw_lushGraphPoint_get_width() { return 21; }
+inline int cairo_code_draw_lushGraphPoint_get_height() { return 21; }
+inline void cairo_code_draw_lushGraphPoint_render(cairo_t *cr) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
