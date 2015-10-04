@@ -1,0 +1,577 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {.h} 
+code_name {.cxx}
+class CaSynthUI {open
+} {
+  Function {show()} {open
+  } {
+    Fl_Window ui {
+      label {the infamous lush life} open
+      xywh {786 433 630 400} type Double box UP_BOX resizable
+      code0 {\#include"ffffltk.h"}
+      code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
+      code2 {using namespace ffffltk;}
+      code3 {o->show();} visible
+    } {
+      Fl_Box bg {
+        xywh {0 0 630 400}
+        code0 {\#include"lushlife.h"}
+        code1 {\#include"draw_lushbg.h"}
+        code3 {o->drawing_h = cairo_code_draw_lushbg_get_height(); o->drawing_w = cairo_code_draw_lushbg_get_width(); o->drawing_f = &cairo_code_draw_lushbg_render;}
+        class Background
+      }
+      Fl_Box logo {selected
+        xywh {3 108 47 107}
+        code0 {\#include"draw_infamousLogoTrans.h"}
+        code1 {o->drawing_h = cairo_code_draw_infamousLogoTrans_get_height(); o->drawing_w = cairo_code_draw_infamousLogoTrans_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoTrans_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box title {
+        xywh {186 300 273 41}
+        code0 {\#include"draw_lushLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_lushLabel_get_height(); o->drawing_w = cairo_code_draw_lushLabel_get_width(); o->drawing_f = &cairo_code_draw_lushLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box ax {
+        xywh {14 244 80 92}
+        code0 {\#include"draw_lushLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_lushAxisLabel_get_height(); o->drawing_w = cairo_code_draw_lushAxisLabel_get_width(); o->drawing_f = &cairo_code_draw_lushAxisLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box sy {
+        xywh {503 300 43 10}
+        code0 {\#include"draw_lushLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_lushSyncLabel_get_height(); o->drawing_w = cairo_code_draw_lushSyncLabel_get_width(); o->drawing_f = &cairo_code_draw_lushSyncLabel_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box fr {
+        xywh {557 7 42 12}
+        code0 {\#include"draw_lushLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Box sh {
+        xywh {553 301 52 39}
+        code0 {\#include"draw_casFrames.h"}
+        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
+        code2 {o->stretch = false;}
+        class Background
+      }
+      Fl_Button activate0 {
+        callback {unsigned char tmp = rule;
+if(rule7->value())
+  tmp |= 0x80;
+else
+  tmp &= ~0x80;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);
+char s[20];
+sprintf(s,"%18i",(int)rule);
+value->copy_label(s);
+param->copy_label("RULE");
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 7} xywh {513 36 16 16}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button activate1 {
+        callback {unsigned char tmp = rule;
+if(rule6->value())
+  tmp |= 0x40;
+else
+  tmp &= ~0x40;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);
+char s[20];
+sprintf(s,"%18i",(int)rule);
+value->copy_label(s);
+param->copy_label("RULE");
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 6} xywh {513 80 16 16}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button activate2 {
+        callback {unsigned char tmp = rule;
+if(rule5->value())
+  tmp |= 0x20;
+else
+  tmp &= ~0x20;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);
+char s[20];
+sprintf(s,"%18i",(int)rule);
+value->copy_label(s);
+param->copy_label("RULE");
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 5} xywh {513 126 16 16}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button activate3 {
+        callback {unsigned char tmp = rule;
+if(rule4->value())
+  tmp |= 0x10;
+else
+  tmp &= ~0x10;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);
+char s[20];
+sprintf(s,"%18i",(int)rule);
+value->copy_label(s);
+param->copy_label("RULE");
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 4} xywh {513 172 16 16} value 1
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button activate4 {
+        callback {unsigned char tmp = rule;
+if(rule3->value())
+  tmp |= 0x08;
+else
+  tmp &= ~0x08;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);
+char s[20];
+sprintf(s,"%18i",(int)rule);
+value->copy_label(s);
+param->copy_label("RULE");
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 3} xywh {513 218 16 16} value 1
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button activate5 {
+        callback {unsigned char tmp = rule;
+if(rule2->value())
+  tmp |= 0x04;
+else
+  tmp &= ~0x04;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);
+char s[20];
+sprintf(s,"%18i",(int)rule);
+value->copy_label(s);
+param->copy_label("RULE");
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 2} xywh {513 263 16 16} value 1
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button sync {
+        callback {unsigned char tmp = rule;
+if(rule1->value())
+  tmp |= 0x02;
+else
+  tmp &= ~0x02;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);
+char s[20];
+sprintf(s,"%18i",(int)rule);
+value->copy_label(s);
+param->copy_label("RULE");
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 1} xywh {514 317 20 20} value 1
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button pangainhide {
+        callback {unsigned char tmp = rule;
+if(rule0->value())
+  tmp |= 0x01;
+else
+  tmp &= ~0x01;
+rule = tmp;
+write_function(controller,RULE,sizeof(float),0,&rule);
+char s[20];
+sprintf(s,"%18i",(int)rule);
+value->copy_label(s);
+param->copy_label("RULE");
+cellgrid->rule = rule;
+cellgrid->redraw();}
+        tooltip {rule, bit 0} xywh {32 296 20 20}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Button pitchdelayhide {
+        callback {unsigned short tmp = initial_condition;
+if(init15->value())
+  tmp |= 0x8000;
+else
+  tmp &= ~0x8000;
+initial_condition = tmp;
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
+char s[20];
+sprintf(s,"%18i",(int)initial_condition);
+value->copy_label(s);
+param->copy_label("INIT. CONDITION");
+cellgrid->initial_condition = initial_condition;
+cellgrid->redraw();}
+        tooltip {initial condition, bit 15} xywh {10 318 20 20}
+        code1 {\#include"draw_tinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
+        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        class Button
+      }
+      Fl_Dial mastergain {
+        callback {write_function(controller,MASTER_GAIN,sizeof(float),0,&mastergain->floatvalue);
+char s[20];
+sprintf(s,"%19.3f",mastergain->floatvalue);
+param->copy_label("MASTER GAIN");
+value->copy_label(s);}
+        tooltip gain xywh {118 300 45 45} maximum 2 step 0.02 value 1
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
+      Fl_Dial pitchfreq0 {
+        callback {write_function(controller,CHANNEL,sizeof(float),0,&channel->floatvalue);
+char s[20];
+sprintf(s,"%18i",(int)channel->floatvalue);
+param->copy_label("MIDI CHANNEL");
+value->copy_label(s);}
+        tooltip {MIDI channel} xywh {532 20 45 45} maximum 16 step 0.5
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
+        class Dial
+      }
+      Fl_Dial pitchfreq1 {
+        callback {write_function(controller,WAVE,sizeof(float),0,&cellwaveform->floatvalue);
+param->copy_label("CELL WAVEFORM");
+int a = cellwaveform->floatvalue; 
+switch(a)
+{
+case 0:
+  value->copy_label("              SINE");
+  break;
+case 1:
+  value->copy_label("               SAW");
+  break;
+case 2:
+  value->copy_label("            SQUARE");
+  break;
+case 3:
+  value->copy_label("          TRIANGLE");
+  break;
+case 4:
+  value->copy_label("       WHITE NOISE");
+  break;
+case 5:
+  value->copy_label("            RANDOM");
+  break;
+}}
+        tooltip waveform xywh {532 66 45 45} maximum 5 step 0.1
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
+        class Dial
+      }
+      Fl_Dial pitchfreq2 {
+        callback {write_function(controller,CELL_LIFE,sizeof(float),0,&lifetime->floatvalue);
+char s[20];
+sprintf(s,"%13.3f BEATS",lifetime->floatvalue);
+param->copy_label("CELL LIFETIME");
+value->copy_label(s);}
+        tooltip {time between cell transitions} xywh {532 112 45 45} minimum 0.001 maximum 10 step 0.05 value 0.25
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
+      Fl_Dial pitchfreq3 {
+        callback {write_function(controller,HARM_MODE,sizeof(float),0,&harmgain->floatvalue);
+param->copy_label("HARMONIC GAINS");
+int a = harmgain->floatvalue; 
+switch(a)
+{
+case 0:
+  value->copy_label("              SINC");
+  break; case 1:
+  value->copy_label("               SAW");
+  break;
+case 2:
+  value->copy_label("            SQUARE");
+  break;
+case 3:
+  value->copy_label("          TRIANGLE");
+  break;
+}}
+        tooltip {gain of harmonics} xywh {532 158 45 45} maximum 3 step 0.08 value 1
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
+        class Dial
+      }
+      Fl_Dial pitchfreq4 {
+        callback {write_function(controller,NHARMONICS,sizeof(float),0,&nharmonics->floatvalue);
+char s[20];
+sprintf(s,"%18i",(int)nharmonics->floatvalue);
+param->copy_label("NUM. HARMONICS");
+value->copy_label(s);}
+        tooltip {num. of harmonics} xywh {532 203 45 45} maximum 16 step 0.1 value 12
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false; o->lock2int = true;}
+        class Dial
+      }
+      Fl_Dial pitchfreq5 {
+        callback {write_function(controller,HARM_WIDTH,sizeof(float),0,&harmwidth->floatvalue);
+char s[20];
+sprintf(s,"%13.2f CENTS",harmwidth->floatvalue);
+param->copy_label("HARMONIC WIDTH");
+value->copy_label(s);}
+        tooltip {width/detune} xywh {532 249 45 45} maximum 50 step 0.1
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
+      Fl_Dial delayfreq0 {
+        callback {write_function(controller,ENV_A,sizeof(float),0,&a->floatvalue);
+char s[20];
+sprintf(s,"%17.3f S",a->floatvalue);
+param->copy_label("ENV. ATTACK");
+value->copy_label(s);}
+        tooltip attack xywh {580 20 45 45} minimum 0.001 maximum 15 step 0.1 value 0.1
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
+      Fl_Dial delayfreq1 {
+        callback {write_function(controller,ENV_D,sizeof(float),0,&d->floatvalue);
+char s[20];
+sprintf(s,"%17.3f S",d->floatvalue);
+param->copy_label("ENV. DECAY");
+value->copy_label(s);}
+        tooltip decay xywh {580 66 45 45} minimum 0.001 maximum 15 step 0.1 value 0.1
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
+      Fl_Dial delayfreq2 {
+        callback {write_function(controller,ENV_B,sizeof(float),0,&b->floatvalue);
+char s[20];
+sprintf(s,"%19.3f",b->floatvalue);
+param->copy_label("ENV. BREAK POINT");
+value->copy_label(s);}
+        tooltip {break point} xywh {580 112 45 45} step 0.01 value 0.5
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
+      Fl_Dial delayfreq3 {
+        callback {write_function(controller,ENV_SWL,sizeof(float),0,&sw->floatvalue);
+char s[20];
+sprintf(s,"%17.3f S",sw->floatvalue);
+param->copy_label("ENV. SWELL");
+value->copy_label(s);}
+        tooltip swell xywh {580 158 45 45} minimum 0.001 maximum 15 step 0.1 value 3
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
+      Fl_Dial delayfreq4 {
+        callback {write_function(controller,ENV_SUS,sizeof(float),0,&su->floatvalue);
+char s[20];
+sprintf(s,"%19.3f",su->floatvalue);
+param->copy_label("ENV. SUSTAIN");
+value->copy_label(s);}
+        tooltip sustain xywh {580 203 45 45} step 0.01 value 0.75
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
+      Fl_Dial delayfreq5 {
+        callback {write_function(controller,ENV_R,sizeof(float),0,&r->floatvalue);
+char s[20];
+sprintf(s,"%17.3f S",r->floatvalue);
+param->copy_label("ENV. RELEASE");
+value->copy_label(s);}
+        tooltip release xywh {580 249 45 45} minimum 0.001 maximum 15 step 0.1 value 0.1
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
+      Fl_Box message {
+        tooltip {current output value} xywh {17 350 600 33}
+        code0 {\#include"draw_rgb5x7.h"}
+        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_red16seg_render;}
+        code3 {o->nchars = 18; o->periods = false;}
+        class AsciiDisplay
+      }
+      Fl_Box graph {
+        xywh {53 17 456 279}
+        class Graph
+      }
+      Fl_Box drygp {
+        xywh {25 25 35 17}
+        class XYhandle
+      }
+      Fl_Box gp0 {
+        xywh {25 25 35 17}
+        code0 {\#include"ffffltk_xy.h"}
+        code1 {\#include"draw_lushGraphPoint.h"}
+        class XYhandle
+      }
+      Fl_Box gp1 {
+        xywh {25 25 35 17}
+        class XYhandle
+      }
+      Fl_Box gp2 {
+        xywh {25 25 35 17}
+        class XYhandle
+      }
+      Fl_Box gp3 {
+        xywh {25 25 35 17}
+        class XYhandle
+      }
+      Fl_Box gp4 {
+        xywh {25 25 35 17}
+        class XYhandle
+      }
+      Fl_Box gp5 {
+        xywh {25 25 35 17}
+        class XYhandle
+      }
+      Fl_Box pd0 {
+        xywh {25 25 35 17}
+        class XYhandle
+      }
+      Fl_Box pdxb0 {
+        xywh {25 25 35 17}
+        code1 {\#include"draw_lushGraphXBound.h"}
+        class XYhandle
+      }
+      Fl_Box pdyb0 {
+        xywh {25 25 35 17}
+        code1 {\#include"draw_lushGraphYBound.h"}
+        class XYhandle
+      }
+    }
+  }
+  decl {LV2UI_Write_Function write_function;} {public local
+  }
+  decl {LV2UI_Controller controller;} {public local
+  }
+  Function {idle()} {open return_type void
+  } {
+    code {Fl::check();
+Fl::flush();} {}
+  }
+  Function {nonmodal(char* param, char* curval)} {open
+  } {
+    code {if(winder) delete winder;} {}
+    Fl_Window winder {
+      label {Set Exact Value} open
+      xywh {867 575 380 115} type Double visible
+    } {
+      Fl_Button {} {
+        label OK
+        callback {char* r = (char*)inpoot->value();
+unsigned int i;
+float val;
+if(!strcmp(winder->label(),"Set rule"))
+{
+if(r!=NULL && sscanf(r,"0x%2x",&i))
+{
+  val = i;
+  set_rule(val);
+  char s[20];
+  sprintf(s,"%18i",(int)rule);
+  value->copy_label(s);
+  param->copy_label("RULE");
+}
+else if(r!=NULL && sscanf(r,"%f",&val))
+{
+  if ( val > 255 ) val = 255;
+  if ( val < 0 ) val = 0;
+  set_rule(val);
+  char s[20];
+  sprintf(s,"%18i",(int)rule);
+  value->copy_label(s);
+  param->copy_label("RULE");
+}
+write_function(controller,RULE,sizeof(float),0,&rule);
+}
+else
+{
+if(r!=NULL && sscanf(r,"0x%4x",&i))
+{
+  val = i;
+  set_initial_condition(val);
+  char s[20];
+  sprintf(s,"%18i",(int)initial_condition);
+  value->copy_label(s);
+  param->copy_label("INIT. CONDITION");
+}
+else if(r!=NULL && sscanf(r,"%f",&val))
+{
+  if ( val > 65535 ) val = 65535;
+  if ( val < 0 ) val = 0;
+  set_initial_condition(val);
+  char s[20];
+  sprintf(s,"%18i",(int)initial_condition);
+  value->copy_label(s);
+  param->copy_label("INIT. CONDITION");
+}
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
+}
+
+delete winder;
+winder = NULL;}
+        xywh {232 79 50 25}
+      }
+      Fl_Button {} {
+        label Cancel
+        callback {delete winder;
+winder = NULL;}
+        xywh {291 79 76 25}
+      }
+      Fl_Input inpoot {
+        label {Enter Value:}
+        xywh {116 25 250 30}
+      }
+    }
+    code {winder->label(param);
+inpoot->value(curval);
+winder->show();} {}
+  }
+} 
