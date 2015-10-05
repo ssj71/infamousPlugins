@@ -22,9 +22,9 @@ class CaSynthUI {open
         class Background
       }
       Fl_Box logo {
-        xywh {3 108 47 107}
-        code0 {\#include"draw_infamousLogoTrans.h"}
-        code1 {o->drawing_h = cairo_code_draw_infamousLogoTrans_get_height(); o->drawing_w = cairo_code_draw_infamousLogoTrans_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoTrans_render;}
+        xywh {3 102 47 107}
+        code0 {\#include"draw_infamousLogo.h"}
+        code1 {o->drawing_h = cairo_code_draw_infamousLogo_get_height(); o->drawing_w = cairo_code_draw_infamousLogo_get_width(); o->drawing_f = &cairo_code_draw_infamousLogo_render;}
         code2 {o->stretch = false;}
         class Background
       }
@@ -52,14 +52,14 @@ class CaSynthUI {open
       Fl_Box fr {
         xywh {557 7 42 12}
         code0 {\#include"draw_lushLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
+        code1 {o->drawing_h = cairo_code_draw_lushFreqLabel_get_height(); o->drawing_w = cairo_code_draw_lushFreqLabel_get_width(); o->drawing_f = &cairo_code_draw_lushFreqLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box sh {
+      Fl_Box sh {selected
         xywh {553 301 52 39}
-        code0 {\#include"draw_casFrames.h"}
-        code1 {o->drawing_h = cairo_code_draw_casFrame_get_height(); o->drawing_w = cairo_code_draw_casFrame_get_width(); o->drawing_f = &cairo_code_draw_casFrame_render;}
+        code0 {\#include"draw_lushLabels.h"}
+        code1 {o->drawing_h = cairo_code_draw_lushShapeLabel_get_height(); o->drawing_w = cairo_code_draw_lushShapeLabel_get_width(); o->drawing_f = &cairo_code_draw_lushShapeLabel_render;}
         code2 {o->stretch = false;}
         class Background
       }
@@ -235,15 +235,66 @@ else
   gp4->deactivate();  
   gp5->deactivate();
   
-}} selected
+}}
         tooltip {rule, bit 0} xywh {32 296 20 20}
         code1 {\#include"draw_whiteTinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
         class Button
       }
       Fl_Button pitchdelayhide {
+        callback {if(pitchdelayhide->value())
+{
+  pd0->activate();
+  pd1->activate(); 
+  pd2->activate(); 
+  pd3->activate();  
+  pd4->activate();  
+  pd5->activate();
+  
+  pdxb0->activate();
+  pdxb1->activate(); 
+  pdxb2->activate(); 
+  pdxb3->activate();  
+  pdxb4->activate();  
+  pdxb5->activate(); 
+   
+  pdyb0->activate();
+  pdyb1->activate(); 
+  pdyb2->activate(); 
+  pdyb3->activate();  
+  pdyb4->activate();  
+  pdyb5->activate();
+}
+else
+{
+  pangainhide->value(1);
+  pd0->deactivate();
+  pd1->deactivate(); 
+  pd2->deactivate(); 
+  pd3->deactivate();  
+  pd4->deactivate();  
+  pd5->deactivate(); 
+  
+  pdxb0->deactivate();
+  pdxb1->deactivate(); 
+  pdxb2->deactivate(); 
+  pdxb3->deactivate();  
+  pdxb4->deactivate();  
+  pdxb5->deactivate(); 
+   
+  pdyb0->deactivate();
+  pdyb1->deactivate(); 
+  pdyb2->deactivate(); 
+  pdyb3->deactivate();  
+  pdyb4->deactivate();  
+  pdyb5->deactivate();
+
+  
+}}
         tooltip {initial condition, bit 15} xywh {10 318 20 20}
         code1 {\#include"draw_whiteTinyButton.h"}
+        code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
         class Button
       }
@@ -434,6 +485,18 @@ value->copy_label(s);}
         code3 {o->drawLabel=false;}
         class Dial
       }
+      Fl_Dial shape {
+        callback {write_function(controller,MASTER_GAIN,sizeof(float),0,&mastergain->floatvalue);
+char s[20];
+sprintf(s,"%19.3f",mastergain->floatvalue);
+param->copy_label("MASTER GAIN");
+value->copy_label(s);}
+        tooltip gain xywh {556 298 45 45} maximum 2 step 0.02 value 1
+        code1 {\#include"draw_flatDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code3 {o->drawLabel=false;}
+        class Dial
+      }
       Fl_Box message {
         tooltip {current output value} xywh {17 350 600 33}
         code0 {\#include"draw_rgb5x7.h"}
@@ -442,7 +505,7 @@ value->copy_label(s);}
         class AsciiDisplay
       }
       Fl_Group graph {open
-        xywh {53 17 456 279}
+        xywh {45 17 464 279}
       } {
         Fl_Box drygp {
           xywh {50 50 15 15}
