@@ -2,7 +2,7 @@
 #define DRAW_LUSHGRAPHYBOUND_H
 inline int cairo_code_draw_lushGraphYBound_get_width() { return 21; }
 inline int cairo_code_draw_lushGraphYBound_get_height() { return 3; }
-inline void cairo_code_draw_lushGraphYBound_render(cairo_t *cr) {
+inline void cairo_code_draw_lushGraphYBound_render(cairo_t *cr, float r, float g, float b) {
 cairo_surface_t *temp_surface;
 cairo_t *old_cr;
 cairo_pattern_t *pattern;
@@ -13,7 +13,7 @@ cairo_set_line_width(cr, 3.318619);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-pattern = cairo_pattern_create_rgba(1,0,0,1);
+pattern = cairo_pattern_create_rgba(r,g,b,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);

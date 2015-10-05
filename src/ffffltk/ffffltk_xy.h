@@ -137,7 +137,7 @@ public:
 
     void draw()
     {
-        if (damage() & FL_DAMAGE_ALL)
+        if (damage() & FL_DAMAGE_ALL && active())
         {
             cairo_t *cr = Fl::cairo_cc();
 

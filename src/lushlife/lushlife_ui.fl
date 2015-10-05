@@ -8,7 +8,7 @@ class CaSynthUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {786 433 630 400} type Double box UP_BOX resizable
+      xywh {665 774 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -21,7 +21,7 @@ class CaSynthUI {open
         code3 {o->drawing_h = cairo_code_draw_lushbg_get_height(); o->drawing_w = cairo_code_draw_lushbg_get_width(); o->drawing_f = &cairo_code_draw_lushbg_render;}
         class Background
       }
-      Fl_Box logo {selected
+      Fl_Box logo {
         xywh {3 108 47 107}
         code0 {\#include"draw_infamousLogoTrans.h"}
         code1 {o->drawing_h = cairo_code_draw_infamousLogoTrans_get_height(); o->drawing_w = cairo_code_draw_infamousLogoTrans_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoTrans_render;}
@@ -64,183 +64,187 @@ class CaSynthUI {open
         class Background
       }
       Fl_Button activate0 {
-        callback {unsigned char tmp = rule;
-if(rule7->value())
-  tmp |= 0x80;
+        callback {if(activate0->value())
+{
+    gp0->activate();
+    pd0->activate();
+    pdxb0->activate();
+    pdyb0->activate();
+    message->copy_label("dbl1          Active");
+}
 else
-  tmp &= ~0x80;
-rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);
-char s[20];
-sprintf(s,"%18i",(int)rule);
-value->copy_label(s);
-param->copy_label("RULE");
-cellgrid->rule = rule;
-cellgrid->redraw();}
+{
+    gp0->deactivate();
+    pd0->deactivate();
+    pdxb0->deactivate();
+    pdyb0->deactivate();
+    message->copy_label("dbl1             Off");
+}
+write_function(controller,ACTIVE0,sizeof(float),0,activate0->floatval);}
         tooltip {rule, bit 7} xywh {513 36 16 16}
-        code1 {\#include"draw_tinyButton.h"}
+        code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_redLED_render;}
         class Button
       }
       Fl_Button activate1 {
-        callback {unsigned char tmp = rule;
-if(rule6->value())
-  tmp |= 0x40;
+        callback {if(activate1->value())
+{
+    gp1->activate();
+    pd1->activate();
+    pdxb1->activate();
+    pdyb1->activate();
+    message->copy_label("dbl2          Active");
+}
 else
-  tmp &= ~0x40;
-rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);
-char s[20];
-sprintf(s,"%18i",(int)rule);
-value->copy_label(s);
-param->copy_label("RULE");
-cellgrid->rule = rule;
-cellgrid->redraw();}
+{
+    gp1->deactivate();
+    pd1->deactivate();
+    pdxb1->deactivate();
+    pdyb1->deactivate();
+    message->copy_label("dbl2             Off");
+}
+write_function(controller,ACTIVE1,sizeof(float),0,activate1->floatval);}
         tooltip {rule, bit 6} xywh {513 80 16 16}
-        code1 {\#include"draw_tinyButton.h"}
+        code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_blueLED_render;}
         class Button
       }
       Fl_Button activate2 {
-        callback {unsigned char tmp = rule;
-if(rule5->value())
-  tmp |= 0x20;
+        callback {if(activate2->value())
+{
+    gp2->activate();
+    pd2->activate();
+    pdxb2->activate();
+    pdyb2->activate();
+    message->copy_label("dbl3          Active");
+}
 else
-  tmp &= ~0x20;
-rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);
-char s[20];
-sprintf(s,"%18i",(int)rule);
-value->copy_label(s);
-param->copy_label("RULE");
-cellgrid->rule = rule;
-cellgrid->redraw();}
+{
+    gp2->deactivate();
+    pd2->deactivate();
+    pdxb2->deactivate();
+    pdyb2->deactivate();
+    message->copy_label("dbl3             Off");
+}
+write_function(controller,ACTIVE2,sizeof(float),0,activate2->floatval);}
         tooltip {rule, bit 5} xywh {513 126 16 16}
-        code1 {\#include"draw_tinyButton.h"}
+        code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_yellowLED_render;}
         class Button
       }
       Fl_Button activate3 {
-        callback {unsigned char tmp = rule;
-if(rule4->value())
-  tmp |= 0x10;
+        callback {if(activate3->value())
+{
+    gp3->activate();
+    pd3->activate();
+    pdxb3->activate();
+    pdyb3->activate();
+    message->copy_label("dbl4          Active");
+}
 else
-  tmp &= ~0x10;
-rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);
-char s[20];
-sprintf(s,"%18i",(int)rule);
-value->copy_label(s);
-param->copy_label("RULE");
-cellgrid->rule = rule;
-cellgrid->redraw();}
+{
+    gp3->deactivate();
+    pd3->deactivate();
+    pdxb3->deactivate();
+    pdyb3->deactivate();
+    message->copy_label("dbl4             Off");
+}
+write_function(controller,ACTIVE3,sizeof(float),0,activate3->floatval);}
         tooltip {rule, bit 4} xywh {513 172 16 16} value 1
-        code1 {\#include"draw_tinyButton.h"}
+        code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_greenLED_render;}
         class Button
       }
       Fl_Button activate4 {
-        callback {unsigned char tmp = rule;
-if(rule3->value())
-  tmp |= 0x08;
+        callback {if(activate4->value())
+{
+    gp4->activate();
+    pd4->activate();
+    pdxb4->activate();
+    pdyb4->activate();
+    message->copy_label("dbl5          Active");
+}
 else
-  tmp &= ~0x08;
-rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);
-char s[20];
-sprintf(s,"%18i",(int)rule);
-value->copy_label(s);
-param->copy_label("RULE");
-cellgrid->rule = rule;
-cellgrid->redraw();}
+{
+    gp4->deactivate();
+    pd4->deactivate();
+    pdxb4->deactivate();
+    pdyb4->deactivate();
+    message->copy_label("dbl5             Off");
+}
+write_function(controller,ACTIVE4,sizeof(float),0,activate4->floatval);}
         tooltip {rule, bit 3} xywh {513 218 16 16} value 1
-        code1 {\#include"draw_tinyButton.h"}
+        code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_orangeLED_render;}
         class Button
       }
       Fl_Button activate5 {
-        callback {unsigned char tmp = rule;
-if(rule2->value())
-  tmp |= 0x04;
+        callback {if(activate5->value())
+{
+    gp5->activate();
+    pd5->activate();
+    pdxb5->activate();
+    pdyb5->activate();
+    message->copy_label("dbl6          Active");
+}
 else
-  tmp &= ~0x04;
-rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);
-char s[20];
-sprintf(s,"%18i",(int)rule);
-value->copy_label(s);
-param->copy_label("RULE");
-cellgrid->rule = rule;
-cellgrid->redraw();}
+{
+    gp5->deactivate();
+    pd5->deactivate();
+    pdxb5->deactivate();
+    pdyb5->deactivate();
+    message->copy_label("dbl6             Off");
+}
+write_function(controller,ACTIVE5,sizeof(float),0,activate5->floatval);}
         tooltip {rule, bit 2} xywh {513 263 16 16} value 1
-        code1 {\#include"draw_tinyButton.h"}
+        code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_purpleLED_render;}
         class Button
       }
       Fl_Button sync {
-        callback {unsigned char tmp = rule;
-if(rule1->value())
-  tmp |= 0x02;
-else
-  tmp &= ~0x02;
-rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);
-char s[20];
-sprintf(s,"%18i",(int)rule);
-value->copy_label(s);
-param->copy_label("RULE");
-cellgrid->rule = rule;
-cellgrid->redraw();}
+        callback {write_function(controller,LFO_SYNC,sizeof(float),0,sync->floatval);
+param->copy_label("LFOs Sync'd");}
         tooltip {rule, bit 1} xywh {514 317 20 20} value 1
-        code1 {\#include"draw_tinyButton.h"}
-        code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        code1 {\#include"draw_whiteTinyButton.h"}
+        code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
         class Button
       }
       Fl_Button pangainhide {
-        callback {unsigned char tmp = rule;
-if(rule0->value())
-  tmp |= 0x01;
+        callback {if(pangainhide->value())
+{
+  gp0->activate();
+  gp1->activate(); 
+  gp2->activate(); 
+  gp3->activate();  
+  gp4->activate();  
+  gp5->activate();
+}
 else
-  tmp &= ~0x01;
-rule = tmp;
-write_function(controller,RULE,sizeof(float),0,&rule);
-char s[20];
-sprintf(s,"%18i",(int)rule);
-value->copy_label(s);
-param->copy_label("RULE");
-cellgrid->rule = rule;
-cellgrid->redraw();}
+{
+  pitchdelayhide->value(1);
+  gp0->deactivate();
+  gp1->deactivate(); 
+  gp2->deactivate(); 
+  gp3->deactivate();  
+  gp4->deactivate();  
+  gp5->deactivate();
+  
+}} selected
         tooltip {rule, bit 0} xywh {32 296 20 20}
-        code1 {\#include"draw_tinyButton.h"}
-        code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        code1 {\#include"draw_whiteTinyButton.h"}
+        code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
         class Button
       }
       Fl_Button pitchdelayhide {
-        callback {unsigned short tmp = initial_condition;
-if(init15->value())
-  tmp |= 0x8000;
-else
-  tmp &= ~0x8000;
-initial_condition = tmp;
-write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
-char s[20];
-sprintf(s,"%18i",(int)initial_condition);
-value->copy_label(s);
-param->copy_label("INIT. CONDITION");
-cellgrid->initial_condition = initial_condition;
-cellgrid->redraw();}
         tooltip {initial condition, bit 15} xywh {10 318 20 20}
-        code1 {\#include"draw_tinyButton.h"}
-        code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_tinyButton_get_height(); o->drawing_w = cairo_code_draw_tinyButton_get_width(); o->drawing_f = &cairo_code_draw_tinyButton_render;}
+        code1 {\#include"draw_whiteTinyButton.h"}
+        code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
         class Button
       }
       Fl_Dial mastergain {
@@ -437,53 +441,123 @@ value->copy_label(s);}
         code3 {o->nchars = 18; o->periods = false;}
         class AsciiDisplay
       }
-      Fl_Box graph {
+      Fl_Group graph {open
         xywh {53 17 456 279}
-        class Graph
-      }
-      Fl_Box drygp {
-        xywh {25 25 35 17}
-        class XYhandle
-      }
-      Fl_Box gp0 {
-        xywh {25 25 35 17}
-        code0 {\#include"ffffltk_xy.h"}
-        code1 {\#include"draw_lushGraphPoint.h"}
-        class XYhandle
-      }
-      Fl_Box gp1 {
-        xywh {25 25 35 17}
-        class XYhandle
-      }
-      Fl_Box gp2 {
-        xywh {25 25 35 17}
-        class XYhandle
-      }
-      Fl_Box gp3 {
-        xywh {25 25 35 17}
-        class XYhandle
-      }
-      Fl_Box gp4 {
-        xywh {25 25 35 17}
-        class XYhandle
-      }
-      Fl_Box gp5 {
-        xywh {25 25 35 17}
-        class XYhandle
-      }
-      Fl_Box pd0 {
-        xywh {25 25 35 17}
-        class XYhandle
-      }
-      Fl_Box pdxb0 {
-        xywh {25 25 35 17}
-        code1 {\#include"draw_lushGraphXBound.h"}
-        class XYhandle
-      }
-      Fl_Box pdyb0 {
-        xywh {25 25 35 17}
-        code1 {\#include"draw_lushGraphYBound.h"}
-        class XYhandle
+      } {
+        Fl_Box drygp {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box gp0 {
+          xywh {50 50 15 15}
+          code0 {\#include"ffffltk_xy.h"}
+          code1 {\#include"draw_lushGraphPoint.h"}
+          class XYhandle
+        }
+        Fl_Box gp1 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box gp2 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box gp3 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box gp4 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box gp5 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box pd0 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box pdxb0 {
+          xywh {55 50 4 15}
+          code1 {\#include"draw_lushGraphXBound.h"}
+          class XYhandle
+        }
+        Fl_Box pdyb0 {
+          xywh {45 50 15 4}
+          code1 {\#include"draw_lushGraphYBound.h"}
+          class XYhandle
+        }
+        Fl_Box pd1 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box pdxb1 {
+          xywh {55 50 4 15}
+          code1 {\#include"draw_lushGraphXBound.h"}
+          class XYhandle
+        }
+        Fl_Box pdyb1 {
+          xywh {45 50 15 4}
+          code1 {\#include"draw_lushGraphYBound.h"}
+          class XYhandle
+        }
+        Fl_Box pd2 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box pdxb2 {
+          xywh {55 50 4 15}
+          code1 {\#include"draw_lushGraphXBound.h"}
+          class XYhandle
+        }
+        Fl_Box pdyb2 {
+          xywh {45 50 15 4}
+          code1 {\#include"draw_lushGraphYBound.h"}
+          class XYhandle
+        }
+        Fl_Box pd3 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box pdxb3 {
+          xywh {55 50 4 15}
+          code1 {\#include"draw_lushGraphXBound.h"}
+          class XYhandle
+        }
+        Fl_Box pdyb3 {
+          xywh {45 50 15 4}
+          code1 {\#include"draw_lushGraphYBound.h"}
+          class XYhandle
+        }
+        Fl_Box pd4 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box pdxb4 {
+          xywh {55 50 4 15}
+          code1 {\#include"draw_lushGraphXBound.h"}
+          class XYhandle
+        }
+        Fl_Box pdyb4 {
+          xywh {45 50 15 4}
+          code1 {\#include"draw_lushGraphYBound.h"}
+          class XYhandle
+        }
+        Fl_Box pd5 {
+          xywh {50 50 15 15}
+          class XYhandle
+        }
+        Fl_Box pdxb5 {
+          xywh {55 50 4 15}
+          code1 {\#include"draw_lushGraphXBound.h"}
+          class XYhandle
+        }
+        Fl_Box pdyb5 {
+          xywh {45 50 15 4}
+          code1 {\#include"draw_lushGraphYBound.h"}
+          class XYhandle
+        }
       }
     }
   }
@@ -495,83 +569,5 @@ value->copy_label(s);}
   } {
     code {Fl::check();
 Fl::flush();} {}
-  }
-  Function {nonmodal(char* param, char* curval)} {open
-  } {
-    code {if(winder) delete winder;} {}
-    Fl_Window winder {
-      label {Set Exact Value} open
-      xywh {867 575 380 115} type Double visible
-    } {
-      Fl_Button {} {
-        label OK
-        callback {char* r = (char*)inpoot->value();
-unsigned int i;
-float val;
-if(!strcmp(winder->label(),"Set rule"))
-{
-if(r!=NULL && sscanf(r,"0x%2x",&i))
-{
-  val = i;
-  set_rule(val);
-  char s[20];
-  sprintf(s,"%18i",(int)rule);
-  value->copy_label(s);
-  param->copy_label("RULE");
-}
-else if(r!=NULL && sscanf(r,"%f",&val))
-{
-  if ( val > 255 ) val = 255;
-  if ( val < 0 ) val = 0;
-  set_rule(val);
-  char s[20];
-  sprintf(s,"%18i",(int)rule);
-  value->copy_label(s);
-  param->copy_label("RULE");
-}
-write_function(controller,RULE,sizeof(float),0,&rule);
-}
-else
-{
-if(r!=NULL && sscanf(r,"0x%4x",&i))
-{
-  val = i;
-  set_initial_condition(val);
-  char s[20];
-  sprintf(s,"%18i",(int)initial_condition);
-  value->copy_label(s);
-  param->copy_label("INIT. CONDITION");
-}
-else if(r!=NULL && sscanf(r,"%f",&val))
-{
-  if ( val > 65535 ) val = 65535;
-  if ( val < 0 ) val = 0;
-  set_initial_condition(val);
-  char s[20];
-  sprintf(s,"%18i",(int)initial_condition);
-  value->copy_label(s);
-  param->copy_label("INIT. CONDITION");
-}
-write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
-}
-
-delete winder;
-winder = NULL;}
-        xywh {232 79 50 25}
-      }
-      Fl_Button {} {
-        label Cancel
-        callback {delete winder;
-winder = NULL;}
-        xywh {291 79 76 25}
-      }
-      Fl_Input inpoot {
-        label {Enter Value:}
-        xywh {116 25 250 30}
-      }
-    }
-    code {winder->label(param);
-inpoot->value(curval);
-winder->show();} {}
   }
 } 

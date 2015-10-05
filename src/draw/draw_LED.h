@@ -43,6 +43,38 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
         gd = 0;
         bd = .4;
         break;
+    case 5://orange
+        r = 1;
+        g = 0.33333;
+        b = 0;
+        rd = .3;
+        gd = .1;
+        bd = 0;
+        break;
+    case 6://yellow
+        r = 0.92157;
+        g = 0.92157;
+        b = 0;
+        rd = .2;
+        gd = .2;
+        bd = 0;
+        break;
+    case 7://purple
+        r = 0.92157;
+        g = 0.92157;
+        b = 0;
+        rd = .2;
+        gd = .2;
+        bd = 0;
+        break;
+    case 8://white
+        r = 1;
+        g = 1;
+        b = 1;
+        rd = .1;
+        gd = .1;
+        bd = .1;
+        break;
     default://red
         r = 1;
         g = 0;
@@ -151,5 +183,21 @@ inline void cairo_code_draw_greenLED_render(cairo_t *cr, int val)
 inline void cairo_code_draw_blueLED_render(cairo_t *cr, int val)
 {
     cairo_code_draw_LED_render(cr, val,4);
+}
+inline void cairo_code_draw_orangeLED_render(cairo_t *cr, int val)
+{
+    cairo_code_draw_LED_render(cr, val,5);
+}
+inline void cairo_code_draw_yellowLED_render(cairo_t *cr, int val)
+{
+    cairo_code_draw_LED_render(cr, val,6);
+}
+inline void cairo_code_draw_purpleLED_render(cairo_t *cr, int val)
+{
+    cairo_code_draw_LED_render(cr, val,7);
+}
+inline void cairo_code_draw_whiteLED_render(cairo_t *cr, int val)
+{
+    cairo_code_draw_LED_render(cr, val,8);
 }
 #endif
