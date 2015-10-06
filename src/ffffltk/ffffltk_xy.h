@@ -86,6 +86,8 @@ public:
         unitsx[0] = 0;
         unitsy[0] = 0;
         lock2int = 0;
+        squaredmaxx = 0;
+        squaredmaxy = 0;
 
         clickOffsetY = 0;
         mouseClicked = false;
@@ -94,7 +96,7 @@ public:
 
     int x, y, w, h;
 
-    Fl_Valuator X,Y;//hidden valuators
+    Fl_Valuator Xv,Yv;//hidden valuators
 
     int clickOffsetY;
     int clickOffsetX;
@@ -111,14 +113,19 @@ public:
     char unitsx[6];
     char unitsy[6];
     int lock2int;//flag to draw only integer values 
+    float squaredmaxx;//max if meant to be squared (for log approx)
+    float squaredmaxy;//max if meant to be squared (for log approx)
 
     static void set_ffffltk_valuex(void* obj, float val)
     {
         XYhandle* me = (XYhandle*)obj;
-        if ( val > me->X.maximum() ) val = me->X.maximum();
-        if ( val < me->X.minimum() ) val = me->X.minimum();
-        me->X.set_value(val);
-        me->floatvaluex = val;
+        if ( val > me->Xv.maximum() ) val = me->Xv.maximum();
+        if ( val < me->Xv.minimum() ) val = me->Xv.minimum();
+        me->Xv.set_value(val);
+        if(me->squaredmaxx)
+            me->floatvaluex = val*val*me->squaredmaxx;
+        else
+            me->floatvaluex = val;
 
         me->redraw();
         me->do_callback();
@@ -126,10 +133,13 @@ public:
     static void set_ffffltk_valuey(void* obj, float val)
     {
         XYhandle* me = (XYhandle*)obj;
-        if ( val > me->Y.maximum() ) val = me->Y.maximum();
-        if ( val < me->Y.minimum() ) val = me->Y.minimum();
-        me->Y.set_value(val);
-        me->floatvaluey = val;
+        if ( val > me->Yv.maximum() ) val = me->Yv.maximum();
+        if ( val < me->Yv.minimum() ) val = me->Yv.minimum();
+        me->Yv.set_value(val);
+        if(me->squaredmaxy)
+            me->floatvaluey = val*val*me->squaredmaxy;
+        else
+            me->floatvaluey = val;
 
         me->redraw();
         me->do_callback();
@@ -170,13 +180,13 @@ public:
     }
 
 
-    void resize(int X, int Y, int W, int H)
+    void resize(int _X, int _Y, int _W, int _H)
     {
-        Fl_Widget::resize(X,Y,W,H);
-        x = X;
-        y = Y;
-        w = W;
-        h = H;
+        Fl_Widget::resize(_X,_Y,_W,_H);
+        x = _X;
+        y = _Y;
+        w = _W;
+        h = _H;
         redraw();
     }
 
@@ -195,8 +205,8 @@ public:
             //highlight = 1;
             if(Fl::event_button() == FL_MIDDLE_MOUSE || Fl::event_button() == FL_RIGHT_MOUSE)
             {
-                entervalx.show(X.value(),(char*)X.tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
-                entervaly.show(Y.value(),(char*)Y.tooltip(),unitsy,(void*)this,set_ffffltk_valuey);
+                entervalx.show(Xv.value(),(char*)Xv.tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
+                entervaly.show(Yv.value(),(char*)Yv.tooltip(),unitsy,(void*)this,set_ffffltk_valuey);
             }
             return 1;
         case FL_DRAG:
@@ -221,15 +231,21 @@ public:
                 if(pos > g->y()+g->h() - h) pos = g->y() + g->h() - h;
                 y = pos;
 
-                val = ( (x - g->x()) / (g->w() - w) ) * (X.maximum() - X.minimum()) + X.minimum();
-                X.set_value(val);
+                val = ( (x - g->x()) / (g->w() - w) ) * (Xv.maximum() - Xv.minimum()) + Xv.minimum();
+                Xv.set_value(val);
                 if(lock2int) val = (int)val;
-                floatvaluex = val;
+                if(squaredmaxx)
+                    floatvaluex = val*val*squaredmaxx;
+                else
+                    floatvaluex = val;
 
-                val = ( (g->y() - y) / (g->h() - h) ) * (Y.maximum() - Y.minimum()) + Y.minimum();
-                Y.set_value(val);
+                val = ( (g->y() - y) / (g->h() - h) ) * (Yv.maximum() - Yv.minimum()) + Yv.minimum();
+                Yv.set_value(val);
                 if(lock2int) val = (int)val;
-                floatvaluey = val;
+                if(squaredmaxy)
+                    floatvaluey = val*val*squaredmaxy;
+                else
+                    floatvaluey = val;
 
                 redraw();
                 do_callback(); // makes FLTK call "extra" code entered in FLUID

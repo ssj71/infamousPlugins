@@ -8,7 +8,7 @@ class CaSynthUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {347 425 630 400} type Double box UP_BOX resizable
+      xywh {673 703 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -70,7 +70,7 @@ class CaSynthUI {open
     pd0->activate();
     pdxb0->activate();
     pdyb0->activate();
-    message->copy_label("dbl1          Active");
+    message->copy_label("dbl1          Active", RGBAsciiDisplay::RED_COLOR);
 }
 else
 {
@@ -78,7 +78,7 @@ else
     pd0->deactivate();
     pdxb0->deactivate();
     pdyb0->deactivate();
-    message->copy_label("dbl1             Off");
+    message->copy_label("dbl1             Off", RGBAsciiDisplay::RED_COLOR);
 }
 write_function(controller,ACTIVE0,sizeof(float),0,activate0->floatvalue);}
         tooltip {rule, bit 7} xywh {513 36 16 16}
@@ -94,7 +94,7 @@ write_function(controller,ACTIVE0,sizeof(float),0,activate0->floatvalue);}
     pd1->activate();
     pdxb1->activate();
     pdyb1->activate();
-    message->copy_label("dbl2          Active");
+    message->copy_label("dbl2          Active", RGBAsciiDisplay::BLUE_COLOR);
 }
 else
 {
@@ -102,7 +102,7 @@ else
     pd1->deactivate();
     pdxb1->deactivate();
     pdyb1->deactivate();
-    message->copy_label("dbl2             Off");
+    message->copy_label("dbl2             Off", RGBAsciiDisplay::BLUE_COLOR);
 }
 write_function(controller,ACTIVE1,sizeof(float),0,activate1->floatvalue);}
         tooltip {rule, bit 6} xywh {513 80 16 16}
@@ -209,7 +209,7 @@ write_function(controller,ACTIVE5,sizeof(float),0,activate5->floatvalue);}
       }
       Fl_Button sync {
         callback {write_function(controller,SYNCLFO,sizeof(float),0,sync->floatvalue);
-param->copy_label("LFOs Sync'd");}
+message->copy_label("LFOs Sync'd", RGBAsciiDisplay::WHITE_COLOR);}
         tooltip {rule, bit 1} xywh {514 317 20 20} value 1
         code1 {\#include"draw_whiteTinyButton.h"}
         code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
@@ -302,7 +302,7 @@ else
         callback {write_function(controller,GAIN,sizeof(float),0,&mastergain->floatvalue);
 char s[25];
 sprintf(s,"Master Gain %10.3f",mastergain->floatvalue);
-value->copy_label(s);}
+value->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
         tooltip gain xywh {118 300 45 45} maximum 2 step 0.02 value 1
         code1 {\#include"draw_redDial.h"}
         code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
@@ -315,7 +315,7 @@ pitchfreq0->floatvalue*=30;
 write_function(controller,SLFOF0,sizeof(float),0,&pitchfreq0->floatvalue);
 char s[25];
 sprintf(s,"Detune LFO Freq %4.3f Hz",(int)pitchfreq0->floatvalue);
-message->copy_label(s);}
+message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
         tooltip {Detune LFO Frequency} xywh {532 20 45 45} step 0.01
         code1 {\#include"draw_redDial.h"}
         code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
@@ -328,7 +328,7 @@ pitchfreq1->floatvalue*=30;
 write_function(controller,SLFOF1,sizeof(float),0,&pitchfreq1->floatvalue);
 char s[25];
 sprintf(s,"Detune LFO Freq %4.3f Hz",(int)pitchfreq1->floatvalue);
-message->copy_label(s);}
+message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
         tooltip waveform xywh {532 66 45 45} step 0.01
         code1 {\#include"draw_redDial.h"}
         code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
@@ -393,7 +393,7 @@ delayfreq0->floatvalue*=30;
 write_function(controller,DLFOF0,sizeof(float),0,&delayfreq0->floatvalue);
 char s[25];
 sprintf(s,"Delay LFO Freq %5.3f Hz",(int)delayfreq0->floatvalue);
-message->copy_label(s);}
+message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
         tooltip attack xywh {580 20 45 45} step 0.01 value 0.1
         code1 {\#include"draw_redDial.h"}
         code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
@@ -406,7 +406,7 @@ delayfreq1->floatvalue*=30;
 write_function(controller,DLFOF1,sizeof(float),0,&delayfreq1->floatvalue);
 char s[25];
 sprintf(s,"Delay LFO Freq %5.3f Hz",(int)delayfreq1->floatvalue);
-message->copy_label(s);}
+message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
         tooltip decay xywh {580 66 45 45} step 0.01 value 0.1
         code1 {\#include"draw_redDial.h"}
         code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
@@ -469,7 +469,7 @@ message->copy_label(s);}
         callback {write_function(controller,LFOSHAPE,sizeof(float),0,&shape->floatvalue);
 char s[25];
 sprintf(s,"LFO Shape %13.3f",mastergain->floatvalue);
-message->copy_label(s);} selected
+message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
         tooltip gain xywh {556 298 45 45} step 0.01 value 0.9
         code1 {\#include"draw_redDial.h"}
         code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
@@ -479,125 +479,203 @@ message->copy_label(s);} selected
       Fl_Box message {
         tooltip {current output value} xywh {17 350 600 33}
         code0 {\#include"draw_rgb5x7.h"}
-        code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_red16seg_render;}
+        code2 {o->drawing_h = cairo_code_draw_rgb5x7_get_height(); o->drawing_w = cairo_code_draw_rgb5x7_get_width(); o->drawing_f = &cairo_code_draw_rgb5x7_render;}
         code3 {o->nchars = 23;}
-        class AsciiDisplay
+        class RGBAsciiDisplay
       }
       Fl_Group graph {open
         xywh {45 17 464 279}
       } {
         Fl_Box drygp {
+          callback {write_function(controller,DRYGAIN,sizeof(float),0,&drygp->floatvaluey);
+write_function(controller,DRYPAN,sizeof(float),0,&drygp->floatvaluex);
+char s[25];
+sprintf(s,"Dry Gain %4.3f, Pan %4.2f",drygp->floatvaluey,drygp->floatvaluex);
+message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointw_render;}
           class XYhandle
         }
         Fl_Box gp0 {
+          callback {write_function(controller,GAIN0,sizeof(float),0,&gp0->floatvaluey);
+write_function(controller,PAN0,sizeof(float),0,&gp0->floatvaluex);
+char s[25];
+sprintf(s,"Gain %6.3f, Pan %6.2f",gp0->floatvaluey,gp0->floatvaluex);
+message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
           xywh {50 50 15 15}
-          code0 {\#include"ffffltk_xy.h"}
-          code1 {\#include"draw_lushGraphPoint.h"}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointr_render;}
           class XYhandle
         }
         Fl_Box gp1 {
+          callback {write_function(controller,GAIN1,sizeof(float),0,&gp1->floatvaluey);
+write_function(controller,PAN1,sizeof(float),0,&gp1->floatvaluex);
+char s[25];
+sprintf(s,"Gain %6.3f, Pan %6.2f",gp1->floatvaluey,gp1->floatvaluex);
+message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointb_render;}
           class XYhandle
         }
         Fl_Box gp2 {
+          callback {write_function(controller,GAIN2,sizeof(float),0,&gp2->floatvaluey);
+write_function(controller,PAN2,sizeof(float),0,&gp2->floatvaluex);
+char s[25];
+sprintf(s,"Gain %6.3f, Pan %6.2f",gp2->floatvaluey,gp2->floatvaluex);
+message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointy_render;}
           class XYhandle
         }
         Fl_Box gp3 {
+          callback {write_function(controller,GAIN3,sizeof(float),0,&gp3->floatvaluey);
+write_function(controller,PAN3,sizeof(float),0,&gp3->floatvaluex);
+char s[25];
+sprintf(s,"Gain %6.3f, Pan %6.2f",gp3->floatvaluey,gp3->floatvaluex);
+message->copy_label(s);}
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointg_render;}
           class XYhandle
         }
         Fl_Box gp4 {
+          callback {write_function(controller,GAIN4,sizeof(float),0,&gp4->floatvaluey);
+write_function(controller,PAN4,sizeof(float),0,&gp4->floatvaluex);
+char s[25];
+sprintf(s,"Gain %6.3f, Pan %6.2f",gp4->floatvaluey,gp4->floatvaluex);
+message->copy_label(s);}
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointo_render;}
           class XYhandle
         }
         Fl_Box gp5 {
+          callback {write_function(controller,GAIN5,sizeof(float),0,&gp5->floatvaluey);
+write_function(controller,PAN5,sizeof(float),0,&gp5->floatvaluex);
+char s[25];
+sprintf(s,"Gain %6.3f, Pan %6.2f",gp5->floatvaluey,gp5->floatvaluex);
+message->copy_label(s);}
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointp_render;}
           class XYhandle
         }
         Fl_Box pd0 {
+          callback {write_function(controller,DETUNE5,sizeof(float),0,&pd0->floatvaluey);
+write_function(controller,DELAY5,sizeof(float),0,&pd0->floatvaluex);
+pdxb0->position(pd0->x()+xos0,pd0->y());
+pdyb0->position(pd0->x(),pd0->y()+yos0);
+char s[25];
+sprintf(s,"Dtn %4.1fcnt, Dly %4.1fms",pd5->floatvaluey,pd5->floatvaluex);
+message->copy_label(s);} selected
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdxb0 {
+          callback {pdxb0->floatvaluex *= pdxb0->floatvaluex;
+pdxb0->floatvaluex *= 150;
+xos0 = pdxb0->floatvaluex - pd0->floatvaluex;
+write_function(controller,DLLFOAMT0,sizeof(float),0,&xos0);
+pdxb0->position(pdxb0->x(),pd0->y());//lock y
+char s[25];
+sprintf(s,"Delay LFO Amplitude %6.2f",xos0);
+message->copy_label(s);}
           xywh {55 50 4 15}
-          code1 {\#include"draw_lushGraphXBound.h"}
+          code0 {\#include"draw_lushGraphXBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushXBoundr_render;}
           class XYhandle
         }
         Fl_Box pdyb0 {
           xywh {45 50 15 4}
-          code1 {\#include"draw_lushGraphYBound.h"}
+          code0 {\#include"draw_lushGraphYBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushYBoundr_render;}
           class XYhandle
         }
         Fl_Box pd1 {
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointb_render;}
           class XYhandle
         }
         Fl_Box pdxb1 {
           xywh {55 50 4 15}
-          code1 {\#include"draw_lushGraphXBound.h"}
+          code0 {\#include"draw_lushGraphXBound.h"}
           class XYhandle
         }
         Fl_Box pdyb1 {
           xywh {45 50 15 4}
-          code1 {\#include"draw_lushGraphYBound.h"}
+          code0 {\#include"draw_lushGraphYBound.h"}
           class XYhandle
         }
         Fl_Box pd2 {
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointy_render;}
           class XYhandle
         }
         Fl_Box pdxb2 {
           xywh {55 50 4 15}
-          code1 {\#include"draw_lushGraphXBound.h"}
+          code0 {\#include"draw_lushGraphXBound.h"}
           class XYhandle
         }
         Fl_Box pdyb2 {
           xywh {45 50 15 4}
-          code1 {\#include"draw_lushGraphYBound.h"}
+          code0 {\#include"draw_lushGraphYBound.h"}
           class XYhandle
         }
         Fl_Box pd3 {
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointg_render;}
           class XYhandle
         }
         Fl_Box pdxb3 {
           xywh {55 50 4 15}
-          code1 {\#include"draw_lushGraphXBound.h"}
+          code0 {\#include"draw_lushGraphXBound.h"}
           class XYhandle
         }
         Fl_Box pdyb3 {
           xywh {45 50 15 4}
-          code1 {\#include"draw_lushGraphYBound.h"}
+          code0 {\#include"draw_lushGraphYBound.h"}
           class XYhandle
         }
         Fl_Box pd4 {
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointo_render;}
           class XYhandle
         }
         Fl_Box pdxb4 {
           xywh {55 50 4 15}
-          code1 {\#include"draw_lushGraphXBound.h"}
+          code0 {\#include"draw_lushGraphXBound.h"}
           class XYhandle
         }
         Fl_Box pdyb4 {
           xywh {45 50 15 4}
-          code1 {\#include"draw_lushGraphYBound.h"}
+          code0 {\#include"draw_lushGraphYBound.h"}
           class XYhandle
         }
         Fl_Box pd5 {
           xywh {50 50 15 15}
+          code0 {\#include"draw_lushGraphPoint.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointp_render;}
           class XYhandle
         }
         Fl_Box pdxb5 {
           xywh {55 50 4 15}
-          code1 {\#include"draw_lushGraphXBound.h"}
+          code0 {\#include"draw_lushGraphXBound.h"}
           class XYhandle
         }
         Fl_Box pdyb5 {
           xywh {45 50 15 4}
-          code1 {\#include"draw_lushGraphYBound.h"}
+          code0 {\#include"draw_lushGraphYBound.h"}
+          code1 {\#include"draw_lushGraphYBound.h"o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointw_render;}
           class XYhandle
         }
       }
@@ -611,5 +689,30 @@ message->copy_label(s);} selected
   } {
     code {Fl::check();
 Fl::flush();} {}
+  }
+  decl {float xos0;} {
+    comment {x offfset between pitch/delay point and lfo amp bound} private local
+  }
+  decl {float xos1;} {private local
+  }
+  decl {float xos2;} {private local
+  }
+  decl {float xos3;} {private local
+  }
+  decl {float xos4;} {private local
+  }
+  decl {float xos5;} {private local
+  }
+  decl {float yos0;} {private local
+  }
+  decl {float yos1;} {private local
+  }
+  decl {float yos2;} {private local
+  }
+  decl {float yos3;} {private local
+  }
+  decl {float yos4;} {private local
+  }
+  decl {float yos0;} {private local
   }
 } 

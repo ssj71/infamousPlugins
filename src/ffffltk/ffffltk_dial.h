@@ -81,6 +81,7 @@ public:
         floatvalue = value();
         units[0] = 0;
         lock2int = 0;
+        squaredmax = 0;
         drawLabel = true;
 
         mouseClickedY = 0;
@@ -103,6 +104,7 @@ public:
     float floatvalue;
     char units[6];
     int lock2int;//flag to draw only integer values
+    float squaredmax;
 
     static void set_ffffltk_value(void* obj, float val)
     {
@@ -110,7 +112,10 @@ public:
         if ( val > me->maximum() ) val = me->maximum();
         if ( val < me->minimum() ) val = me->minimum();
         me->set_value(val);
-        me->floatvalue = val;
+        if(me->squaredmax)
+            me->floatvalue = val*val*me->squaredmax;
+        else
+            me->floatvalue = val;
 
         me->redraw();
         me->do_callback();
@@ -225,7 +230,10 @@ public:
 
                 set_value( val );
                 if(lock2int) val = (int)val;
-                floatvalue = val;
+                if(squaredmax)
+                    floatvalue = val*val*squaredmax;
+                else
+                    floatvalue = val;
 
                 mouseClickedY = Fl::event_y();
                 if(lock2int)
@@ -243,7 +251,10 @@ public:
             // highlight = 0;
             Fl_Widget::copy_label("");
             redraw();
-            floatvalue = value();
+            if(squaredmax)
+                floatvalue = value()*value()*squaredmax;
+            else
+                floatvalue = value();
             // never do anything after a callback, as the callback
             // may delete the widget!
             //}
