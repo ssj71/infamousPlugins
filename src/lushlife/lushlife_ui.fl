@@ -8,7 +8,7 @@ class CaSynthUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {665 774 630 400} type Double box UP_BOX resizable
+      xywh {347 425 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -56,7 +56,7 @@ class CaSynthUI {open
         code2 {o->stretch = false;}
         class Background
       }
-      Fl_Box sh {selected
+      Fl_Box sh {
         xywh {553 301 52 39}
         code0 {\#include"draw_lushLabels.h"}
         code1 {o->drawing_h = cairo_code_draw_lushShapeLabel_get_height(); o->drawing_w = cairo_code_draw_lushShapeLabel_get_width(); o->drawing_f = &cairo_code_draw_lushShapeLabel_render;}
@@ -80,7 +80,7 @@ else
     pdyb0->deactivate();
     message->copy_label("dbl1             Off");
 }
-write_function(controller,ACTIVE0,sizeof(float),0,activate0->floatval);}
+write_function(controller,ACTIVE0,sizeof(float),0,activate0->floatvalue);}
         tooltip {rule, bit 7} xywh {513 36 16 16}
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -104,7 +104,7 @@ else
     pdyb1->deactivate();
     message->copy_label("dbl2             Off");
 }
-write_function(controller,ACTIVE1,sizeof(float),0,activate1->floatval);}
+write_function(controller,ACTIVE1,sizeof(float),0,activate1->floatvalue);}
         tooltip {rule, bit 6} xywh {513 80 16 16}
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -128,7 +128,7 @@ else
     pdyb2->deactivate();
     message->copy_label("dbl3             Off");
 }
-write_function(controller,ACTIVE2,sizeof(float),0,activate2->floatval);}
+write_function(controller,ACTIVE2,sizeof(float),0,activate2->floatvalue);}
         tooltip {rule, bit 5} xywh {513 126 16 16}
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -152,7 +152,7 @@ else
     pdyb3->deactivate();
     message->copy_label("dbl4             Off");
 }
-write_function(controller,ACTIVE3,sizeof(float),0,activate3->floatval);}
+write_function(controller,ACTIVE3,sizeof(float),0,activate3->floatvalue);}
         tooltip {rule, bit 4} xywh {513 172 16 16} value 1
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -176,7 +176,7 @@ else
     pdyb4->deactivate();
     message->copy_label("dbl5             Off");
 }
-write_function(controller,ACTIVE4,sizeof(float),0,activate4->floatval);}
+write_function(controller,ACTIVE4,sizeof(float),0,activate4->floatvalue);}
         tooltip {rule, bit 3} xywh {513 218 16 16} value 1
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -200,7 +200,7 @@ else
     pdyb5->deactivate();
     message->copy_label("dbl6             Off");
 }
-write_function(controller,ACTIVE5,sizeof(float),0,activate5->floatval);}
+write_function(controller,ACTIVE5,sizeof(float),0,activate5->floatvalue);}
         tooltip {rule, bit 2} xywh {513 263 16 16} value 1
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -208,7 +208,7 @@ write_function(controller,ACTIVE5,sizeof(float),0,activate5->floatval);}
         class Button
       }
       Fl_Button sync {
-        callback {write_function(controller,LFO_SYNC,sizeof(float),0,sync->floatval);
+        callback {write_function(controller,SYNCLFO,sizeof(float),0,sync->floatvalue);
 param->copy_label("LFOs Sync'd");}
         tooltip {rule, bit 1} xywh {514 317 20 20} value 1
         code1 {\#include"draw_whiteTinyButton.h"}
@@ -299,201 +299,180 @@ else
         class Button
       }
       Fl_Dial mastergain {
-        callback {write_function(controller,MASTER_GAIN,sizeof(float),0,&mastergain->floatvalue);
-char s[20];
-sprintf(s,"%19.3f",mastergain->floatvalue);
-param->copy_label("MASTER GAIN");
+        callback {write_function(controller,GAIN,sizeof(float),0,&mastergain->floatvalue);
+char s[25];
+sprintf(s,"Master Gain %10.3f",mastergain->floatvalue);
 value->copy_label(s);}
         tooltip gain xywh {118 300 45 45} maximum 2 step 0.02 value 1
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial pitchfreq0 {
-        callback {write_function(controller,CHANNEL,sizeof(float),0,&channel->floatvalue);
-char s[20];
-sprintf(s,"%18i",(int)channel->floatvalue);
-param->copy_label("MIDI CHANNEL");
-value->copy_label(s);}
-        tooltip {MIDI channel} xywh {532 20 45 45} maximum 16 step 0.5
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->drawLabel=false; o->lock2int = true;}
+        callback {pitchfreq0->floatvalue*=pitchfreq0->floatvalue;
+pitchfreq0->floatvalue*=30;
+write_function(controller,SLFOF0,sizeof(float),0,&pitchfreq0->floatvalue);
+char s[25];
+sprintf(s,"Detune LFO Freq %4.3f Hz",(int)pitchfreq0->floatvalue);
+message->copy_label(s);}
+        tooltip {Detune LFO Frequency} xywh {532 20 45 45} step 0.01
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial pitchfreq1 {
-        callback {write_function(controller,WAVE,sizeof(float),0,&cellwaveform->floatvalue);
-param->copy_label("CELL WAVEFORM");
-int a = cellwaveform->floatvalue; 
-switch(a)
-{
-case 0:
-  value->copy_label("              SINE");
-  break;
-case 1:
-  value->copy_label("               SAW");
-  break;
-case 2:
-  value->copy_label("            SQUARE");
-  break;
-case 3:
-  value->copy_label("          TRIANGLE");
-  break;
-case 4:
-  value->copy_label("       WHITE NOISE");
-  break;
-case 5:
-  value->copy_label("            RANDOM");
-  break;
-}}
-        tooltip waveform xywh {532 66 45 45} maximum 5 step 0.1
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->drawLabel=false; o->lock2int = true;}
+        callback {pitchfreq1->floatvalue*=pitchfreq1->floatvalue;
+pitchfreq1->floatvalue*=30;
+write_function(controller,SLFOF1,sizeof(float),0,&pitchfreq1->floatvalue);
+char s[25];
+sprintf(s,"Detune LFO Freq %4.3f Hz",(int)pitchfreq1->floatvalue);
+message->copy_label(s);}
+        tooltip waveform xywh {532 66 45 45} step 0.01
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial pitchfreq2 {
-        callback {write_function(controller,CELL_LIFE,sizeof(float),0,&lifetime->floatvalue);
-char s[20];
-sprintf(s,"%13.3f BEATS",lifetime->floatvalue);
-param->copy_label("CELL LIFETIME");
-value->copy_label(s);}
-        tooltip {time between cell transitions} xywh {532 112 45 45} minimum 0.001 maximum 10 step 0.05 value 0.25
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        callback {pitchfreq2->floatvalue*=pitchfreq2->floatvalue;
+pitchfreq2->floatvalue*=30;
+write_function(controller,SLFOF2,sizeof(float),0,&pitchfreq2->floatvalue);
+char s[25];
+sprintf(s,"Detune LFO Freq %4.3f Hz",(int)pitchfreq2->floatvalue);
+message->copy_label(s);}
+        tooltip {time between cell transitions} xywh {532 112 45 45} step 0.01 value 0.25
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial pitchfreq3 {
-        callback {write_function(controller,HARM_MODE,sizeof(float),0,&harmgain->floatvalue);
-param->copy_label("HARMONIC GAINS");
-int a = harmgain->floatvalue; 
-switch(a)
-{
-case 0:
-  value->copy_label("              SINC");
-  break; case 1:
-  value->copy_label("               SAW");
-  break;
-case 2:
-  value->copy_label("            SQUARE");
-  break;
-case 3:
-  value->copy_label("          TRIANGLE");
-  break;
-}}
-        tooltip {gain of harmonics} xywh {532 158 45 45} maximum 3 step 0.08 value 1
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->drawLabel=false; o->lock2int = true;}
+        callback {pitchfreq3->floatvalue*=pitchfreq3->floatvalue;
+pitchfreq3->floatvalue*=30;
+write_function(controller,SLFOF3,sizeof(float),0,&pitchfreq3->floatvalue);
+char s[25];
+sprintf(s,"Detune LFO Freq %4.3f Hz",(int)pitchfreq3->floatvalue);
+message->copy_label(s);}
+        tooltip {gain of harmonics} xywh {532 158 45 45} step 0.01 value 0.1
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial pitchfreq4 {
-        callback {write_function(controller,NHARMONICS,sizeof(float),0,&nharmonics->floatvalue);
-char s[20];
-sprintf(s,"%18i",(int)nharmonics->floatvalue);
-param->copy_label("NUM. HARMONICS");
-value->copy_label(s);}
-        tooltip {num. of harmonics} xywh {532 203 45 45} maximum 16 step 0.1 value 12
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
-        code3 {o->drawLabel=false; o->lock2int = true;}
+        callback {pitchfreq4->floatvalue*=pitchfreq4->floatvalue;
+pitchfreq4->floatvalue*=30;
+write_function(controller,SLFOF4,sizeof(float),0,&pitchfreq4->floatvalue);
+char s[25];
+sprintf(s,"Detune LFO Freq %4.3f Hz",(int)pitchfreq4->floatvalue);
+message->copy_label(s);}
+        tooltip {num. of harmonics} xywh {532 203 45 45} step 0.01
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
+        code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial pitchfreq5 {
-        callback {write_function(controller,HARM_WIDTH,sizeof(float),0,&harmwidth->floatvalue);
-char s[20];
-sprintf(s,"%13.2f CENTS",harmwidth->floatvalue);
-param->copy_label("HARMONIC WIDTH");
-value->copy_label(s);}
-        tooltip {width/detune} xywh {532 249 45 45} maximum 50 step 0.1
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        callback {pitchfreq5->floatvalue*=pitchfreq5->floatvalue;
+pitchfreq5->floatvalue*=30;
+write_function(controller,SLFOF5,sizeof(float),0,&pitchfreq5->floatvalue);
+char s[25];
+sprintf(s,"Detune LFO Freq %4.3f Hz",(int)pitchfreq5->floatvalue);
+message->copy_label(s);}
+        tooltip {width/detune} xywh {532 249 45 45} step 0.01
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial delayfreq0 {
-        callback {write_function(controller,ENV_A,sizeof(float),0,&a->floatvalue);
-char s[20];
-sprintf(s,"%17.3f S",a->floatvalue);
-param->copy_label("ENV. ATTACK");
-value->copy_label(s);}
-        tooltip attack xywh {580 20 45 45} minimum 0.001 maximum 15 step 0.1 value 0.1
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        callback {delayfreq0->floatvalue*=delayfreq0->floatvalue;
+delayfreq0->floatvalue*=30;
+write_function(controller,DLFOF0,sizeof(float),0,&delayfreq0->floatvalue);
+char s[25];
+sprintf(s,"Delay LFO Freq %5.3f Hz",(int)delayfreq0->floatvalue);
+message->copy_label(s);}
+        tooltip attack xywh {580 20 45 45} step 0.01 value 0.1
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial delayfreq1 {
-        callback {write_function(controller,ENV_D,sizeof(float),0,&d->floatvalue);
-char s[20];
-sprintf(s,"%17.3f S",d->floatvalue);
-param->copy_label("ENV. DECAY");
-value->copy_label(s);}
-        tooltip decay xywh {580 66 45 45} minimum 0.001 maximum 15 step 0.1 value 0.1
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        callback {delayfreq1->floatvalue*=delayfreq1->floatvalue;
+delayfreq1->floatvalue*=30;
+write_function(controller,DLFOF1,sizeof(float),0,&delayfreq1->floatvalue);
+char s[25];
+sprintf(s,"Delay LFO Freq %5.3f Hz",(int)delayfreq1->floatvalue);
+message->copy_label(s);}
+        tooltip decay xywh {580 66 45 45} step 0.01 value 0.1
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial delayfreq2 {
-        callback {write_function(controller,ENV_B,sizeof(float),0,&b->floatvalue);
-char s[20];
-sprintf(s,"%19.3f",b->floatvalue);
-param->copy_label("ENV. BREAK POINT");
-value->copy_label(s);}
+        callback {delayfreq2->floatvalue*=delayfreq2->floatvalue;
+delayfreq2->floatvalue*=30;
+write_function(controller,DLFOF2,sizeof(float),0,&delayfreq2->floatvalue);
+char s[25];
+sprintf(s,"Delay LFO Freq %5.3f Hz",(int)delayfreq2->floatvalue);
+message->copy_label(s);}
         tooltip {break point} xywh {580 112 45 45} step 0.01 value 0.5
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial delayfreq3 {
-        callback {write_function(controller,ENV_SWL,sizeof(float),0,&sw->floatvalue);
-char s[20];
-sprintf(s,"%17.3f S",sw->floatvalue);
-param->copy_label("ENV. SWELL");
-value->copy_label(s);}
-        tooltip swell xywh {580 158 45 45} minimum 0.001 maximum 15 step 0.1 value 3
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        callback {delayfreq3->floatvalue*=delayfreq3->floatvalue;
+delayfreq3->floatvalue*=30;
+write_function(controller,DLFOF3,sizeof(float),0,&delayfreq3->floatvalue);
+char s[25];
+sprintf(s,"Delay LFO Freq %5.3f Hz",(int)delayfreq3->floatvalue);
+message->copy_label(s);}
+        tooltip swell xywh {580 158 45 45} step 0.01 value 3
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial delayfreq4 {
-        callback {write_function(controller,ENV_SUS,sizeof(float),0,&su->floatvalue);
-char s[20];
-sprintf(s,"%19.3f",su->floatvalue);
-param->copy_label("ENV. SUSTAIN");
-value->copy_label(s);}
+        callback {delayfreq4->floatvalue*=delayfreq4->floatvalue;
+delayfreq4->floatvalue*=30;
+write_function(controller,DLFOF4,sizeof(float),0,&delayfreq4->floatvalue);
+char s[25];
+sprintf(s,"Delay LFO Freq %5.3f Hz",(int)delayfreq4->floatvalue);
+message->copy_label(s);}
         tooltip sustain xywh {580 203 45 45} step 0.01 value 0.75
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial delayfreq5 {
-        callback {write_function(controller,ENV_R,sizeof(float),0,&r->floatvalue);
-char s[20];
-sprintf(s,"%17.3f S",r->floatvalue);
-param->copy_label("ENV. RELEASE");
-value->copy_label(s);}
-        tooltip release xywh {580 249 45 45} minimum 0.001 maximum 15 step 0.1 value 0.1
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        callback {delayfreq5->floatvalue*=delayfreq5->floatvalue;
+delayfreq5->floatvalue*=30;
+write_function(controller,DLFOF5,sizeof(float),0,&delayfreq5->floatvalue);
+char s[25];
+sprintf(s,"Delay LFO Freq %5.3f Hz",(int)delayfreq5->floatvalue);
+message->copy_label(s);}
+        tooltip release xywh {580 249 45 45} step 0.01 value 0.1
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
       Fl_Dial shape {
-        callback {write_function(controller,MASTER_GAIN,sizeof(float),0,&mastergain->floatvalue);
-char s[20];
-sprintf(s,"%19.3f",mastergain->floatvalue);
-param->copy_label("MASTER GAIN");
-value->copy_label(s);}
-        tooltip gain xywh {556 298 45 45} maximum 2 step 0.02 value 1
-        code1 {\#include"draw_flatDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_flatDial_get_height(); o->drawing_w = cairo_code_draw_flatDial_get_width(); o->drawing_f = &cairo_code_draw_flatDial_render;}
+        callback {write_function(controller,LFOSHAPE,sizeof(float),0,&shape->floatvalue);
+char s[25];
+sprintf(s,"LFO Shape %13.3f",mastergain->floatvalue);
+message->copy_label(s);} selected
+        tooltip gain xywh {556 298 45 45} step 0.01 value 0.9
+        code1 {\#include"draw_redDial.h"}
+        code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
@@ -501,7 +480,7 @@ value->copy_label(s);}
         tooltip {current output value} xywh {17 350 600 33}
         code0 {\#include"draw_rgb5x7.h"}
         code2 {o->drawing_h = cairo_code_draw_16seg_get_height(); o->drawing_w = cairo_code_draw_16seg_get_width(); o->drawing_f = &cairo_code_draw_red16seg_render;}
-        code3 {o->nchars = 18; o->periods = false;}
+        code3 {o->nchars = 23;}
         class AsciiDisplay
       }
       Fl_Group graph {open
