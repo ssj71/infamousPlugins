@@ -2,7 +2,7 @@
 version 1.0300 
 header_name {.h} 
 code_name {.cxx}
-class CaSynthUI {open
+class LushLifeUI {open selected
 } {
   Function {show()} {open
   } {
@@ -796,7 +796,7 @@ write_function(controller,DTLFOAMT5,sizeof(float),0,&yos5);
 pdyb5->position(pd5->x(),pdyb5->y());//lock x
 char s[25];
 sprintf(s,"Detune LFO Amplitude %6.2f",yos5);
-message->copy_label(s);} selected
+message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushYBoundr_render;}
