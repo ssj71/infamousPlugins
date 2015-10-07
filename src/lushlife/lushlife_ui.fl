@@ -2,13 +2,13 @@
 version 1.0300 
 header_name {.h} 
 code_name {.cxx}
-class LushLifeUI {open selected
+class LushLifeUI {open
 } {
   Function {show()} {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {494 381 630 400} type Double box UP_BOX resizable
+      xywh {388 384 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -564,7 +564,8 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pd0 {
-          callback {write_function(controller,DETUNE0,sizeof(float),0,&pd0->floatvaluey);
+          callback {p0 = pd0->floatvaluey / 100;
+write_function(controller,DETUNE0,sizeof(float),0,&p0);
 write_function(controller,DELAY0,sizeof(float),0,&pd0->floatvaluex);
 pdxb0->position(pd0->x()+xos0,pd0->y());
 pdyb0->position(pd0->x(),pd0->y()-yos0);
@@ -604,7 +605,8 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pd1 {
-          callback {write_function(controller,DETUNE1,sizeof(float),0,&pd1->floatvaluey);
+          callback {p1 = pd1->floatvaluey / 100;
+write_function(controller,DETUNE1,sizeof(float),0,&p1);
 write_function(controller,DELAY1,sizeof(float),0,&pd1->floatvaluex);
 pdxb1->position(pd1->x()+xos1,pd1->y());
 pdyb1->position(pd1->x(),pd1->y()-yos1);
@@ -644,7 +646,8 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pd2 {
-          callback {write_function(controller,DETUNE2,sizeof(float),0,&pd2->floatvaluey);
+          callback {p2 = pd2->floatvaluey / 100;
+write_function(controller,DETUNE2,sizeof(float),0,&p2);
 write_function(controller,DELAY2,sizeof(float),0,&pd2->floatvaluex);
 pdxb2->position(pd2->x()+xos2,pd2->y());
 pdyb2->position(pd2->x(),pd2->y()-yos2);
@@ -684,7 +687,8 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pd3 {
-          callback {write_function(controller,DETUNE3,sizeof(float),0,&pd3->floatvaluey);
+          callback {p0 = pd0->floatvaluey / 100;
+write_function(controller,DETUNE3,sizeof(float),0,&pd3->floatvaluey);
 write_function(controller,DELAY3,sizeof(float),0,&pd3->floatvaluex);
 pdxb3->position(pd3->x()+xos3,pd3->y());
 pdyb3->position(pd3->x(),pd3->y()-yos3);
@@ -724,7 +728,8 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pd4 {
-          callback {write_function(controller,DETUNE4,sizeof(float),0,&pd4->floatvaluey);
+          callback {p0 = pd0->floatvaluey / 100;
+write_function(controller,DETUNE4,sizeof(float),0,&pd4->floatvaluey);
 write_function(controller,DELAY4,sizeof(float),0,&pd4->floatvaluex);
 pdxb4->position(pd4->x()+xos4,pd4->y());
 pdyb4->position(pd4->x(),pd4->y()-yos4);
@@ -764,7 +769,8 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pd5 {
-          callback {write_function(controller,DETUNE5,sizeof(float),0,&pd5->floatvaluey);
+          callback {p0 = pd0->floatvaluey / 100;
+write_function(controller,DETUNE5,sizeof(float),0,&pd5->floatvaluey);
 write_function(controller,DELAY5,sizeof(float),0,&pd5->floatvaluex);
 pdxb5->position(pd5->x()+xos5,pd5->y());
 pdyb5->position(pd5->x(),pd5->y()-yos5);
@@ -816,7 +822,7 @@ message->copy_label(s);}
 Fl::flush();} {}
   }
   decl {float xos0;} {
-    comment {x offfset between pitch/delay point and lfo amp bound} private local
+    comment {x offfset between pitch/delay point and lfo amp bound (in pixels)} selected private local
   }
   decl {float xos1;} {private local
   }
@@ -838,6 +844,19 @@ Fl::flush();} {}
   }
   decl {float yos4;} {private local
   }
-  decl {float yos0;} {private local
+  decl {float yos5;} {private local
+  }
+  decl {float p0;} {
+    comment {scaled pitch values} private local
+  }
+  decl {float p1;} {private local
+  }
+  decl {float p2;} {private local
+  }
+  decl {float p3;} {private local
+  }
+  decl {float p4;} {private local
+  }
+  decl {float p5;} {private local
   }
 } 
