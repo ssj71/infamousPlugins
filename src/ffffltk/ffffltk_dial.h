@@ -104,7 +104,7 @@ public:
     float floatvalue;
     char units[6];
     int lock2int;//flag to draw only integer values
-    float squaredmax;
+    float squaredmax;// floatvalue = value()*value()*squaredmax;
 
     static void set_ffffltk_value(void* obj, float val)
     {
@@ -113,7 +113,7 @@ public:
         if ( val < me->minimum() ) val = me->minimum();
         me->set_value(val);
         if(me->squaredmax)
-            me->floatvalue = val*val*me->squaredmax;
+            me->floatvalue = sqrt(val/me->squaredmax);
         else
             me->floatvalue = val;
 

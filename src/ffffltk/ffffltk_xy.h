@@ -113,7 +113,7 @@ public:
     char unitsx[6];
     char unitsy[6];
     int lock2int;//flag to draw only integer values 
-    float squaredmaxx;//max if meant to be squared (for log approx)
+    float squaredmaxx;//max if meant to be squared (for log approx) floatval = val()*val()*squaredmaxx
     float squaredmaxy;//max if meant to be squared (for log approx)
 
     static void set_ffffltk_valuex(void* obj, float val)
@@ -123,7 +123,7 @@ public:
         if ( val < me->Xv.minimum() ) val = me->Xv.minimum();
         me->Xv.set_value(val);
         if(me->squaredmaxx)
-            me->floatvaluex = val*val*me->squaredmaxx;
+            me->floatvaluex = sqrt(val/me->squaredmaxx);
         else
             me->floatvaluex = val;
 
@@ -137,7 +137,7 @@ public:
         if ( val < me->Yv.minimum() ) val = me->Yv.minimum();
         me->Yv.set_value(val);
         if(me->squaredmaxy)
-            me->floatvaluey = val*val*me->squaredmaxy;
+            me->floatvaluey = sqrt(val/me->squaredmaxy);
         else
             me->floatvaluey = val;
 

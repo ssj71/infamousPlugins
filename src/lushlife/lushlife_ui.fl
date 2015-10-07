@@ -8,7 +8,7 @@ class CaSynthUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {673 703 630 400} type Double box UP_BOX resizable
+      xywh {494 381 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -564,13 +564,13 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pd0 {
-          callback {write_function(controller,DETUNE5,sizeof(float),0,&pd0->floatvaluey);
-write_function(controller,DELAY5,sizeof(float),0,&pd0->floatvaluex);
+          callback {write_function(controller,DETUNE0,sizeof(float),0,&pd0->floatvaluey);
+write_function(controller,DELAY0,sizeof(float),0,&pd0->floatvaluex);
 pdxb0->position(pd0->x()+xos0,pd0->y());
-pdyb0->position(pd0->x(),pd0->y()+yos0);
+pdyb0->position(pd0->x(),pd0->y()-yos0);
 char s[25];
-sprintf(s,"Dtn %4.1fcnt, Dly %4.1fms",pd5->floatvaluey,pd5->floatvaluex);
-message->copy_label(s);} selected
+sprintf(s,"Dtn %4.1fcnt, Dly %4.1fms",pd0->floatvaluey,pd0->floatvaluex);
+message->copy_label(s);}
           xywh {50 50 15 15}
           code0 {\#include"draw_lushGraphPoint.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointr_render;}
@@ -578,9 +578,7 @@ message->copy_label(s);} selected
           class XYhandle
         }
         Fl_Box pdxb0 {
-          callback {pdxb0->floatvaluex *= pdxb0->floatvaluex;
-pdxb0->floatvaluex *= 150;
-xos0 = pdxb0->floatvaluex - pd0->floatvaluex;
+          callback {xos0 = pdxb0->floatvaluex - pd0->floatvaluex;
 write_function(controller,DLLFOAMT0,sizeof(float),0,&xos0);
 pdxb0->position(pdxb0->x(),pd0->y());//lock y
 char s[25];
@@ -589,93 +587,220 @@ message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushXBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb0 {
+          callback {yos0 = pd0->floatvaluey - pdyb0->floatvaluey;
+write_function(controller,DTLFOAMT0,sizeof(float),0,&yos0);
+pdyb0->position(pd0->x(),pdyb0->y());//lock x
+char s[25];
+sprintf(s,"Detune LFO Amplitude %6.2f",yos0);
+message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushYBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pd1 {
-          xywh {50 50 15 15}
+          callback {write_function(controller,DETUNE1,sizeof(float),0,&pd1->floatvaluey);
+write_function(controller,DELAY1,sizeof(float),0,&pd1->floatvaluex);
+pdxb1->position(pd1->x()+xos1,pd1->y());
+pdyb1->position(pd1->x(),pd1->y()-yos1);
+char s[25];
+sprintf(s,"Dtn %4.1fcnt, Dly %4.1fms",pd1->floatvaluey,pd1->floatvaluex);
+message->copy_label(s);}
+          xywh {65 40 15 15}
           code0 {\#include"draw_lushGraphPoint.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointb_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdxb1 {
+          callback {xos1 = pdxb1->floatvaluex - pd1->floatvaluex;
+write_function(controller,DLLFOAMT1,sizeof(float),0,&xos1);
+pdxb1->position(pdxb1->x(),pd1->y());//lock y
+char s[25];
+sprintf(s,"Delay LFO Amplitude %6.2f",xos1);
+message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushXBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb1 {
+          callback {yos1 = pd1->floatvaluey - pdyb1->floatvaluey;
+write_function(controller,DTLFOAMT1,sizeof(float),0,&yos1);
+pdyb1->position(pd1->x(),pdyb1->y());//lock x
+char s[25];
+sprintf(s,"Detune LFO Amplitude %6.2f",yos1);
+message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushYBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pd2 {
+          callback {write_function(controller,DETUNE2,sizeof(float),0,&pd2->floatvaluey);
+write_function(controller,DELAY2,sizeof(float),0,&pd2->floatvaluex);
+pdxb2->position(pd2->x()+xos2,pd2->y());
+pdyb2->position(pd2->x(),pd2->y()-yos2);
+char s[25];
+sprintf(s,"Dtn %4.1fcnt, Dly %4.1fms",pd2->floatvaluey,pd2->floatvaluex);
+message->copy_label(s);}
           xywh {50 50 15 15}
           code0 {\#include"draw_lushGraphPoint.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointy_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdxb2 {
+          callback {xos2 = pdxb2->floatvaluex - pd2->floatvaluex;
+write_function(controller,DLLFOAMT2,sizeof(float),0,&xos2);
+pdxb2->position(pdxb2->x(),pd2->y());//lock y
+char s[25];
+sprintf(s,"Delay LFO Amplitude %6.2f",xos2);
+message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushXBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb2 {
+          callback {yos2 = pd2->floatvaluey - pdyb2->floatvaluey;
+write_function(controller,DTLFOAMT2,sizeof(float),0,&yos2);
+pdyb0->position(pd2->x(),pdyb2->y());//lock x
+char s[25];
+sprintf(s,"Detune LFO Amplitude %6.2f",yos2);
+message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushYBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pd3 {
+          callback {write_function(controller,DETUNE3,sizeof(float),0,&pd3->floatvaluey);
+write_function(controller,DELAY3,sizeof(float),0,&pd3->floatvaluex);
+pdxb3->position(pd3->x()+xos3,pd3->y());
+pdyb3->position(pd3->x(),pd3->y()-yos3);
+char s[25];
+sprintf(s,"Dtn %4.1fcnt, Dly %4.1fms",pd3->floatvaluey,pd3->floatvaluex);
+message->copy_label(s);}
           xywh {50 50 15 15}
           code0 {\#include"draw_lushGraphPoint.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointg_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdxb3 {
+          callback {xos3 = pdxb3->floatvaluex - pd3->floatvaluex;
+write_function(controller,DLLFOAMT3,sizeof(float),0,&xos3);
+pdxb3->position(pdxb3->x(),pd3->y());//lock y
+char s[25];
+sprintf(s,"Delay LFO Amplitude %6.2f",xos3);
+message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushXBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb3 {
+          callback {yos3 = pd3->floatvaluey - pdyb3->floatvaluey;
+write_function(controller,DTLFOAMT3,sizeof(float),0,&yos3);
+pdyb3->position(pd3->x(),pdyb3->y());//lock x
+char s[25];
+sprintf(s,"Detune LFO Amplitude %6.2f",yos3);
+message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushYBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pd4 {
+          callback {write_function(controller,DETUNE4,sizeof(float),0,&pd4->floatvaluey);
+write_function(controller,DELAY4,sizeof(float),0,&pd4->floatvaluex);
+pdxb4->position(pd4->x()+xos4,pd4->y());
+pdyb4->position(pd4->x(),pd4->y()-yos4);
+char s[25];
+sprintf(s,"Dtn %4.1fcnt, Dly %4.1fms",pd4->floatvaluey,pd4->floatvaluex);
+message->copy_label(s);}
           xywh {50 50 15 15}
           code0 {\#include"draw_lushGraphPoint.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointo_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdxb4 {
+          callback {xos4 = pdxb4->floatvaluex - pd4->floatvaluex;
+write_function(controller,DLLFOAMT4,sizeof(float),0,&xos4);
+pdxb4->position(pdxb4->x(),pd4->y());//lock y
+char s[25];
+sprintf(s,"Delay LFO Amplitude %6.2f",xos4);
+message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushXBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb4 {
+          callback {yos4 = pd4->floatvaluey - pdyb4->floatvaluey;
+write_function(controller,DTLFOAMT4,sizeof(float),0,&yos4);
+pdyb4->position(pd4->x(),pdyb4->y());//lock x
+char s[25];
+sprintf(s,"Detune LFO Amplitude %6.2f",yos4);
+message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushYBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pd5 {
+          callback {write_function(controller,DETUNE5,sizeof(float),0,&pd5->floatvaluey);
+write_function(controller,DELAY5,sizeof(float),0,&pd5->floatvaluex);
+pdxb5->position(pd5->x()+xos5,pd5->y());
+pdyb5->position(pd5->x(),pd5->y()-yos5);
+char s[25];
+sprintf(s,"Dtn %4.1fcnt, Dly %4.1fms",pd5->floatvaluey,pd5->floatvaluex);
+message->copy_label(s);}
           xywh {50 50 15 15}
           code0 {\#include"draw_lushGraphPoint.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointp_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdxb5 {
+          callback {xos5 = pdxb5->floatvaluex - pd5->floatvaluex;
+write_function(controller,DLLFOAMT5,sizeof(float),0,&xos5);
+pdxb5->position(pdxb5->x(),pd5->y());//lock y
+char s[25];
+sprintf(s,"Delay LFO Amplitude %6.2f",xos5);
+message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushXBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb5 {
+          callback {yos5 = pd5->floatvaluey - pdyb5->floatvaluey;
+write_function(controller,DTLFOAMT5,sizeof(float),0,&yos5);
+pdyb5->position(pd5->x(),pdyb5->y());//lock x
+char s[25];
+sprintf(s,"Detune LFO Amplitude %6.2f",yos5);
+message->copy_label(s);} selected
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
-          code1 {\#include"draw_lushGraphYBound.h"o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointw_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushYBoundr_render;}
+          code2 {o->Xv.bounds(0,1); o->Yv.bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
       }
