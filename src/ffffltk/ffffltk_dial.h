@@ -29,7 +29,7 @@
 #include "ffffltk_input.h"
 
 //avtk drawing method (adapted)
-static void default_bg_drawing(cairo_t *cr, float val)
+static void default_dial_drawing(cairo_t *cr, float val)
 {
 
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_ROUND);
@@ -77,7 +77,7 @@ public:
 
         drawing_w = 100;
         drawing_h = 100;
-        drawing_f = &default_bg_drawing;
+        drawing_f = &default_dial_drawing;
         floatvalue = value();
         units[0] = 0;
         lock2int = 0;
@@ -151,7 +151,7 @@ public:
             if(lock2int) val = (int)val;
             val = (val-minimum())/(maximum()-minimum());
             if(drawing_f) drawing_f(cr,val);
-            else default_bg_drawing(cr,val);
+            else default_dial_drawing(cr,val);
 
             cairo_restore( cr );
 

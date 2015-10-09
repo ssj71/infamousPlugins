@@ -10,8 +10,6 @@ inline int cairo_code_draw_LED_get_height()
 }
 inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
     cairo_matrix_t matrix;
 
@@ -119,8 +117,6 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-60.60796,-180.04859);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********light************/
     if(val)
@@ -165,8 +161,6 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
         cairo_close_path(cr);
         cairo_set_tolerance(cr, 0.1);
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1.036663,0,0,1.036663,-63.17433,-186.99338);
-//cairo_pattern_set_matrix(pattern, &matrix);
         cairo_stroke_preserve(cr);
     }//if on
     /********************/

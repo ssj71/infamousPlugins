@@ -3,8 +3,6 @@
 inline int cairo_code_draw_lushGraphPoint_get_width() { return 21; }
 inline int cairo_code_draw_lushGraphPoint_get_height() { return 21; }
 inline void cairo_code_draw_lushGraphPoint_render(cairo_t *cr, float r, float g, float b) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
 cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 

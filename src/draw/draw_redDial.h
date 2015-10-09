@@ -1,10 +1,9 @@
 #ifndef DRAW_REDDIAL_H
 #define DRAW_REDDIAL_H
+#define PI 3.1415926535897932384626433832795
 inline int cairo_code_draw_redDial_get_width() { return 50; }
 inline int cairo_code_draw_redDial_get_height() { return 50; }
 inline void cairo_code_draw_redDial_render(cairo_t *cr, float val) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
 cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 

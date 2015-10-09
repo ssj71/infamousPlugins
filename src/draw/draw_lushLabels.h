@@ -3,10 +3,7 @@
 inline int cairo_code_draw_lushAxisLabel_get_width() { return 80; }
 inline int cairo_code_draw_lushAxisLabel_get_height() { return 92; }
 inline void cairo_code_draw_lushAxisLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
 cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
 
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.701961,0.701961,0.701961,1);
@@ -784,10 +781,7 @@ cairo_fill_preserve(cr);
 inline int cairo_code_draw_lushFreqLabel_get_width() { return 42; }
 inline int cairo_code_draw_lushFreqLabel_get_height() { return 12; }
 inline void cairo_code_draw_lushFreqLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
 cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
 
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.701961,0.701961,0.701961,1);
@@ -969,10 +963,7 @@ cairo_fill_preserve(cr);
 inline int cairo_code_draw_lushLabel_get_width() { return 273; }
 inline int cairo_code_draw_lushLabel_get_height() { return 41; }
 inline void cairo_code_draw_lushLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
 cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
 
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.701961,0.701961,0.701961,1);
@@ -1856,10 +1847,7 @@ cairo_fill_preserve(cr);
 inline int cairo_code_draw_lushShapeLabel_get_width() { return 52; }
 inline int cairo_code_draw_lushShapeLabel_get_height() { return 39; }
 inline void cairo_code_draw_lushShapeLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
 cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
 
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.701961,0.701961,0.701961,1);
@@ -2301,10 +2289,7 @@ cairo_fill_preserve(cr);
 inline int cairo_code_draw_lushSyncLabel_get_width() { return 43; }
 inline int cairo_code_draw_lushSyncLabel_get_height() { return 10; }
 inline void cairo_code_draw_lushSyncLabel_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
 cairo_pattern_t *pattern;
-cairo_matrix_t matrix;
 
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.701961,0.701961,0.701961,1);

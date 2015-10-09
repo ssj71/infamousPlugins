@@ -23,8 +23,8 @@
  //This class provides an adjustable point on an xy table such that you can have several points on the same axes
 
 
-#ifndef FFF_DIAL_H
-#define FFF_DIAL_H
+#ifndef FFF_XY_H
+#define FFF_XY_H
 
 #include <FL/Fl_Dial.H>
 #include <FL/Fl_Slider.H>
@@ -32,7 +32,7 @@
 #include "ffffltk_input.h"
 
 //avtk drawing method (adapted)
-static void default_bg_drawing(cairo_t *cr, float val)
+static void default_xy_drawing(cairo_t *cr)
 {
 
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_ROUND);
@@ -56,7 +56,7 @@ static void default_bg_drawing(cairo_t *cr, float val)
     cairo_stroke(cr);
     cairo_set_dash ( cr, dashes, 0, 0.0);
 
-    float angle = 2.46 + ( 4.54 * val );
+    float angle = 2.46 + ( 4.54 * 1 );
     cairo_set_line_width(cr, 4.97);
     cairo_arc(cr, 50,50, 46, 2.46, angle );
     cairo_line_to(cr, 50,50);
@@ -80,7 +80,7 @@ public:
 
         drawing_w = 100;
         drawing_h = 100;
-        drawing_f = &default_bg_drawing;
+        drawing_f = &default_xy_drawing;
         floatvaluex = 0;
         floatvaluey = 0;
         unitsx[0] = 0;
@@ -92,11 +92,15 @@ public:
         clickOffsetY = 0;
         mouseClicked = false;
 
+        Xv = new Fl_Dial(0,0,0,0,NULL);
+        Yv = new Fl_Dial(0,0,0,0,NULL);
+
     }
+    ~XYhandle(){delete Xv; delete Yv;}
 
     int x, y, w, h;
 
-    Fl_Valuator Xv,Yv;//hidden valuators
+    Fl_Dial *Xv,*Yv;//hidden valuators
 
     int clickOffsetY;
     int clickOffsetX;
@@ -107,7 +111,7 @@ public:
 
     int drawing_w;
     int drawing_h;
-    void (*drawing_f)(cairo_t*,float);//function pointer to draw function
+    void (*drawing_f)(cairo_t*);//function pointer to draw function
     float floatvaluex;//these hold the actual value used (could be restricted to integer vals)
     float floatvaluey;
     char unitsx[6];
@@ -119,9 +123,9 @@ public:
     static void set_ffffltk_valuex(void* obj, float val)
     {
         XYhandle* me = (XYhandle*)obj;
-        if ( val > me->Xv.maximum() ) val = me->Xv.maximum();
-        if ( val < me->Xv.minimum() ) val = me->Xv.minimum();
-        me->Xv.set_value(val);
+        if ( val > me->Xv->maximum() ) val = me->Xv->maximum();
+        if ( val < me->Xv->minimum() ) val = me->Xv->minimum();
+        me->Xv->value(val);
         if(me->squaredmaxx)
             me->floatvaluex = sqrt(val/me->squaredmaxx);
         else
@@ -133,9 +137,9 @@ public:
     static void set_ffffltk_valuey(void* obj, float val)
     {
         XYhandle* me = (XYhandle*)obj;
-        if ( val > me->Yv.maximum() ) val = me->Yv.maximum();
-        if ( val < me->Yv.minimum() ) val = me->Yv.minimum();
-        me->Yv.set_value(val);
+        if ( val > me->Yv->maximum() ) val = me->Yv->maximum();
+        if ( val < me->Yv->minimum() ) val = me->Yv->minimum();
+        me->Yv->value(val);
         if(me->squaredmaxy)
             me->floatvaluey = sqrt(val/me->squaredmaxy);
         else
@@ -171,8 +175,8 @@ public:
             //scale the drawing
             cairo_scale(cr,scale,scale);
             //call the draw function
-            if(drawing_f) drawing_f(cr,val);
-            else default_bg_drawing(cr,val);
+            if(drawing_f) drawing_f(cr);
+            else default_xy_drawing(cr);
 
             cairo_restore( cr );
 
@@ -196,7 +200,7 @@ public:
 
         //Fl_Slider::handle( event );
 
-        float val = value();
+        float val;
         int pos;
         Fl_Group *g;//parent
         switch(event)
@@ -205,8 +209,8 @@ public:
             //highlight = 1;
             if(Fl::event_button() == FL_MIDDLE_MOUSE || Fl::event_button() == FL_RIGHT_MOUSE)
             {
-                entervalx.show(Xv.value(),(char*)Xv.tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
-                entervaly.show(Yv.value(),(char*)Yv.tooltip(),unitsy,(void*)this,set_ffffltk_valuey);
+                entervalx.show(Xv->value(),(char*)Xv->tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
+                entervaly.show(Yv->value(),(char*)Yv->tooltip(),unitsy,(void*)this,set_ffffltk_valuey);
             }
             return 1;
         case FL_DRAG:
@@ -231,16 +235,16 @@ public:
                 if(pos > g->y()+g->h() - h) pos = g->y() + g->h() - h;
                 y = pos;
 
-                val = ( (x - g->x()) / (g->w() - w) ) * (Xv.maximum() - Xv.minimum()) + Xv.minimum();
-                Xv.set_value(val);
+                val = ( (x - g->x()) / (g->w() - w) ) * (Xv->maximum() - Xv->minimum()) + Xv->minimum();
+                Xv->value(val);
                 if(lock2int) val = (int)val;
                 if(squaredmaxx)
                     floatvaluex = val*val*squaredmaxx;
                 else
                     floatvaluex = val;
 
-                val = ( (g->y() - y) / (g->h() - h) ) * (Yv.maximum() - Yv.minimum()) + Yv.minimum();
-                Yv.set_value(val);
+                val = ( (g->y() - y) / (g->h() - h) ) * (Yv->maximum() - Yv->minimum()) + Yv->minimum();
+                Yv->value(val);
                 if(lock2int) val = (int)val;
                 if(squaredmaxy)
                     floatvaluey = val*val*squaredmaxy;
@@ -257,7 +261,8 @@ public:
             // highlight = 0;
             Fl_Widget::copy_label("");
             redraw();
-            floatvalue = value();
+            floatvaluex = Xv->value();
+            floatvaluey = Yv->value();
             // never do anything after a callback, as the callback
             // may delete the widget!
             //}

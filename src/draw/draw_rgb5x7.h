@@ -13,7 +13,7 @@ inline int cairo_code_draw_rgb5x7_get_height()
 
 //just subtract 32 from the char and you get the index here
 //each byte is a column and msb to lsb is bottom to top row, msb not used
-static uint8_t Font5x7[][5]  =
+static const uint8_t Font5x7[][5]  =
 {
     {0x00, 0x00, 0x00, 0x00, 0x00},// (space)
     {0x00, 0x00, 0x5F, 0x00, 0x00},// !
@@ -135,30 +135,30 @@ inline void cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, uint8_t r, uint
 
 inline void cairo_code_draw_red5x7_render(cairo_t *cr, char num)
 {
-    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 1, 0, 0);
+    cairo_code_draw_rgb5x7_render(cr, num, 1, 0, 0);
 }
 inline void cairo_code_draw_blue5x7_render(cairo_t *cr, char num)
 {
-    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 0, 0, 1);
+    cairo_code_draw_rgb5x7_render(cr, num, 0, 0, 1);
 }
 inline void cairo_code_draw_green5x7_render(cairo_t *cr, char num)
 {
-    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 1, 0.88235, 0);
+    cairo_code_draw_rgb5x7_render(cr, num, 1, 0.88235, 0);
 }
 inline void cairo_code_draw_orange5x7_render(cairo_t *cr, char num)
 {
-    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 1, .33333, 0);
+    cairo_code_draw_rgb5x7_render(cr, num, 1, .33333, 0);
 }
 inline void cairo_code_draw_yellow5x7_render(cairo_t *cr, char num)
 {
-    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 0.92157, 0.92157, 0);
+    cairo_code_draw_rgb5x7_render(cr, num, 0.92157, 0.92157, 0);
 }
 inline void cairo_code_draw_purple5x7_render(cairo_t *cr, char num)
 {
-    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 0.78431, 0, 1);
+    cairo_code_draw_rgb5x7_render(cr, num, 0.78431, 0, 1);
 }
 inline void cairo_code_draw_white5x7_render(cairo_t *cr, char num)
 {
-    cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, 1, 1, 1);
+    cairo_code_draw_rgb5x7_render(cr, num, 1, 1, 1);
 }
 #endif

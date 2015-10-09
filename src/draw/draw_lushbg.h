@@ -3,8 +3,6 @@
 inline int cairo_code_draw_lushbg_get_width() { return 630; }
 inline int cairo_code_draw_lushbg_get_height() { return 400; }
 inline void cairo_code_draw_lushbg_render(cairo_t *cr) {
-cairo_surface_t *temp_surface;
-cairo_t *old_cr;
 cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 

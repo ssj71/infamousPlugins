@@ -59,7 +59,7 @@ static LV2UI_Handle init_lushlifeUI(const struct _LV2UI_Descriptor * descriptor,
 
 void cleanup_lushlifeUI(LV2UI_Handle ui)
 {
-    CaSynthUI *self = (CaSynthUI*)ui;
+    LushLifeUI *self = (LushLifeUI*)ui;
 
     delete self->ui;
     delete self;
@@ -67,7 +67,7 @@ void cleanup_lushlifeUI(LV2UI_Handle ui)
 
 void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_size, uint32_t format, const void * buffer)
 {
-    CaSynthUI *self = (CaSynthUI*)ui;
+    LushLifeUI *self = (LushLifeUI*)ui;
     if(!format)
     {
       float val = *(float*)buffer;
@@ -77,10 +77,10 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           self->mastergain->value(val);
           break;
         case DRY_GAIN:
-          self->drygp->Yv.value(val);
+          self->drygp->Yv->value(val);
           break;
         case DRY_PAN:
-          self->drygp->Xv.value(val);
+          self->drygp->Xv->value(val);
           break;
         case LFOSHAPE:
           self->shape->value(val);
@@ -92,28 +92,28 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           self->activate0->value(val);
           break;
         case SHIFT0:
-          self->pd0->Yv.value(val/100);
+          self->pd0->Yv->value(val/100);
           break;
         case SLFOA0:
-          self->pdyb0->Yv.value(self->pd0->Yv.value() + val/100);
+          self->pdyb0->Yv->value(self->pd0->Yv->value() + val/100);
           break;
         case SLFOF0:
           self->pitchfreq0->value(val);
           break;
         case DELAY0:
-          self->pd0->Xv.value(sqrt(val/150));//this is a "log" approximated control, so value() doesn't work the same
+          self->pd0->Xv->value(sqrt(val/150));//this is a "log" approximated control, so value() doesn't work the same
           break;
         case DLFOA0:
-          self->pdxb0->Xv.value(sqrt(val/150) + self->pd0->Xv.value());
+          self->pdxb0->Xv->value(sqrt(val/150) + self->pd0->Xv->value());
           break;
         case DLFOF0:
           self->delayfreq0->value(val);
           break;
         case GAIN0:
-          self->gp0->Yv.value(val);
+          self->gp0->Yv->value(val);
           break;
         case PAN0:
-          self->gp0->Xv.value(val);
+          self->gp0->Xv->>value(val);
           break;
       }//switch
     }//if float
