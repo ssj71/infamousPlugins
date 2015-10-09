@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {388 384 630 400} type Double box UP_BOX resizable
+      xywh {390 384 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -579,11 +579,12 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdxb0 {
-          callback {xos0 = pdxb0->floatvaluex - pd0->floatvaluex;
-write_function(controller,DLLFOAMT0,sizeof(float),0,&xos0);
+          callback {dos0 = pdxb0->floatvaluex - pd0->floatvaluex;
+xos0 = pdxb0->x() - pd0->x();
+write_function(controller,DLLFOAMT0,sizeof(float),0,&dos0);
 pdxb0->position(pdxb0->x(),pd0->y());//lock y
 char s[25];
-sprintf(s,"Delay LFO Amplitude %6.2f",xos0);
+sprintf(s,"Delay LFO Amplitude %6.2f",dos0);
 message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
@@ -620,11 +621,12 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdxb1 {
-          callback {xos1 = pdxb1->floatvaluex - pd1->floatvaluex;
-write_function(controller,DLLFOAMT1,sizeof(float),0,&xos1);
+          callback {dos1 = pdxb1->floatvaluex - pd1->floatvaluex;
+xos1 = pdxb1->x() - pd1->x();
+write_function(controller,DLLFOAMT1,sizeof(float),0,&dos1);
 pdxb1->position(pdxb1->x(),pd1->y());//lock y
 char s[25];
-sprintf(s,"Delay LFO Amplitude %6.2f",xos1);
+sprintf(s,"Delay LFO Amplitude %6.2f",dos1);
 message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
@@ -661,11 +663,12 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdxb2 {
-          callback {xos2 = pdxb2->floatvaluex - pd2->floatvaluex;
-write_function(controller,DLLFOAMT2,sizeof(float),0,&xos2);
+          callback {dos2 = pdxb2->floatvaluex - pd2->floatvaluex;
+xos2 = pdxb2->x() - pd2->x();
+write_function(controller,DLLFOAMT2,sizeof(float),0,&dos2);
 pdxb2->position(pdxb2->x(),pd2->y());//lock y
 char s[25];
-sprintf(s,"Delay LFO Amplitude %6.2f",xos2);
+sprintf(s,"Delay LFO Amplitude %6.2f",dos2);
 message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
@@ -702,11 +705,12 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdxb3 {
-          callback {xos3 = pdxb3->floatvaluex - pd3->floatvaluex;
-write_function(controller,DLLFOAMT3,sizeof(float),0,&xos3);
+          callback {dos3 = pdxb3->floatvaluex - pd3->floatvaluex;
+xos3 = pdxb3->x() - pd3->x();
+write_function(controller,DLLFOAMT3,sizeof(float),0,&dos3);
 pdxb3->position(pdxb3->x(),pd3->y());//lock y
 char s[25];
-sprintf(s,"Delay LFO Amplitude %6.2f",xos3);
+sprintf(s,"Delay LFO Amplitude %6.2f",dos3);
 message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
@@ -743,11 +747,12 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdxb4 {
-          callback {xos4 = pdxb4->floatvaluex - pd4->floatvaluex;
-write_function(controller,DLLFOAMT4,sizeof(float),0,&xos4);
+          callback {dos4 = pdxb4->floatvaluex - pd4->floatvaluex;
+xos4 = pdxb4->x() - pd4->x();
+write_function(controller,DLLFOAMT4,sizeof(float),0,&dos4);
 pdxb4->position(pdxb4->x(),pd4->y());//lock y
 char s[25];
-sprintf(s,"Delay LFO Amplitude %6.2f",xos4);
+sprintf(s,"Delay LFO Amplitude %6.2f",dos4);
 message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
@@ -784,11 +789,12 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdxb5 {
-          callback {xos5 = pdxb5->floatvaluex - pd5->floatvaluex;
-write_function(controller,DLLFOAMT5,sizeof(float),0,&xos5);
+          callback {dos5 = pdxb5->floatvaluex - pd5->floatvaluex;
+xos5 = pdxb5->x() - pd5->x();
+write_function(controller,DLLFOAMT5,sizeof(float),0,&dos5);
 pdxb5->position(pdxb5->x(),pd5->y());//lock y
 char s[25];
-sprintf(s,"Delay LFO Amplitude %6.2f",xos5);
+sprintf(s,"Delay LFO Amplitude %6.2f",dos5);
 message->copy_label(s);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
@@ -822,7 +828,7 @@ message->copy_label(s);}
 Fl::flush();} {}
   }
   decl {float xos0;} {
-    comment {x offfset between pitch/delay point and lfo amp bound (in pixels)} selected private local
+    comment {x offfset between pitch/delay point and lfo amp bound (in pixels)} private local
   }
   decl {float xos1;} {private local
   }
@@ -847,7 +853,7 @@ Fl::flush();} {}
   decl {float yos5;} {private local
   }
   decl {float p0;} {
-    comment {scaled pitch values} private local
+    comment {scaled pitch values (semitones)} selected private local
   }
   decl {float p1;} {private local
   }
@@ -858,5 +864,30 @@ Fl::flush();} {}
   decl {float p4;} {private local
   }
   decl {float p5;} {private local
+  }
+  decl {float pos0;} {
+    comment {x offfset between pitch/delay point and lfo amp bound (in ms or semitones)} private local
+  }
+  decl {float pos1;} {private local
+  }
+  decl {float pos2;} {private local
+  }
+  decl {float pos3;} {private local
+  }
+  decl {float pos4;} {private local
+  }
+  decl {float pos5;} {private local
+  }
+  decl {float dos0;} {private local
+  }
+  decl {float dos1;} {private local
+  }
+  decl {float dos2;} {private local
+  }
+  decl {float dos3;} {private local
+  }
+  decl {float dos4;} {private local
+  }
+  decl {float dos5;} {private local
   }
 } 
