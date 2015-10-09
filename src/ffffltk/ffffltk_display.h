@@ -167,7 +167,7 @@ public:
     }
     int x, y, w, h;
     //const char* label;
-    enum
+    typedef enum
     {
         CUSTOM_COLOR,
         RED_COLOR,
@@ -281,7 +281,7 @@ public:
                 //scale
                 cairo_scale(cr,scalex,scaley);
                 if(drawing_f) drawing_f(cr,c,r,g,b);
-                else default_display_drawing(cr,c,r,g,b);
+                else default_rgb_display_drawing(cr,c,r,g,b);
 
                 cairo_restore(cr);
             }

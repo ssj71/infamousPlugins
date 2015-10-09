@@ -92,28 +92,28 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           self->activate0->value(val);
           break;
         case SHIFT0:
-          self->harmwidth->value(val);
+          self->pd0->Yv.value(val/100);
           break;
         case SLFOA0:
-          self->a->value(val);
+          self->pdyb0->Yv.value(self->pd0->Yv.value() + val/100);
           break;
         case SLFOF0:
-          self->d->value(val);
+          self->pitchfreq0->value(val);
           break;
         case DELAY0:
-          self->b->value(val);
+          self->pd0->Xv.value(sqrt(val/150));//this is a "log" approximated control, so value() doesn't work the same
           break;
         case DLFOA0:
-          self->sw->value(val);
+          self->pdxb0->Xv.value(sqrt(val/150) + self->pd0->Xv.value());
           break;
         case DLFOF0:
-          self->su->value(val);
+          self->delayfreq0->value(val);
           break;
         case GAIN0:
-          self->r->value(val);
+          self->gp0->Yv.value(val);
           break;
         case PAN0:
-          self->amwave->value(val);
+          self->gp0->Xv.value(val);
           break;
       }//switch
     }//if float
@@ -122,7 +122,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
 static int
 idle(LV2UI_Handle handle)
 {
-  CaSynthUI* self = (CaSynthUI*)handle;
+  LushLifeUI* self = (LushLifeUI*)handle;
   self->idle();
   
   return 0;
@@ -131,7 +131,7 @@ idle(LV2UI_Handle handle)
 static int
 resize_func(LV2UI_Feature_Handle handle, int w, int h)
 {
-  CaSynthUI* self = (CaSynthUI*)handle;
+  LushLifeUI* self = (LushLifeUI*)handle;
   self->ui->size(w,h);
   
   return 0;

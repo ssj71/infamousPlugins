@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {390 384 630 400} type Double box UP_BOX resizable
+      xywh {77 471 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -567,6 +567,7 @@ message->copy_label(s);}
           callback {p0 = pd0->floatvaluey / 100;
 write_function(controller,DETUNE0,sizeof(float),0,&p0);
 write_function(controller,DELAY0,sizeof(float),0,&pd0->floatvaluex);
+//move bounds
 pdxb0->position(pd0->x()+xos0,pd0->y());
 pdyb0->position(pd0->x(),pd0->y()-yos0);
 char s[25];
@@ -579,7 +580,8 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdxb0 {
-          callback {dos0 = pdxb0->floatvaluex - pd0->floatvaluex;
+          callback {//calculate new offsets
+dos0 = pdxb0->floatvaluex - pd0->floatvaluex;
 xos0 = pdxb0->x() - pd0->x();
 write_function(controller,DLLFOAMT0,sizeof(float),0,&dos0);
 pdxb0->position(pdxb0->x(),pd0->y());//lock y
@@ -593,11 +595,14 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdyb0 {
-          callback {yos0 = pd0->floatvaluey - pdyb0->floatvaluey;
-write_function(controller,DTLFOAMT0,sizeof(float),0,&yos0);
+          callback {//calculate new offsets
+pos0 = pd0->floatvaluey - pdyb0->floatvaluey;
+pos0 /= 100;//convert to semitones
+yos0 = pd0->y() - pdyb0->y();
+write_function(controller,DTLFOAMT0,sizeof(float),0,&pos0);
 pdyb0->position(pd0->x(),pdyb0->y());//lock x
 char s[25];
-sprintf(s,"Detune LFO Amplitude %6.2f",yos0);
+sprintf(s,"Detune LFO Amplitude %6.2f",pos0*100);
 message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
@@ -635,11 +640,13 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdyb1 {
-          callback {yos1 = pd1->floatvaluey - pdyb1->floatvaluey;
-write_function(controller,DTLFOAMT1,sizeof(float),0,&yos1);
+          callback {pos1 = pd1->floatvaluey - pdyb1->floatvaluey;
+pos1 /= 100;//convert to semitones
+yos1 = pd1->y() - pdyb1->y();
+write_function(controller,DTLFOAMT1,sizeof(float),0,&pos1);
 pdyb1->position(pd1->x(),pdyb1->y());//lock x
 char s[25];
-sprintf(s,"Detune LFO Amplitude %6.2f",yos1);
+sprintf(s,"Detune LFO Amplitude %6.2f",pos1*100);
 message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
@@ -677,11 +684,13 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdyb2 {
-          callback {yos2 = pd2->floatvaluey - pdyb2->floatvaluey;
-write_function(controller,DTLFOAMT2,sizeof(float),0,&yos2);
+          callback {pos2 = pd2->floatvaluey - pdyb2->floatvaluey;
+pos2 /= 100;//convert to semitones
+yos2 = pd2->y() - pdyb2->y();
+write_function(controller,DTLFOAMT2,sizeof(float),0,&pos2);
 pdyb0->position(pd2->x(),pdyb2->y());//lock x
 char s[25];
-sprintf(s,"Detune LFO Amplitude %6.2f",yos2);
+sprintf(s,"Detune LFO Amplitude %6.2f",pos2*100);
 message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
@@ -719,11 +728,13 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdyb3 {
-          callback {yos3 = pd3->floatvaluey - pdyb3->floatvaluey;
-write_function(controller,DTLFOAMT3,sizeof(float),0,&yos3);
+          callback {pos3 = pd3->floatvaluey - pdyb3->floatvaluey;
+pos3 /= 100;//convert to semitones
+yos3 = pd3->y() - pdyb3->y();
+write_function(controller,DTLFOAMT3,sizeof(float),0,&pos3);
 pdyb3->position(pd3->x(),pdyb3->y());//lock x
 char s[25];
-sprintf(s,"Detune LFO Amplitude %6.2f",yos3);
+sprintf(s,"Detune LFO Amplitude %6.2f",pos3*100);
 message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
@@ -761,12 +772,14 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdyb4 {
-          callback {yos4 = pd4->floatvaluey - pdyb4->floatvaluey;
-write_function(controller,DTLFOAMT4,sizeof(float),0,&yos4);
+          callback {pos4 = pd4->floatvaluey - pdyb4->floatvaluey;
+pos4 /= 100;//convert to semitones
+yos4 = pd4->y() - pdyb4->y();
+write_function(controller,DTLFOAMT4,sizeof(float),0,&pos4);
 pdyb4->position(pd4->x(),pdyb4->y());//lock x
 char s[25];
-sprintf(s,"Detune LFO Amplitude %6.2f",yos4);
-message->copy_label(s);}
+sprintf(s,"Detune LFO Amplitude %6.2f",pos4*100);
+message->copy_label(s);} selected
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushYBoundr_render;}
@@ -803,11 +816,13 @@ message->copy_label(s);}
           class XYhandle
         }
         Fl_Box pdyb5 {
-          callback {yos5 = pd5->floatvaluey - pdyb5->floatvaluey;
-write_function(controller,DTLFOAMT5,sizeof(float),0,&yos5);
+          callback {pos5 = pd5->floatvaluey - pdyb5->floatvaluey;
+pos5 /= 100;//convert to semitones
+yos5 = pd5->y() - pdyb5->y();
+write_function(controller,DTLFOAMT5,sizeof(float),0,&pos5);
 pdyb5->position(pd5->x(),pdyb5->y());//lock x
 char s[25];
-sprintf(s,"Detune LFO Amplitude %6.2f",yos5);
+sprintf(s,"Detune LFO Amplitude %6.2f",pos5*100);
 message->copy_label(s);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
@@ -853,7 +868,7 @@ Fl::flush();} {}
   decl {float yos5;} {private local
   }
   decl {float p0;} {
-    comment {scaled pitch values (semitones)} selected private local
+    comment {scaled pitch values (semitones)} private local
   }
   decl {float p1;} {private local
   }
