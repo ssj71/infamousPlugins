@@ -81,7 +81,7 @@ else
     message->copy_label("dbl1             Off", RGBAsciiDisplay::RED_COLOR);
 }
 write_function(controller,ACTIVE0,sizeof(float),0,&activate0->floatvalue);}
-        tooltip {rule, bit 7} xywh {513 36 16 16}
+        tooltip {Activate Double 1} xywh {513 36 16 16} value 1
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_redLED_render;}
@@ -105,7 +105,7 @@ else
     message->copy_label("dbl2             Off", RGBAsciiDisplay::BLUE_COLOR);
 }
 write_function(controller,ACTIVE1,sizeof(float),0,&activate1->floatvalue);}
-        tooltip {rule, bit 6} xywh {513 80 16 16}
+        tooltip {Activate Double 2} xywh {513 80 16 16} value 1
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_blueLED_render;}
@@ -129,7 +129,7 @@ else
     message->copy_label("dbl3             Off", RGBAsciiDisplay::YELLOW_COLOR);
 }
 write_function(controller,ACTIVE2,sizeof(float),0,&activate2->floatvalue);}
-        tooltip {rule, bit 5} xywh {513 126 16 16}
+        tooltip {Activate Double 3} xywh {513 126 16 16} value 1
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_yellowLED_render;}
@@ -153,7 +153,7 @@ else
     message->copy_label("dbl4             Off", RGBAsciiDisplay::GREEN_COLOR);
 }
 write_function(controller,ACTIVE3,sizeof(float),0,&activate3->floatvalue);}
-        tooltip {rule, bit 4} xywh {513 172 16 16} value 1
+        tooltip {Activate Double 4} xywh {513 172 16 16} value 1
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_greenLED_render;}
@@ -177,7 +177,7 @@ else
     message->copy_label("dbl5             Off", RGBAsciiDisplay::ORANGE_COLOR);
 }
 write_function(controller,ACTIVE4,sizeof(float),0,&activate4->floatvalue);}
-        tooltip {rule, bit 3} xywh {513 218 16 16} value 1
+        tooltip {Activate Double 5} xywh {513 218 16 16} value 1
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_orangeLED_render;}
@@ -201,7 +201,7 @@ else
     message->copy_label("dbl6             Off", RGBAsciiDisplay::PURPLE_COLOR);
 }
 write_function(controller,ACTIVE5,sizeof(float),0,&activate5->floatvalue);}
-        tooltip {rule, bit 2} xywh {513 263 16 16} value 1
+        tooltip {Activate Double 6} xywh {513 263 16 16} value 1
         code1 {\#include"draw_LED.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_LED_get_height(); o->drawing_w = cairo_code_draw_LED_get_width(); o->drawing_f = &cairo_code_draw_purpleLED_render;}
@@ -210,7 +210,7 @@ write_function(controller,ACTIVE5,sizeof(float),0,&activate5->floatvalue);}
       Fl_Button sync {
         callback {write_function(controller,SYNCLFO,sizeof(float),0,&sync->floatvalue);
 message->copy_label("LFOs Sync'd", RGBAsciiDisplay::WHITE_COLOR);}
-        tooltip {rule, bit 1} xywh {514 317 20 20} value 1
+        tooltip {Sync All LFOs} xywh {514 317 20 20}
         code1 {\#include"draw_whiteTinyButton.h"}
         code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
         class Button
@@ -227,7 +227,7 @@ message->copy_label("LFOs Sync'd", RGBAsciiDisplay::WHITE_COLOR);}
 }
 else
 {
-  pitchdelayhide->value(1);
+  pitchdelayhide->value(1);  
   gp0->deactivate();
   gp1->deactivate(); 
   gp2->deactivate(); 
@@ -236,7 +236,7 @@ else
   gp5->deactivate();
   
 }}
-        tooltip {rule, bit 0} xywh {32 296 20 20}
+        tooltip {Show Pan/Gain Controls} xywh {32 296 20 20} value 1
         code1 {\#include"draw_whiteTinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
@@ -292,7 +292,7 @@ else
 
   
 }}
-        tooltip {initial condition, bit 15} xywh {10 318 20 20}
+        tooltip {Show Detune/Delay Controls} xywh {10 318 20 20} value 1
         code1 {\#include"draw_whiteTinyButton.h"}
         code2 {o->type(FL_TOGGLE_BUTTON);}
         code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
@@ -303,7 +303,7 @@ else
 char s[25];
 sprintf(s,"Master Gain %10.3f",mastergain->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
-        tooltip gain xywh {118 300 45 45} maximum 2 step 0.02 value 1
+        tooltip {Master Gain} xywh {118 300 45 45} maximum 2 step 0.02 value 1
         code1 {\#include"draw_redDial.h"}
         code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
@@ -468,16 +468,16 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
       Fl_Dial shape {
         callback {write_function(controller,LFOSHAPE,sizeof(float),0,&shape->floatvalue);
 char s[25];
-sprintf(s,"LFO Shape %13.3f",mastergain->floatvalue);
-message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
+sprintf(s,"LFO Shape %13.3f",shape->floatvalue);
+message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);} selected
         tooltip gain xywh {556 298 45 45} step 0.01 value 0.9
         code1 {\#include"draw_redDial.h"}
         code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
         code3 {o->drawLabel=false;}
         class Dial
       }
-      Fl_Box message {selected
-        tooltip {current output value} xywh {17 350 600 33}
+      Fl_Box message {
+        xywh {17 350 600 33}
         code0 {\#include"draw_rgb5x7.h"}
         code2 {o->drawing_h = cairo_code_draw_rgb5x7_get_height(); o->drawing_w = cairo_code_draw_rgb5x7_get_width(); o->drawing_f = &cairo_code_draw_rgb5x7_render;}
         code3 {o->nchars = 26;}

@@ -9,7 +9,7 @@ inline int cairo_code_draw_rgbLED_get_height()
 {
     return 19;
 }
-inline void cairo_code_draw_rgbLED_render(cairo_t *cr, uint8_t val, uint8_t r, uint8_t g, uint8_t b)
+inline void cairo_code_draw_rgbLED_render(cairo_t *cr, uint8_t val, float r, float g, float b)
 {
     cairo_pattern_t *pattern;
     cairo_matrix_t matrix;

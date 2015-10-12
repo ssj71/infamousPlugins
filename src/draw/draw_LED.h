@@ -34,8 +34,8 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
         bd = 0;
         break;
     case 4://blue
-        r = 0.055555;
-        g = 0.1;
+        r = 0.1;
+        g = 0.2;
         b = 1;
         rd = 0;
         gd = 0;
@@ -58,9 +58,9 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
         bd = 0;
         break;
     case 7://purple
-        r = 0.92157;
-        g = 0.92157;
-        b = 0;
+        r = 0.78431;
+        g = 0;
+        b = 1;
         rd = .2;
         gd = .2;
         bd = 0;

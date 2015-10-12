@@ -6,7 +6,7 @@ inline void cairo_code_draw_whiteTinyButton_render(cairo_t *cr, int val) {
 cairo_pattern_t *pattern;
 cairo_matrix_t matrix;
 
-    if(val)
+    if(!val)
     {
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_rgba(0.164706,0.164706,0.164706,1);

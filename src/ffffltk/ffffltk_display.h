@@ -109,6 +109,7 @@ public:
                 {
                     //draw blanks
                     j--;
+                    c = ' ';
                 }
                 else if(!periods && str[j] == '.')
                 {
@@ -213,7 +214,7 @@ public:
                 copy_label(new_label,0,0.88235,0);
                 break;
             case BLUE_COLOR:
-                copy_label(new_label,0,0,1);
+                copy_label(new_label,0.1,0.2,1);
                 break;
             case PURPLE_COLOR:
                 copy_label(new_label,0.78431,0,1);
@@ -267,6 +268,7 @@ public:
                 {
                     //draw blanks
                     j--;
+                    c = ' ';
                 }
                 else if(!periods && str[j] == '.')
                 {
