@@ -142,7 +142,7 @@ public:
     }
 };
 
-//this special display is for ascii that changes colors (the whole message is always 1 color)
+//this special display is for ascii that changes colors (the whole message is always 1 textcolor)
 class RGBAsciiDisplay: public Fl_Widget
 {
 public:
@@ -163,7 +163,7 @@ public:
         nchars = 1;
         periods = true;
         r = g = b = 1;
-        color = WHITE_COLOR;
+        textcolor = WHITE_COLOR;
     }
     int x, y, w, h;
     //const char* label;
@@ -185,11 +185,11 @@ public:
     int nchars;
     bool periods;//flag, states that periods are treated as a full character (monospace)
     float r,g,b;
-    color_t color;
+    color_t textcolor;
 
     void copy_label(const char* new_label, float _r, float _g, float _b)
     {
-        color = CUSTOM_COLOR;
+        textcolor = CUSTOM_COLOR;
         r = _r;
         g = _g;
         b = _b;
@@ -197,7 +197,7 @@ public:
     }
     void copy_label(const char* new_label, color_t c)
     {
-        color = c;
+        textcolor = c;
         switch(c)
         {
             case RED_COLOR:
@@ -222,7 +222,7 @@ public:
                 copy_label(new_label,1,1,1);
                 break;
             case CUSTOM_COLOR:
-                copy_label(new_label,r,g,b);//no change in color since they haven't redefined it
+                copy_label(new_label,r,g,b);//no change in textcolor since they haven't redefined it
                 break;
         }
     }

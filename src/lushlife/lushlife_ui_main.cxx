@@ -113,7 +113,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           self->gp0->Yv->value(val);
           break;
         case PAN0:
-          self->gp0->Xv->>value(val);
+          self->gp0->Xv->value(val);
           break;
       }//switch
     }//if float

@@ -63,9 +63,9 @@ cairo_pattern_set_filter(pattern, CAIRO_FILTER_GOOD);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 
-    cairo_translate(cr,45.5,45.5);
+    cairo_translate(cr,25,25);
     cairo_rotate(cr,3*PI/2*val - 3*PI/4);
-    cairo_translate(cr,-45.5,-45.5);
+    cairo_translate(cr,-25,-25);
 
 cairo_new_path(cr);
 cairo_move_to(cr, 31.828125, 46.628906);

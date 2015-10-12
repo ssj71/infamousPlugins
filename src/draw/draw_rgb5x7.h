@@ -113,7 +113,7 @@ static const uint8_t Font5x7[][5]  =
     {0x08, 0x1C, 0x2A, 0x08, 0x08} // <-
 };
 
-inline void cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, uint8_t r, uint8_t g, uint8_t b)
+inline void cairo_code_draw_rgb5x7_render(cairo_t *cr, char num, float r, float g, float b)
 {
 
     float offset = 1.3*cairo_code_draw_rgbLED_get_width();//1.3 so there is a space between

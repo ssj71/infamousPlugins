@@ -8,7 +8,7 @@ class StuckUI {open
   } {
     Fl_Window ui {
       label {the infamous stuck} open
-      xywh {306 258 256 400} type Double box UP_BOX resizable
+      xywh {1442 28 1436 1740} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}

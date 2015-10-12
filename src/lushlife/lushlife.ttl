@@ -4,6 +4,7 @@
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix lv2ui:   <http://lv2plug.in/ns/extensions/ui#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
 @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
 @prefix param: <http://lv2plug.in/ns/ext/parameters#> .
@@ -53,6 +54,7 @@
         lv2:microVersion 1 ;
         rdfs:comment "A artificial double tracker for vocals or other monophonic sounds. It is capable of everything from lush chorus, to thin doubles, to weird over-the-top effects. It is modulation ready with 6 double tracks each controllable by 2 lfos." ;
         lv2:optionalFeature lv2:hardRTCapable ;
+        lv2ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife_ui> ;
 
 
         lv2:port [
