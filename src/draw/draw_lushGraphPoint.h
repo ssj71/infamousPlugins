@@ -11,7 +11,7 @@ cairo_set_line_width(cr, 4);
 cairo_set_miter_limit(cr, 4);
 cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-pattern = cairo_pattern_create_rgba(r,b,g,1);
+pattern = cairo_pattern_create_rgba(r,g,b,1);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 cairo_new_path(cr);

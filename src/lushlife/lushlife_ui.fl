@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {375 534 630 400} type Double box UP_BOX resizable
+      xywh {377 534 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -234,7 +234,27 @@ else
   gp3->deactivate();  
   gp4->deactivate();  
   gp5->deactivate();
+ 
+  pd0->activate();
+  pd1->activate(); 
+  pd2->activate(); 
+  pd3->activate();  
+  pd4->activate();  
+  pd5->activate();
   
+  pdxb0->activate();
+  pdxb1->activate(); 
+  pdxb2->activate(); 
+  pdxb3->activate();  
+  pdxb4->activate();  
+  pdxb5->activate(); 
+   
+  pdyb0->activate();
+  pdyb1->activate(); 
+  pdyb2->activate(); 
+  pdyb3->activate();  
+  pdyb4->activate();  
+  pdyb5->activate(); 
 }}
         tooltip {Show Pan/Gain Controls} xywh {32 296 20 20} value 1
         code1 {\#include"draw_whiteTinyButton.h"}
@@ -290,6 +310,12 @@ else
   pdyb4->deactivate();  
   pdyb5->deactivate();
 
+  gp0->activate();
+  gp1->activate(); 
+  gp2->activate(); 
+  gp3->activate();  
+  gp4->activate();  
+  gp5->activate();
   
 }}
         tooltip {Show Detune/Delay Controls} xywh {10 318 20 20} value 1
@@ -469,7 +495,7 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
         callback {write_function(controller,LFOSHAPE,sizeof(float),0,&shape->floatvalue);
 char s[25];
 sprintf(s,"LFO Shape %13.3f",shape->floatvalue);
-message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);} selected
+message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
         tooltip gain xywh {556 298 45 45} step 0.01 value 0.9
         code1 {\#include"draw_redDial.h"}
         code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
@@ -587,8 +613,10 @@ message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
         }
         Fl_Box pdxb0 {
           callback {//calculate new offsets
-dos0 = pdxb0->floatvaluex - pd0->floatvaluex;
 xos0 = pdxb0->x - pd0->x;
+if(xos0<0)
+  pdxb0->x = pd0->x;
+dos0 = pdxb0->floatvaluex - pd0->floatvaluex;
 write_function(controller,DLFOA0,sizeof(float),0,&dos0);
 pdxb0->position(pdxb0->x,pd0->y);//lock y
 char s[25];
@@ -602,14 +630,16 @@ message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
         }
         Fl_Box pdyb0 {
           callback {//calculate new offsets
+yos0 = pd0->y - pdyb0->y;
+if(yos0<0)
+  pdyb0->y = pd0->y;
 pos0 = pd0->floatvaluey - pdyb0->floatvaluey;
 pos0 /= 100;//convert to semitones
-yos0 = pd0->y - pdyb0->y;
 write_function(controller,SLFOA0,sizeof(float),0,&pos0);
 pdyb0->position(pd0->x,pdyb0->y);//lock x
 char s[25];
 sprintf(s,"Detune LFO Amplitude %6.2f",pos0*100);
-message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
+message->copy_label(s, RGBAsciiDisplay::RED_COLOR);} selected
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
           code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundr_render;}
@@ -617,7 +647,8 @@ message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
           class XYhandle
         }
         Fl_Box pd1 {
-          callback {p1 = pd1->floatvaluey / 100;
+          callback {//calculate new offsets
+p1 = pd1->floatvaluey / 100;
 write_function(controller,SHIFT1,sizeof(float),0,&p1);
 write_function(controller,DELAY1,sizeof(float),0,&pd1->floatvaluex);
 pdxb1->position(pd1->x+xos1,pd1->y);
@@ -632,8 +663,11 @@ message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
           class XYhandle
         }
         Fl_Box pdxb1 {
-          callback {dos1 = pdxb1->floatvaluex - pd1->floatvaluex;
+          callback {//calculate new offsets
 xos1 = pdxb1->x - pd1->x;
+if(xos1<0)
+  pdxb1->x = pd1->x;
+dos1 = pdxb1->floatvaluex - pd1->floatvaluex;
 write_function(controller,DLFOA1,sizeof(float),0,&dos1);
 pdxb1->position(pdxb1->x,pd1->y);//lock y
 char s[25];
@@ -641,14 +675,17 @@ sprintf(s,"Delay LFO Amplitude %6.2f",dos1);
 message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundb_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb1 {
-          callback {pos1 = pd1->floatvaluey - pdyb1->floatvaluey;
-pos1 /= 100;//convert to semitones
+          callback {//calculate new offsets
 yos1 = pd1->y - pdyb1->y;
+if(yos1<0)
+  pdyb1->y = pd1->y;
+pos1 = pd1->floatvaluey - pdyb1->floatvaluey;
+pos1 /= 100;//convert to semitones
 write_function(controller,SLFOA1,sizeof(float),0,&pos1);
 pdyb1->position(pd1->x,pdyb1->y);//lock x
 char s[25];
@@ -656,7 +693,7 @@ sprintf(s,"Detune LFO Amplitude %6.2f",pos1*100);
 message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundb_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
@@ -676,8 +713,11 @@ message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
           class XYhandle
         }
         Fl_Box pdxb2 {
-          callback {dos2 = pdxb2->floatvaluex - pd2->floatvaluex;
+          callback {//calculate new offsets
 xos2 = pdxb2->x - pd2->x;
+if(xos2<0)
+  pdxb2->x = pd2->x;
+dos2 = pdxb2->floatvaluex - pd2->floatvaluex;
 write_function(controller,DLFOA2,sizeof(float),0,&dos2);
 pdxb2->position(pdxb2->x,pd2->y);//lock y
 char s[25];
@@ -685,14 +725,17 @@ sprintf(s,"Delay LFO Amplitude %6.2f",dos2);
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundy_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb2 {
-          callback {pos2 = pd2->floatvaluey - pdyb2->floatvaluey;
-pos2 /= 100;//convert to semitones
+          callback {//calculate new offsets
 yos2 = pd2->y - pdyb2->y;
+if(yos2<0)
+  pdyb2->y = pd2->y;
+pos2 = pd2->floatvaluey - pdyb2->floatvaluey;
+pos2 /= 100;//convert to semitones
 write_function(controller,SLFOA2,sizeof(float),0,&pos2);
 pdyb0->position(pd2->x,pdyb2->y);//lock x
 char s[25];
@@ -700,7 +743,7 @@ sprintf(s,"Detune LFO Amplitude %6.2f",pos2*100);
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundy_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
@@ -720,8 +763,11 @@ message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
           class XYhandle
         }
         Fl_Box pdxb3 {
-          callback {dos3 = pdxb3->floatvaluex - pd3->floatvaluex;
+          callback {//calculate new offsets
 xos3 = pdxb3->x - pd3->x;
+if(xos3<0)
+  pdxb3->x = pd3->x;
+dos3 = pdxb3->floatvaluex - pd3->floatvaluex;
 write_function(controller,DLFOA3,sizeof(float),0,&dos3);
 pdxb3->position(pdxb3->x,pd3->y);//lock y
 char s[25];
@@ -729,14 +775,17 @@ sprintf(s,"Delay LFO Amplitude %6.2f",dos3);
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundg_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb3 {
-          callback {pos3 = pd3->floatvaluey - pdyb3->floatvaluey;
-pos3 /= 100;//convert to semitones
+          callback {//calculate new offsets
 yos3 = pd3->y - pdyb3->y;
+if(yos3<0)
+  pdyb3->y = pd3->y;
+pos3 = pd3->floatvaluey - pdyb3->floatvaluey;
+pos3 /= 100;//convert to semitones
 write_function(controller,SLFOA3,sizeof(float),0,&pos3);
 pdyb3->position(pd3->x,pdyb3->y);//lock x
 char s[25];
@@ -744,7 +793,7 @@ sprintf(s,"Detune LFO Amplitude %6.2f",pos3*100);
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundg_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
@@ -764,8 +813,11 @@ message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
           class XYhandle
         }
         Fl_Box pdxb4 {
-          callback {dos4 = pdxb4->floatvaluex - pd4->floatvaluex;
+          callback {//calculate new offsets
 xos4 = pdxb4->x - pd4->x;
+if(xos4<0)
+  pdxb4->x = pd4->x;
+dos4 = pdxb4->floatvaluex - pd4->floatvaluex;
 write_function(controller,DLFOA4,sizeof(float),0,&dos4);
 pdxb4->position(pdxb4->x,pd4->y);//lock y
 char s[25];
@@ -773,14 +825,17 @@ sprintf(s,"Delay LFO Amplitude %6.2f",dos4);
 message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundo_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb4 {
-          callback {pos4 = pd4->floatvaluey - pdyb4->floatvaluey;
-pos4 /= 100;//convert to semitones
+          callback {//calculate new offsets
 yos4 = pd4->y - pdyb4->y;
+if(yos4<0)
+  pdyb4->y = pd4->y;
+pos4 = pd4->floatvaluey - pdyb4->floatvaluey;
+pos4 /= 100;//convert to semitones
 write_function(controller,SLFOA4,sizeof(float),0,&pos4);
 pdyb4->position(pd4->x,pdyb4->y);//lock x
 char s[25];
@@ -788,7 +843,7 @@ sprintf(s,"Detune LFO Amplitude %6.2f",pos4*100);
 message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundo_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
@@ -808,8 +863,11 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
           class XYhandle
         }
         Fl_Box pdxb5 {
-          callback {dos5 = pdxb5->floatvaluex - pd5->floatvaluex;
+          callback {//calculate new offsets
 xos5 = pdxb5->x - pd5->x;
+if(xos5<0)
+  pdxb5->x = pd5->x;
+dos5 = pdxb5->floatvaluex - pd5->floatvaluex;
 write_function(controller,DLFOA5,sizeof(float),0,&dos5);
 pdxb5->position(pdxb5->x,pd5->y);//lock y
 char s[25];
@@ -817,14 +875,17 @@ sprintf(s,"Delay LFO Amplitude %6.2f",dos5);
 message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
           xywh {55 50 4 15}
           code0 {\#include"draw_lushGraphXBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundp_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }
         Fl_Box pdyb5 {
-          callback {pos5 = pd5->floatvaluey - pdyb5->floatvaluey;
-pos5 /= 100;//convert to semitones
+          callback {//calculate new offsets
 yos5 = pd5->y - pdyb5->y;
+if(yos5<0)
+  pdyb5->y = pd5->y;
+pos5 = pd5->floatvaluey - pdyb5->floatvaluey;
+pos5 /= 100;//convert to semitones
 write_function(controller,SLFOA5,sizeof(float),0,&pos5);
 pdyb5->position(pd5->x,pdyb5->y);//lock x
 char s[25];
@@ -832,7 +893,7 @@ sprintf(s,"Detune LFO Amplitude %6.2f",pos5*100);
 message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
           xywh {45 50 15 4}
           code0 {\#include"draw_lushGraphYBound.h"}
-          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundr_render;}
+          code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundp_render;}
           code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 150;}
           class XYhandle
         }

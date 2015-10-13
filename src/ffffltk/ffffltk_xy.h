@@ -235,7 +235,7 @@ public:
                 if(pos > g->y()+g->h() - h) pos = g->y() + g->h() - h;
                 y = pos;
 
-                val = ( (x - g->x()) / (g->w() - w) ) * (Xv->maximum() - Xv->minimum()) + Xv->minimum();
+                val = ( (float)(x - g->x()) / (float)(g->w() - w) ) * (Xv->maximum() - Xv->minimum()) + Xv->minimum();
                 Xv->value(val);
                 if(lock2int) val = (int)val;
                 if(squaredmaxx)
@@ -243,7 +243,7 @@ public:
                 else
                     floatvaluex = val;
 
-                val = ( (g->y() - y) / (g->h() - h) ) * (Yv->maximum() - Yv->minimum()) + Yv->minimum();
+                val = ( (float)(g->y() - y) / (float)(g->h() - h) ) * (Yv->maximum() - Yv->minimum()) + Yv->minimum();
                 Yv->value(val);
                 if(lock2int) val = (int)val;
                 if(squaredmaxy)
@@ -251,7 +251,9 @@ public:
                 else
                     floatvaluey = val;
 
+                Fl_Widget::position(x,y);
                 redraw();
+                g->redraw();
                 do_callback(); // makes FLTK call "extra" code entered in FLUID
             }
         }
