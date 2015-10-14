@@ -8,47 +8,51 @@ class CheapDistUI {open
   } {
     Fl_Window ui {
       label {the infamous envelope follower} open
-      xywh {658 403 252 193} type Double box UP_BOX resizable
+      xywh {662 403 252 193} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
       code3 {o->show();} visible
     } {
-      Fl_Box bg {
-        xywh {0 0 252 193}
-        code0 {\#include"cheapdist.h"}
-        code1 {\#include"draw_white.h"}
-        code3 {o->drawing_h = cairo_code_draw_white_get_height(); o->drawing_w = cairo_code_draw_white_get_width(); o->drawing_f = &cairo_code_draw_white_render;}
-        class Background
-      }
-      Fl_Box title {
-        xywh {0 0 252 54}
-        code0 {\#include"draw_cheapLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_cheapTitle_get_height(); o->drawing_w = cairo_code_draw_cheapTitle_get_width(); o->drawing_f = &cairo_code_draw_cheapTitle_render;}
-        code2 {o->stretch = false;}
-        class Background
-      }
-      Fl_Box aglab {
-        xywh {95 175 98 18}
-        code0 {\#include"draw_envLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_cheapAggression_get_height(); o->drawing_w = cairo_code_draw_cheapAggression_get_width(); o->drawing_f = &cairo_code_draw_cheapAggression_render;}
-        code2 {o->stretch = false;}
-        class Background
-      }
-      Fl_Box logo {
-        xywh {5 55 67 133}
-        code0 {\#include"draw_infamousLogoBW.h"}
-        code1 {o->drawing_h = cairo_code_draw_infamousLogoBW_get_height(); o->drawing_w = cairo_code_draw_infamousLogoBW_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoBW_render;}
-        code2 {o->stretch = false;}
-        class Background
-      }
-      Fl_Dial aggression {
-        callback {write_function(controller,AGGRESSION,sizeof(float),0,&aggression->floatvalue);} selected
-        tooltip gain xywh {95 55 99 119} minimum 1 maximum 3 step 0.01 value 1
-        code1 {\#include"draw_cheapDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_cheapDial_get_height(); o->drawing_w = cairo_code_draw_cheapDial_get_width(); o->drawing_f = &cairo_code_draw_cheapDial_render;}
-        code3 {o->lock2int = true;}
-        class Dial
+      Fl_Group {} {open selected
+        xywh {0 0 252 193} resizable
+      } {
+        Fl_Box bg {
+          xywh {0 0 252 193}
+          code0 {\#include"cheapdist.h"}
+          code1 {\#include"draw_white.h"}
+          code3 {o->drawing_h = cairo_code_draw_white_get_height(); o->drawing_w = cairo_code_draw_white_get_width(); o->drawing_f = &cairo_code_draw_white_render;}
+          class Background
+        }
+        Fl_Box title {
+          xywh {0 0 252 54}
+          code0 {\#include"draw_cheapLabels.h"}
+          code1 {o->drawing_h = cairo_code_draw_cheapTitle_get_height(); o->drawing_w = cairo_code_draw_cheapTitle_get_width(); o->drawing_f = &cairo_code_draw_cheapTitle_render;}
+          code2 {o->stretch = false;}
+          class Background
+        }
+        Fl_Box aglab {
+          xywh {95 175 98 18}
+          code0 {\#include"draw_envLabels.h"}
+          code1 {o->drawing_h = cairo_code_draw_cheapAggression_get_height(); o->drawing_w = cairo_code_draw_cheapAggression_get_width(); o->drawing_f = &cairo_code_draw_cheapAggression_render;}
+          code2 {o->stretch = false;}
+          class Background
+        }
+        Fl_Box logo {
+          xywh {5 55 67 133}
+          code0 {\#include"draw_infamousLogoBW.h"}
+          code1 {o->drawing_h = cairo_code_draw_infamousLogoBW_get_height(); o->drawing_w = cairo_code_draw_infamousLogoBW_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoBW_render;}
+          code2 {o->stretch = false;}
+          class Background
+        }
+        Fl_Dial aggression {
+          callback {write_function(controller,AGGRESSION,sizeof(float),0,&aggression->floatvalue);}
+          tooltip gain xywh {95 55 99 119} minimum 1 maximum 3 step 0.01 value 1
+          code1 {\#include"draw_cheapDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_cheapDial_get_height(); o->drawing_w = cairo_code_draw_cheapDial_get_width(); o->drawing_f = &cairo_code_draw_cheapDial_render;}
+          code3 {o->lock2int = true;}
+          class Dial
+        }
       }
     }
   }

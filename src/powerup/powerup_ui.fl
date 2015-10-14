@@ -8,67 +8,71 @@ class PowerUpUI {open
   } {
     Fl_Window ui {
       label {the infamous power cut} open
-      xywh {56 491 487 318} type Double box UP_BOX resizable
+      xywh {60 491 487 318} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
       code3 {o->show();} visible
     } {
-      Fl_Box bg {
-        xywh {0 0 487 318}
-        code0 {\#include"powerup.h"}
-        code1 {\#include"draw_powerbg.h"}
-        code3 {o->drawing_h = cairo_code_draw_powerbg_get_height(); o->drawing_w = cairo_code_draw_powerbg_get_width(); o->drawing_f = &cairo_code_draw_powerbg_render;}
-        class Background
-      }
-      Fl_Box title {
-        xywh {28 20 271 38}
-        code0 {\#include"draw_pwrLabels.h"}
-        code1 {o->drawing_h = cairo_code_draw_pwrupLabel_get_height(); o->drawing_w = cairo_code_draw_pwrupLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrupLabel_render;}
-        class Background
-      }
-      Fl_Box timelabel {
-        xywh {13 179 127 25}
-        code2 {o->drawing_h = cairo_code_draw_pwrstarttLabel_get_height(); o->drawing_w = cairo_code_draw_pwrstarttLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrstarttLabel_render;}
-        class Background
-      }
-      Fl_Box curvelabel {
-        xywh {145 179 132 119}
-        code2 {o->drawing_h = cairo_code_draw_pwrstartcLabel_get_height(); o->drawing_w = cairo_code_draw_pwrstartcLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrstartcLabel_render;}
-        class Background
-      }
-      Fl_Box reel {
-        xywh {286 8 381 381}
-        code0 {\#include"draw_reel.h"}
-        code1 {\#include"reel.h"}
-        code2 {o->drawing_h = cairo_code_draw_reel_get_height(); o->drawing_w = cairo_code_draw_reel_get_width(); }
-        class PowerReel
-      }
-      Fl_Button power {
-        callback {write_function(controller,FIRE_IT_UP,sizeof(float),0,&power->floatvalue);
+      Fl_Group {} {open selected
+        xywh {0 0 667 389} resizable
+      } {
+        Fl_Box bg {
+          xywh {0 0 487 318}
+          code0 {\#include"powerup.h"}
+          code1 {\#include"draw_powerbg.h"}
+          code3 {o->drawing_h = cairo_code_draw_powerbg_get_height(); o->drawing_w = cairo_code_draw_powerbg_get_width(); o->drawing_f = &cairo_code_draw_powerbg_render;}
+          class Background
+        }
+        Fl_Box title {
+          xywh {28 20 271 38}
+          code0 {\#include"draw_pwrLabels.h"}
+          code1 {o->drawing_h = cairo_code_draw_pwrupLabel_get_height(); o->drawing_w = cairo_code_draw_pwrupLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrupLabel_render;}
+          class Background
+        }
+        Fl_Box timelabel {
+          xywh {13 179 127 25}
+          code2 {o->drawing_h = cairo_code_draw_pwrstarttLabel_get_height(); o->drawing_w = cairo_code_draw_pwrstarttLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrstarttLabel_render;}
+          class Background
+        }
+        Fl_Box curvelabel {
+          xywh {145 179 132 119}
+          code2 {o->drawing_h = cairo_code_draw_pwrstartcLabel_get_height(); o->drawing_w = cairo_code_draw_pwrstartcLabel_get_width(); o->drawing_f = &cairo_code_draw_pwrstartcLabel_render;}
+          class Background
+        }
+        Fl_Box reel {
+          xywh {286 8 381 381}
+          code0 {\#include"draw_reel.h"}
+          code1 {\#include"reel.h"}
+          code2 {o->drawing_h = cairo_code_draw_reel_get_height(); o->drawing_w = cairo_code_draw_reel_get_width();}
+          class PowerReel
+        }
+        Fl_Button power {
+          callback {write_function(controller,FIRE_IT_UP,sizeof(float),0,&power->floatvalue);
 reel->trigger = power->value();}
-        tooltip {Fire it Up!} xywh {42 80 160 64}
-        code1 {\#include"draw_powerButton.h"}
-        code2 {o->type(FL_TOGGLE_BUTTON);}
-        code3 {o->drawing_h = cairo_code_draw_powerButton_get_height(); o->drawing_w = cairo_code_draw_powerButton_get_width(); o->drawing_f = &cairo_code_draw_powerButton_render;}
-        class Button
-      }
-      Fl_Dial time {
-        callback {write_function(controller,STARTUP_TIME,sizeof(float),0,&time->floatvalue);
+          tooltip {Fire it Up!} xywh {42 80 160 64}
+          code1 {\#include"draw_powerButton.h"}
+          code2 {o->type(FL_TOGGLE_BUTTON);}
+          code3 {o->drawing_h = cairo_code_draw_powerButton_get_height(); o->drawing_w = cairo_code_draw_powerButton_get_width(); o->drawing_f = &cairo_code_draw_powerButton_render;}
+          class Button
+        }
+        Fl_Dial time {
+          callback {write_function(controller,STARTUP_TIME,sizeof(float),0,&time->floatvalue);
 if(!power->value()){reel->time = time->value()/.06;}}
-        tooltip {Startup Time} xywh {38 218 77 77} maximum 10 step 0.1 value 0.5
-        code1 {\#include"draw_silverDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_silverDial_get_height(); o->drawing_w = cairo_code_draw_silverDial_get_width(); o->drawing_f = &cairo_code_draw_silverDial_render;}
-        code3 {sprintf(o->units,"s");}
-        class Dial
-      }
-      Fl_Dial curve {
-        callback {write_function(controller,STARTUP_CURVE,sizeof(float),0,&curve->floatvalue);
-if(!power->value()){reel->curve = curve->value();}} selected
-        tooltip {Startup Curve} xywh {172 218 77 77} minimum -10 maximum 10 step 0.2
-        code1 {\#include"draw_tabDial.h"}
-        code2 {o->drawing_h = cairo_code_draw_silverDial_get_height(); o->drawing_w = cairo_code_draw_silverDial_get_width(); o->drawing_f = &cairo_code_draw_silverDial_render;}
-        class Dial
+          tooltip {Startup Time} xywh {38 218 77 77} maximum 10 step 0.1 value 0.5
+          code1 {\#include"draw_silverDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_silverDial_get_height(); o->drawing_w = cairo_code_draw_silverDial_get_width(); o->drawing_f = &cairo_code_draw_silverDial_render;}
+          code3 {sprintf(o->units,"s");}
+          class Dial
+        }
+        Fl_Dial curve {
+          callback {write_function(controller,STARTUP_CURVE,sizeof(float),0,&curve->floatvalue);
+if(!power->value()){reel->curve = curve->value();}}
+          tooltip {Startup Curve} xywh {172 218 77 77} minimum -10 maximum 10 step 0.2
+          code1 {\#include"draw_tabDial.h"}
+          code2 {o->drawing_h = cairo_code_draw_silverDial_get_height(); o->drawing_w = cairo_code_draw_silverDial_get_width(); o->drawing_f = &cairo_code_draw_silverDial_render;}
+          class Dial
+        }
       }
     }
   }
