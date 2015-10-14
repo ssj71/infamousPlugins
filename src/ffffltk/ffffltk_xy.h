@@ -243,7 +243,7 @@ public:
                 else
                     floatvaluex = val;
 
-                val = ( (float)(g->y() - y) / (float)(g->h() - h) ) * (Yv->maximum() - Yv->minimum()) + Yv->minimum();
+                val = Yv->maximum() - ( (float)(y - g->y()) / (float)(g->h() - h) ) * (Yv->maximum() - Yv->minimum());
                 Yv->value(val);
                 if(lock2int) val = (int)val;
                 if(squaredmaxy)

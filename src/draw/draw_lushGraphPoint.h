@@ -62,6 +62,6 @@ inline void cairo_code_draw_lushGraphPointp_render(cairo_t *cr)
 
 inline void cairo_code_draw_lushGraphPointw_render(cairo_t *cr)
 {
-    cairo_code_draw_lushGraphPoint_render(cr, 0.164, 0.164, 0.164);
+    cairo_code_draw_lushGraphPoint_render(cr, 0.9, 0.9, 0.9);
 }
 #endif

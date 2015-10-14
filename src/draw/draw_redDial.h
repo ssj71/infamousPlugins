@@ -52,6 +52,11 @@ cairo_matrix_init(&matrix, 0.648375,0,0,0.648375,-26.638418,-85.597409);
 cairo_pattern_set_matrix(pattern, &matrix);
 cairo_stroke_preserve(cr);
 /********************/
+
+    cairo_translate(cr,25,25);
+    cairo_rotate(cr,3*PI/2*val - 3*PI/4);
+    cairo_translate(cr,-25,-25);
+
 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 pattern = cairo_pattern_create_linear(52.458691, 825.30457, 40.941853, 782.5293);
 cairo_pattern_add_color_stop_rgba(pattern, 0,0.407843,0,0,1);
@@ -63,9 +68,9 @@ cairo_pattern_set_filter(pattern, CAIRO_FILTER_GOOD);
 cairo_set_source(cr, pattern);
 cairo_pattern_destroy(pattern);
 
-    cairo_translate(cr,25,25);
-    cairo_rotate(cr,3*PI/2*val - 3*PI/4);
-    cairo_translate(cr,-25,-25);
+//    cairo_translate(cr,25,25);
+//    cairo_rotate(cr,3*PI/2*val - 3*PI/4);
+//    cairo_translate(cr,-25,-25);
 
 cairo_new_path(cr);
 cairo_move_to(cr, 31.828125, 46.628906);
