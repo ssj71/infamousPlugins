@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {452 816 630 400} type Double box UP_BOX resizable
+      xywh {454 816 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -143,7 +143,7 @@ else
     pdyb2->deactivate();
     message->copy_label("dbl3             Off", RGBAsciiDisplay::YELLOW_COLOR);
 }
-write_function(controller,ACTIVE2,sizeof(float),0,&activate2->floatvalue);} selected
+write_function(controller,ACTIVE2,sizeof(float),0,&activate2->floatvalue);}
           tooltip {Activate Double 3} xywh {513 126 16 16} value 1
           code1 {\#include"draw_LED.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -246,12 +246,18 @@ message->copy_label("LFOs Sync'd", RGBAsciiDisplay::WHITE_COLOR);}
           callback {if(pangainhide->value())
 {
   drygp->activate();
-  gp0->activate();
-  gp1->activate(); 
-  gp2->activate(); 
-  gp3->activate();  
-  gp4->activate();  
-  gp5->activate();
+  if(activate0->value())
+    gp0->activate();
+  if(activate1->value())
+    gp1->activate(); 
+  if(activate2->value())
+    gp2->activate(); 
+  if(activate3->value())
+    gp3->activate();  
+  if(activate4->value())
+    gp4->activate();  
+  if(activate5->value())
+    gp5->activate();
 }
 else
 {
@@ -264,26 +270,44 @@ else
   gp4->deactivate();  
   gp5->deactivate();
  
-  pd0->activate();
-  pd1->activate(); 
-  pd2->activate(); 
-  pd3->activate();  
-  pd4->activate();  
-  pd5->activate();
+  if(activate0->value())
+    pd0->activate();
+  if(activate1->value())
+    pd1->activate(); 
+  if(activate2->value())
+    pd2->activate(); 
+  if(activate3->value())
+    pd3->activate();  
+  if(activate4->value())
+    pd4->activate();  
+  if(activate5->value())
+    pd5->activate();
   
-  pdxb0->activate();
-  pdxb1->activate(); 
-  pdxb2->activate(); 
-  pdxb3->activate();  
-  pdxb4->activate();  
-  pdxb5->activate(); 
+  if(activate0->value())
+    pdxb0->activate();
+  if(activate1->value())
+    pdxb1->activate(); 
+  if(activate2->value())
+    pdxb2->activate(); 
+  if(activate3->value())
+    pdxb3->activate();  
+  if(activate4->value())
+    pdxb4->activate();  
+  if(activate5->value())
+    pdxb5->activate(); 
    
-  pdyb0->activate();
-  pdyb1->activate(); 
-  pdyb2->activate(); 
-  pdyb3->activate();  
-  pdyb4->activate();  
-  pdyb5->activate(); 
+  if(activate0->value())
+    pdyb0->activate();
+  if(activate1->value())
+    pdyb1->activate(); 
+  if(activate2->value())
+    pdyb2->activate(); 
+  if(activate3->value())
+    pdyb3->activate();  
+  if(activate4->value())
+    pdyb4->activate();  
+  if(activate5->value())
+    pdyb5->activate();
 }}
           tooltip {Show Pan/Gain Controls} xywh {32 296 20 20} value 1 align 6
           code1 {\#include"draw_whiteTinyButton.h"}
@@ -294,26 +318,44 @@ else
         Fl_Button pitchdelayhide {
           callback {if(pitchdelayhide->value())
 {
-  pd0->activate();
-  pd1->activate(); 
-  pd2->activate(); 
-  pd3->activate();  
-  pd4->activate();  
-  pd5->activate();
+  if(activate0->value())
+    pd0->activate();
+  if(activate1->value())
+    pd1->activate(); 
+  if(activate2->value())
+    pd2->activate(); 
+  if(activate3->value())
+    pd3->activate();  
+  if(activate4->value())
+    pd4->activate();  
+  if(activate5->value())
+    pd5->activate();
   
-  pdxb0->activate();
-  pdxb1->activate(); 
-  pdxb2->activate(); 
-  pdxb3->activate();  
-  pdxb4->activate();  
-  pdxb5->activate(); 
+  if(activate0->value())
+    pdxb0->activate();
+  if(activate1->value())
+    pdxb1->activate(); 
+  if(activate2->value())
+    pdxb2->activate(); 
+  if(activate3->value())
+    pdxb3->activate();  
+  if(activate4->value())
+    pdxb4->activate();  
+  if(activate5->value())
+    pdxb5->activate(); 
    
-  pdyb0->activate();
-  pdyb1->activate(); 
-  pdyb2->activate(); 
-  pdyb3->activate();  
-  pdyb4->activate();  
-  pdyb5->activate();
+  if(activate0->value())
+    pdyb0->activate();
+  if(activate1->value())
+    pdyb1->activate(); 
+  if(activate2->value())
+    pdyb2->activate(); 
+  if(activate3->value())
+    pdyb3->activate();  
+  if(activate4->value())
+    pdyb4->activate();  
+  if(activate5->value())
+    pdyb5->activate();
 }
 else
 {
@@ -340,12 +382,18 @@ else
   pdyb5->deactivate();
 
   drygp->activate();
-  gp0->activate();
-  gp1->activate(); 
-  gp2->activate(); 
-  gp3->activate();  
-  gp4->activate();  
-  gp5->activate();
+  if(activate0->value())
+    gp0->activate();
+  if(activate1->value())
+    gp1->activate(); 
+  if(activate2->value())
+    gp2->activate(); 
+  if(activate3->value())
+    gp3->activate();  
+  if(activate4->value())
+    gp4->activate();  
+  if(activate5->value())
+    gp5->activate();
   
 }}
           tooltip {Show Detune/Delay Controls} xywh {10 318 20 20} value 1
@@ -428,7 +476,7 @@ else
   sprintf(s,"Detune LFO Freq %4.3f Hz",pitchfreq2->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
-          tooltip {Detune LFO 3 Frequency} xywh {532 112 45 45} step 0.01 value 0.25
+          tooltip {Detune LFO 3 Frequency} xywh {532 112 45 45} step 0.01
           code1 {\#include"draw_redDial.h"}
           code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
           code3 {o->drawLabel=false;}
@@ -451,7 +499,7 @@ else
   sprintf(s,"Detune LFO Freq %4.3f Hz",pitchfreq3->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
-          tooltip {Detune LFO 4 Frequency} xywh {532 158 45 45} step 0.01 value 0.1
+          tooltip {Detune LFO 4 Frequency} xywh {532 158 45 45} step 0.01
           code1 {\#include"draw_redDial.h"}
           code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
           code3 {o->drawLabel=false;}
@@ -520,7 +568,7 @@ else
   sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq0->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
-          tooltip {Delay LFO 1 Frequency} xywh {580 20 45 45} step 0.01 value 0.1
+          tooltip {Delay LFO 1 Frequency} xywh {580 20 45 45} step 0.01
           code1 {\#include"draw_redDial.h"}
           code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
           code3 {o->drawLabel=false;}
@@ -543,7 +591,7 @@ else
   sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq1->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
-          tooltip {Delay LFO 2 Frequency} xywh {580 66 45 45} step 0.01 value 0.1
+          tooltip {Delay LFO 2 Frequency} xywh {580 66 45 45} step 0.01
           code1 {\#include"draw_redDial.h"}
           code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
           code3 {o->drawLabel=false;}
@@ -566,7 +614,7 @@ else
   sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq2->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
-          tooltip {Delay LFO 3 Frequency} xywh {580 112 45 45} step 0.01 value 0.5
+          tooltip {Delay LFO 3 Frequency} xywh {580 112 45 45} step 0.01
           code1 {\#include"draw_redDial.h"}
           code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
           code3 {o->drawLabel=false;}
@@ -589,7 +637,7 @@ else
   sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq3->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
-          tooltip {Delay LFO 4 Frequency} xywh {580 158 45 45} step 0.01 value 3
+          tooltip {Delay LFO 4 Frequency} xywh {580 158 45 45} step 0.01
           code1 {\#include"draw_redDial.h"}
           code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
           code3 {o->drawLabel=false;}
@@ -612,7 +660,7 @@ else
   sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq4->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
-          tooltip {Delay LFO 5 Frequency} xywh {580 203 45 45} step 0.01 value 0.75
+          tooltip {Delay LFO 5 Frequency} xywh {580 203 45 45} step 0.01
           code1 {\#include"draw_redDial.h"}
           code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
           code3 {o->drawLabel=false;}
@@ -634,8 +682,8 @@ else
      pdxb5->activate();
   sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq5->floatvalue);
 }
-message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
-          tooltip {Delay LFO 6 Frequency} xywh {580 249 45 45} step 0.01 value 0.1
+message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);} selected
+          tooltip {Delay LFO 6 Frequency} xywh {580 249 45 45} step 0.01
           code1 {\#include"draw_redDial.h"}
           code2 {o->drawing_h = cairo_code_draw_redDial_get_height(); o->drawing_w = cairo_code_draw_redDial_get_width(); o->drawing_f = &cairo_code_draw_redDial_render;}
           code3 {o->drawLabel=false;}

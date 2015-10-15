@@ -32,7 +32,7 @@ inline void cairo_code_draw_lushGraphXBoundr_render(cairo_t *cr)
 
 inline void cairo_code_draw_lushGraphXBoundb_render(cairo_t *cr)
 {
-    cairo_code_draw_lushGraphXBound_render(cr, 0, 0, 1);
+    cairo_code_draw_lushGraphXBound_render(cr, 0.2, 0.1, 1);
 }
 
 inline void cairo_code_draw_lushGraphXBoundg_render(cairo_t *cr)

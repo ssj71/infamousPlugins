@@ -139,7 +139,7 @@ public:
         me->x = ( (val - me->Xv->minimum()) / (me->Xv->maximum() - me->Xv->minimum()) ) * (g->w() - me->w) + g->x();
 
         me->do_callback();
-        //me->redraw();
+        me->redraw();
         g->redraw();
     }
     static void set_ffffltk_valuey(void* obj, float val)
@@ -158,7 +158,7 @@ public:
         me->y = ( (me->Yv->maximum() - val) / (me->Yv->maximum() - me->Yv->minimum()) ) * (g->h() - me->h) + g->y();
 
         me->do_callback();
-        //me->redraw();
+        me->redraw();
         g->redraw();
     }
 

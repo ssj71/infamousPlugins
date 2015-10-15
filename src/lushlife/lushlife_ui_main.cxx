@@ -45,6 +45,38 @@ static LV2UI_Handle init_lushlifeUI(const struct _LV2UI_Descriptor * descriptor,
 
     self->ui = self->show();
     srand ((unsigned int) time (NULL));
+
+    //its faster for me to set initial conditions here
+    //self->activate2->value(0);
+    //self->activate3->value(0);
+    //self->activate4->value(0);
+    //self->activate5->value(0);
+
+    //self->activate2->do_callback();
+    //self->activate3->do_callback();
+    //self->activate4->do_callback();
+    //self->activate5->do_callback();
+
+    XYhandle::set_ffffltk_valuex((void*)self->drygp,0);//pan
+    XYhandle::set_ffffltk_valuey((void*)self->drygp,.8);//gain
+
+    XYhandle::set_ffffltk_valuex((void*)self->gp0,.8);//pan
+    XYhandle::set_ffffltk_valuey((void*)self->gp0,.1);//gain
+    XYhandle::set_ffffltk_valuex((void*)self->pd0,10);//delay
+    XYhandle::set_ffffltk_valuey((void*)self->pd0,1);//shift
+    XYhandle::set_ffffltk_valuex((void*)self->pdxb0,30);//delay lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdyb0,30);//shift lfo
+    XYhandle::set_ffffltk_valuex((void*)self->pdyb0,30);//dummy
+    XYhandle::set_ffffltk_valuey((void*)self->pdxb0,30);//dummy
+
+    XYhandle::set_ffffltk_valuex((void*)self->gp1,-.1);//pan
+    XYhandle::set_ffffltk_valuey((void*)self->gp1,.8);//gain
+    XYhandle::set_ffffltk_valuex((void*)self->pd1,7);//delay
+    XYhandle::set_ffffltk_valuey((void*)self->pd1,1);//shift
+    XYhandle::set_ffffltk_valuex((void*)self->pdxb1,10);//delay lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdyb1,10);//shift lfo
+    XYhandle::set_ffffltk_valuex((void*)self->pdyb1,30);//dummy
+    XYhandle::set_ffffltk_valuey((void*)self->pdxb1,30);//dummy
     fl_open_display();
     
     // set host to change size of the window
@@ -54,35 +86,6 @@ static LV2UI_Handle init_lushlifeUI(const struct _LV2UI_Descriptor * descriptor,
     }
     fl_embed( self->ui,(Window)parentXwindow);
     *widget = (LV2UI_Widget)fl_xid(self->ui);
-
-    //its faster for me to set initial conditions here
-    self->activate2->value(0);
-    self->activate3->value(0);
-    self->activate4->value(0);
-    self->activate5->value(0);
-
-    self->activate2->do_callback();
-    self->activate3->do_callback();
-    self->activate4->do_callback();
-    self->activate5->do_callback();
-
-    XYhandle::set_ffffltk_valuex((void*)self->drygp,.8);
-    XYhandle::set_ffffltk_valuey((void*)self->drygp,0);
-
-    XYhandle::set_ffffltk_valuex((void*)self->gp0,.8);
-    XYhandle::set_ffffltk_valuey((void*)self->gp0,.1);
-    XYhandle::set_ffffltk_valuex((void*)self->pd0,10);
-    XYhandle::set_ffffltk_valuey((void*)self->pd0,.01);
-    self->gp0->redraw();
-    self->pd0->redraw();
-
-    XYhandle::set_ffffltk_valuex(self->gp1,.8);
-    XYhandle::set_ffffltk_valuey(self->gp1,-.1);
-    XYhandle::set_ffffltk_valuex(self->pd1,7);
-    XYhandle::set_ffffltk_valuey(self->pd1,-.01);
-    self->gp1->do_callback();
-    self->pd1->do_callback();
-
 
     return (LV2UI_Handle)self;
 }
@@ -107,10 +110,10 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           self->mastergain->value(val);
           break;
         case DRY_GAIN:
-          self->drygp->Yv->value(val);
+          XYhandle::set_ffffltk_valuey((void*)self->drygp,val);
           break;
         case DRY_PAN:
-          self->drygp->Xv->value(val);
+          XYhandle::set_ffffltk_valuex((void*)self->drygp,val);
           break;
         case LFOSHAPE:
           self->shape->value(val);
@@ -118,32 +121,89 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
         case SYNCLFO:
           self->sync->value(val);
           break;
+        
         case ACTIVE0:
           self->activate0->value(val);
           break;
         case SHIFT0:
-          self->pd0->Yv->value(val/100);
+          XYhandle::set_ffffltk_valuey((void*)self->pd0,val*100);
           break;
         case SLFOA0:
-          self->pdyb0->Yv->value(self->pd0->Yv->value() + val/100);
+          XYhandle::set_ffffltk_valuey((void*)self->pdyb0,val*100 + self->pd0->floatvaluey);
           break;
         case SLFOF0:
           self->pitchfreq0->value(val);
           break;
         case DELAY0:
-          self->pd0->Xv->value(sqrt(val/150));//this is a "log" approximated control, so value() doesn't work the same
+          XYhandle::set_ffffltk_valuex((void*)self->pd0,val);
           break;
         case DLFOA0:
-          self->pdxb0->Xv->value(sqrt(val/150) + self->pd0->Xv->value());
+          XYhandle::set_ffffltk_valuex((void*)self->pdxb0,val + self->pd0->floatvaluex);
           break;
         case DLFOF0:
           self->delayfreq0->value(val);
           break;
         case GAIN0:
-          self->gp0->Yv->value(val);
+          XYhandle::set_ffffltk_valuey((void*)self->gp0,val);
           break;
         case PAN0:
-          self->gp0->Xv->value(val);
+          XYhandle::set_ffffltk_valuex((void*)self->gp0,val);
+          break;
+
+        case ACTIVE1:
+          self->activate1->value(val);
+          break;
+        case SHIFT1:
+          XYhandle::set_ffffltk_valuey((void*)self->pd1,val*100);
+          break;
+        case SLFOA1:
+          XYhandle::set_ffffltk_valuey((void*)self->pdyb1,val*100 + self->pd1->floatvaluey);
+          break;
+        case SLFOF1:
+          self->pitchfreq1->value(val);
+          break;
+        case DELAY1:
+          XYhandle::set_ffffltk_valuex((void*)self->pd1,val);
+          break;
+        case DLFOA1:
+          XYhandle::set_ffffltk_valuex((void*)self->pdxb1,val + self->pd1->floatvaluex);
+          break;
+        case DLFOF1:
+          self->delayfreq1->value(val);
+          break;
+        case GAIN1:
+          XYhandle::set_ffffltk_valuey((void*)self->gp1,val);
+          break;
+        case PAN1:
+          XYhandle::set_ffffltk_valuex((void*)self->gp1,val);
+          break;
+
+        case ACTIVE2:
+          self->activate2->value(val);
+          break;
+        case SHIFT2:
+          XYhandle::set_ffffltk_valuey((void*)self->pd2,val*100);
+          break;
+        case SLFOA2:
+          XYhandle::set_ffffltk_valuey((void*)self->pdyb2,val*100 + self->pd2->floatvaluey);
+          break;
+        case SLFOF2:
+          self->pitchfreq2->value(val);
+          break;
+        case DELAY2:
+          XYhandle::set_ffffltk_valuex((void*)self->pd2,val);
+          break;
+        case DLFOA2:
+          XYhandle::set_ffffltk_valuex((void*)self->pdxb2,val + self->pd2->floatvaluex);
+          break;
+        case DLFOF2:
+          self->delayfreq2->value(val);
+          break;
+        case GAIN2:
+          XYhandle::set_ffffltk_valuey((void*)self->gp2,val);
+          break;
+        case PAN2:
+          XYhandle::set_ffffltk_valuex((void*)self->gp2,val);
           break;
       }//switch
     }//if float
