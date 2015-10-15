@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {448 816 630 400} type Double box UP_BOX resizable
+      xywh {450 816 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}

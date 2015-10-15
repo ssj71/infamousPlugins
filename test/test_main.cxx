@@ -4,13 +4,14 @@
 #include <FL/Fl_Double_Window.H>
 
 //#include "test.h"
-#include "envfollower_ui.h"
+#include "lushlife_ui.h"
 
 int main()
 {
   //FancyUI a;// = new FancyUI;
   //EnvFollowerUI* a = new EnvFollowerUI();
-  EnvFollowerUI a ;//= new EnvFollowerUI();
+  LushLifeUI a ;//= new EnvFollowerUI();
+  //LushLifeUI *a = new LushLifeUI();
 
   //a.make_window();
   //a->ui->show();

@@ -92,8 +92,11 @@ public:
         clickOffsetY = 0;
         mouseClicked = false;
 
+        Fl_Group* tmp = Fl_Group::current();//store current group so it doesn't get lost
+        Fl_Group::current(NULL);
         Xv = new Fl_Dial(0,0,0,0,NULL);
         Yv = new Fl_Dial(0,0,0,0,NULL);
+        Fl_Group::current(tmp);
 
     }
     ~XYhandle(){delete Xv; delete Yv;}
