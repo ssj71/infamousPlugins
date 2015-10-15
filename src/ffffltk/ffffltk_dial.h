@@ -109,16 +109,17 @@ public:
     static void set_ffffltk_value(void* obj, float val)
     {
         Dial* me = (Dial*)obj;
+        if(me->squaredmax)//remove squaring for bounds check
+            me->floatvalue = sqrt(val/me->squaredmax);
         if ( val > me->maximum() ) val = me->maximum();
         if ( val < me->minimum() ) val = me->minimum();
         me->set_value(val);
         if(me->squaredmax)
-            me->floatvalue = sqrt(val/me->squaredmax);
-        else
-            me->floatvalue = val;
+            val = sqrt(val/me->squaredmax);
+        me->floatvalue = val;
 
-        me->redraw();
         me->do_callback();
+        me->redraw();
     }
 
     void draw()
@@ -196,7 +197,7 @@ public:
                 //}
                 //    redraw();
                 //do_callback();
-                enterval.show(value(),(char*)this->tooltip(),units,(void*)this,set_ffffltk_value);
+                enterval.show(floatvalue,(char*)this->tooltip(),units,(void*)this,set_ffffltk_value);
             }
             return 1;
         case FL_DRAG:

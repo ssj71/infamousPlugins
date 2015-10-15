@@ -24,7 +24,7 @@ class LushLifeUI {open
           code3 {o->drawing_h = cairo_code_draw_lushbg_get_height(); o->drawing_w = cairo_code_draw_lushbg_get_width(); o->drawing_f = &cairo_code_draw_lushbg_render;}
           class Background
         }
-        Fl_Box logo {selected
+        Fl_Box logo {
           xywh {3 68 47 107}
           code0 {\#include"draw_infamousLogo.h"}
           code1 {o->drawing_h = cairo_code_draw_infamousLogo_get_height(); o->drawing_w = cairo_code_draw_infamousLogo_get_width(); o->drawing_f = &cairo_code_draw_infamousLogo_render;}
@@ -143,7 +143,7 @@ else
     pdyb2->deactivate();
     message->copy_label("dbl3             Off", RGBAsciiDisplay::YELLOW_COLOR);
 }
-write_function(controller,ACTIVE2,sizeof(float),0,&activate2->floatvalue);}
+write_function(controller,ACTIVE2,sizeof(float),0,&activate2->floatvalue);} selected
           tooltip {Activate Double 3} xywh {513 126 16 16} value 1
           code1 {\#include"draw_LED.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}

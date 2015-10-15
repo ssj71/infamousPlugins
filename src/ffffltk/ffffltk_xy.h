@@ -127,7 +127,7 @@ public:
     {
         XYhandle* me = (XYhandle*)obj;
         if(me->squaredmaxx)
-            val = sqrt(val)/me->squaredmaxx;//reverse squaring for bounds check
+            val = sqrt(val/me->squaredmaxx);//reverse squaring for bounds check
         if ( val > me->Xv->maximum() ) val = me->Xv->maximum();
         if ( val < me->Xv->minimum() ) val = me->Xv->minimum();
         me->Xv->value(val);
@@ -146,7 +146,7 @@ public:
     {
         XYhandle* me = (XYhandle*)obj;
         if(me->squaredmaxy)
-            val = sqrt(val)/me->squaredmaxy;//reverse squaring for bounds check
+            val = sqrt(val/me->squaredmaxy);//reverse squaring for bounds check
         if ( val > me->Yv->maximum() ) val = me->Yv->maximum();
         if ( val < me->Yv->minimum() ) val = me->Yv->minimum();
         me->Yv->value(val);
@@ -223,11 +223,11 @@ public:
             if(Fl::event_button() == FL_MIDDLE_MOUSE || Fl::event_button() == FL_RIGHT_MOUSE)
             {
                 if(!Xv->tooltip())
-                    Xv->tooltip("X Parameter");
-                entervalx.show(Xv->value(),(char*)Xv->tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
+                    Xv->copy_tooltip("X Parameter");
+                entervalx.show(floatvaluex,(char*)Xv->tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
                 if(!Yv->tooltip())
-                    Yv->tooltip("Y Parameter");
-                entervaly.show(Yv->value(),(char*)Yv->tooltip(),unitsy,(void*)this,set_ffffltk_valuey);
+                    Yv->copy_tooltip("Y Parameter");
+                entervaly.show(floatvaluey,(char*)Yv->tooltip(),unitsy,(void*)this,set_ffffltk_valuey);
             }
             return 1;
         case FL_DRAG:
@@ -280,8 +280,8 @@ public:
             // highlight = 0;
             Fl_Widget::copy_label("");
             redraw();
-            floatvaluex = Xv->value();
-            floatvaluey = Yv->value();
+            //floatvaluex = Xv->value();
+            //floatvaluey = Yv->value();
             // never do anything after a callback, as the callback
             // may delete the widget!
             //}

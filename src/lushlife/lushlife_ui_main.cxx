@@ -46,6 +46,7 @@ static LV2UI_Handle init_lushlifeUI(const struct _LV2UI_Descriptor * descriptor,
     self->ui = self->show();
     srand ((unsigned int) time (NULL));
     fl_open_display();
+    
     // set host to change size of the window
     if (resize)
     {
@@ -53,6 +54,35 @@ static LV2UI_Handle init_lushlifeUI(const struct _LV2UI_Descriptor * descriptor,
     }
     fl_embed( self->ui,(Window)parentXwindow);
     *widget = (LV2UI_Widget)fl_xid(self->ui);
+
+    //its faster for me to set initial conditions here
+    self->activate2->value(0);
+    self->activate3->value(0);
+    self->activate4->value(0);
+    self->activate5->value(0);
+
+    self->activate2->do_callback();
+    self->activate3->do_callback();
+    self->activate4->do_callback();
+    self->activate5->do_callback();
+
+    XYhandle::set_ffffltk_valuex((void*)self->drygp,.8);
+    XYhandle::set_ffffltk_valuey((void*)self->drygp,0);
+
+    XYhandle::set_ffffltk_valuex((void*)self->gp0,.8);
+    XYhandle::set_ffffltk_valuey((void*)self->gp0,.1);
+    XYhandle::set_ffffltk_valuex((void*)self->pd0,10);
+    XYhandle::set_ffffltk_valuey((void*)self->pd0,.01);
+    self->gp0->redraw();
+    self->pd0->redraw();
+
+    XYhandle::set_ffffltk_valuex(self->gp1,.8);
+    XYhandle::set_ffffltk_valuey(self->gp1,-.1);
+    XYhandle::set_ffffltk_valuex(self->pd1,7);
+    XYhandle::set_ffffltk_valuey(self->pd1,-.01);
+    self->gp1->do_callback();
+    self->pd1->do_callback();
+
 
     return (LV2UI_Handle)self;
 }
