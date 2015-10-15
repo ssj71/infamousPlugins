@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {450 816 630 400} type Double box UP_BOX resizable
+      xywh {452 816 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -24,8 +24,8 @@ class LushLifeUI {open
           code3 {o->drawing_h = cairo_code_draw_lushbg_get_height(); o->drawing_w = cairo_code_draw_lushbg_get_width(); o->drawing_f = &cairo_code_draw_lushbg_render;}
           class Background
         }
-        Fl_Box logo {
-          xywh {3 102 47 107}
+        Fl_Box logo {selected
+          xywh {3 68 47 107}
           code0 {\#include"draw_infamousLogo.h"}
           code1 {o->drawing_h = cairo_code_draw_infamousLogo_get_height(); o->drawing_w = cairo_code_draw_infamousLogo_get_width(); o->drawing_f = &cairo_code_draw_infamousLogo_render;}
           code2 {o->stretch = false;}
@@ -284,7 +284,7 @@ else
   pdyb3->activate();  
   pdyb4->activate();  
   pdyb5->activate(); 
-}} selected
+}}
           tooltip {Show Pan/Gain Controls} xywh {32 296 20 20} value 1 align 6
           code1 {\#include"draw_whiteTinyButton.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}

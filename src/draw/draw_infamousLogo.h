@@ -10,14 +10,10 @@ inline int cairo_code_draw_infamousLogo_get_height()
 }
 inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
     cairo_pattern_t *pattern;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-    temp_surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 67, 133);
-    cr = cairo_create(temp_surface);
-    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-    pattern = cairo_pattern_create_rgba(0.101961,0.101961,0.101961,1);
+    pattern = cairo_pattern_create_rgba(0.7,0.7,0.7,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -47,7 +43,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_fill_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-    pattern = cairo_pattern_create_rgba(0.101961,0.101961,0.101961,1);
+    pattern = cairo_pattern_create_rgba(0.7,0.7,0.7,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -97,7 +93,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -113,7 +109,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -132,7 +128,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -148,7 +144,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -164,7 +160,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -180,7 +176,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -196,7 +192,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -212,7 +208,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -228,7 +224,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -244,7 +240,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -397,7 +393,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -427,7 +423,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -442,7 +438,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
@@ -491,7 +487,7 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_set_miter_limit(cr, 4);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-    pattern = cairo_pattern_create_rgba(0,0,0,1);
+    pattern = cairo_pattern_create_rgba(.8,.8,.8,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
