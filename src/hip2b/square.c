@@ -64,7 +64,7 @@ void run_square(LV2_Handle handle, uint32_t nframes)
         gstep /= nframes;
     else
         gstep /= 64;
-    if(gtep<PRACTICALLYZERO/10000)//avoid denormals
+    if(gstep<PRACTICALLYZERO/10000)//avoid denormals
     {
         gstep = 0;
         plug->gain = *plug->output_p;
