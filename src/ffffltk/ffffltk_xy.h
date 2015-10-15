@@ -126,30 +126,40 @@ public:
     static void set_ffffltk_valuex(void* obj, float val)
     {
         XYhandle* me = (XYhandle*)obj;
+        if(me->squaredmaxx)
+            val = sqrt(val)/me->squaredmaxx;//reverse squaring for bounds check
         if ( val > me->Xv->maximum() ) val = me->Xv->maximum();
         if ( val < me->Xv->minimum() ) val = me->Xv->minimum();
         me->Xv->value(val);
         if(me->squaredmaxx)
-            me->floatvaluex = sqrt(val/me->squaredmaxx);
+            me->floatvaluex = val*val*me->squaredmaxx;
         else
             me->floatvaluex = val;
+        Fl_Group *g = me->parent();//parent
+        me->x = ( (val - me->Xv->minimum()) / (me->Xv->maximum() - me->Xv->minimum()) ) * (g->w() - me->w) + g->x();
 
-        me->redraw();
         me->do_callback();
+        //me->redraw();
+        g->redraw();
     }
     static void set_ffffltk_valuey(void* obj, float val)
     {
         XYhandle* me = (XYhandle*)obj;
+        if(me->squaredmaxy)
+            val = sqrt(val)/me->squaredmaxy;//reverse squaring for bounds check
         if ( val > me->Yv->maximum() ) val = me->Yv->maximum();
         if ( val < me->Yv->minimum() ) val = me->Yv->minimum();
         me->Yv->value(val);
         if(me->squaredmaxy)
-            me->floatvaluey = sqrt(val/me->squaredmaxy);
+            me->floatvaluey = val*val*me->squaredmaxy;
         else
             me->floatvaluey = val;
+        Fl_Group *g = me->parent();//parent
+        me->y = ( (me->Yv->maximum() - val) / (me->Yv->maximum() - me->Yv->minimum()) ) * (g->h() - me->h) + g->y();
 
-        me->redraw();
         me->do_callback();
+        //me->redraw();
+        g->redraw();
     }
 
     void draw()
@@ -212,7 +222,11 @@ public:
             //highlight = 1;
             if(Fl::event_button() == FL_MIDDLE_MOUSE || Fl::event_button() == FL_RIGHT_MOUSE)
             {
+                if(!Xv->tooltip())
+                    Xv->tooltip("X Parameter");
                 entervalx.show(Xv->value(),(char*)Xv->tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
+                if(!Yv->tooltip())
+                    Yv->tooltip("Y Parameter");
                 entervaly.show(Yv->value(),(char*)Yv->tooltip(),unitsy,(void*)this,set_ffffltk_valuey);
             }
             return 1;
