@@ -37,7 +37,7 @@ add_library(${PLUGIN} SHARED
   lfo.h
 )
 
-add_library(${PLUGIN}_ui SHARED
+add_library(${PLUGIN}_ui SHARED EXCLUDE_FROM_ALL
   lushlife.h
   lushlife_ui_main.cxx
   ${${PLUGIN}_ui_FLTK_UI_SRCS}
@@ -53,7 +53,7 @@ target_link_libraries(${PLUGIN} ${LV2_LIBRARIES} ${FFTW_LIBRARIES} m zita-resamp
 target_link_libraries(${PLUGIN}_ui ${LV2_LIBRARIES} ${NTK_LIBRARIES} ${CAIRO_LIBRARIES} m)
 
 # config install
-install(TARGETS ${PLUGIN} ${PLUGIN}_ui
+install(TARGETS ${PLUGIN} ${PLUGIN}_ui OPTIONAL
   LIBRARY
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
