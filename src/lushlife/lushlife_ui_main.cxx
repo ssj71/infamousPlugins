@@ -57,6 +57,7 @@ static LV2UI_Handle init_lushlifeUI(const struct _LV2UI_Descriptor * descriptor,
     //self->activate4->do_callback();
     //self->activate5->do_callback();
 
+/*
     XYhandle::set_ffffltk_valuex((void*)self->drygp,0);//pan
     XYhandle::set_ffffltk_valuey((void*)self->drygp,.8);//gain
 
@@ -77,6 +78,49 @@ static LV2UI_Handle init_lushlifeUI(const struct _LV2UI_Descriptor * descriptor,
     XYhandle::set_ffffltk_valuey((void*)self->pdyb1,10);//shift lfo
     XYhandle::set_ffffltk_valuex((void*)self->pdyb1,30);//dummy
     XYhandle::set_ffffltk_valuey((void*)self->pdxb1,30);//dummy
+
+    self->pdxb0->x = self->pdyb0->x = self->pd0->x;
+    self->pdxb0->y = self->pdyb0->y = self->pd0->y;
+    self->pdxb1->x = self->pdyb1->x = self->pd1->x;
+    self->pdxb1->y = self->pdyb1->y = self->pd1->y;
+    self->pdxb2->x = self->pdyb2->x = self->pd2->x;
+    self->pdxb2->y = self->pdyb2->y = self->pd2->y;
+    
+    XYhandle::set_ffffltk_valuex((void*)self->pdxb0,self->pd0->floatvaluex);//delay lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdxb0,self->pd0->floatvaluey);//
+    XYhandle::set_ffffltk_valuex((void*)self->pdyb0,self->pd0->floatvaluex);//shift lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdyb0,self->pd0->floatvaluey);//
+
+    XYhandle::set_ffffltk_valuex((void*)self->pdxb1,self->pd1->floatvaluex);//delay lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdxb1,self->pd1->floatvaluey);//
+    XYhandle::set_ffffltk_valuex((void*)self->pdyb1,self->pd1->floatvaluex);//shift lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdyb1,self->pd1->floatvaluey);//
+
+
+    XYhandle::set_ffffltk_valuex((void*)self->pdxb2,self->pd2->floatvaluex);//delay lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdxb2,self->pd2->floatvaluey);//
+    XYhandle::set_ffffltk_valuex((void*)self->pdyb2,self->pd2->floatvaluex);//shift lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdyb2,self->pd2->floatvaluey);//
+
+
+    XYhandle::set_ffffltk_valuex((void*)self->pdxb3,self->pd3->floatvaluex);//delay lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdxb3,self->pd3->floatvaluey);//
+    XYhandle::set_ffffltk_valuex((void*)self->pdyb3,self->pd3->floatvaluex);//shift lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdyb3,self->pd3->floatvaluey);//
+
+
+    XYhandle::set_ffffltk_valuex((void*)self->pdxb4,self->pd4->floatvaluex);//delay lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdxb4,self->pd4->floatvaluey);//
+    XYhandle::set_ffffltk_valuex((void*)self->pdyb4,self->pd4->floatvaluex);//shift lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdyb4,self->pd4->floatvaluey);//
+
+
+    XYhandle::set_ffffltk_valuex((void*)self->pdxb5,self->pd5->floatvaluex);//delay lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdxb5,self->pd5->floatvaluey);//
+    XYhandle::set_ffffltk_valuex((void*)self->pdyb5,self->pd5->floatvaluex);//shift lfo
+    XYhandle::set_ffffltk_valuey((void*)self->pdyb5,self->pd5->floatvaluey);//
+    */
+
     fl_open_display();
     
     // set host to change size of the window
@@ -204,6 +248,90 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case PAN2:
           XYhandle::set_ffffltk_valuex((void*)self->gp2,val);
+          break;
+
+        case ACTIVE3:
+          self->activate3->value(val);
+          break;
+        case SHIFT3:
+          XYhandle::set_ffffltk_valuey((void*)self->pd3,val*100);
+          break;
+        case SLFOA3:
+          XYhandle::set_ffffltk_valuey((void*)self->pdyb3,val*100 + self->pd3->floatvaluey);
+          break;
+        case SLFOF3:
+          self->pitchfreq3->value(val);
+          break;
+        case DELAY3:
+          XYhandle::set_ffffltk_valuex((void*)self->pd3,val);
+          break;
+        case DLFOA3:
+          XYhandle::set_ffffltk_valuex((void*)self->pdxb3,val + self->pd3->floatvaluex);
+          break;
+        case DLFOF3:
+          self->delayfreq3->value(val);
+          break;
+        case GAIN3:
+          XYhandle::set_ffffltk_valuey((void*)self->gp3,val);
+          break;
+        case PAN3:
+          XYhandle::set_ffffltk_valuex((void*)self->gp3,val);
+          break;
+
+        case ACTIVE4:
+          self->activate4->value(val);
+          break;
+        case SHIFT4:
+          XYhandle::set_ffffltk_valuey((void*)self->pd3,val*100);
+          break;
+        case SLFOA4:
+          XYhandle::set_ffffltk_valuey((void*)self->pdyb4,val*100 + self->pd4->floatvaluey);
+          break;
+        case SLFOF4:
+          self->pitchfreq4->value(val);
+          break;
+        case DELAY4:
+          XYhandle::set_ffffltk_valuex((void*)self->pd4,val);
+          break;
+        case DLFOA4:
+          XYhandle::set_ffffltk_valuex((void*)self->pdxb4,val + self->pd4->floatvaluex);
+          break;
+        case DLFOF4:
+          self->delayfreq4->value(val);
+          break;
+        case GAIN4:
+          XYhandle::set_ffffltk_valuey((void*)self->gp4,val);
+          break;
+        case PAN4:
+          XYhandle::set_ffffltk_valuex((void*)self->gp4,val);
+          break;
+
+        case ACTIVE5:
+          self->activate5->value(val);
+          break;
+        case SHIFT5:
+          XYhandle::set_ffffltk_valuey((void*)self->pd3,val*100);
+          break;
+        case SLFOA5:
+          XYhandle::set_ffffltk_valuey((void*)self->pdyb5,val*100 + self->pd5->floatvaluey);
+          break;
+        case SLFOF5:
+          self->pitchfreq5->value(val);
+          break;
+        case DELAY5:
+          XYhandle::set_ffffltk_valuex((void*)self->pd5,val);
+          break;
+        case DLFOA5:
+          XYhandle::set_ffffltk_valuex((void*)self->pdxb5,val + self->pd5->floatvaluex);
+          break;
+        case DLFOF5:
+          self->delayfreq5->value(val);
+          break;
+        case GAIN5:
+          XYhandle::set_ffffltk_valuey((void*)self->gp5,val);
+          break;
+        case PAN5:
+          XYhandle::set_ffffltk_valuex((void*)self->gp5,val);
           break;
       }//switch
     }//if float

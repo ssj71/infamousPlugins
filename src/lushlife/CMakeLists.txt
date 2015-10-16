@@ -4,7 +4,7 @@ set(PLUGIN "lushlife")
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/")
 
-set(CMAKE_CXX_FLAGS "-Wall -g -msse2 -mfpmath=sse -ffast-math")
+set(CMAKE_CXX_FLAGS "-Wall -g -msse2 -mfpmath=sse -ffast-math ")#-fno-stack-protector")
 #SET( CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS} -lzita-resampler")
 
 if(NOT LIBDIR)
