@@ -89,6 +89,7 @@ public:
         squaredmaxx = 0;
         squaredmaxy = 0;
 
+        clickOffsetX = 0;
         clickOffsetY = 0;
         mouseClicked = false;
 
