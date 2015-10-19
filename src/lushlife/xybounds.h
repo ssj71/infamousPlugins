@@ -101,15 +101,19 @@ public:
     void update_position()
     {
         Fl_Group *g = parent();//parent
-        x = ( (centerpoint->floatvaluex + floatvalue - Xv->minimum()) / (Xv->maximum() - Xv->minimum()) ) * (g->w() - w) + g->x();//reconvert to pixels based on value (this way it tracks log)
+        float val = centerpoint->floatvaluex + floatvalue;
+        if(squaredmax)
+            val = sqrt(val/squaredmax);
+        x = ( (val - Xv->minimum()) / (Xv->maximum() - Xv->minimum()) ) * (g->w() - w) + g->x();//reconvert to pixels based on value (this way it tracks log)
         x += centerpoint->w - w; //line up right hand sides
         y = centerpoint->y;
 
         if(x > g->x()+g->w()) dontdraw = true;
         else dontdraw = false;
+        Fl_Widget::position(x,y);
         do_callback();
-        redraw();
         g->redraw();
+        redraw();
     }
 
     void draw()
@@ -187,12 +191,12 @@ public:
 
                 g = parent();
                 pos = Fl::event_x()-clickOffset;
-                if(pos < g->x()) pos = g->x();
+                if(pos < centerpoint->x) pos = centerpoint->x;
                 if(pos > g->x()+g->w() - w) pos = g->x() + g->w() - w;
                 x = pos;
 
 
-                val = ( (float)(x - g->x()) / (float)(g->w() - w) ) * (Xv->maximum() - Xv->minimum()) + Xv->minimum();
+                val = ( (float)(pos - g->x()) / (float)(g->w() - w) ) * (Xv->maximum() - Xv->minimum()) + Xv->minimum();
                 if(lock2int) val = (int)val;
                 if(squaredmax)
                     floatvalue = val*val*squaredmax;
@@ -200,9 +204,14 @@ public:
                     floatvalue = val;
 
                 floatvalue -= centerpoint->floatvaluex;
+//                if(floatvalue<floatmin) floatvalue=floatmin;
+//                if(floatvalue<floatmax) floatvalue=floatmax;
+                //update_position();
+
                 Fl_Widget::position(x,y);
                 redraw();
                 g->redraw();
+                
                 do_callback(); // makes FLTK call "extra" code entered in FLUID
             }
         }
@@ -229,7 +238,7 @@ public:
             return Fl_Widget::handle(event);
         }
     }
-};
+};//xbound
 
 class YBound : public Fl_Widget
 {
@@ -296,11 +305,15 @@ public:
     void update_position()
     {
         Fl_Group *g = parent();//parent
-        y = g->h() - ( (centerpoint->floatvaluey + floatvalue - Yv->minimum()) / (Yv->maximum() - Yv->minimum()) ) * (g->h() - h) + g->y();//reconvert to pixels based on value (this way it tracks log)
+        float val = centerpoint->floatvaluey + floatvalue;
+        if(squaredmax)
+            val = sqrt(val/squaredmax);
+        y = g->h() - ( (val - Yv->minimum()) / (Yv->maximum() - Yv->minimum()) ) * (g->h() - h) + g->y();//reconvert to pixels based on value (this way it tracks log)
         x = centerpoint->x;
 
         if(y > g->y()+g->h()) dontdraw = true;
         else dontdraw = false;
+        Fl_Widget::position(x,y);
         do_callback();
         redraw();
         g->redraw();
@@ -381,12 +394,13 @@ public:
 
                 g = parent();
                 pos = Fl::event_y()-clickOffset;
-                if(pos < g->y()) pos = g->y();
-                if(pos > g->y()+g->h() - h) pos = g->y() + g->h() - h;
+                if(pos <= g->y()) pos = g->y();
+                //if(pos >= centerpoint->y+centerpoint->h - h) pos = centerpoint->y + centerpoint->h - h;
+                if(pos >= centerpoint->y) pos = centerpoint->y;
                 y = pos;
 
-
-                val = ( (float)(y - g->y()) / (float)(g->h() - h) ) * (Yv->maximum() - Yv->minimum()) + Yv->minimum();
+                pos += centerpoint->h - h;//offset for size differences
+                val = Yv->maximum() - ( (float)(pos - g->y()) / (float)(g->h() - h) ) * (Yv->maximum() - Yv->minimum());
                 if(lock2int) val = (int)val;
                 if(squaredmax)
                     floatvalue = val*val*squaredmax;
@@ -394,9 +408,13 @@ public:
                     floatvalue = val;
 
                 floatvalue -= centerpoint->floatvaluey;
+                //if(floatvalue<floatmin) floatvalue = floatmin;
+                //if(floatvalue>floatmax) floatvalue = floatmax;
+                //update_position();
                 Fl_Widget::position(x,y);
                 redraw();
                 g->redraw();
+                
                 do_callback(); // makes FLTK call "extra" code entered in FLUID
             }
         }
@@ -423,7 +441,7 @@ public:
             return Fl_Widget::handle(event);
         }
     }
-};
+};//y bound
 } // ffffltk
 
 #endif // FFF_DIAL_H

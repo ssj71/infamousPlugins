@@ -7,7 +7,7 @@ class LushLifeUI {open
   Function {show()} {open
   } {
     Fl_Window ui {
-      label {the infamous lush life} open selected
+      label {the infamous lush life} open
       xywh {750 453 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
@@ -1006,7 +1006,7 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
             callback {write_function(controller,DLFOA5,sizeof(float),0,&pdxb5->floatvalue);
 char s[30];
 sprintf(s,"Delay LFO Amplitude %6.2f",pdxb5->floatvalue);
-message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
+message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);} selected
             xywh {150 150 4 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundp_render;}
