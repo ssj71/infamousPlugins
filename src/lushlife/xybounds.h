@@ -104,7 +104,7 @@ public:
         if(squaredmax)
             val = sqrt(val/squaredmax);
         x = ( (val - Xv->minimum()) / (Xv->maximum() - Xv->minimum()) ) * (g->w() - centerpoint->w) + g->x();//reconvert to pixels based on value (this way it tracks log)
-        x += centerpoint->w - w; //line up right hand sides
+        x += centerpoint->w; //line up right hand sides
         y = centerpoint->y;
 
         if(x > g->x()+g->w()) dontdraw = true;
