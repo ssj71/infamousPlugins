@@ -191,12 +191,12 @@ public:
 
                 g = parent();
                 pos = Fl::event_x()-clickOffset;
-                if(pos < centerpoint->x) pos = centerpoint->x;
+                if(pos < centerpoint->x + centerpoint->w) pos = centerpoint->x + centerpoint->w;
                 if(pos > g->x()+g->w() - w) pos = g->x() + g->w() - w;
                 x = pos;
 
-
-                val = ( (float)(pos - g->x()) / (float)(g->w() - w) ) * (Xv->maximum() - Xv->minimum()) + Xv->minimum();
+                pos -= centerpoint->w;//adjust for zero
+                val = ( (float)(pos - g->x()) / (float)(g->w() - centerpoint->w) ) * (Xv->maximum() - Xv->minimum()) + Xv->minimum();
                 if(lock2int) val = (int)val;
                 if(squaredmax)
                     floatvalue = val*val*squaredmax;
