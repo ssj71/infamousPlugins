@@ -131,10 +131,10 @@ public:
             if(scale > centerpoint->h/(double)centerpoint->drawing_h)
             {
                 scale = centerpoint->h/(double)centerpoint->drawing_h;
-                shiftx = (w - scale*drawing_w)/2.f;
+               // shiftx = (w - scale*drawing_w)/2.f;
             }
-            else
-                shifty = h - scale*drawing_h;
+            //else
+            //    shifty = h - scale*drawing_h;
             //label behind value
             //move to position in the window
             cairo_translate(cr,x+shiftx,y+shifty);
@@ -335,7 +335,7 @@ public:
             if(scale > centerpoint->h/(double)centerpoint->drawing_h)
             {
                 scale = centerpoint->h/(double)centerpoint->drawing_h;
-                shiftx = (w - scale*drawing_w)/2.f;
+                shiftx = (w - scale*drawing_w);///2.f;
             }
             else
                 shifty = h - scale*drawing_h;

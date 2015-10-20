@@ -181,10 +181,10 @@ public:
             if(scale > h/(double)drawing_h)
             {
                 scale = h/(double)drawing_h;
-                shiftx = (w - scale*drawing_w)/2.f;
+                shiftx = (w - scale*drawing_w);//2.f;
             }
             else
-                shifty = h - scale*drawing_h;
+                shifty = 0;//h - scale*drawing_h;//shift to top right for bounds
             //label behind value
             //move to position in the window
             cairo_translate(cr,x+shiftx,y+shifty);
