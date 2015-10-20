@@ -55,8 +55,7 @@ public:
         floatmax = 0;
         units[0] = 0;
         lock2int = 0;
-        squaredmax = 0;
-
+        squaredmax = 0; 
         clickOffset = 0;
         mouseClicked = false;
 
@@ -104,7 +103,7 @@ public:
         float val = centerpoint->floatvaluex + floatvalue;
         if(squaredmax)
             val = sqrt(val/squaredmax);
-        x = ( (val - Xv->minimum()) / (Xv->maximum() - Xv->minimum()) ) * (g->w() - w) + g->x();//reconvert to pixels based on value (this way it tracks log)
+        x = ( (val - Xv->minimum()) / (Xv->maximum() - Xv->minimum()) ) * (g->w() - centerpoint->w) + g->x();//reconvert to pixels based on value (this way it tracks log)
         x += centerpoint->w - w; //line up right hand sides
         y = centerpoint->y;
 
@@ -128,10 +127,10 @@ public:
             double scale,
                    shiftx=0,
                    shifty=0;
-            scale = w/(double)drawing_w;
-            if(scale > h/(double)drawing_h)
+            scale = centerpoint->w/(double)centerpoint->drawing_w;
+            if(scale > centerpoint->h/(double)centerpoint->drawing_h)
             {
-                scale = h/(double)drawing_h;
+                scale = centerpoint->h/(double)centerpoint->drawing_h;
                 shiftx = (w - scale*drawing_w)/2.f;
             }
             else
@@ -204,8 +203,8 @@ public:
                     floatvalue = val;
 
                 floatvalue -= centerpoint->floatvaluex;
-//                if(floatvalue<floatmin) floatvalue=floatmin;
-//                if(floatvalue<floatmax) floatvalue=floatmax;
+                if(floatvalue<floatmin) floatvalue=floatmin;
+                if(floatvalue>floatmax) floatvalue=floatmax;
                 //update_position();
 
                 Fl_Widget::position(x,y);
@@ -308,10 +307,11 @@ public:
         float val = centerpoint->floatvaluey + floatvalue;
         if(squaredmax)
             val = sqrt(val/squaredmax);
-        y = g->h() - ( (val - Yv->minimum()) / (Yv->maximum() - Yv->minimum()) ) * (g->h() - h) + g->y();//reconvert to pixels based on value (this way it tracks log)
+        y = ( (Yv->maximum() - val) / (Yv->maximum() - Yv->minimum()) ) * (g->h() - centerpoint->h) + g->y() - h;//reconvert to pixels based on value (this way it tracks log)
         x = centerpoint->x;
 
-        if(y > g->y()+g->h()) dontdraw = true;
+        //if(y > g->y()+g->h()) dontdraw = true;
+        if(y < g->y()) dontdraw = true;
         else dontdraw = false;
         Fl_Widget::position(x,y);
         do_callback();
@@ -331,10 +331,10 @@ public:
             double scale,
                    shiftx=0,
                    shifty=0;
-            scale = w/(double)drawing_w;
-            if(scale > h/(double)drawing_h)
+            scale = centerpoint->w/(double)centerpoint->drawing_w;
+            if(scale > centerpoint->h/(double)centerpoint->drawing_h)
             {
-                scale = h/(double)drawing_h;
+                scale = centerpoint->h/(double)centerpoint->drawing_h;
                 shiftx = (w - scale*drawing_w)/2.f;
             }
             else
@@ -396,11 +396,11 @@ public:
                 pos = Fl::event_y()-clickOffset;
                 if(pos <= g->y()) pos = g->y();
                 //if(pos >= centerpoint->y+centerpoint->h - h) pos = centerpoint->y + centerpoint->h - h;
-                if(pos >= centerpoint->y) pos = centerpoint->y;
+                if(pos >= centerpoint->y - h) pos = centerpoint->y - h;
                 y = pos;
 
-                pos += centerpoint->h - h;//offset for size differences
-                val = Yv->maximum() - ( (float)(pos - g->y()) / (float)(g->h() - h) ) * (Yv->maximum() - Yv->minimum());
+                pos += h;//offset for size differences
+                val = Yv->maximum() - ( (float)(pos - g->y()) / (float)(g->h() - centerpoint->h) ) * (Yv->maximum() - Yv->minimum());
                 if(lock2int) val = (int)val;
                 if(squaredmax)
                     floatvalue = val*val*squaredmax;
@@ -409,8 +409,11 @@ public:
 
                 floatvalue -= centerpoint->floatvaluey;
                 //if(floatvalue<floatmin) floatvalue = floatmin;
-                //if(floatvalue>floatmax) floatvalue = floatmax;
-                //update_position();
+                if(floatvalue>floatmax)
+                {
+                    floatvalue = floatmax;
+                    update_position();
+                }
                 Fl_Widget::position(x,y);
                 redraw();
                 g->redraw();
