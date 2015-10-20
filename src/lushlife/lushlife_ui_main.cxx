@@ -46,80 +46,12 @@ static LV2UI_Handle init_lushlifeUI(const struct _LV2UI_Descriptor * descriptor,
     self->ui = self->show();
     srand ((unsigned int) time (NULL));
 
-    //its faster for me to set initial conditions here
-    //self->activate2->value(0);
-    //self->activate3->value(0);
-    //self->activate4->value(0);
-    //self->activate5->value(0);
-
-    //self->activate2->do_callback();
-    //self->activate3->do_callback();
-    //self->activate4->do_callback();
-    //self->activate5->do_callback();
-
-/*
-    XYhandle::set_ffffltk_valuex((void*)self->drygp,0);//pan
-    XYhandle::set_ffffltk_valuey((void*)self->drygp,.8);//gain
-
-    XYhandle::set_ffffltk_valuex((void*)self->gp0,.8);//pan
-    XYhandle::set_ffffltk_valuey((void*)self->gp0,.1);//gain
-    XYhandle::set_ffffltk_valuex((void*)self->pd0,10);//delay
-    XYhandle::set_ffffltk_valuey((void*)self->pd0,1);//shift
-    XYhandle::set_ffffltk_valuex((void*)self->pdxb0,30);//delay lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdyb0,30);//shift lfo
-    XYhandle::set_ffffltk_valuex((void*)self->pdyb0,30);//dummy
-    XYhandle::set_ffffltk_valuey((void*)self->pdxb0,30);//dummy
-
-    XYhandle::set_ffffltk_valuex((void*)self->gp1,-.1);//pan
-    XYhandle::set_ffffltk_valuey((void*)self->gp1,.8);//gain
-    XYhandle::set_ffffltk_valuex((void*)self->pd1,7);//delay
-    XYhandle::set_ffffltk_valuey((void*)self->pd1,1);//shift
-    XYhandle::set_ffffltk_valuex((void*)self->pdxb1,10);//delay lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdyb1,10);//shift lfo
-    XYhandle::set_ffffltk_valuex((void*)self->pdyb1,30);//dummy
-    XYhandle::set_ffffltk_valuey((void*)self->pdxb1,30);//dummy
-
-    self->pdxb0->x = self->pdyb0->x = self->pd0->x;
-    self->pdxb0->y = self->pdyb0->y = self->pd0->y;
-    self->pdxb1->x = self->pdyb1->x = self->pd1->x;
-    self->pdxb1->y = self->pdyb1->y = self->pd1->y;
-    self->pdxb2->x = self->pdyb2->x = self->pd2->x;
-    self->pdxb2->y = self->pdyb2->y = self->pd2->y;
-    
-    XYhandle::set_ffffltk_valuex((void*)self->pdxb0,self->pd0->floatvaluex);//delay lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdxb0,self->pd0->floatvaluey);//
-    XYhandle::set_ffffltk_valuex((void*)self->pdyb0,self->pd0->floatvaluex);//shift lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdyb0,self->pd0->floatvaluey);//
-
-    XYhandle::set_ffffltk_valuex((void*)self->pdxb1,self->pd1->floatvaluex);//delay lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdxb1,self->pd1->floatvaluey);//
-    XYhandle::set_ffffltk_valuex((void*)self->pdyb1,self->pd1->floatvaluex);//shift lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdyb1,self->pd1->floatvaluey);//
-
-
-    XYhandle::set_ffffltk_valuex((void*)self->pdxb2,self->pd2->floatvaluex);//delay lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdxb2,self->pd2->floatvaluey);//
-    XYhandle::set_ffffltk_valuex((void*)self->pdyb2,self->pd2->floatvaluex);//shift lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdyb2,self->pd2->floatvaluey);//
-
-
-    XYhandle::set_ffffltk_valuex((void*)self->pdxb3,self->pd3->floatvaluex);//delay lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdxb3,self->pd3->floatvaluey);//
-    XYhandle::set_ffffltk_valuex((void*)self->pdyb3,self->pd3->floatvaluex);//shift lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdyb3,self->pd3->floatvaluey);//
-
-
-    XYhandle::set_ffffltk_valuex((void*)self->pdxb4,self->pd4->floatvaluex);//delay lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdxb4,self->pd4->floatvaluey);//
-    XYhandle::set_ffffltk_valuex((void*)self->pdyb4,self->pd4->floatvaluex);//shift lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdyb4,self->pd4->floatvaluey);//
-
-
-    XYhandle::set_ffffltk_valuex((void*)self->pdxb5,self->pd5->floatvaluex);//delay lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdxb5,self->pd5->floatvaluey);//
-    XYhandle::set_ffffltk_valuex((void*)self->pdyb5,self->pd5->floatvaluex);//shift lfo
-    XYhandle::set_ffffltk_valuey((void*)self->pdyb5,self->pd5->floatvaluey);//
-    */
+    self->graph->set_graph(self->pdxb0,self->pdyb0,
+                           self->pdxb1,self->pdyb1,
+                           self->pdxb2,self->pdyb2,
+                           self->pdxb3,self->pdyb3,
+                           self->pdxb4,self->pdyb4,
+                           self->pdxb5,self->pdyb5);
 
     fl_open_display();
     

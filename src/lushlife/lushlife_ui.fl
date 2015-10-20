@@ -709,7 +709,8 @@ message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
         }
         Fl_Group graph {open selected
           xywh {49 17 460 279}
-          code0 {\#include"xybounds.h"}
+          code0 {\#include"graph.h"}
+          class Graph_Group
         } {
           Fl_Box drygp {
             callback {write_function(controller,DRY_GAIN,sizeof(float),0,&drygp->floatvaluey);
