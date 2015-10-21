@@ -56,7 +56,7 @@ public:
                 cairo_save( cr );
 
                 int os;
-                int ymn, ymx;
+                int ymn, ymx, xmn, xmx;
                 float r,g,b;
                 XYhandle* cp = y0->centerpoint;
                 XBound *xb;
@@ -80,23 +80,44 @@ public:
                 cairo_pattern_destroy(pattern);
                 cairo_new_path(cr);
 
-                os = xb->h/2;//find middle of widgets
-                if(os < yb->w/2)
-                    os = yb->w/2;
+                //find drawn size of widgets
+                os = xb->h;
+                if(os > yb->w)
+                    os = yb->w;
 
+                //y trace
                 if(y0->active())
                 {
                     ymn = yb->y + yb->h;
-                    ymx = (cp->y - (yb->y + yb->h)) + cp->y + cp->h;
+                    ymx = (cp->y - (yb->y + yb->h)) + cp->y + os;
                 }
                 else
                 {
                     ymn = cp->y;
-                    ymx = cp->y + cp->h;
+                    ymx = cp->y + os;
                 } 
+                if(ymn<y()) ymn = y();
+                if(ymx>y()+h()) ymx = y() + h();
 
-                cairo_move_to(cr, yb->x+os, ymn);
-                cairo_line_to(cr, yb->x+os, ymx);
+                //x trace
+                if(x0->active())
+                {
+                    xmn = xb->x;
+                    xmx = (cp->x - xb->x) + cp->x + os;
+                }
+                else
+                {
+                    xmn = cp->x;
+                    xmx = cp->x + os;
+                } 
+                if(xmn<x()) xmn = x();
+                if(xmx>x()+w()) xmx = x() + w();
+
+                os /= 2;
+                cairo_move_to(cr, yb->x+yb->w-os, ymn);
+                cairo_line_to(cr, yb->x+yb->w-os, ymx);
+                cairo_move_to(cr, xmn, xb->y+os);
+                cairo_line_to(cr, xmx, xb->y+os);
 
                 cairo_set_tolerance(cr, 0.1);
                 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
