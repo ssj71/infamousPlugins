@@ -139,7 +139,7 @@ inline void cairo_code_draw_red5x7_render(cairo_t *cr, char num)
 }
 inline void cairo_code_draw_blue5x7_render(cairo_t *cr, char num)
 {
-    cairo_code_draw_rgb5x7_render(cr, num, 0, 0, 1);
+    cairo_code_draw_rgb5x7_render(cr, num, .1, .2, 1);
 }
 inline void cairo_code_draw_green5x7_render(cairo_t *cr, char num)
 {

@@ -45,37 +45,22 @@ public:
     XBound* x0,*x1,*x2,*x3,*x4,*x5;
     YBound* y0,*y1,*y2,*y3,*y4,*y5;
 
-    void draw()
+    void draw_trace(cairo_t* cr, XBound *xb, YBound *yb, float r, float g, float b)
     {
-        if (damage() & ~FL_DAMAGE_CHILD)
-        {
-            if(x0)
-            {
-                cairo_t *cr = Fl::cairo_cc();
-
-                cairo_save( cr );
-
                 int os;
                 int ymn, ymx, xmn, xmx;
-                float r,g,b;
-                XYhandle* cp = y0->centerpoint;
-                XBound *xb;
-                YBound *yb;
 
-                cairo_pattern_t *pattern;
-
-                //red
-                cp = y0->centerpoint;
-                xb = x0;
-                yb = y0;
-                r=1;g=0;b=0;
+                XYhandle* cp = yb->centerpoint;
+                
+                if (!cp->active()) return;
 
                 cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
                 cairo_set_line_width(cr, 1);
                 cairo_set_miter_limit(cr, 1);
                 cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
                 cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
-                pattern = cairo_pattern_create_rgba(r,g,b,1);
+
+                cairo_pattern_t *pattern = cairo_pattern_create_rgba(r,g,b,1);
                 cairo_set_source(cr, pattern);
                 cairo_pattern_destroy(pattern);
                 cairo_new_path(cr);
@@ -86,7 +71,7 @@ public:
                     os = yb->w;
 
                 //y trace
-                if(y0->active())
+                if(yb->active())
                 {
                     ymn = yb->y + yb->h;
                     ymx = (cp->y - (yb->y + yb->h)) + cp->y + os;
@@ -100,7 +85,7 @@ public:
                 if(ymx>y()+h()) ymx = y() + h();
 
                 //x trace
-                if(x0->active())
+                if(xb->active())
                 {
                     xmn = xb->x;
                     xmx = (cp->x - xb->x) + cp->x + os;
@@ -121,9 +106,27 @@ public:
 
                 cairo_set_tolerance(cr, 0.1);
                 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-                cairo_stroke_preserve(cr);
+                cairo_stroke_preserve(cr); 
+    }
 
-                cairo_restore( cr );
+    void draw()
+    {
+        if (damage() & ~FL_DAMAGE_CHILD)
+        {
+            if(x0)
+            {
+                cairo_t *cr = Fl::cairo_cc();
+                cairo_save( cr );
+
+                draw_trace(cr, x0, y0, 1,0,0);//red
+                draw_trace(cr, x1, y1, .1,.2,1);//blue
+                draw_trace(cr, x2, y2, .92157,.92157,0);//yellow
+                draw_trace(cr, x3, y3, 0,.88235,0);//green
+                draw_trace(cr, x4, y4, 1,.33333,0);//orange
+                draw_trace(cr, x5, y5, .78431,0,1);//purple
+
+                cairo_restore( cr ); 
+
             }
         }
         draw_children();
