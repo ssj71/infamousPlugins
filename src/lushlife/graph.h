@@ -85,10 +85,18 @@ public:
                 if(ymx>y()+h()) ymx = y() + h();
 
                 //x trace
+                //y = ax^2 + b   a=w(), b=x()
+                //x = 2*x1 - x2         x1 = cp->x, x2 = xb->x
+                //y = w()*(2*cp->x - xb->x)*(2*cp->x - xb->x) + x();
+
+                //me->x = ( (val - me->Xv->minimum()) / (me->Xv->maximum() - me->Xv->minimum()) ) * (g->w() - me->w) + g->x();
+                
+
                 if(xb->active())
                 {
-                    xmn = xb->x;
-                    xmx = (cp->x - xb->x) + cp->x + os;
+                    xmx = xb->x;
+                    //xmn = (cp->x - xb->x) + cp->x + os;//linear
+                    xmn = sqrt((cp->floatvaluex - xb->floatvalue)/cp->squaredmaxx)*(w() - os) + x();//"LOG" approx
                 }
                 else
                 {
