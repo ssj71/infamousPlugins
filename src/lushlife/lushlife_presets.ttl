@@ -1,0 +1,236 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:00Dfault>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+	lv2:port 
+    [ lv2:symbol "MASTERGAIN" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DRYGAIN" ;    pset:value 0.5 ] , 
+    [ lv2:symbol "DRYPAN" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "LFOSHAPE" ;   pset:value 0.7 ] , 
+    [ lv2:symbol "LFOSYNC" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE0" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY0" ;     pset:value 10.0 ] , 
+    [ lv2:symbol "DLLFOAMT0" ;  pset:value 10.0 ] , 
+    [ lv2:symbol "DLLFOFREQ0" ; pset:value 0.6 ] , 
+    [ lv2:symbol "DETUNE0" ;    pset:value 0.001 ] , 
+    [ lv2:symbol "DTLFOAMT0" ;  pset:value 0.05 ] , 
+    [ lv2:symbol "DTLFOFREQ0" ; pset:value 0.3 ] , 
+    [ lv2:symbol "GAIN0" ;      pset:value 0.5 ] , 
+    [ lv2:symbol "PAN0" ;       pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE1" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE2" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE3" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE4" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE5" ;    pset:value 0.0 ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:01Stereo>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+	lv2:port 
+    [ lv2:symbol "MASTERGAIN" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DRYGAIN" ;    pset:value 0.4 ] , 
+    [ lv2:symbol "DRYPAN" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "LFOSHAPE" ;   pset:value 0.7 ] , 
+    [ lv2:symbol "LFOSYNC" ;    pset:value 0.0 ] , 
+
+    [ lv2:symbol "ACTIVE0" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY0" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOAMT0" ;  pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOFREQ0" ; pset:value 0.0 ] , 
+    [ lv2:symbol "DETUNE0" ;    pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOAMT0" ;  pset:value 0.0 ] , 
+    [ lv2:symbol "DTLFOFREQ0" ; pset:value 0.0 ] , 
+    [ lv2:symbol "GAIN0" ;      pset:value 0.4 ] , 
+    [ lv2:symbol "PAN0" ;       pset:value 0.6 ] , 
+
+    [ lv2:symbol "ACTIVE1" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY1" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOAMT1" ;  pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOFREQ1" ; pset:value 0.0 ] , 
+    [ lv2:symbol "DETUNE1" ;    pset:value -0.1 ] , 
+    [ lv2:symbol "DTLFOAMT1" ;  pset:value 0.0 ] , 
+    [ lv2:symbol "DTLFOFREQ1" ; pset:value 0.0 ] , 
+    [ lv2:symbol "GAIN1" ;      pset:value 0.4 ] , 
+    [ lv2:symbol "PAN1" ;       pset:value -0.6 ] , 
+
+    [ lv2:symbol "ACTIVE2" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE3" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE4" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE5" ;    pset:value 0.0 ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:02PingPongPitch>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+	lv2:port 
+    [ lv2:symbol "MASTERGAIN" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DRYGAIN" ;    pset:value 0.6 ] , 
+    [ lv2:symbol "DRYPAN" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "LFOSHAPE" ;   pset:value 0.7 ] , 
+    [ lv2:symbol "LFOSYNC" ;    pset:value 0.0 ] , 
+
+    [ lv2:symbol "ACTIVE0" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY0" ;     pset:value 75.0 ] , 
+    [ lv2:symbol "DLLFOAMT0" ;  pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOFREQ0" ; pset:value 0.0 ] , 
+    [ lv2:symbol "DETUNE0" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DTLFOAMT0" ;  pset:value 0.5 ] , 
+    [ lv2:symbol "DTLFOFREQ0" ; pset:value 10.0 ] , 
+    [ lv2:symbol "GAIN0" ;      pset:value 0.4 ] , 
+    [ lv2:symbol "PAN0" ;       pset:value -1.0 ] , 
+
+    [ lv2:symbol "ACTIVE1" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY1" ;     pset:value 150.0 ] , 
+    [ lv2:symbol "DLLFOAMT1" ;  pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOFREQ1" ; pset:value 0.0 ] , 
+    [ lv2:symbol "DETUNE1" ;    pset:value -1.0 ] , 
+    [ lv2:symbol "DTLFOAMT1" ;  pset:value 0.5 ] , 
+    [ lv2:symbol "DTLFOFREQ1" ; pset:value 10.0 ] , 
+    [ lv2:symbol "GAIN1" ;      pset:value 0.3 ] , 
+    [ lv2:symbol "PAN1" ;       pset:value 1.0 ] , 
+
+    [ lv2:symbol "ACTIVE2" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE3" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE4" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "ACTIVE5" ;    pset:value 0.0 ] .  
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:03TightChoir>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+	lv2:port 
+    [ lv2:symbol "MASTERGAIN" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DRYGAIN" ;    pset:value 0.2 ] , 
+    [ lv2:symbol "DRYPAN" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "LFOSHAPE" ;   pset:value 0.4 ] , 
+    [ lv2:symbol "LFOSYNC" ;    pset:value 0.0 ] , 
+
+    [ lv2:symbol "ACTIVE0" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY0" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOAMT0" ;  pset:value 15.0 ] , 
+    [ lv2:symbol "DLLFOFREQ0" ; pset:value 0.5 ] , 
+    [ lv2:symbol "DETUNE0" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "DTLFOAMT0" ;  pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOFREQ0" ; pset:value 0.5 ] , 
+    [ lv2:symbol "GAIN0" ;      pset:value 0.2 ] , 
+    [ lv2:symbol "PAN0" ;       pset:value -0.5 ] , 
+
+    [ lv2:symbol "ACTIVE1" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY1" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOAMT1" ;  pset:value 15.0 ] , 
+    [ lv2:symbol "DLLFOFREQ1" ; pset:value 0.5 ] , 
+    [ lv2:symbol "DETUNE1" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "DTLFOAMT1" ;  pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOFREQ1" ; pset:value 0.5 ] , 
+    [ lv2:symbol "GAIN1" ;      pset:value 0.2 ] , 
+    [ lv2:symbol "PAN1" ;       pset:value 0.5 ] , 
+
+    [ lv2:symbol "ACTIVE2" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY2" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOAMT2" ;  pset:value 15.0 ] , 
+    [ lv2:symbol "DLLFOFREQ2" ; pset:value 0.5 ] , 
+    [ lv2:symbol "DETUNE2" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "DTLFOAMT2" ;  pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOFREQ2" ; pset:value 0.5 ] , 
+    [ lv2:symbol "GAIN2" ;      pset:value 0.2 ] , 
+    [ lv2:symbol "PAN2" ;       pset:value -0.5 ] , 
+
+    [ lv2:symbol "ACTIVE3" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY3" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOAMT3" ;  pset:value 15.0 ] , 
+    [ lv2:symbol "DLLFOFREQ3" ; pset:value 0.5 ] , 
+    [ lv2:symbol "DETUNE3" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "DTLFOAMT3" ;  pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOFREQ3" ; pset:value 0.5 ] , 
+    [ lv2:symbol "GAIN3" ;      pset:value 0.2 ] , 
+    [ lv2:symbol "PAN3" ;       pset:value 0.5 ] , 
+
+    [ lv2:symbol "ACTIVE4" ;    pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY4" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOAMT4" ;  pset:value 15.0 ] , 
+    [ lv2:symbol "DLLFOFREQ4" ; pset:value 0.5 ] , 
+    [ lv2:symbol "DETUNE4" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "DTLFOAMT4" ;  pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOFREQ4" ; pset:value 0.5 ] , 
+    [ lv2:symbol "GAIN4" ;      pset:value 0.2 ] , 
+    [ lv2:symbol "PAN4" ;       pset:value -0.5 ] , 
+
+    [ lv2:symbol "ACTIVE5" ;    pset:value 1.0 ] .
+    [ lv2:symbol "DELAY5" ;     pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOAMT5" ;  pset:value 15.0 ] , 
+    [ lv2:symbol "DLLFOFREQ5" ; pset:value 0.5 ] , 
+    [ lv2:symbol "DETUNE5" ;    pset:value 0.0 ] , 
+    [ lv2:symbol "DTLFOAMT5" ;  pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOFREQ5" ; pset:value 0.5 ] , 
+    [ lv2:symbol "GAIN5" ;      pset:value 0.2 ] , 
+    [ lv2:symbol "PAN5" ;       pset:value 0.5 ] .
+
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:04Lush>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+	lv2:port 
+    [ lv2:symbol "ACTIVE0" ; pset:value 1.0 ] , 
+    [ lv2:symbol "ACTIVE1" ; pset:value 1.0 ] , 
+    [ lv2:symbol "ACTIVE2" ; pset:value 1.0 ] , 
+    [ lv2:symbol "ACTIVE3" ; pset:value 1.0 ] , 
+    [ lv2:symbol "ACTIVE4" ; pset:value 1.0 ] , 
+    [ lv2:symbol "ACTIVE5" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DELAY0" ; pset:value 0.0 ] , 
+    [ lv2:symbol "DELAY1" ; pset:value 3.0 ] , 
+    [ lv2:symbol "DELAY2" ; pset:value 120.00000763 ] , 
+    [ lv2:symbol "DELAY3" ; pset:value 109.99999237 ] , 
+    [ lv2:symbol "DELAY4" ; pset:value 39.99999619 ] , 
+    [ lv2:symbol "DELAY5" ; pset:value 29.99999809 ] , 
+    [ lv2:symbol "DETUNE0" ; pset:value 0.1 ] , 
+    [ lv2:symbol "DETUNE1" ; pset:value -0.1 ] , 
+    [ lv2:symbol "DETUNE2" ; pset:value 0.2 ] , 
+    [ lv2:symbol "DETUNE3" ; pset:value -5.0 ] , 
+    [ lv2:symbol "DETUNE4" ; pset:value 0.0 ] , 
+    [ lv2:symbol "DETUNE5" ; pset:value 0.0 ] , 
+    [ lv2:symbol "DLLFOAMT0" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DLLFOAMT1" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DLLFOAMT2" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DLLFOAMT3" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DLLFOAMT4" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DLLFOAMT5" ; pset:value 1.0 ] , 
+    [ lv2:symbol "DLLFOFREQ0" ; pset:value 0.60000002 ] , 
+    [ lv2:symbol "DLLFOFREQ1" ; pset:value 0.1 ] , 
+    [ lv2:symbol "DLLFOFREQ2" ; pset:value 0.64999998 ] , 
+    [ lv2:symbol "DLLFOFREQ3" ; pset:value 0.5 ] , 
+    [ lv2:symbol "DLLFOFREQ4" ; pset:value 0.60000002 ] , 
+    [ lv2:symbol "DLLFOFREQ5" ; pset:value 0.44999999 ] , 
+    [ lv2:symbol "DRYGAIN" ; pset:value 0.0 ] , 
+    [ lv2:symbol "DRYPAN" ; pset:value 0.0 ] , 
+    [ lv2:symbol "DTLFOAMT0" ; pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOAMT1" ; pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOAMT2" ; pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOAMT3" ; pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOAMT4" ; pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOAMT5" ; pset:value 0.1 ] , 
+    [ lv2:symbol "DTLFOFREQ0" ; pset:value 0.30000001 ] , 
+    [ lv2:symbol "DTLFOFREQ1" ; pset:value 0.55000001 ] , 
+    [ lv2:symbol "DTLFOFREQ2" ; pset:value 0.40000001 ] , 
+    [ lv2:symbol "DTLFOFREQ3" ; pset:value 0.2 ] , 
+    [ lv2:symbol "DTLFOFREQ4" ; pset:value 0.34999999 ] , 
+    [ lv2:symbol "DTLFOFREQ5" ; pset:value 0.1 ] , 
+    [ lv2:symbol "GAIN0" ; pset:value 0.80000001 ] , 
+    [ lv2:symbol "GAIN1" ; pset:value 0.80000001 ] , 
+    [ lv2:symbol "GAIN2" ; pset:value 0.40000001 ] , 
+    [ lv2:symbol "GAIN3" ; pset:value 0.40000001 ] , 
+    [ lv2:symbol "GAIN4" ; pset:value 0.30000001 ] , 
+    [ lv2:symbol "GAIN5" ; pset:value 0.30000001 ] , 
+    [ lv2:symbol "LFOSHAPE" ; pset:value 0.5 ] , 
+    [ lv2:symbol "LFOSYNC" ; pset:value 0.0 ] , 
+    [ lv2:symbol "MASTERGAIN" ; pset:value 0.80000001 ] , 
+    [ lv2:symbol "PAN0" ; pset:value 0.5 ] , 
+    [ lv2:symbol "PAN1" ; pset:value -0.5 ] , 
+    [ lv2:symbol "PAN2" ; pset:value 0.89999998 ] , 
+    [ lv2:symbol "PAN3" ; pset:value -0.89999998 ] , 
+    [ lv2:symbol "PAN4" ; pset:value 0.2 ] , 
+    [ lv2:symbol "PAN5" ; pset:value -0.2 ] .
