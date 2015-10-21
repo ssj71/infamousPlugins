@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {754 453 630 400} type Double box UP_BOX resizable
+      xywh {1922 28 956 1740} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -308,7 +308,7 @@ else
     pdyb4->activate();  
   if(activate5->value() && pitchfreq5->value())
     pdyb5->activate();
-}} selected
+}}
           tooltip {Show Pan/Gain Controls} xywh {32 296 20 20} value 1 align 6
           code1 {\#include"draw_whiteTinyButton.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -400,6 +400,142 @@ else
           code1 {\#include"draw_whiteTinyButton.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
           code3 {o->drawing_h = cairo_code_draw_whiteTinyButton_get_height(); o->drawing_w = cairo_code_draw_whiteTinyButton_get_width(); o->drawing_f = &cairo_code_draw_whiteTinyButton_render;}
+          class Button
+        }
+        Fl_Button logo {
+          callback {//randomize everything
+float tmp;
+\#define MIN(a,b) (a<b?a:b)
+\#define MAX(a,b) (a<b?b:a)
+
+tmp = rand()/(float)RAND_MAX;
+tmp = (int)(0xFF*tmp);
+set_rule(tmp);
+write_function(controller,RULE,sizeof(float),0,&rule);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = (int)(0xFFFF*tmp);
+set_initial_condition(tmp);
+write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = (int)(5*tmp);
+cellwaveform->value(tmp);
+cellwaveform->floatvalue = tmp;
+write_function(controller,WAVE,sizeof(float),0,&cellwaveform->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = rand()/(float)RAND_MAX;
+tmp = 9.999*tmp + 0.001;
+lifetime->value(tmp);
+lifetime->floatvalue = tmp;
+write_function(controller,CELL_LIFE,sizeof(float),0,&lifetime->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp = (int)(3*tmp);
+harmgain->value(tmp);
+harmgain->floatvalue = tmp;
+write_function(controller,HARM_MODE,sizeof(float),0,&harmgain->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp = 1-tmp;//bias to larger values
+tmp = (int)(16*tmp);
+nharmonics->value(tmp);
+nharmonics->floatvalue = tmp;
+write_function(controller,NHARMONICS,sizeof(float),0,&nharmonics->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= 50;
+harmwidth->value(tmp);
+harmwidth->floatvalue = tmp;
+write_function(controller,HARM_WIDTH,sizeof(float),0,&harmwidth->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp = 14.999*tmp + 0.001;
+a->value(tmp);
+a->floatvalue = tmp;
+write_function(controller,ENV_A,sizeof(float),0,&a->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp = 14.999*tmp + 0.001;
+d->value(tmp);
+d->floatvalue = tmp;
+write_function(controller,ENV_D,sizeof(float),0,&d->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+b->value(tmp);
+b->floatvalue = tmp;
+write_function(controller,ENV_B,sizeof(float),0,&b->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp = 14.999*tmp + 0.001;
+sw->value(tmp);
+sw->floatvalue = tmp;
+write_function(controller,ENV_SWL,sizeof(float),0,&sw->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+su->value(tmp);
+su->floatvalue = tmp;
+write_function(controller,ENV_SUS,sizeof(float),0,&su->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp = 14.999*tmp + 0.001;
+r->value(tmp);
+r->floatvalue = tmp;
+write_function(controller,ENV_R,sizeof(float),0,&r->floatvalue);
+
+tmp = 5.0*rand()/(float)RAND_MAX;
+amwave->value(tmp);
+amwave->floatvalue = tmp;
+write_function(controller,AMOD_WAV,sizeof(float),0,&amwave->floatvalue);
+
+tmp = 5.0*rand()/(float)RAND_MAX;
+fmwave->value(tmp);
+fmwave->floatvalue = tmp;
+write_function(controller,FMOD_WAV,sizeof(float),0,&fmwave->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= 110;
+amfreq->value(tmp);
+amfreq->floatvalue = tmp;
+write_function(controller,AMOD_FREQ,sizeof(float),0,&amfreq->floatvalue);
+
+tmp = rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= rand()/(float)RAND_MAX;
+tmp *= 110;
+fmfreq->value(tmp);
+fmfreq->floatvalue = tmp;
+write_function(controller,FMOD_FREQ,sizeof(float),0,&fmfreq->floatvalue);
+
+tmp = 2.0*rand()/(float)RAND_MAX -1;
+tmp *= 2.0*rand()/(float)RAND_MAX -1;
+tmp *= 2.0*rand()/(float)RAND_MAX -1;
+amgain->value(tmp);
+amgain->floatvalue = tmp;
+write_function(controller,AMOD_GAIN,sizeof(float),0,&amgain->floatvalue);
+
+tmp = 2.0*rand()/(float)RAND_MAX -1;
+tmp *= 2.0*rand()/(float)RAND_MAX -1;
+tmp *= 2.0*rand()/(float)RAND_MAX -1;
+tmp *= 4;
+fmgain->value(tmp);
+fmgain->floatvalue = tmp;
+write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);
+
+param->copy_label("AFFIRMATIVE DAVE.");
+value->copy_label("        I READ YOU.");} selected
+          xywh {50 295 20 20}
           class Button
         }
         Fl_Dial mastergain {
