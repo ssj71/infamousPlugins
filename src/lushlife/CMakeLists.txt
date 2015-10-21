@@ -58,6 +58,6 @@ install(TARGETS ${PLUGIN} ${PLUGIN}_ui
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
 
-install (FILES manifest.ttl ${PLUGIN}.ttl 
+install (FILES manifest.ttl ${PLUGIN}.ttl ${PLUGIN}_presets.ttl
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )

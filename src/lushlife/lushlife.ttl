@@ -9,6 +9,7 @@
 @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
 @prefix param: <http://lv2plug.in/ns/ext/parameters#> .
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:groups:woosh0>
     a param:ControlGroup ;
@@ -691,9 +692,37 @@
                 lv2:default -0.20 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
-                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:groups:woosh5> ;
-
-
-
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:groups:woosh5> ; 
         ] ;
 	.
+
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:00Dfault>
+        a pset:Preset ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+        rdfs:label "00 Dfault" ;
+        rdfs:seeAlso <lushlife_presets.ttl> .
+        
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:01Stereo>
+        a pset:Preset ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+        rdfs:label "01 Stereo" ;
+        rdfs:seeAlso <lushlife_presets.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:02PingPongPitch>
+        a pset:Preset ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+        rdfs:label "02 Ping Pong Pitch" ;
+        rdfs:seeAlso <lushlife_presets.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:03TightChoir>
+        a pset:Preset ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+        rdfs:label "03 Tight Choir" ;
+        rdfs:seeAlso <lushlife_presets.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:04Lush>
+        a pset:Preset ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+        rdfs:label "04 Lush" ;
+        rdfs:seeAlso <lushlife_presets.ttl> .
