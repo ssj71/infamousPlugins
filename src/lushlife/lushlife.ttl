@@ -90,7 +90,7 @@
                 lv2:index 4 ;
                 lv2:symbol "MASTERGAIN" ;
                 lv2:name "Master Gain" ;
-                lv2:default 0.8 ;
+                lv2:default 1.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
         ], [
@@ -98,7 +98,7 @@
                 lv2:index 5 ;
                 lv2:symbol "DRYGAIN" ;
                 lv2:name "Dry Gain" ;
-                lv2:default 0.00 ;
+                lv2:default 0.5 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
@@ -115,7 +115,7 @@
                 lv2:index 7 ;
                 lv2:symbol "LFOSHAPE" ;
                 lv2:name "LFO Shape" ;
-                lv2:default 0.5 ;
+                lv2:default 0.7 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ; 
                 lv2:scalePoint [ rdfs:label "Noise"; rdf:value 0.0 ] ;
@@ -149,7 +149,7 @@
                 lv2:index 10 ;
                 lv2:symbol "DETUNE0" ;
                 lv2:name "Detune 0" ;
-                lv2:default 0.1 ;
+                lv2:default 0.001 ;
                 lv2:minimum -24.0 ;
                 lv2:maximum 24.0 ;
                 units:unit units:semitone12TET ;
@@ -159,7 +159,7 @@
                 lv2:index 11 ;
                 lv2:symbol "DTLFOAMT0" ;
                 lv2:name "Detune LFO Amount" ;
-                lv2:default 0.1 ;
+                lv2:default 0.05 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 12.0 ; 
                 units:unit units:semitone12TET ;
@@ -179,7 +179,7 @@
                 lv2:index 13 ;
                 lv2:symbol "DELAY0" ;
                 lv2:name "Delay 0" ;
-                lv2:default 0.0 ;
+                lv2:default 10.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 150.0 ;
                 units:unit units:ms;
@@ -189,7 +189,7 @@
                 lv2:index 14 ;
                 lv2:symbol "DLLFOAMT0" ;
                 lv2:name "Delay LFO Amount" ;
-                lv2:default 1.0 ;
+                lv2:default 10.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 75.0 ; 
                 units:unit units:ms;
@@ -209,7 +209,7 @@
                 lv2:index 16 ;
                 lv2:symbol "GAIN0" ;
                 lv2:name "Gain 0" ;
-                lv2:default 0.80 ;
+                lv2:default 0.5 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
@@ -219,7 +219,7 @@
                 lv2:index 17 ;
                 lv2:symbol "PAN0" ;
                 lv2:name "Pan 0" ;
-                lv2:default 0.50 ;
+                lv2:default 0.0 ;
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:groups:woosh0> ;
@@ -232,7 +232,7 @@
                 lv2:index 18 ;
                 lv2:symbol "ACTIVE1" ;
                 lv2:name "Active 1" ;
-                lv2:default 1 ;
+                lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
                 lv2:portProperty lv2:integer ;
@@ -293,7 +293,7 @@
                 lv2:index 24 ;
                 lv2:symbol "DLLFOFREQ1" ;
                 lv2:name "Delay LFO Frequency" ;
-                lv2:default 0.1 ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 30.0 ; 
                 units:unit units:hz ;
@@ -326,7 +326,7 @@
                 lv2:index 27 ;
                 lv2:symbol "ACTIVE2" ;
                 lv2:name "Active 2" ;
-                lv2:default 1 ;
+                lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
                 lv2:portProperty lv2:integer ;
@@ -357,7 +357,7 @@
                 lv2:index 30 ;
                 lv2:symbol "DTLFOFREQ2" ;
                 lv2:name "Detune LFO Frequency" ;
-                lv2:default 0.4 ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 30.0 ; 
                 units:unit units:hz ;
@@ -387,7 +387,7 @@
                 lv2:index 33 ;
                 lv2:symbol "DLLFOFREQ2" ;
                 lv2:name "Delay LFO Frequency" ;
-                lv2:default 0.65 ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 30.0 ; 
                 units:unit units:hz ;
@@ -420,7 +420,7 @@
                 lv2:index 36 ;
                 lv2:symbol "ACTIVE3" ;
                 lv2:name "Active 3" ;
-                lv2:default 1 ;
+                lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
                 lv2:portProperty lv2:integer ;
@@ -451,7 +451,7 @@
                 lv2:index 39 ;
                 lv2:symbol "DTLFOFREQ3" ;
                 lv2:name "Detune LFO Frequency" ;
-                lv2:default 0.2 ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 30.0 ; 
                 units:unit units:hz ;
@@ -481,7 +481,7 @@
                 lv2:index 42 ;
                 lv2:symbol "DLLFOFREQ3" ;
                 lv2:name "Delay LFO Frequency" ;
-                lv2:default 0.5 ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 30.0 ; 
                 units:unit units:hz ;
@@ -514,7 +514,7 @@
                 lv2:index 45 ;
                 lv2:symbol "ACTIVE4" ;
                 lv2:name "Active 4" ;
-                lv2:default 1 ;
+                lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
                 lv2:portProperty lv2:integer ;
@@ -545,7 +545,7 @@
                 lv2:index 48 ;
                 lv2:symbol "DTLFOFREQ4" ;
                 lv2:name "Detune LFO Frequency" ;
-                lv2:default 0.35 ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 30.0 ; 
                 units:unit units:hz ;
@@ -575,7 +575,7 @@
                 lv2:index 51 ;
                 lv2:symbol "DLLFOFREQ4" ;
                 lv2:name "Delay LFO Frequency" ;
-                lv2:default 0.6 ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 30.0 ; 
                 units:unit units:hz ;
@@ -608,7 +608,7 @@
                 lv2:index 54 ;
                 lv2:symbol "ACTIVE5" ;
                 lv2:name "Active 5" ;
-                lv2:default 1 ;
+                lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
                 lv2:portProperty lv2:integer ;
@@ -639,7 +639,7 @@
                 lv2:index 57 ;
                 lv2:symbol "DTLFOFREQ5" ;
                 lv2:name "Detune LFO Frequency" ;
-                lv2:default 0.1 ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 30.0 ; 
                 units:unit units:hz ;
@@ -669,7 +669,7 @@
                 lv2:index 60 ;
                 lv2:symbol "DLLFOFREQ5" ;
                 lv2:name "Delay LFO Frequency" ;
-                lv2:default 0.45 ;
+                lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 30.0 ; 
                 units:unit units:hz ;
