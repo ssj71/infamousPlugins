@@ -1012,4 +1012,8 @@ inline void cairo_code_draw_infamousLogo_render(cairo_t *cr)
     cairo_stroke_preserve(cr);
     /********************/
 }
+inline void cairo_code_draw_infamousLogoButton_render(cairo_t *cr, int bogus)
+{
+    cairo_code_draw_infamousLogo_render(cr);
+}
 #endif

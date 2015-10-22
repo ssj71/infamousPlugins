@@ -101,6 +101,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
         
         case ACTIVE0:
           self->activate0->value(val);
+          self->activate0->do_callback();
           break;
         case SHIFT0:
           XYhandle::set_ffffltk_valuey((void*)self->pd0,val*100);
@@ -129,6 +130,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
 
         case ACTIVE1:
           self->activate1->value(val);
+          self->activate1->do_callback();
           break;
         case SHIFT1:
           XYhandle::set_ffffltk_valuey((void*)self->pd1,val*100);
@@ -157,6 +159,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
 
         case ACTIVE2:
           self->activate2->value(val);
+          self->activate2->do_callback();
           break;
         case SHIFT2:
           XYhandle::set_ffffltk_valuey((void*)self->pd2,val*100);
@@ -185,6 +188,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
 
         case ACTIVE3:
           self->activate3->value(val);
+          self->activate3->do_callback();
           break;
         case SHIFT3:
           XYhandle::set_ffffltk_valuey((void*)self->pd3,val*100);
@@ -213,6 +217,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
 
         case ACTIVE4:
           self->activate4->value(val);
+          self->activate4->do_callback();
           break;
         case SHIFT4:
           XYhandle::set_ffffltk_valuey((void*)self->pd3,val*100);
@@ -241,6 +246,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
 
         case ACTIVE5:
           self->activate5->value(val);
+          self->activate5->do_callback();
           break;
         case SHIFT5:
           XYhandle::set_ffffltk_valuey((void*)self->pd3,val*100);

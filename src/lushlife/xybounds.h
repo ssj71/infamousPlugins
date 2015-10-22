@@ -55,23 +55,13 @@ public:
         floatmax = 0;
         units[0] = 0;
         lock2int = 0;
-        squaredmax = 0; 
         clickOffset = 0;
-        mouseClicked = false;
-
-        Fl_Group* tmp = Fl_Group::current();//store current group so it doesn't get lost
-        Fl_Group::current(NULL);
-        Xv = new Fl_Dial(0,0,0,0,NULL);
-        Fl_Group::current(tmp);
-
+        mouseClicked = false; 
     }
-    ~XBound(){delete Xv;}
 
     int x, y, w, h;
     float floatmin,floatmax;
     bool dontdraw;
-
-    Fl_Dial *Xv;//hidden valuators
 
     int clickOffset;
     bool mouseClicked;
@@ -85,7 +75,6 @@ public:
     float floatvalue;//these hold the actual value used (could be restricted to integer vals)
     char units[6];
     int lock2int;//flag to draw only integer values 
-    float squaredmax;//max if meant to be squared (for log approx) floatval = val()*val()*squaredmaxx
 
     static void set_ffffltk_value(void* obj, float val)
     {
@@ -101,9 +90,9 @@ public:
     {
         Fl_Group *g = parent();//parent
         float val = centerpoint->floatvaluex + floatvalue;
-        if(squaredmax)
-            val = sqrt(val/squaredmax);
-        x = ( (val - Xv->minimum()) / (Xv->maximum() - Xv->minimum()) ) * (g->w() - centerpoint->w) + g->x();//reconvert to pixels based on value (this way it tracks log)
+        if(centerpoint->squaredmaxx)
+            val = sqrt(val/centerpoint->squaredmaxx);
+        x = ( (val - centerpoint->Xv->minimum()) / (centerpoint->Xv->maximum() - centerpoint->Xv->minimum()) ) * (g->w() - centerpoint->w) + g->x();//reconvert to pixels based on value (this way it tracks log)
         x += centerpoint->w; //line up right hand sides
         y = centerpoint->y;
 
@@ -195,10 +184,10 @@ public:
                 x = pos;
 
                 pos -= centerpoint->w;//adjust for zero
-                val = ( (float)(pos - g->x()) / (float)(g->w() - centerpoint->w) ) * (Xv->maximum() - Xv->minimum()) + Xv->minimum();
+                val = ( (float)(pos - g->x()) / (float)(g->w() - centerpoint->w) ) * (centerpoint->Xv->maximum() - centerpoint->Xv->minimum()) + centerpoint->Xv->minimum();
                 if(lock2int) val = (int)val;
-                if(squaredmax)
-                    floatvalue = val*val*squaredmax;
+                if(centerpoint->squaredmaxx)
+                    floatvalue = val*val*centerpoint->squaredmaxx;
                 else
                     floatvalue = val;
 
@@ -220,8 +209,8 @@ public:
             // highlight = 0;
             Fl_Widget::copy_label("");
             redraw();
-            //floatvaluex = Xv->value();
-            //floatvaluey = Yv->value();
+            //floatvaluex = centerpoint->Xv->value();
+            //floatvaluey = centerpoint->Yv->value();
             // never do anything after a callback, as the callback
             // may delete the widget!
             //}
@@ -258,24 +247,14 @@ public:
         floatmax = 0;
         units[0] = 0;
         lock2int = 0;
-        squaredmax = 0;
 
         clickOffset = 0;
-        mouseClicked = false;
-
-        Fl_Group* tmp = Fl_Group::current();//store current group so it doesn't get lost
-        Fl_Group::current(NULL);
-        Yv = new Fl_Dial(0,0,0,0,NULL);
-        Fl_Group::current(tmp);
-
+        mouseClicked = false; 
     }
-    ~YBound(){delete Yv;}
 
     int x, y, w, h;
     float floatmin,floatmax;
     bool dontdraw;
-
-    Fl_Dial *Yv;//hidden valuators
 
     int clickOffset;
     bool mouseClicked;
@@ -289,7 +268,6 @@ public:
     float floatvalue;//these hold the actual value used (could be restricted to integer vals)
     char units[6];
     int lock2int;//flag to draw only integer values 
-    float squaredmax;//max if meant to be squared (for log approx) floatval = val()*val()*squaredmaxx
 
     static void set_ffffltk_value(void* obj, float val)
     {
@@ -305,9 +283,9 @@ public:
     {
         Fl_Group *g = parent();//parent
         float val = centerpoint->floatvaluey + floatvalue;
-        if(squaredmax)
-            val = sqrt(val/squaredmax);
-        y = ( (Yv->maximum() - val) / (Yv->maximum() - Yv->minimum()) ) * (g->h() - centerpoint->h) + g->y() - h;//reconvert to pixels based on value (this way it tracks log)
+        if(centerpoint->squaredmaxy)
+            val = sqrt(val/centerpoint->squaredmaxy);
+        y = ( (centerpoint->Yv->maximum() - val) / (centerpoint->Yv->maximum() - centerpoint->Yv->minimum()) ) * (g->h() - centerpoint->h) + g->y() - h;//reconvert to pixels based on value (this way it tracks log)
         x = centerpoint->x;
 
         //if(y > g->y()+g->h()) dontdraw = true;
@@ -400,10 +378,10 @@ public:
                 y = pos;
 
                 pos += h;//offset for size differences
-                val = Yv->maximum() - ( (float)(pos - g->y()) / (float)(g->h() - centerpoint->h) ) * (Yv->maximum() - Yv->minimum());
+                val = centerpoint->Yv->maximum() - ( (float)(pos - g->y()) / (float)(g->h() - centerpoint->h) ) * (centerpoint->Yv->maximum() - centerpoint->Yv->minimum());
                 if(lock2int) val = (int)val;
-                if(squaredmax)
-                    floatvalue = val*val*squaredmax;
+                if(centerpoint->squaredmaxy)
+                    floatvalue = val*val*centerpoint->squaredmaxy;
                 else
                     floatvalue = val;
 
@@ -427,8 +405,8 @@ public:
             // highlight = 0;
             Fl_Widget::copy_label("");
             redraw();
-            //floatvaluex = Xv->value();
-            //floatvaluey = Yv->value();
+            //floatvaluex = centerpoint->Xv->value();
+            //floatvaluey = centerpoint->Yv->value();
             // never do anything after a callback, as the callback
             // may delete the widget!
             //}

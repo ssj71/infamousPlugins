@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {1922 28 956 1740} type Double box UP_BOX resizable
+      xywh {122 127 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -22,13 +22,6 @@ class LushLifeUI {open
           code0 {\#include"lushlife.h"}
           code1 {\#include"draw_lushbg.h"}
           code3 {o->drawing_h = cairo_code_draw_lushbg_get_height(); o->drawing_w = cairo_code_draw_lushbg_get_width(); o->drawing_f = &cairo_code_draw_lushbg_render;}
-          class Background
-        }
-        Fl_Box logo {
-          xywh {3 68 47 107}
-          code0 {\#include"draw_infamousLogo.h"}
-          code1 {o->drawing_h = cairo_code_draw_infamousLogo_get_height(); o->drawing_w = cairo_code_draw_infamousLogo_get_width(); o->drawing_f = &cairo_code_draw_infamousLogo_render;}
-          code2 {o->stretch = false;}
           class Background
         }
         Fl_Box title {
@@ -405,137 +398,67 @@ else
         Fl_Button logo {
           callback {//randomize everything
 float tmp;
-\#define MIN(a,b) (a<b?a:b)
-\#define MAX(a,b) (a<b?b:a)
+
+mastergain->value(.5);//lower gain so that it doesn't randomly blast you
+mastergain->do_callback();
 
 tmp = rand()/(float)RAND_MAX;
-tmp = (int)(0xFF*tmp);
-set_rule(tmp);
-write_function(controller,RULE,sizeof(float),0,&rule);
+XYhandle::set_ffffltk_valuey((void*)drygp,tmp);
 
 tmp = rand()/(float)RAND_MAX;
-tmp = (int)(0xFFFF*tmp);
-set_initial_condition(tmp);
-write_function(controller,INIT_CELLS,sizeof(float),0,&initial_condition);
+tmp = 2*tmp - 1;
+XYhandle::set_ffffltk_valuex((void*)drygp,tmp);
 
 tmp = rand()/(float)RAND_MAX;
-tmp = (int)(5*tmp);
-cellwaveform->value(tmp);
-cellwaveform->floatvalue = tmp;
-write_function(controller,WAVE,sizeof(float),0,&cellwaveform->floatvalue);
+shape->value(tmp);
+shape->do_callback();
+
+//woosh 0
+pdxb0->activate();
+pdyb0->activate();
 
 tmp = rand()/(float)RAND_MAX;
-tmp = rand()/(float)RAND_MAX;
-tmp = 9.999*tmp + 0.001;
-lifetime->value(tmp);
-lifetime->floatvalue = tmp;
-write_function(controller,CELL_LIFE,sizeof(float),0,&lifetime->floatvalue);
+tmp = (int)(tmp+.5);
+activate0->value(tmp);
+activate0->do_callback();
 
 tmp = rand()/(float)RAND_MAX;
-tmp = (int)(3*tmp);
-harmgain->value(tmp);
-harmgain->floatvalue = tmp;
-write_function(controller,HARM_MODE,sizeof(float),0,&harmgain->floatvalue);
+tmp = tmp*200 - 100;
+XYhandle::set_ffffltk_valuey((void*)pd0,tmp);
 
 tmp = rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp = 1-tmp;//bias to larger values
-tmp = (int)(16*tmp);
-nharmonics->value(tmp);
-nharmonics->floatvalue = tmp;
-write_function(controller,NHARMONICS,sizeof(float),0,&nharmonics->floatvalue);
+tmp = tmp*100;
+YBound::set_ffffltk_value((void*)pdyb0,tmp);
 
 tmp = rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp *= 50;
-harmwidth->value(tmp);
-harmwidth->floatvalue = tmp;
-write_function(controller,HARM_WIDTH,sizeof(float),0,&harmwidth->floatvalue);
+tmp = tmp*30;
+pitchfreq0->value(tmp);
+pitchfreq0->do_callback();
 
 tmp = rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp = 14.999*tmp + 0.001;
-a->value(tmp);
-a->floatvalue = tmp;
-write_function(controller,ENV_A,sizeof(float),0,&a->floatvalue);
+tmp = tmp*150;
+XYhandle::set_ffffltk_valuex((void*)pd0,tmp);
 
 tmp = rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp = 14.999*tmp + 0.001;
-d->value(tmp);
-d->floatvalue = tmp;
-write_function(controller,ENV_D,sizeof(float),0,&d->floatvalue);
+tmp = tmp*75;
+XBound::set_ffffltk_value((void*)pdxb0,tmp);
 
 tmp = rand()/(float)RAND_MAX;
-b->value(tmp);
-b->floatvalue = tmp;
-write_function(controller,ENV_B,sizeof(float),0,&b->floatvalue);
+tmp = tmp*30;
+delayfreq0->value(tmp);
+delayfreq0->do_callback();
 
 tmp = rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp = 14.999*tmp + 0.001;
-sw->value(tmp);
-sw->floatvalue = tmp;
-write_function(controller,ENV_SWL,sizeof(float),0,&sw->floatvalue);
+XYhandle::set_ffffltk_valuey((void*)gp0,tmp);
 
 tmp = rand()/(float)RAND_MAX;
-su->value(tmp);
-su->floatvalue = tmp;
-write_function(controller,ENV_SUS,sizeof(float),0,&su->floatvalue);
+tmp = tmp*2 -1;
+XYhandle::set_ffffltk_valuex((void*)gp0,tmp);
 
-tmp = rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp = 14.999*tmp + 0.001;
-r->value(tmp);
-r->floatvalue = tmp;
-write_function(controller,ENV_R,sizeof(float),0,&r->floatvalue);
-
-tmp = 5.0*rand()/(float)RAND_MAX;
-amwave->value(tmp);
-amwave->floatvalue = tmp;
-write_function(controller,AMOD_WAV,sizeof(float),0,&amwave->floatvalue);
-
-tmp = 5.0*rand()/(float)RAND_MAX;
-fmwave->value(tmp);
-fmwave->floatvalue = tmp;
-write_function(controller,FMOD_WAV,sizeof(float),0,&fmwave->floatvalue);
-
-tmp = rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp *= 110;
-amfreq->value(tmp);
-amfreq->floatvalue = tmp;
-write_function(controller,AMOD_FREQ,sizeof(float),0,&amfreq->floatvalue);
-
-tmp = rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp *= rand()/(float)RAND_MAX;
-tmp *= 110;
-fmfreq->value(tmp);
-fmfreq->floatvalue = tmp;
-write_function(controller,FMOD_FREQ,sizeof(float),0,&fmfreq->floatvalue);
-
-tmp = 2.0*rand()/(float)RAND_MAX -1;
-tmp *= 2.0*rand()/(float)RAND_MAX -1;
-tmp *= 2.0*rand()/(float)RAND_MAX -1;
-amgain->value(tmp);
-amgain->floatvalue = tmp;
-write_function(controller,AMOD_GAIN,sizeof(float),0,&amgain->floatvalue);
-
-tmp = 2.0*rand()/(float)RAND_MAX -1;
-tmp *= 2.0*rand()/(float)RAND_MAX -1;
-tmp *= 2.0*rand()/(float)RAND_MAX -1;
-tmp *= 4;
-fmgain->value(tmp);
-fmgain->floatvalue = tmp;
-write_function(controller,FMOD_GAIN,sizeof(float),0,&fmgain->floatvalue);
-
-param->copy_label("AFFIRMATIVE DAVE.");
-value->copy_label("        I READ YOU.");} selected
-          xywh {50 295 20 20}
+message->copy_label("-*- INFAMOUS AGAIN -*-",RGBAsciiDisplay::WHITE_COLOR);}
+          xywh {3 68 47 107}
+          code0 {\#include"draw_infamousLogo.h"}
+          code1 {o->drawing_h = cairo_code_draw_infamousLogo_get_height(); o->drawing_w = cairo_code_draw_infamousLogo_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoButton_render;}
           class Button
         }
         Fl_Dial mastergain {
@@ -968,7 +891,7 @@ message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
             tooltip {Delay LFO Amp.} xywh {150 150 4 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundr_render;}
-            code2 {o->Xv->bounds(0,1); o->squaredmax = 150; o->floatmax = 75; o->centerpoint = pd0;}
+            code2 {o->floatmax = 75; o->centerpoint = pd0;}
             class XBound
           }
           Fl_Box pdyb0 {
@@ -980,7 +903,7 @@ message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
             tooltip {Detune LFO Amp.} xywh {150 150 15 4}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundr_render;}
-            code2 {o->Yv->bounds(-100,100); o->floatmax = 100; o->centerpoint = pd0;}
+            code2 {o->floatmax = 100; o->centerpoint = pd0;}
             class YBound
           }
           Fl_Box pd1 {
@@ -1007,7 +930,7 @@ message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
             tooltip {Delay LFO Amp.} xywh {150 150 4 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundb_render;}
-            code2 {o->Xv->bounds(0,1); o->squaredmax = 150; o->floatmax = 75; o->centerpoint = pd1;}
+            code2 {o->floatmax = 75; o->centerpoint = pd1;}
             class XBound
           }
           Fl_Box pdyb1 {
@@ -1019,7 +942,7 @@ message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
             tooltip {Detune LFO Amp.} xywh {150 150 15 4}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundb_render;}
-            code2 {o->Yv->bounds(-100,100); o->floatmax = 100; o->centerpoint = pd1;}
+            code2 {o->floatmax = 100; o->centerpoint = pd1;}
             class YBound
           }
           Fl_Box pd2 {
@@ -1045,7 +968,7 @@ message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
             tooltip {Delay LFO Amp.} xywh {150 150 4 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundy_render;}
-            code2 {o->Xv->bounds(0,1); o->squaredmax = 150; o->floatmax = 75; o->centerpoint = pd2;}
+            code2 {o->floatmax = 75; o->centerpoint = pd2;}
             class XBound
           }
           Fl_Box pdyb2 {
@@ -1057,7 +980,7 @@ message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
             tooltip {Detune LFO Amp.} xywh {150 150 15 4}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundy_render;}
-            code2 {o->Yv->bounds(-100,100); o->floatmax = 100; o->centerpoint = pd2;}
+            code2 {o->floatmax = 100; o->centerpoint = pd2;}
             class YBound
           }
           Fl_Box pd3 {
@@ -1083,7 +1006,7 @@ message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
             tooltip {Delay LFO Amp.} xywh {150 150 4 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundg_render;}
-            code2 {o->Xv->bounds(0,1); o->squaredmax = 150; o->floatmax = 75; o->centerpoint = pd3;}
+            code2 {o->floatmax = 75; o->centerpoint = pd3;}
             class XBound
           }
           Fl_Box pdyb3 {
@@ -1095,7 +1018,7 @@ message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
             tooltip {Detune LFO Amp.} xywh {150 150 15 4}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundg_render;}
-            code2 {o->Yv->bounds(-100,100); o->floatmax = 100; o->centerpoint = pd3;}
+            code2 {o->floatmax = 100; o->centerpoint = pd3;}
             class YBound
           }
           Fl_Box pd4 {
@@ -1121,7 +1044,7 @@ message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
             tooltip {Delay LFO Amp.} xywh {150 150 4 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundo_render;}
-            code2 {o->Xv->bounds(0,1); o->squaredmax = 150; o->floatmax = 75; o->centerpoint = pd4;}
+            code2 {o->floatmax = 75; o->centerpoint = pd4;}
             class XBound
           }
           Fl_Box pdyb4 {
@@ -1133,7 +1056,7 @@ message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
             tooltip {Detune LFO Amp.} xywh {150 150 15 4}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundo_render;}
-            code2 {o->Yv->bounds(-100,100); o->floatmax = 100; o->centerpoint = pd4;}
+            code2 {o->floatmax = 100; o->centerpoint = pd4;}
             class YBound
           }
           Fl_Box pd5 {
@@ -1159,7 +1082,7 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
             tooltip {Delay LFO Amp.} xywh {150 150 4 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundp_render;}
-            code2 {o->Xv->bounds(0,1); o->squaredmax = 150; o->floatmax = 75; o->centerpoint = pd5;}
+            code2 {o->floatmax = 75; o->centerpoint = pd5;}
             class XBound
           }
           Fl_Box pdyb5 {
@@ -1167,11 +1090,11 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
 write_function(controller,SLFOA5,sizeof(float),0,&pos5);
 char s[30];
 sprintf(s,"Detune LFO Amplitude %6.2f",pdyb5->floatvalue);
-message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
+message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);} selected
             tooltip {Detune LFO Amp.} xywh {150 150 15 4}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundp_render;}
-            code2 {o->Yv->bounds(-100,100); o->floatmax = 100; o->centerpoint = pd5;}
+            code2 {o->floatmax = 100; o->centerpoint = pd5;}
             class YBound
           }
         }
