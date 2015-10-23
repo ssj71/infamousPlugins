@@ -70,7 +70,7 @@ class LushLifeUI {open
     pdxb0->activate();
     pdyb0->activate();
   }
-  message->copy_label("dbl1          Active", RGBAsciiDisplay::RED_COLOR);
+  message->copy_label("Channel 1          Active", RGBAsciiDisplay::RED_COLOR);
 }
 else
 {
@@ -78,9 +78,10 @@ else
     pd0->deactivate();
     pdxb0->deactivate();
     pdyb0->deactivate();
-    message->copy_label("dbl1             Off", RGBAsciiDisplay::RED_COLOR);
+    message->copy_label("Channel 1           Off", RGBAsciiDisplay::RED_COLOR);
 }
-write_function(controller,ACTIVE0,sizeof(float),0,&activate0->floatvalue);}
+write_function(controller,ACTIVE0,sizeof(float),0,&activate0->floatvalue);
+graph->redraw();}
           tooltip {Activate Double 1} xywh {513 36 16 16} value 1
           code1 {\#include"draw_LED.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -98,7 +99,7 @@ write_function(controller,ACTIVE0,sizeof(float),0,&activate0->floatvalue);}
     pdxb1->activate();
     pdyb1->activate();
   }
-    message->copy_label("dbl2          Active", RGBAsciiDisplay::BLUE_COLOR);
+    message->copy_label("Channel 2          Active", RGBAsciiDisplay::BLUE_COLOR);
 }
 else
 {
@@ -106,9 +107,10 @@ else
     pd1->deactivate();
     pdxb1->deactivate();
     pdyb1->deactivate();
-    message->copy_label("dbl2             Off", RGBAsciiDisplay::BLUE_COLOR);
+    message->copy_label("Channel 2           Off", RGBAsciiDisplay::BLUE_COLOR);
 }
-write_function(controller,ACTIVE1,sizeof(float),0,&activate1->floatvalue);}
+write_function(controller,ACTIVE1,sizeof(float),0,&activate1->floatvalue);
+graph->redraw();}
           tooltip {Activate Double 2} xywh {513 80 16 16} value 1
           code1 {\#include"draw_LED.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -126,7 +128,7 @@ write_function(controller,ACTIVE1,sizeof(float),0,&activate1->floatvalue);}
     pdxb2->activate();
     pdyb2->activate();
   }
-    message->copy_label("dbl3          Active", RGBAsciiDisplay::YELLOW_COLOR);
+    message->copy_label("Channel 3          Active", RGBAsciiDisplay::YELLOW_COLOR);
 }
 else
 {
@@ -134,9 +136,10 @@ else
     pd2->deactivate();
     pdxb2->deactivate();
     pdyb2->deactivate();
-    message->copy_label("dbl3             Off", RGBAsciiDisplay::YELLOW_COLOR);
+    message->copy_label("Channel 3           Off", RGBAsciiDisplay::YELLOW_COLOR);
 }
-write_function(controller,ACTIVE2,sizeof(float),0,&activate2->floatvalue);}
+write_function(controller,ACTIVE2,sizeof(float),0,&activate2->floatvalue);
+graph->redraw();}
           tooltip {Activate Double 3} xywh {513 126 16 16} value 1
           code1 {\#include"draw_LED.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -154,7 +157,7 @@ write_function(controller,ACTIVE2,sizeof(float),0,&activate2->floatvalue);}
     pdxb3->activate();
     pdyb3->activate();
   }
-    message->copy_label("dbl4          Active", RGBAsciiDisplay::GREEN_COLOR);
+    message->copy_label("Channel 4          Active", RGBAsciiDisplay::GREEN_COLOR);
 }
 else
 {
@@ -162,9 +165,10 @@ else
     pd3->deactivate();
     pdxb3->deactivate();
     pdyb3->deactivate();
-    message->copy_label("dbl4             Off", RGBAsciiDisplay::GREEN_COLOR);
+    message->copy_label("Channel 4           Off", RGBAsciiDisplay::GREEN_COLOR);
 }
-write_function(controller,ACTIVE3,sizeof(float),0,&activate3->floatvalue);}
+write_function(controller,ACTIVE3,sizeof(float),0,&activate3->floatvalue);
+graph->redraw();}
           tooltip {Activate Double 4} xywh {513 172 16 16} value 1
           code1 {\#include"draw_LED.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -182,7 +186,7 @@ write_function(controller,ACTIVE3,sizeof(float),0,&activate3->floatvalue);}
     pdxb4->activate();
     pdyb4->activate();
   }
-    message->copy_label("dbl5          Active", RGBAsciiDisplay::ORANGE_COLOR);
+    message->copy_label("Channel 5          Active", RGBAsciiDisplay::ORANGE_COLOR);
 }
 else
 {
@@ -190,9 +194,10 @@ else
     pd4->deactivate();
     pdxb4->deactivate();
     pdyb4->deactivate();
-    message->copy_label("dbl5             Off", RGBAsciiDisplay::ORANGE_COLOR);
+    message->copy_label("Channel 5           Off", RGBAsciiDisplay::ORANGE_COLOR);
 }
-write_function(controller,ACTIVE4,sizeof(float),0,&activate4->floatvalue);}
+write_function(controller,ACTIVE4,sizeof(float),0,&activate4->floatvalue);
+graph->redraw();}
           tooltip {Activate Double 5} xywh {513 218 16 16} value 1
           code1 {\#include"draw_LED.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -301,7 +306,9 @@ else
     pdyb4->activate();  
   if(activate5->value() && pitchfreq5->value())
     pdyb5->activate();
-}}
+}
+graph->redraw();
+}
           tooltip {Show Pan/Gain Controls} xywh {32 296 20 20} value 1 align 6
           code1 {\#include"draw_whiteTinyButton.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -388,7 +395,9 @@ else
   if(activate5->value())
     gp5->activate();
   
-}}
+}
+graph->redraw();
+}
           tooltip {Show Detune/Delay Controls} xywh {10 318 20 20} value 1
           code1 {\#include"draw_whiteTinyButton.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -418,22 +427,11 @@ pdxb0->activate();
 pdyb0->activate();
 
 tmp = rand()/(float)RAND_MAX;
-tmp = (int)(tmp+.5);
-activate0->value(tmp);
-activate0->do_callback();
-
-tmp = rand()/(float)RAND_MAX;
 tmp = tmp*200 - 100;
 XYhandle::set_ffffltk_valuey((void*)pd0,tmp);
 
-tmp = rand()/(float)RAND_MAX;
-tmp = tmp*100;
+tmp = rand()/(float)RAND_MAX; tmp = tmp*100;
 YBound::set_ffffltk_value((void*)pdyb0,tmp);
-
-tmp = rand()/(float)RAND_MAX;
-tmp = tmp*30;
-pitchfreq0->value(tmp);
-pitchfreq0->do_callback();
 
 tmp = rand()/(float)RAND_MAX;
 tmp = tmp*150;
@@ -444,7 +442,12 @@ tmp = tmp*75;
 XBound::set_ffffltk_value((void*)pdxb0,tmp);
 
 tmp = rand()/(float)RAND_MAX;
-tmp = tmp*30;
+tmp = tmp*sqrt(30);
+pitchfreq0->value(tmp);
+pitchfreq0->do_callback();
+
+tmp = rand()/(float)RAND_MAX;
+tmp = tmp*sqrt(30);
 delayfreq0->value(tmp);
 delayfreq0->do_callback();
 
@@ -455,7 +458,8 @@ tmp = rand()/(float)RAND_MAX;
 tmp = tmp*2 -1;
 XYhandle::set_ffffltk_valuex((void*)gp0,tmp);
 
-message->copy_label("-*- INFAMOUS AGAIN -*-",RGBAsciiDisplay::WHITE_COLOR);}
+message->copy_label("- * - INFAMOUS AGAIN - * -",RGBAsciiDisplay::WHITE_COLOR);
+graph->redraw();}
           xywh {3 68 47 107}
           code0 {\#include"draw_infamousLogo.h"}
           code1 {o->drawing_h = cairo_code_draw_infamousLogo_get_height(); o->drawing_w = cairo_code_draw_infamousLogo_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoButton_render;}
@@ -464,7 +468,7 @@ message->copy_label("-*- INFAMOUS AGAIN -*-",RGBAsciiDisplay::WHITE_COLOR);}
         Fl_Dial mastergain {
           callback {write_function(controller,GAIN,sizeof(float),0,&mastergain->floatvalue);
 char s[30];
-sprintf(s,"Master Gain %10.3f",mastergain->floatvalue);
+sprintf(s,"Master Gain %14.4f",mastergain->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
           tooltip {Master Gain} xywh {118 300 45 45} maximum 2 step 0.02 value 1
           code1 {\#include"draw_redDial.h"}
@@ -480,14 +484,14 @@ char s[30];
 if(!pitchfreq0->floatvalue)
 {
   pdyb0->deactivate();
-  sprintf(s,"Detune LFO   Off");
+  sprintf(s,"Detune LFO          Off");
   graph->redraw();
 }
 else
 {
   if(pd0->active())
     pdyb0->activate();
-  sprintf(s,"Detune LFO Freq %4.3f Hz",pitchfreq0->floatvalue);
+  sprintf(s,"Detune LFO Freq  %6.3f Hz",pitchfreq0->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
           tooltip {Detune LFO 1 Frequency} xywh {532 20 45 45} step 0.01
@@ -504,14 +508,14 @@ char s[30];
 if(!pitchfreq1->floatvalue)
 {
   pdyb1->deactivate();
-  sprintf(s,"Detune LFO   Off");
+  sprintf(s,"Detune LFO          Off");
   graph->redraw();
 }
 else
 {
   if(pd1->active())
     pdyb1->activate();
-  sprintf(s,"Detune LFO Freq %4.3f Hz",pitchfreq1->floatvalue);
+  sprintf(s,"Detune LFO Freq  %6.3f Hz",pitchfreq1->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
           tooltip {Detune LFO 2 Frequency} xywh {532 66 45 45} step 0.01
@@ -528,14 +532,14 @@ char s[30];
 if(!pitchfreq2->floatvalue)
 {
   pdyb2->deactivate();
-  sprintf(s,"Detune LFO   Off");
+  sprintf(s,"Detune LFO          Off");
   graph->redraw();
 }
 else
 {
   if(pd2->active())
     pdyb2->activate();
-  sprintf(s,"Detune LFO Freq %4.3f Hz",pitchfreq2->floatvalue);
+  sprintf(s,"Detune LFO Freq  %6.3f Hz",pitchfreq2->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
           tooltip {Detune LFO 3 Frequency} xywh {532 112 45 45} step 0.01
@@ -552,14 +556,14 @@ char s[30];
 if(!pitchfreq3->floatvalue)
 {
   pdyb3->deactivate();
-  sprintf(s,"Detune LFO   Off");
+  sprintf(s,"Detune LFO          Off");
   graph->redraw();
 }
 else
 {
   if(pd3->active())
     pdyb3->activate();
-  sprintf(s,"Detune LFO Freq %4.3f Hz",pitchfreq3->floatvalue);
+  sprintf(s,"Detune LFO Freq  %6.3f Hz",pitchfreq3->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
           tooltip {Detune LFO 4 Frequency} xywh {532 158 45 45} step 0.01
@@ -576,14 +580,14 @@ char s[30];
 if(!pitchfreq4->floatvalue)
 {
   pdyb4->deactivate();
-  sprintf(s,"Detune LFO   Off");
+  sprintf(s,"Detune LFO          Off");
   graph->redraw();
 }
 else
 {
   if(pd4->active())
     pdyb4->activate();
-  sprintf(s,"Detune LFO Freq %4.3f Hz",pitchfreq4->floatvalue);
+  sprintf(s,"Detune LFO Freq  %6.3f Hz",pitchfreq4->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
           tooltip {Detune LFO 5 Frequency} xywh {532 203 45 45} step 0.01
@@ -600,14 +604,14 @@ char s[30];
 if(!pitchfreq5->floatvalue)
 {
   pdyb5->deactivate();
-  sprintf(s,"Detune LFO   Off");
+  sprintf(s,"Detune LFO          Off");
   graph->redraw();
 }
 else
 {
   if(pd5->active())
     pdyb5->activate();
-  sprintf(s,"Detune LFO Freq %4.3f Hz",pitchfreq5->floatvalue);
+  sprintf(s,"Detune LFO Freq  %6.3f Hz",pitchfreq5->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
           tooltip {Detune LFO 6 Frequency} xywh {532 249 45 45} step 0.01
@@ -624,14 +628,14 @@ char s[30];
 if(!delayfreq0->floatvalue)
 {
   pdxb0->deactivate();
-  sprintf(s,"Delay LFO        Off");
+  sprintf(s,"Delay LFO           Off");
   graph->redraw();
 }
 else 
 {
   if(pd0->active())
     pdxb0->activate();
-  sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq0->floatvalue);
+  sprintf(s,"Delay LFO Freq   %6.3f Hz",delayfreq0->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
           tooltip {Delay LFO 1 Frequency} xywh {580 20 45 45} step 0.01
@@ -648,14 +652,14 @@ char s[30];
 if(!delayfreq1->floatvalue)
 {
   pdxb1->deactivate();
-  sprintf(s,"Delay LFO        Off");
+  sprintf(s,"Delay LFO           Off");
   graph->redraw();
 }
 else
 {
   if(pd1->active())
     pdxb1->activate();
-  sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq1->floatvalue);
+  sprintf(s,"Delay LFO Freq   %6.3f Hz",delayfreq1->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
           tooltip {Delay LFO 2 Frequency} xywh {580 66 45 45} step 0.01
@@ -672,14 +676,14 @@ char s[30];
 if(!delayfreq2->floatvalue)
 {
   pdxb2->deactivate();
-  sprintf(s,"Delay LFO        Off");
+  sprintf(s,"Delay LFO           Off");
   graph->redraw();
 }
 else
 {
   if(pd2->active())
     pdxb2->activate();
-  sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq2->floatvalue);
+  sprintf(s,"Delay LFO Freq   %6.3f Hz",delayfreq2->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
           tooltip {Delay LFO 3 Frequency} xywh {580 112 45 45} step 0.01
@@ -696,14 +700,14 @@ char s[30];
 if(!delayfreq3->floatvalue)
 {
   pdxb3->deactivate();
-  sprintf(s,"Delay LFO        Off");
+  sprintf(s,"Delay LFO           Off");
   graph->redraw();
 }
 else
 {
   if(pd3->active())
      pdxb3->activate();
-  sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq3->floatvalue);
+  sprintf(s,"Delay LFO Freq   %6.3f Hz",delayfreq3->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
           tooltip {Delay LFO 4 Frequency} xywh {580 158 45 45} step 0.01
@@ -720,14 +724,14 @@ char s[30];
 if(!delayfreq4->floatvalue)
 {
   pdxb4->deactivate();
-  sprintf(s,"Delay LFO        Off");
+  sprintf(s,"Delay LFO           Off");
   graph->redraw();
 }
 else
 {
   if(pd4->active())
     pdxb4->activate();
-  sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq4->floatvalue);
+  sprintf(s,"Delay LFO Freq   %6.3f Hz",delayfreq4->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
           tooltip {Delay LFO 5 Frequency} xywh {580 203 45 45} step 0.01
@@ -744,14 +748,14 @@ char s[30];
 if(!delayfreq5->floatvalue)
 {
   pdxb5->deactivate();
-  sprintf(s,"Delay LFO        Off");
+  sprintf(s,"Delay LFO           Off");
   graph->redraw();
 }
 else
 {
    if(pd5->active())
      pdxb5->activate();
-  sprintf(s,"Delay LFO Freq %5.3f Hz",delayfreq5->floatvalue);
+  sprintf(s,"Delay LFO Freq   %6.3f Hz",delayfreq5->floatvalue);
 }
 message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
           tooltip {Delay LFO 6 Frequency} xywh {580 249 45 45} step 0.01
@@ -763,7 +767,7 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
         Fl_Dial shape {
           callback {write_function(controller,LFOSHAPE,sizeof(float),0,&shape->floatvalue);
 char s[30];
-sprintf(s,"LFO Shape %13.3f",shape->floatvalue);
+sprintf(s,"LFO Shape %16.4f",shape->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
           tooltip {LFO Shape} xywh {556 298 45 45} step 0.01 value 0.9
           code1 {\#include"draw_redDial.h"}
@@ -787,7 +791,7 @@ message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
             callback {write_function(controller,DRY_GAIN,sizeof(float),0,&drygp->floatvaluey);
 write_function(controller,DRY_PAN,sizeof(float),0,&drygp->floatvaluex);
 char s[30];
-sprintf(s,"Dry Gain %4.3f, Pan %4.3f",drygp->floatvaluey,drygp->floatvaluex);
+sprintf(s,"Dry Gain %4.3f, Pan %5.3f",drygp->floatvaluey,drygp->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
             tooltip {Dry Signal Gain/Pan} xywh {250 50 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -799,7 +803,7 @@ message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
             callback {write_function(controller,GAIN0,sizeof(float),0,&gp0->floatvaluey);
 write_function(controller,PAN0,sizeof(float),0,&gp0->floatvaluex);
 char s[30];
-sprintf(s,"Gain %4.3f,    Pan %4.3f",gp0->floatvaluey,gp0->floatvaluex);
+sprintf(s,"Gain  %4.3f,   Pan  %5.3f",gp0->floatvaluey,gp0->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
             tooltip {Gain/Pan} xywh {250 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -811,7 +815,7 @@ message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
             callback {write_function(controller,GAIN1,sizeof(float),0,&gp1->floatvaluey);
 write_function(controller,PAN1,sizeof(float),0,&gp1->floatvaluex);
 char s[30];
-sprintf(s,"Gain %4.3f,    Pan %4.3f",gp1->floatvaluey,gp1->floatvaluex);
+sprintf(s,"Gain  %4.3f,   Pan  %5.3f",gp1->floatvaluey,gp1->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);} selected
             tooltip {Gain/Pan} xywh {245 155 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -823,7 +827,7 @@ message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);} selected
             callback {write_function(controller,GAIN2,sizeof(float),0,&gp2->floatvaluey);
 write_function(controller,PAN2,sizeof(float),0,&gp2->floatvaluex);
 char s[30];
-sprintf(s,"Gain %4.3f,    Pan %4.3f",gp2->floatvaluey,gp2->floatvaluex);
+sprintf(s,"Gain  %4.3f,   Pan  %5.3f",gp2->floatvaluey,gp2->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
             tooltip {Gain/Pan} xywh {245 145 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -835,7 +839,7 @@ message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
             callback {write_function(controller,GAIN3,sizeof(float),0,&gp3->floatvaluey);
 write_function(controller,PAN3,sizeof(float),0,&gp3->floatvaluex);
 char s[30];
-sprintf(s,"Gain %4.3f,    Pan %4.3f",gp3->floatvaluey,gp3->floatvaluex);
+sprintf(s,"Gain  %4.3f,   Pan  %5.3f",gp3->floatvaluey,gp3->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
             tooltip {Gain/Pan} xywh {255 140 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -847,7 +851,7 @@ message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
             callback {write_function(controller,GAIN4,sizeof(float),0,&gp4->floatvaluey);
 write_function(controller,PAN4,sizeof(float),0,&gp4->floatvaluex);
 char s[30];
-sprintf(s,"Gain %4.3f,    Pan %4.3f",gp4->floatvaluey,gp4->floatvaluex);
+sprintf(s,"Gain  %4.3f,   Pan  %5.3f",gp4->floatvaluey,gp4->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
             tooltip {Gain/Pan} xywh {255 140 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -859,7 +863,7 @@ message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
             callback {write_function(controller,GAIN5,sizeof(float),0,&gp5->floatvaluey);
 write_function(controller,PAN5,sizeof(float),0,&gp5->floatvaluex);
 char s[30];
-sprintf(s,"Gain %4.3f,    Pan %4.3f",gp5->floatvaluey,gp5->floatvaluex);
+sprintf(s,"Gain  %4.3f,   Pan  %5.3f",gp5->floatvaluey,gp5->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
             tooltip {Gain/Pan} xywh {250 165 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -875,7 +879,7 @@ write_function(controller,DELAY0,sizeof(float),0,&pd0->floatvaluex);
 pdxb0->update_position();
 pdyb0->update_position();
 char s[30];
-sprintf(s,"Dtn %4.1f cnt, Dly %4.1fms",pd0->floatvaluey,pd0->floatvaluex);
+sprintf(s,"Dtn %5.1f cnt, Dly %5.1fms",pd0->floatvaluey,pd0->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -914,7 +918,7 @@ write_function(controller,DELAY1,sizeof(float),0,&pd1->floatvaluex);
 pdxb1->update_position();
 pdyb1->update_position();
 char s[30];
-sprintf(s,"Dtn %4.1f cnt, Dly %4.1fms",pd1->floatvaluey,pd1->floatvaluex);
+sprintf(s,"Dtn %5.1f cnt, Dly %5.1fms",pd1->floatvaluey,pd1->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -952,7 +956,7 @@ write_function(controller,DELAY2,sizeof(float),0,&pd2->floatvaluex);
 pdxb2->update_position();
 pdyb2->update_position();
 char s[30];
-sprintf(s,"Dtn %4.1f cnt, Dly %4.1fms",pd2->floatvaluey,pd2->floatvaluex);
+sprintf(s,"Dtn %5.1f cnt, Dly %5.1fms",pd2->floatvaluey,pd2->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -990,7 +994,7 @@ write_function(controller,DELAY3,sizeof(float),0,&pd3->floatvaluex);
 pdxb3->update_position();
 pdyb3->update_position();
 char s[30];
-sprintf(s,"Dtn %4.1f cnt, Dly %4.1fms",pd3->floatvaluey,pd3->floatvaluex);
+sprintf(s,"Dtn %5.1f cnt, Dly %5.1fms",pd3->floatvaluey,pd3->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -1028,7 +1032,7 @@ write_function(controller,DELAY4,sizeof(float),0,&pd4->floatvaluex);
 pdxb4->update_position();
 pdyb4->update_position();
 char s[30];
-sprintf(s,"Dtn %4.1f cnt, Dly %4.1fms",pd4->floatvaluey,pd4->floatvaluex);
+sprintf(s,"Dtn %5.1f cnt, Dly %5.1fms",pd4->floatvaluey,pd4->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
@@ -1066,7 +1070,7 @@ write_function(controller,DELAY5,sizeof(float),0,&pd5->floatvaluex);
 pdxb5->update_position();
 pdyb5->update_position();
 char s[30];
-sprintf(s,"Dtn %4.1f cnt, Dly %4.1fms",pd5->floatvaluey,pd5->floatvaluex);
+sprintf(s,"Dtn %5.1f cnt, Dly %5.1fms",pd5->floatvaluey,pd5->floatvaluex);
 message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
