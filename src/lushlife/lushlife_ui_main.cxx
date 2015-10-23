@@ -220,7 +220,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           self->activate4->do_callback();
           break;
         case SHIFT4:
-          XYhandle::set_ffffltk_valuey((void*)self->pd3,val*100);
+          XYhandle::set_ffffltk_valuey((void*)self->pd4,val*100);
           break;
         case SLFOA4:
           YBound::set_ffffltk_value((void*)self->pdyb4,val*100);
@@ -249,7 +249,7 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           self->activate5->do_callback();
           break;
         case SHIFT5:
-          XYhandle::set_ffffltk_valuey((void*)self->pd3,val*100);
+          XYhandle::set_ffffltk_valuey((void*)self->pd5,val*100);
           break;
         case SLFOA5:
           YBound::set_ffffltk_value((void*)self->pdyb5,val*100);
