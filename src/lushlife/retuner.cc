@@ -74,7 +74,7 @@ Retuner::Retuner (int fsamp, int nshift) :
         _ds ++;
     }
     
-    _ipsize *= 4; //ssj add buffer space to allow delays
+    _ipsize *= 4.5; //ssj add buffer space to allow delays
 
     // Accepted correlation peak range, corresponding to 60..1200 Hz.
     _ifmin = _fsamp / 1200;
@@ -413,7 +413,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments
                 //float d =  _shift[shftdx].delay + _shift[shftdx].dlfo->out(_lfoshape);
                 //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + _shift[shftdx].delay;
-                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 56 + d; //error in fragments of how much old buffer is kept. Target is to keep it so that each fragment period ends with around ph = 4*16-8=56 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 64 + d; //error in fragments of how much old buffer is kept. Target is to keep it so that each fragment period ends with around ph = 4.5*16-8=64 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
                 if (ph > 0.5f)
                 {
                     // Jump back by 'dr' frames and crossfade.
