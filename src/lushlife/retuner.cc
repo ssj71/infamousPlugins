@@ -395,14 +395,22 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 // the circular input buffer limits it must be at
                 // least one fragment size.
                 float d =  _shift[shftdx].delay + _shift[shftdx].dlfo->out(_lfoshape);
-                if(d>62)d=62;
+                if(d>62)d=62;//clamp so lfo doesn't go over bounds
                 else if(d<0)d=0;
 
+/*
                 p = -d/4;//delay determines how far to offset the cycle index
                 p += ((int)_ipindex >> _ds);//move to current position of cycle index
-                p &= 0x0f;//wrap around the buffer
+                //p &= 0x0f;//wrap around the buffer
+                if(p<0)
+                    p+=16;
+                if(p>=16)
+                    p-=16;
                 //p = p<18?p:0;
                 //p = p%16;
+*/
+                p = (int)(_ipindex - d*_frsize) >> _ds;//find which cycle estimate to use
+                p = p%16;
 
                 dr = _cycle[p] * (int)(ceilf (_frsize / _cycle[p]));//samples per ncycles  >= 1 fragment
                 dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
