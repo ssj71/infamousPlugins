@@ -188,7 +188,7 @@ private:
     int              _notebits;
     int              _lastnote;
     int              _count;
-    float            _cycle[18];
+    float            _cycle[20];
     float            _error;
     //float            _ratio;//
     //float            _phase;//ssj not used
