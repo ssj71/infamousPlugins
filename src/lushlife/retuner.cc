@@ -398,18 +398,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 if(d>62)d=62;//clamp so lfo doesn't go over bounds
                 else if(d<0)d=0;
 
-/*
-                p = -d/4;//delay determines how far to offset the cycle index
-                p += ((int)_ipindex >> _ds);//move to current position of cycle index
-                //p &= 0x0f;//wrap around the buffer
-                if(p<0)
-                    p+=16;
-                if(p>=16)
-                    p-=16;
-                //p = p<18?p:0;
-                //p = p%16;
-*/
-                p = (int)(_ipindex - d*_frsize) >> _ds;//find which cycle estimate to use
+                p = (int)(_ipindex+1 - d*_frsize) >> _ds;//find which cycle estimate to use
                 p = p%16;
 
                 dr = _cycle[p] * (int)(ceilf (_frsize / _cycle[p]));//samples per ncycles  >= 1 fragment
@@ -421,10 +410,8 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     ph /= 2;
                     dr *= 2;
                 }
-                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments
-                //float d =  _shift[shftdx].delay + _shift[shftdx].dlfo->out(_lfoshape);
-                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + _shift[shftdx].delay;
-                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 56 + d; //error in fragments of how much old buffer is kept. Target is to keep it so that each fragment period ends with around ph = 4.5*16-8=64 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
+                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments 16-6 = 10 (middle of buffer if ratio=1)
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 58 + d; //error in fragments of how much old buffer is kept. Target is to keep it so that each fragment period ends with around ph = 4*16-6=58 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
                 if (ph > 0.5f)
                 {
                     // Jump back by 'dr' frames and crossfade.
@@ -500,7 +487,7 @@ void Retuner::findcycle (void)
     h = _fftlen / 2;
     j = _ipindex - d*_fftlen;
     k = _ipsize - 1;
-    p = (_ipindex>>_ds)-0;//estimate corresponds to middle of fft window
+    p = ((_ipindex+1)>>_ds)-0;//estimate corresponds to middle of fft window
     //p &= 0x0f;
     //p = p<18?p:0;
     p = p%16;
