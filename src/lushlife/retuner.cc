@@ -339,9 +339,6 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 _frcount = 0;
                 findcycle ();
                 p = (_ipindex>>_ds)-0;//estimate corresponds to middle of the fft window
-                //p &= 0x0f;
-                //p = p<18?p:0;
-                p = p%16;
                 if (_cycle[p])
                 {
                     // If the pitch estimate succeeds, find the
@@ -398,8 +395,8 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 if(d>62)d=62;//clamp so lfo doesn't go over bounds
                 else if(d<0)d=0;
 
-                p = (int)(_ipindex+1 - d*_frsize) >> _ds;//find which cycle estimate to use
-                p = p%16;
+                p = (int)(_ipindex - d*_frsize) >> _ds;//find which cycle estimate to use
+                p += p<0?16:0;
 
                 dr = _cycle[p] * (int)(ceilf (_frsize / _cycle[p]));//samples per ncycles  >= 1 fragment
                 dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
@@ -487,10 +484,7 @@ void Retuner::findcycle (void)
     h = _fftlen / 2;
     j = _ipindex - d*_fftlen;
     k = _ipsize - 1;
-    p = ((_ipindex+1)>>_ds)-0;//estimate corresponds to middle of fft window
-    //p &= 0x0f;
-    //p = p<18?p:0;
-    p = p%16;
+    p = ((_ipindex)>>_ds)-0;//estimate corresponds to middle of fft window
     for (i = 0; i < _fftlen; i++)
     {
         _fftTdata [i] = _fftTwind [i] * _ipbuff [j & k];
@@ -560,7 +554,8 @@ void Retuner::finderror (void)
         return;
     }
 
-    i = (int)_shift[0].rindex1>>_ds;
+    //i = (int)_shift[0].rindex1>>_ds;
+    i = (int)_ipindex>>_ds;
     //i = i<18?i:0; 
     f = log2f (_fsamp / (_cycle[i] * _refpitch));
     dm = 0;
