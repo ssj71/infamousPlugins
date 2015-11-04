@@ -27,13 +27,18 @@ Dependencies:
     zita-resampler
     fftw3
 
-
 If you do not have ntk and ntk-fluid already installed use the commands:
     git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
     cd ntk
     ./waf configure
     ./waf
     sudo ./waf install
+
+If you do not like GUIs or cannot fulfill the ntk dependencies, there is an option to build without GUIs. Use the commands:
+    cmake
+    make no-GUI
+    sudo cmake -DCOMPONENT=no-GUI -P cmake_install.cmake
+
 
 A NOTE ABOUT CV PORTS!:
 I have commented out all the cv ports (envfollower, stuck, and the powercut/up plugins) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they were frequently interpreted as second port of a stereo pair.
