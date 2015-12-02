@@ -18,6 +18,6 @@ public:
     float freq;
 private:
     float phase;
-    float y0,y1,y2;
+    float y0,y1,x1,ro;
     float phastep;
 };

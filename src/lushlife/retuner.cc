@@ -415,7 +415,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 float d = _shift[shftdx].d;//TODO: if this works, can remove d, its only used 1x
                 //p = (int)(_ipindex + _ipsize - _shift[shftdx].delay*_frsize) >> _ds;//find which cycle estimate to use
                 //p = (int)(_ipindex + _ipsize - d*_frsize) >> _ds;//find which cycle estimate to use
-                p = (int)(r1>>_ds);//use cycle estimate corresponding with where we are, rather than where we want to be. May want to shift to middle of next fragment. Not sure.
+                p = ((int)(r1+8*_frsize)>>_ds);//use cycle estimate corresponding with where we are, rather than where we want to be. May want to shift to middle of next fragment. Not sure.
                 p &= 31;
                 //p += p<0?18:0;
 
