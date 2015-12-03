@@ -377,8 +377,8 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     _shift[shftdx].ratio = powf (2.0f, a/12 - _error * _corrgain);
                     //_shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs/12 - _error * _corrgain);
                     a = _shift[shftdx].dlfo->out(_lfoshape) + _shift[shftdx].delay;
-                    if(a>63)
-                        a = 63;//clamp so lfo doesn't go over bounds
+                    if(a>112)
+                        a = 112;//clamp so lfo doesn't go over bounds
                     else if(a<0)
                         a = 0; 
                     _shift[shftdx].d = a;
