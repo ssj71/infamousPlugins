@@ -45,9 +45,8 @@ public:
     XBound* x0,*x1,*x2,*x3,*x4,*x5;
     YBound* y0,*y1,*y2,*y3,*y4,*y5;
 
-    void draw_trace(cairo_t* cr, XBound *xb, YBound *yb, float r, float g, float b)
+    void draw_trace(cairo_t* cr, XBound *xb, YBound *yb, int os, float r, float g, float b)
     {
-                int os;
                 int ymn, ymx, xmn, xmx;
 
                 XYhandle* cp = yb->centerpoint;
@@ -64,11 +63,6 @@ public:
                 cairo_set_source(cr, pattern);
                 cairo_pattern_destroy(pattern);
                 cairo_new_path(cr);
-
-                //find drawn size of widgets
-                os = xb->h;
-                if(os > yb->w)
-                    os = yb->w;
 
                 //y trace
                 if(yb->active())
@@ -123,6 +117,12 @@ public:
         {
             if(x0)
             {
+                //find drawn size of widgets
+                int os; 
+                os = x0->h;
+                if(os > y0->w)
+                    os = y0->w;
+
                 cairo_t *cr = Fl::cairo_cc();
                 cairo_save( cr );
 
@@ -137,8 +137,8 @@ public:
                 cairo_pattern_destroy(pattern);
                 cairo_new_path(cr);
 
-                cairo_move_to(cr, x(),y()+h()/2.0);
-                cairo_line_to(cr, x()+w(),y()+h()/2.0);
+                cairo_move_to(cr, x(),         y()+h()/2.0 + os/2);
+                cairo_line_to(cr, x()+w(),     y()+h()/2.0 + os/2);
                 cairo_move_to(cr, x()+w()/2.0, y());
                 cairo_line_to(cr, x()+w()/2.0, y()+h());
 
@@ -146,12 +146,12 @@ public:
                 cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
                 cairo_stroke_preserve(cr); 
 
-                draw_trace(cr, x0, y0, 1,0,0);//red
-                draw_trace(cr, x1, y1, .1,.2,1);//blue
-                draw_trace(cr, x2, y2, .92157,.92157,0);//yellow
-                draw_trace(cr, x3, y3, 0,.88235,0);//green
-                draw_trace(cr, x4, y4, 1,.33333,0);//orange
-                draw_trace(cr, x5, y5, .78431,0,1);//purple
+                draw_trace(cr, x0, y0, os, 1,0,0);//red
+                draw_trace(cr, x1, y1, os, .1,.2,1);//blue
+                draw_trace(cr, x2, y2, os, .92157,.92157,0);//yellow
+                draw_trace(cr, x3, y3, os, 0,.88235,0);//green
+                draw_trace(cr, x4, y4, os, 1,.33333,0);//orange
+                draw_trace(cr, x5, y5, os, .78431,0,1);//purple
 
                 cairo_restore( cr ); 
 

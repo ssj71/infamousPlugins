@@ -1190,8 +1190,8 @@ message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
             class YBound
           }
           Fl_Box pd3 {
-            callback {p0 = pd0->floatvaluey / 100;
-write_function(controller,SHIFT3,sizeof(float),0,&pd3->floatvaluey);
+            callback {p3 = pd3->floatvaluey / 100;
+write_function(controller,SHIFT3,sizeof(float),0,&p3);
 write_function(controller,DELAY3,sizeof(float),0,&pd3->floatvaluex);
 pdxb3->update_position();
 pdyb3->update_position();
@@ -1228,8 +1228,8 @@ message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
             class YBound
           }
           Fl_Box pd4 {
-            callback {p0 = pd0->floatvaluey / 100;
-write_function(controller,SHIFT4,sizeof(float),0,&pd4->floatvaluey);
+            callback {p4 = pd4->floatvaluey / 100;
+write_function(controller,SHIFT4,sizeof(float),0,&p4);
 write_function(controller,DELAY4,sizeof(float),0,&pd4->floatvaluex);
 pdxb4->update_position();
 pdyb4->update_position();
@@ -1266,8 +1266,8 @@ message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
             class YBound
           }
           Fl_Box pd5 {
-            callback {p0 = pd0->floatvaluey / 100;
-write_function(controller,SHIFT5,sizeof(float),0,&pd5->floatvaluey);
+            callback {p5 = pd5->floatvaluey / 100;
+write_function(controller,SHIFT5,sizeof(float),0,&p5);
 write_function(controller,DELAY5,sizeof(float),0,&pd5->floatvaluex);
 pdxb5->update_position();
 pdyb5->update_position();
