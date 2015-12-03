@@ -22,7 +22,7 @@ lv2:symbol "Audio_Signal" .
 <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:midi>
 a param:ControlGroup ;
 lv2:name "MIDI Signal" ;
-lv2:symbol "MIDI Signal" .
+lv2:symbol "MIDI_Signal" .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl>
 a param:ControlGroup ;
@@ -37,7 +37,7 @@ lv2:symbol "Control_Signal" .
         doap:description "Fully featured envelope follower";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
-                foaf:homepage <http://infamounsplugins.sourceforge.net> ;
+                foaf:homepage <http://infamousplugins.sourceforge.net> ;
                 foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
         lv2:minorVersion 0 ;
