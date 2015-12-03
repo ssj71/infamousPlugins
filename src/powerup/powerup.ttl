@@ -21,7 +21,7 @@
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This effect outputs silence until triggered then slowly starts playing back the input audio, speeding up until playback is full speed. It adds a large amount of latency to accomplish this, so may not be usefyl live." ;
-        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:optionalFeature lv2:hardRTCapabl, ui:resize ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#powerup_ui> ;
 
         lv2:port [

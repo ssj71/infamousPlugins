@@ -12,6 +12,7 @@
 @prefix param: <http://lv2plug.in/ns/ext/parameters#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
+@prefix pprops:   <http://lv2plug.in/ns/ext/port-props#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio>
 a param:ControlGroup ;
@@ -43,7 +44,7 @@ lv2:symbol "Control_Signal" .
         lv2:microVersion 1 ;
         rdfs:comment "This envelope follower follows the volume envelope of an audio signal and produces a midi control signal. It can be used for things like a sidechained filter cutoff, ducking, or making any other effects volume responsive.";
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
-        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui> ;
 
         lv2:port [
@@ -116,7 +117,7 @@ lv2:symbol "Control_Signal" .
                 lv2:index 8 ;
                 lv2:symbol "ATIME" ;
                 lv2:name "Attack Time" ;
-                lv2:portProperty lv2:logarithmic ;
+                lv2:portProperty pprops:logarithmic ;
                 lv2:default 0.01 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
@@ -126,7 +127,7 @@ lv2:symbol "Control_Signal" .
                 lv2:index 9 ;
                 lv2:symbol "DTIME" ;
                 lv2:name "Decay Time" ;
-                lv2:portProperty lv2:logarithmic ;
+                lv2:portProperty pprops:logarithmic ;
                 lv2:default 10.0 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 30.0 ;

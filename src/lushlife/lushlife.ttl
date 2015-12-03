@@ -53,7 +53,7 @@
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "A artificial double tracker for vocals or other monophonic sounds. It is capable of everything from lush chorus, to thin doubles, to weird over-the-top effects. It is modulation ready with 6 double tracks each controllable by 2 lfos." ;
-        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:optionalFeature lv2:hardRTCapabl, ui:resize ;
 
 
         lv2:port [
