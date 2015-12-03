@@ -423,11 +423,6 @@ shape->do_callback();
 
 //woosh 0
 tmp = rand()/(float)RAND_MAX;
-activate0->value(tmp<.5);
-activate0->floatvalue = tmp<.5;
-activate0->do_callback();
-
-tmp = rand()/(float)RAND_MAX;
 pitchfreq0->value(tmp);
 pitchfreq0->floatvalue = tmp;
 pitchfreq0->do_callback();
@@ -460,13 +455,13 @@ tmp = rand()/(float)RAND_MAX;
 tmp = tmp*2 -1;
 XYhandle::set_ffffltk_valuex((void*)gp0,tmp);
 
+tmp = rand()/(float)RAND_MAX;
+activate0->value(tmp<.5);
+activate0->floatvalue = tmp<.5;
+activate0->do_callback();
+
 
 //woosh 1
-tmp = rand()/(float)RAND_MAX;
-activate1->value(tmp<.5);
-activate1->floatvalue = tmp<.5;
-activate1->do_callback();
-
 tmp = rand()/(float)RAND_MAX;
 pitchfreq1->value(tmp);
 pitchfreq1->floatvalue = tmp;
@@ -500,13 +495,13 @@ tmp = rand()/(float)RAND_MAX;
 tmp = tmp*2 -1;
 XYhandle::set_ffffltk_valuex((void*)gp1,tmp);
 
+tmp = rand()/(float)RAND_MAX;
+activate1->value(tmp<.5);
+activate1->floatvalue = tmp<.5;
+activate1->do_callback();
+
 
 //woosh 2
-tmp = rand()/(float)RAND_MAX;
-activate2->value(tmp<.5);
-activate2->floatvalue = tmp<.5;
-activate2->do_callback();
-
 tmp = rand()/(float)RAND_MAX;
 pitchfreq2->value(tmp);
 pitchfreq2->floatvalue = tmp;
@@ -540,13 +535,12 @@ tmp = rand()/(float)RAND_MAX;
 tmp = tmp*2 -1;
 XYhandle::set_ffffltk_valuex((void*)gp2,tmp);
 
+tmp = rand()/(float)RAND_MAX;
+activate2->value(tmp<.5);
+activate2->floatvalue = tmp<.5;
+activate2->do_callback();
 
 //woosh 3
-tmp = rand()/(float)RAND_MAX;
-activate3->value(tmp<.5);
-activate3->floatvalue = tmp<.5;
-activate3->do_callback();
-
 tmp = rand()/(float)RAND_MAX;
 pitchfreq3->value(tmp);
 pitchfreq3->floatvalue = tmp;
@@ -580,12 +574,13 @@ tmp = rand()/(float)RAND_MAX;
 tmp = tmp*2 -1;
 XYhandle::set_ffffltk_valuex((void*)gp3,tmp);
 
-//woosh 4
 tmp = rand()/(float)RAND_MAX;
-activate4->value(tmp<.5);
-activate4->floatvalue = tmp<.5;
-activate4->do_callback();
+activate3->value(tmp<.5);
+activate3->floatvalue = tmp<.5;
+activate3->do_callback();
 
+
+//woosh 4
 tmp = rand()/(float)RAND_MAX;
 pitchfreq4->value(tmp);
 pitchfreq4->floatvalue = tmp;
@@ -619,13 +614,13 @@ tmp = rand()/(float)RAND_MAX;
 tmp = tmp*2 -1;
 XYhandle::set_ffffltk_valuex((void*)gp4,tmp);
 
+tmp = rand()/(float)RAND_MAX;
+activate4->value(tmp<.5);
+activate4->floatvalue = tmp<.5;
+activate4->do_callback();
+
 
 //woosh 5
-tmp = rand()/(float)RAND_MAX;
-activate5->value(tmp<.5);
-activate5->floatvalue = tmp<.5;
-activate5->do_callback();
-
 tmp = rand()/(float)RAND_MAX;
 pitchfreq5->value(tmp);
 pitchfreq5->floatvalue = tmp;
@@ -658,6 +653,12 @@ XYhandle::set_ffffltk_valuey((void*)gp5,tmp);
 tmp = rand()/(float)RAND_MAX;
 tmp = tmp*2 -1;
 XYhandle::set_ffffltk_valuex((void*)gp5,tmp);
+
+tmp = rand()/(float)RAND_MAX;
+activate5->value(tmp<.5);
+activate5->floatvalue = tmp<.5;
+activate5->do_callback();
+
 
 message->copy_label("- * - INFAMOUS AGAIN - * -",RGBAsciiDisplay::WHITE_COLOR);
 graph->redraw();} selected
