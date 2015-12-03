@@ -34,13 +34,13 @@ typedef struct
     float         pan;
     float         ratio;
     float         rindex1, rindex2;
-    float         delay;//latency in fragments
+    float         d, delay;//latency in fragments
     bool          xfade;
     float		  corroffs;
     Lfo*          clfo;
     Lfo*          dlfo;
 
-    float         g, gainstep;
+    float         g, gainstep;//used for parameter smoothing
     float         p, panstep;
 } Shifter;
 
@@ -188,7 +188,7 @@ private:
     int              _notebits;
     int              _lastnote;
     int              _count;
-    float            _cycle[16];
+    float            _cycle[32];
     float            _error;
     //float            _ratio;//
     //float            _phase;//ssj not used
