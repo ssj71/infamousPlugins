@@ -19,7 +19,7 @@
         lv2:microVersion 1 ;
         rdfs:comment "This is a duffing oscillator which exhibits chaos, even when driven with a stable signal. Its not extremely musical, but can be fun to make some noise. It is analogous to a spring with magnets pulling it in opposite directions. Input your guitar or synth and see what comes out. It has a check to prevent instability."
         lv2:optionalFeature lv2:hardRTCapable,
-            <http://lv2plug.in/ns/ext/bufsz#maxBlockLength>;
+            <http://lv2plug.in/ns/ext/buf-size#boundedBlockLength>;
 
 
         lv2:port [

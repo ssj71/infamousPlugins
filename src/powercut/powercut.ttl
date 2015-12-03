@@ -8,7 +8,7 @@
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#powercut>
-        a lv2:Plugin, lv2:ModulationPlugin ;
+        a lv2:Plugin, lv2:ModulatorPlugin ;
         doap:name "the infamous power cut" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
         doap:description "A tape stop effect";
@@ -20,7 +20,7 @@
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This is a tape stop with up to 10 seconds of decay time. Curvature can be added for full customization of the effect."
-        lv2:optionalFeature lv2:hardRTCapabl, ui:resize ;
+        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#powercut_ui> ;
 
 
