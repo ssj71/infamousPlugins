@@ -2,6 +2,6 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife>
-        a lv2:Plugin, lv2:DelayPlugin ;
+        a lv2:Plugin, lv2:ModulatorPlugin ;
         lv2:binary <lushlife.so> ;
         rdfs:seeAlso <lushlife.ttl> .

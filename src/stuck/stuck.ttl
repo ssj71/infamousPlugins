@@ -20,7 +20,7 @@
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This effect samples the input, detects the primary waveform, and creates a drone of the note played when triggered. It is polyphonic and matches your tone." ;
-        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#stuck_ui> ;
 
         lv2:port [

@@ -74,7 +74,7 @@ Retuner::Retuner (int fsamp, int nshift) :
         _ds ++;
     }
     
-    _ipsize *= 4; //ssj add buffer space to allow delays
+    _ipsize *= 8; //ssj add buffer space to allow delays
 
     // Accepted correlation peak range, corresponding to 60..1200 Hz.
     _ifmin = _fsamp / 1200;
@@ -141,7 +141,7 @@ Retuner::Retuner (int fsamp, int nshift) :
     //_rindex2 = 0;
 
     //ssj initialize cycles
-    for(i = 0; i < 16; i++)
+    for(i = 0; i < 32; i++)
         _cycle[i] = _frsize;
 
     //ssj initialize shifts
@@ -160,12 +160,13 @@ Retuner::Retuner (int fsamp, int nshift) :
         _shift[i].ratio = 1.0f;
         _shift[i].rindex1 =  _ipsize / 2;
         _shift[i].rindex2 = 0;
+        _shift[i].d = 0;
         _shift[i].delay = 0;
         _shift[i].xfade = false; 
         _shift[i].corroffs = 0.0f; 
 
         _shift[i].clfo = new Lfo(_fsamp,4*_frsize);
-        _shift[i].dlfo = new Lfo(_fsamp,_frsize);
+        _shift[i].dlfo = new Lfo(_fsamp,4*_frsize);
         _shift[i].clfo->gain = 0;
         _shift[i].clfo->freq = 1;
         _shift[i].dlfo->gain = 0;
@@ -339,7 +340,6 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 _frcount = 0;
                 findcycle ();
                 p = (_ipindex>>_ds)-0;//estimate corresponds to middle of the fft window
-                p &= 0x0f;
                 if (_cycle[p])
                 {
                     // If the pitch estimate succeeds, find the
@@ -376,6 +376,12 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     else if(a<-24)a=-24;
                     _shift[shftdx].ratio = powf (2.0f, a/12 - _error * _corrgain);
                     //_shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs/12 - _error * _corrgain);
+                    a = _shift[shftdx].dlfo->out(_lfoshape) + _shift[shftdx].delay;
+                    if(a>112)
+                        a = 112;//clamp so lfo doesn't go over bounds
+                    else if(a<0)
+                        a = 0; 
+                    _shift[shftdx].d = a;
                 }
             }
 
@@ -392,14 +398,26 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 // of pitch periods, and to avoid reading outside
                 // the circular input buffer limits it must be at
                 // least one fragment size.
-                float d =  _shift[shftdx].delay + _shift[shftdx].dlfo->out(_lfoshape);
-                if(d>62)d=62;
-                else if(d<0)d=0;
+                /*
+                float d =  _shift[shftdx].dlfo->out(_lfoshape);
+                if(_shift[shftdx].delay + d>63)
+                    d = 63 - _shift[shftdx].delay;//clamp so lfo doesn't go over bounds
+                else if(_shift[shftdx].delay + d<0)
+                    d = -_shift[shftdx].delay;
 
-                p = -d/4;//delay determines how far to offset the cycle index
-                if(p > 0) p = 0;
-                p += ((int)_ipindex >> _ds);//move to current position of cycle index
-                p &= 0x0f;//wrap around the buffer
+                float d = _shift[shftdx].dlfo->out(_lfoshape);
+                d +=  _shift[shftdx].delay;
+                if(d>63)
+                    d = 63;//clamp so lfo doesn't go over bounds
+                else if(d<0)
+                    d = 0; 
+                */
+                float d = _shift[shftdx].d;//TODO: if this works, can remove d, its only used 1x
+                //p = (int)(_ipindex + _ipsize - _shift[shftdx].delay*_frsize) >> _ds;//find which cycle estimate to use
+                //p = (int)(_ipindex + _ipsize - d*_frsize) >> _ds;//find which cycle estimate to use
+                p = ((int)(r1+8*_frsize)>>_ds);//use cycle estimate corresponding with where we are, rather than where we want to be. May want to shift to middle of next fragment. Not sure.
+                p &= 31;
+                //p += p<0?18:0;
 
                 dr = _cycle[p] * (int)(ceilf (_frsize / _cycle[p]));//samples per ncycles  >= 1 fragment
                 dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
@@ -410,10 +428,10 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     ph /= 2;
                     dr *= 2;
                 }
-                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments
-                //float d =  _shift[shftdx].delay + _shift[shftdx].dlfo->out(_lfoshape);
-                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 62 + _shift[shftdx].delay;
-                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 56 + d; //error in fragments of how much old buffer is kept. Target is to keep it so that each fragment period ends with around ph = 4*16-8=56 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
+                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments 16-6 = 10 (middle of buffer if ratio=1)
+                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 66 + _shift[shftdx].delay + d; //error in fragments of how much old buffer is kept. Target is to keep it so that each fragment period ends with around ph = 4*16-6=58 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
+                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 58 + d;
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 122 + d;
                 if (ph > 0.5f)
                 {
                     // Jump back by 'dr' frames and crossfade.
@@ -429,8 +447,10 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     // Jump forward by 'dr' frames and crossfade.
                     _shift[shftdx].xfade = true;
                     ph = ceil (ph / dp);
-                    if(ph>=0)ph=-1; 
-                    else if(ph < -32) ph = -32;
+                    if(ph>=0)
+                        ph=-1; 
+                    else if(ph < -32)
+                        ph = -32;
                     r2 = r1 - ph * dr; // ph < 0
                     if (r2 >= _ipsize) r2 -= _ipsize;
                 }
@@ -489,8 +509,7 @@ void Retuner::findcycle (void)
     h = _fftlen / 2;
     j = _ipindex - d*_fftlen;
     k = _ipsize - 1;
-    p = (_ipindex>>_ds)-0;//estimate corresponds to middle of fft window
-    p &= 0x0f;
+    p = ((_ipindex)>>_ds)-0;//estimate corresponds to middle of fft window
     for (i = 0; i < _fftlen; i++)
     {
         _fftTdata [i] = _fftTwind [i] * _ipbuff [j & k];
@@ -560,7 +579,7 @@ void Retuner::finderror (void)
         return;
     }
 
-    i = (int)_shift[0].rindex1>>_ds;
+    i = (int)_ipindex>>_ds;
     f = log2f (_fsamp / (_cycle[i] * _refpitch));
     dm = 0;
     am = 1;

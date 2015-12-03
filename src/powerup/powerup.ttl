@@ -3,13 +3,13 @@
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
-@prefix pprops: <http://lv2plug.in/ns/ext/port-props> .
+@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#powerup>
-        a lv2:Plugin, lv2:ModulationPlugin ;
+        a lv2:Plugin, lv2:ModulatorPlugin ;
         doap:name "the infamous power up" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
         doap:description "A tape start effect";
@@ -21,7 +21,7 @@
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This effect outputs silence until triggered then slowly starts playing back the input audio, speeding up until playback is full speed. It adds a large amount of latency to accomplish this, so may not be usefyl live." ;
-        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#powerup_ui> ;
 
         lv2:port [
