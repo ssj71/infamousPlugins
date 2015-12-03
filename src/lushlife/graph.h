@@ -126,6 +126,26 @@ public:
                 cairo_t *cr = Fl::cairo_cc();
                 cairo_save( cr );
 
+                cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+                cairo_set_line_width(cr, 1);
+                cairo_set_miter_limit(cr, 1);
+                cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
+                cairo_set_line_join(cr, CAIRO_LINE_JOIN_MITER);
+
+                cairo_pattern_t *pattern = cairo_pattern_create_rgba(.2,.2,.2,1);
+                cairo_set_source(cr, pattern);
+                cairo_pattern_destroy(pattern);
+                cairo_new_path(cr);
+
+                cairo_move_to(cr, x(),y()+h()/2.0);
+                cairo_line_to(cr, x()+w(),y()+h()/2.0);
+                cairo_move_to(cr, x()+w()/2.0, y());
+                cairo_line_to(cr, x()+w()/2.0, y()+h());
+
+                cairo_set_tolerance(cr, 0.1);
+                cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
+                cairo_stroke_preserve(cr); 
+
                 draw_trace(cr, x0, y0, 1,0,0);//red
                 draw_trace(cr, x1, y1, .1,.2,1);//blue
                 draw_trace(cr, x2, y2, .92157,.92157,0);//yellow
