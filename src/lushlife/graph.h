@@ -137,8 +137,8 @@ public:
                 cairo_pattern_destroy(pattern);
                 cairo_new_path(cr);
 
-                cairo_move_to(cr, x(),         y()+h()/2.0 + os/2);
-                cairo_line_to(cr, x()+w(),     y()+h()/2.0 + os/2);
+                cairo_move_to(cr, x(),         y()+h()/2.0 - os/2);
+                cairo_line_to(cr, x()+w(),     y()+h()/2.0 - os/2);
                 cairo_move_to(cr, x()+w()/2.0, y());
                 cairo_line_to(cr, x()+w()/2.0, y()+h());
 
