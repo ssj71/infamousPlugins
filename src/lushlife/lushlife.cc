@@ -48,7 +48,7 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
 {
     LUSHLIFE* plug = (LUSHLIFE*)handle;
 
-    plug->tuner->set_gain(*plug->dry_gain_p,NWOOSH);
+    plug->tuner->set_gain(*plug->dry_gain_p**plug->mastergain_p,NWOOSH);
     plug->tuner->set_pan(*plug->dry_pan_p,NWOOSH);
 
     unsigned int i;
@@ -57,7 +57,7 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
         plug->tuner->set_active((int)*plug->active_p[i],i);
         plug->tuner->set_delay(*plug->delay_p[i],i);
         plug->tuner->set_corroffs(*plug->shift_p[i],i);
-        plug->tuner->set_gain(*plug->gain_p[i],i);
+        plug->tuner->set_gain(*plug->gain_p[i]**plug->mastergain_p,i);
         plug->tuner->set_pan(*plug->pan_p[i],i);
 
         plug->tuner->set_offs_lfo_amount(*plug->slfoa_p[i],i);
@@ -71,12 +71,6 @@ void run_lushlife(LV2_Handle handle, uint32_t nframes)
 
     plug->tuner->process(nframes,plug->input_p,plug->outputl_p,plug->outputr_p);
 
-    //apply master gain
-    for(i=0;i<nframes;i++)
-    {
-        plug->outputl_p[i] *= *plug->mastergain_p;
-        plug->outputr_p[i] *= *plug->mastergain_p;
-    }
     *plug->latency_p = plug->latency;
 
 return;
