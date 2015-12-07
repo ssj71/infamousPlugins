@@ -470,15 +470,15 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     _shift[shftdx].g = 0;
                 }
                 // recalculate gain/pan stepsize
-                dr = (_shift[shftdx].gain - _shift[shftdx].g)/_frsize;
-                if (dr != 0 && (dr < DENORMAL || dr > -DENORMAL))
+                dr = (_shift[shftdx].gain - _shift[shftdx].g)/(_frsize);
+                if (dr != 0 && (dr < DENORMAL && dr > -DENORMAL))
                 {
                     dr = 0;
                     _shift[shftdx].g = _shift[shftdx].gain;
                 }
                 _shift[shftdx].gainstep = dr;
-                dr = (_shift[shftdx].pan - _shift[shftdx].p)/_frsize;
-                if (dr != 0 && (dr < DENORMAL || dr > -DENORMAL))
+                dr = (_shift[shftdx].pan - _shift[shftdx].p)/(_frsize);
+                if (dr != 0 && (dr < DENORMAL && dr > -DENORMAL))
                 {
                     dr = 0;
                     _shift[shftdx].p = _shift[shftdx].pan;
