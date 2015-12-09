@@ -18,6 +18,9 @@ To install the package under a specific library path (i.e. if you are using fedo
 
 Once this is complete you can already start using the plugins in your favorite LV2 host
 
+There is also an uninstall available:
+    sudo make uninstall
+
 Dependencies:
     cmake
     ntk
