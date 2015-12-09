@@ -67,8 +67,10 @@ class LushLifeUI {open
   if(pitchdelayhide->value())
   {
     pd0->activate();
-    pdxb0->activate();
-    pdyb0->activate();
+    if(delayfreq0->value())
+      pdxb0->activate();
+    if(pitchfreq0->value())
+      pdyb0->activate();
   }
   message->copy_label("Channel 1          Active", RGBAsciiDisplay::RED_COLOR);
 }
@@ -96,8 +98,10 @@ graph->redraw();}
   if(pitchdelayhide->value())
   {
     pd1->activate();
-    pdxb1->activate();
-    pdyb1->activate();
+    if(delayfreq1->value())
+      pdxb1->activate();
+    if(pitchfreq1->value())
+      pdyb1->activate();
   }
     message->copy_label("Channel 2          Active", RGBAsciiDisplay::BLUE_COLOR);
 }
@@ -125,8 +129,10 @@ graph->redraw();}
   if(pitchdelayhide->value())
   {
     pd2->activate();
-    pdxb2->activate();
-    pdyb2->activate();
+    if(delayfreq2->value())
+      pdxb2->activate();
+    if(pitchfreq2->value())
+      pdyb2->activate();
   }
     message->copy_label("Channel 3          Active", RGBAsciiDisplay::YELLOW_COLOR);
 }
@@ -154,8 +160,10 @@ graph->redraw();}
   if(pitchdelayhide->value())
   {
     pd3->activate();
-    pdxb3->activate();
-    pdyb3->activate();
+    if(delayfreq3->value())
+      pdxb3->activate();
+    if(pitchfreq3->value())
+      pdyb3->activate();
   }
     message->copy_label("Channel 4          Active", RGBAsciiDisplay::GREEN_COLOR);
 }
@@ -183,8 +191,10 @@ graph->redraw();}
   if(pitchdelayhide->value())
   {
     pd4->activate();
-    pdxb4->activate();
-    pdyb4->activate();
+    if(delayfreq4->value())
+      pdxb4->activate();
+    if(pitchfreq4->value())
+      pdyb4->activate();
   }
     message->copy_label("Channel 5          Active", RGBAsciiDisplay::ORANGE_COLOR);
 }
@@ -212,8 +222,10 @@ graph->redraw();}
   if(pitchdelayhide->value())
   {
     pd5->activate();
-    pdxb5->activate();
-    pdyb5->activate();
+    if(delayfreq5->value())
+      pdxb5->activate();
+    if(pitchfreq5->value())
+      pdyb5->activate();
   }
     message->copy_label("dbl6          Active", RGBAsciiDisplay::PURPLE_COLOR);
 }
