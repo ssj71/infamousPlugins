@@ -42,7 +42,8 @@
   -o-transition-property: opacity, -o-transform;
   -o-transition-duration: 3s, 8s;
   transition-property: opacity, transform;
-  transition-duration: 1s, 7s;
+  /*transition-duration: 1s, 7s;*/
+  transition-duration: 1s, 1s;
 }
 #slideshow .fx:first-child + img ~ img {
 	z-index:-1;
@@ -251,7 +252,33 @@
   transform: scale(1.2) translate(-110px,-250px);
   opacity:1;
 }
-#slideshow .fx-14 {/*logo*/
+#slideshow .fx-14 {/*lush*/
+  margin-left:-100px;
+  margin-top:-20px;
+  -webkit-transform-origin: top left;
+  -moz-transform-origin: top left;
+  -o-transform-origin: top left;
+  transform-origin: top left;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(1) translate(-250px,-180px);
+  opacity:1;
+}
+#slideshow .fx-15 {
+  margin-left:100px;
+  margin-top:-220px;
+  -webkit-transform-origin: bottom right;
+  -moz-transform-origin: bottom right;
+  -o-transform-origin: bottom right;
+  transform-origin: bottom right;
+  -webkit-transform: scale(1.5) translate(30px);
+  -moz-transform: scale(1.5) translate(30px);
+  -o-transform: scale(1.5) translate(30px);
+  transform: scale(2.2) translate(-40px,0px);
+  opacity:1;
+}
+#slideshow .fx-16 {/*logo*/
   margin-left:-350px;
   margin-top:-820px;
   -webkit-transform-origin: bottom left;
@@ -314,6 +341,10 @@
 			 alt="">
 		<img src="images/hip2b.png"
 			 alt="">
+		<img src="images/lushlife.png"
+			 alt="">
+		<img src="images/lushlife.png"
+			 alt="">
 		<img src="images/infamous_logo.png"
 			 alt="">
 	</div>
@@ -367,7 +398,8 @@ those things and feel I can do something different...<br />
     s[m].className="fx-"+m,
 	m++
   }
-  document.getElementById("slideshow").getElementsByTagName("img")[0].className="fx",window.setInterval(e,8e3);
+  /*document.getElementById("slideshow").getElementsByTagName("img")[0].className="fx",window.setInterval(e,8e3);*/
+  document.getElementById("slideshow").getElementsByTagName("img")[0].className="fx",window.setInterval(e,2e3);
   var s=document.getElementById("slideshow").getElementsByTagName("img"),a=s.length,m=1
 }();
 </script>
