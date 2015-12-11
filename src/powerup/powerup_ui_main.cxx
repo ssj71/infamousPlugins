@@ -102,7 +102,8 @@ static int
 resize_func(LV2UI_Feature_Handle handle, int w, int h)
 {
   PowerUpUI* self = (PowerUpUI*)handle;
-  self->ui->size(w,h);
+  if(w>0 && h>0)
+      self->ui->size(w,h);
   
   return 0;
 }
