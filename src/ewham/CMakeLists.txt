@@ -1,4 +1,4 @@
-#CMake file for infamous stuck
+#CMake file for infamous ewham
 
 set(PLUGIN "ewham")
 

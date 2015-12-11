@@ -102,7 +102,7 @@ static int
 resize_func(LV2UI_Feature_Handle handle, int w, int h)
 {
   PowerCutUI* self = (PowerCutUI*)handle;
-  if(w>0 && h>0)
+  if(self && w>0 && h>0)
       self->ui->size(w,h);
   
   return 0;
