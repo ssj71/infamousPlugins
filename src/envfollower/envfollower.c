@@ -71,7 +71,6 @@ typedef struct _ENVFOLLOWER
 LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     ENVFOLLOWER* plug = malloc(sizeof(ENVFOLLOWER));
-    LV2_URID_Map *urid_map;
 
     plug->sample_time = 1/sample_rate;
 

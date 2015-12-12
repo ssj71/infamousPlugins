@@ -14,7 +14,6 @@ inline void cairo_code_draw_blue_envScope_render(cairo_t *cr, float *data, uint1
     cairo_surface_t *temp_surface;
     cairo_t *old_cr = cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     temp_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,600,200);
     cr = cairo_create(temp_surface);
@@ -30,7 +29,6 @@ inline void cairo_code_draw_blue_envScope_render(cairo_t *cr, float *data, uint1
     cairo_new_path(cr);
 
     start = (start-1)&0x7FF;
-//cairo_move_to(cr,598,183.33*data[start]+16.66);
     cairo_move_to(cr,598,-183.33*data[start]+183.33);
     for(uint16_t i=1; i<596; i++)
     {
@@ -39,12 +37,9 @@ inline void cairo_code_draw_blue_envScope_render(cairo_t *cr, float *data, uint1
 
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-173.625,-152.125);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
 
-//blur_image_surface(temp_surface,3);
     cairo_set_source_surface(old_cr,temp_surface,0,0);
     cairo_paint(old_cr);
     cairo_surface_destroy(temp_surface);
@@ -57,7 +52,6 @@ inline void cairo_code_draw_green_envScope_render(cairo_t *cr, float *data, uint
     cairo_surface_t *temp_surface;
     cairo_t *old_cr = cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     temp_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,600,200);
     cr = cairo_create(temp_surface);
@@ -81,8 +75,6 @@ inline void cairo_code_draw_green_envScope_render(cairo_t *cr, float *data, uint
 
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-173.625,-152.125);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
 

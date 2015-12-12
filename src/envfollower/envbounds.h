@@ -65,7 +65,6 @@ public:
     {
 
         cairo_pattern_t *pattern;
-        cairo_matrix_t matrix;
 
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
         if(drawlines)
