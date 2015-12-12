@@ -11,8 +11,6 @@ inline int cairo_code_draw_tinyButton_get_height()
 inline void draw_nothing_render(cairo_t *cr, int val) { };
 inline void cairo_code_draw_tinyButton_render(cairo_t *cr, int val)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
     cairo_matrix_t matrix;
 
@@ -65,8 +63,6 @@ inline void cairo_code_draw_tinyButton_render(cairo_t *cr, int val)
         cairo_close_path(cr);
         cairo_set_tolerance(cr, 0.1);
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-915.02844,-473.718751);
-//cairo_pattern_set_matrix(pattern, &matrix);
         cairo_stroke_preserve(cr);
         /********************/
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -110,8 +106,6 @@ inline void cairo_code_draw_tinyButton_render(cairo_t *cr, int val)
         cairo_close_path(cr);
         cairo_set_tolerance(cr, 0.1);
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-915.02844,-473.718751);
-//cairo_pattern_set_matrix(pattern, &matrix);
         cairo_stroke_preserve(cr);
     }
     else
@@ -164,8 +158,6 @@ inline void cairo_code_draw_tinyButton_render(cairo_t *cr, int val)
         cairo_close_path(cr);
         cairo_set_tolerance(cr, 0.1);
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-789.25,-430.17803);
-//cairo_pattern_set_matrix(pattern, &matrix);
         cairo_stroke_preserve(cr);
         /********************/
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -209,8 +201,6 @@ inline void cairo_code_draw_tinyButton_render(cairo_t *cr, int val)
         cairo_close_path(cr);
         cairo_set_tolerance(cr, 0.1);
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1.442462,0,0,1.442462,-224.16517,-425.726231);
-//cairo_pattern_set_matrix(pattern, &matrix);
         cairo_stroke_preserve(cr);
         /********************/
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);

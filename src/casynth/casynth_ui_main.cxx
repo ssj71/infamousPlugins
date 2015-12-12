@@ -71,7 +71,6 @@ void casynthUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_
     if(!format)
     {
       float val = *(float*)buffer;
-      char str[5];
       switch(port_index)
       {
         case CHANNEL:
