@@ -71,7 +71,6 @@ void casynthUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_
     if(!format)
     {
       float val = *(float*)buffer;
-      char str[5];
       switch(port_index)
       {
         case CHANNEL:
@@ -154,7 +153,8 @@ static int
 resize_func(LV2UI_Feature_Handle handle, int w, int h)
 {
   CaSynthUI* self = (CaSynthUI*)handle;
-  self->ui->size(w,h);
+  if(self && w>0 && h>0)
+      self->ui->size(w,h);
   
   return 0;
 }

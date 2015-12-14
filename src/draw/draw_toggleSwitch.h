@@ -10,8 +10,6 @@ inline int cairo_code_draw_toggleSwitch_get_height()
 }
 inline void cairo_code_draw_toggleSwitch_render(cairo_t *cr, int val)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
     cairo_matrix_t matrix;
 
@@ -48,8 +46,6 @@ inline void cairo_code_draw_toggleSwitch_render(cairo_t *cr, int val)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 0.794911,0,0,0.794911,266.03129,-98.51087);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     if(val)
@@ -101,14 +97,7 @@ inline void cairo_code_draw_toggleSwitch_render(cairo_t *cr, int val)
         cairo_close_path(cr);
         cairo_set_tolerance(cr, 0.1);
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-385.69136,-470.4375);
-//cairo_pattern_set_matrix(pattern, &matrix);
         cairo_stroke_preserve(cr);
-        /********************
-        cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-        old_cr = cr;
-        temp_surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 11, 36);
-        cr = cairo_create(temp_surface);*/
     }
     else
     {
@@ -159,20 +148,7 @@ inline void cairo_code_draw_toggleSwitch_render(cairo_t *cr, int val)
         cairo_close_path(cr);
         cairo_set_tolerance(cr, 0.1);
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-385.69136,-470.4375);
-//cairo_pattern_set_matrix(pattern, &matrix);
         cairo_stroke_preserve(cr);
     }//if on
-    /********************
-    cairo_pattern_set_extend(pattern, CAIRO_EXTEND_NONE);
-    cairo_pattern_set_filter(pattern, CAIRO_FILTER_GOOD);
-    cairo_destroy(cr);
-    cr = old_cr;
-    cairo_set_source_surface(cr, temp_surface, 0, 0);
-    cairo_surface_destroy(temp_surface);
-    pattern = cairo_pattern_create_rgba(0,0,0,0.431373);
-    cairo_mask(cr, pattern);
-    cairo_pattern_destroy(pattern);
-    */
 }
 #endif

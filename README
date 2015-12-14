@@ -1,6 +1,6 @@
 Welcome to the INFAMOUS Plugins README
 
-These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use. Installation is discussed first here then the plugins below.
+These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use (exceptions are noted in the description). Installation is discussed first here, then the plugins below.
 
 To install, fulfill the dependencies (below), then run the commands:
     mkdir build
@@ -18,6 +18,9 @@ To install the package under a specific library path (i.e. if you are using fedo
 
 Once this is complete you can already start using the plugins in your favorite LV2 host
 
+There is also an uninstall available:
+    sudo make uninstall
+
 Dependencies:
     cmake
     ntk
@@ -27,13 +30,18 @@ Dependencies:
     zita-resampler
     fftw3
 
-
 If you do not have ntk and ntk-fluid already installed use the commands:
     git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
     cd ntk
     ./waf configure
     ./waf
     sudo ./waf install
+
+If you do not like GUIs or cannot fulfill the ntk dependencies, there is an option to build without GUIs. Use the commands:
+    cmake
+    make no-GUI
+    sudo cmake -DCOMPONENT=no-GUI -P cmake_install.cmake
+
 
 A NOTE ABOUT CV PORTS!:
 I have commented out all the cv ports (envfollower, stuck, and the powercut/up plugins) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they were frequently interpreted as second port of a stereo pair.
@@ -188,4 +196,23 @@ This is a duffing oscillator driven by the input. The duffing oscillator is inte
 =================================
 10. lushlife
 
-coming soon...
+This is an artificial double tracking plugin capable of everything from a thin beatle effect to thick lush choruses to weird outlandish effects. It is primarily for vocals though it works on any monophonic signal. Utilizing 6 channels of doubles that can be individually detuned, delayed, panned, and mixed (or bypassed), lushlife is fully modulation ready and includes lfos for the delay and pitch shifting of each double. The host-generated UI allows you to go to very extreme values, but the GUI (shown) just uses the cleanest settings. 
+
+
+    MASTER GAIN - overall gain
+    DRY GAIN - gain of unshifted signal
+    DRY PAN - pan of unshifted signal
+    LFO SHAPE - blend of sine and random lfo wave
+    LFO SYNC - while 1 all lfos phase is reset
+    WOOSH N - label for parameter group of each of the 6 channels
+      ACTIVE - turns on the doubled channel
+      DETUNE - changes the pitch of the channel in semitones
+      DELAY - changes the delay of the channel in milliseconds
+      GAIN - changes the gain of the channel
+      PAN - changes the panning of the channel
+      DETUNE LFO AMT - semitone range the channel's detune is modulated
+      DETUNE LFO FREQ - frequency of the detune modulation for the channel
+      DELAY LFO AMT - millisecond range the channel's lay is modulated
+      DELAY LFO FREQ - frequency of the delay modulation for the channel
+
+

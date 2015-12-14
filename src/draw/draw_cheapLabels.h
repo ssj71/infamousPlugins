@@ -10,10 +10,7 @@ inline int cairo_code_draw_cheapTitle_get_height()
 }
 inline void cairo_code_draw_cheapTitle_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -720,10 +717,7 @@ inline int cairo_code_draw_cheapAggression_get_height()
 }
 inline void cairo_code_draw_cheapAggression_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);

@@ -1207,8 +1207,6 @@ value->copy_label(s);}
         }
         Fl_Button secret_rule {
           callback {char n[20];
-float val=0;
-int i=0;
 sprintf(n,"%i",(int)rule);
 nonmodal((char*)"Set rule",n)}
           tooltip {enter rule value} xywh {0 243 26 20}
@@ -1217,8 +1215,6 @@ nonmodal((char*)"Set rule",n)}
         }
         Fl_Button secret_initial {
           callback {char n[20];
-float val=0;
-int i=0;
 sprintf(n,"%i",(int)initial_condition);
 nonmodal((char*)"Set initial condition",n);}
           tooltip {enter initial value} xywh {0 263 26 20}

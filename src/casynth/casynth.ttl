@@ -12,6 +12,7 @@
 @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
 @prefix param: <http://lv2plug.in/ns/ext/parameters#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:auto>
 a param:ControlGroup ;
@@ -42,7 +43,7 @@ lv2:symbol "Modulation" .
         lv2:microVersion 1 ;
         rdfs:comment "This additive synth is controlled by a elementary cellular automaton which determines which partials sound and which are silent. It is tempo sync'd and is excellent for pulsating sounds." ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
-        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:optionalFeature lv2:hardRTCapable, ui:resize;
         lv2ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#casynth_ui> ;
 
         lv2:port [
@@ -93,8 +94,8 @@ lv2:symbol "Modulation" .
                 lv2:index 5 ;
                 lv2:symbol "CELL_LIFE" ;
                 lv2:name "Cell Lifetime" ;
-                lv2:portProperty lv2:logarithmic ;
-                lv2:portDesignation lv2time:beats;
+                lv2:portProperty pprops:logarithmic ;
+                lv2:designation lv2time:beat;
                 lv2:default 0.25 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 10.0 ;
@@ -167,7 +168,7 @@ lv2:symbol "Modulation" .
                 lv2:index 11 ;
                 lv2:symbol "ENV_A" ;
                 lv2:name "Attack" ;
-                lv2:portProperty lv2:logarithmic ;
+                lv2:portProperty pprops:logarithmic ;
                 lv2:default 0.10 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
@@ -178,7 +179,7 @@ lv2:symbol "Modulation" .
                 lv2:index 12 ;
                 lv2:symbol "ENV_D" ;
                 lv2:name "Decay" ;
-                lv2:portProperty lv2:logarithmic ;
+                lv2:portProperty pprops:logarithmic ;
                 lv2:default 0.10 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
@@ -199,7 +200,7 @@ lv2:symbol "Modulation" .
                 lv2:index 14 ;
                 lv2:symbol "ENV_SWL" ;
                 lv2:name "Swell" ;
-                lv2:portProperty lv2:logarithmic ;
+                lv2:portProperty pprops:logarithmic ;
                 lv2:default 3.0 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
@@ -220,7 +221,7 @@ lv2:symbol "Modulation" .
                 lv2:index 16 ;
                 lv2:symbol "ENV_R" ;
                 lv2:name "Release" ;
-                lv2:portProperty lv2:logarithmic ;
+                lv2:portProperty pprops:logarithmic ;
                 lv2:default 0.1 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
@@ -248,7 +249,7 @@ lv2:symbol "Modulation" .
                 lv2:index 18 ;
                 lv2:symbol "AMOD_FREQ" ;
                 lv2:name "AM Frequency" ;
-                lv2:portProperty lv2:logarithmic ;
+                lv2:portProperty pprops:logarithmic ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 110.0 ;
@@ -286,7 +287,7 @@ lv2:symbol "Modulation" .
                 lv2:index 21 ;
                 lv2:symbol "FMOD_FREQ" ;
                 lv2:name "FM Frequency" ;
-                lv2:portProperty lv2:logarithmic ;
+                lv2:portProperty pprops:logarithmic ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 110.0 ;

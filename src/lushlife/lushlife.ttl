@@ -42,7 +42,7 @@
     lv2:name "Woosh 5" .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife>
-        a lv2:Plugin, lv2:ModulationPlugin ;
+        a lv2:Plugin, lv2:ModulatorPlugin ;
         doap:name "the infamous lush life" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
         doap:description "an artificial double tracker" ;
@@ -54,7 +54,7 @@
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "A artificial double tracker for vocals or other monophonic sounds. It is capable of everything from lush chorus, to thin doubles, to weird over-the-top effects. It is modulation ready with 6 double tracks each controllable by 2 lfos." ;
-        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
         lv2ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife_ui> ;
 
 

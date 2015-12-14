@@ -2,6 +2,6 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#duffer>
-        a lv2:Plugin, lv2:ModulationPlugin ;
+        a lv2:Plugin, lv2:ModulatorPlugin ;
         lv2:binary <duffer.so> ;
         rdfs:seeAlso <duffer.ttl> .

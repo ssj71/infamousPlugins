@@ -3,7 +3,8 @@
 set(PLUGIN "duffer")
 
 #set(CMAKE_C_FLAGS "-Wall -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 
 if(NOT LIBDIR)
   set(LIBDIR "lib")
@@ -44,11 +45,13 @@ target_link_libraries(${PLUGIN} ${LV2_LIBRARIES} m zita-resampler)
 #target_link_libraries(${PLUGIN}_ui ${LV2_LIBRARIES} ${NTK_LIBRARIES} ${CAIRO_LIBRARIES} m)
 
 # config install
-install(TARGETS ${PLUGIN} #${PLUGIN}_ui
+install(TARGETS ${PLUGIN}
   LIBRARY
+  COMPONENT no-GUI
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
 
 install (FILES manifest.ttl ${PLUGIN}.ttl 
+  COMPONENT no-GUI
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )

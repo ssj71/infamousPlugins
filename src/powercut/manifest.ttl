@@ -10,5 +10,5 @@
 <http://ssj71.github.io/infamousPlugins/plugs.html#powercut_ui>
 	a ui:X11UI ;
 	ui:binary <powercut_ui.so> ;
-	lv2:extensionData ui:idle, ui:resize ;
+	lv2:extensionData ui:idleInterface  ;
 	.

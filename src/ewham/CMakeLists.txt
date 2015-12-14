@@ -1,4 +1,4 @@
-#CMake file for infamous stuck
+#CMake file for infamous ewham
 
 set(PLUGIN "ewham")
 
@@ -49,11 +49,13 @@ target_link_libraries(${PLUGIN} ${LV2_LIBRARIES} ${FFTW_LIBRARIES} m zita-resamp
 #target_link_libraries(${PLUGIN}_ui ${LV2_LIBRARIES} ${NTK_LIBRARIES} ${CAIRO_LIBRARIES} m)
 
 # config install
-install(TARGETS ${PLUGIN} # ${PLUGIN}_ui
+install(TARGETS ${PLUGIN}
   LIBRARY
+  COMPONENT no-GUI
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
 
 install (FILES manifest.ttl ${PLUGIN}.ttl 
+  COMPONENT no-GUI
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )

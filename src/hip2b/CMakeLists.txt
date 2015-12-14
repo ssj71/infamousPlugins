@@ -3,6 +3,7 @@
 set(PLUGIN "hip2b")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -msse2 -mfpmath=sse -ffast-math")
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
 
 if(NOT LIBDIR)
   set(LIBDIR "lib")
@@ -43,11 +44,18 @@ target_link_libraries(${PLUGIN} ${LV2_LIBRARIES} m)
 target_link_libraries(${PLUGIN}_ui ${LV2_LIBRARIES} ${NTK_LIBRARIES} ${CAIRO_LIBRARIES} m)
 
 # config install
-install(TARGETS ${PLUGIN} ${PLUGIN}_ui
+install(TARGETS ${PLUGIN}
+  LIBRARY
+  COMPONENT no-GUI
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
+)
+
+install(TARGETS ${PLUGIN}_ui
   LIBRARY
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
 
-install (FILES manifest.ttl ${PLUGIN}.ttl 
+install (FILES manifest.ttl ${PLUGIN}.ttl
+  COMPONENT no-GUI
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )

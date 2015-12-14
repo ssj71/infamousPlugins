@@ -10,10 +10,7 @@ inline int cairo_code_draw_casALabel_get_height()
 }
 inline void cairo_code_draw_casALabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -74,10 +71,7 @@ inline int cairo_code_draw_casAMLabel_get_height()
 }
 inline void cairo_code_draw_casAMLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -793,10 +787,7 @@ inline int cairo_code_draw_casBLabel_get_height()
 }
 inline void cairo_code_draw_casBLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -865,10 +856,7 @@ inline int cairo_code_draw_casCellLabel_get_height()
 }
 inline void cairo_code_draw_casCellLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -1049,10 +1037,7 @@ inline int cairo_code_draw_casChLabel_get_height()
 }
 inline void cairo_code_draw_casChLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -1135,10 +1120,7 @@ inline int cairo_code_draw_casDLabel_get_height()
 }
 inline void cairo_code_draw_casDLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -1194,10 +1176,7 @@ inline int cairo_code_draw_casEnvelopeLabel_get_height()
 }
 inline void cairo_code_draw_casEnvelopeLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -1518,10 +1497,7 @@ inline int cairo_code_draw_casFLabel_get_height()
 }
 inline void cairo_code_draw_casFLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -1577,10 +1553,7 @@ inline int cairo_code_draw_casFMLabel_get_height()
 }
 inline void cairo_code_draw_casFMLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -2298,10 +2271,7 @@ inline int cairo_code_draw_casGLabel_get_height()
 }
 inline void cairo_code_draw_casGLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -2362,10 +2332,7 @@ inline int cairo_code_draw_casHarmonicsLabel_get_height()
 }
 inline void cairo_code_draw_casHarmonicsLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -2716,10 +2683,7 @@ inline int cairo_code_draw_casHarmWaveLabel_get_height()
 }
 inline void cairo_code_draw_casHarmWaveLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     cairo_set_line_width(cr, 2);
@@ -2738,8 +2702,6 @@ inline void cairo_code_draw_casHarmWaveLabel_render(cairo_t *cr)
     cairo_line_to(cr, 66.492188, 9.980469);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 1,0,0,1,-306.101265,-253.59139);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -2757,8 +2719,6 @@ inline void cairo_code_draw_casHarmWaveLabel_render(cairo_t *cr)
     cairo_line_to(cr, 20.558594, 9.980469);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 1,0,0,1,-306.101265,-253.59139);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -2777,8 +2737,6 @@ inline void cairo_code_draw_casHarmWaveLabel_render(cairo_t *cr)
     cairo_line_to(cr, 67.300781, 45.203125);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 1,0,0,1,-306.101265,-253.59139);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -2799,8 +2757,6 @@ inline void cairo_code_draw_casHarmWaveLabel_render(cairo_t *cr)
     cairo_curve_to(cr, 19.117188, 47.203125, 20.367188, 48.660156, 20.367188, 48.660156);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 1,0,0,1,-306.101265,-253.59139);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
 }
@@ -2817,10 +2773,7 @@ inline int cairo_code_draw_casLLabel_get_height()
 }
 inline void cairo_code_draw_casLLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -2858,10 +2811,7 @@ inline int cairo_code_draw_casMasterLabel_get_height()
 }
 inline void cairo_code_draw_casMasterLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -3128,10 +3078,7 @@ inline int cairo_code_draw_casNLabel_get_height()
 }
 inline void cairo_code_draw_casNLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -3179,10 +3126,7 @@ inline int cairo_code_draw_casOutputLabel_get_height()
 }
 inline void cairo_code_draw_casOutputLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -3419,10 +3363,7 @@ inline int cairo_code_draw_casParameterLabel_get_height()
 }
 inline void cairo_code_draw_casParameterLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -3815,10 +3756,7 @@ inline int cairo_code_draw_casRLabel_get_height()
 }
 inline void cairo_code_draw_casRLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -3884,10 +3822,7 @@ inline int cairo_code_draw_casRuleLabel_get_height()
 }
 inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     cairo_set_line_width(cr, 1.298941);
@@ -3905,8 +3840,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.619105,0,0,0.619105,-25.61546,-303.069283);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -3940,8 +3873,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,238.919738,-274.76955);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -3959,8 +3890,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_line_to(cr, 206.710938, 9.015625);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,238.919738,-274.76955);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -3978,8 +3907,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_line_to(cr, 166.121094, 0.410156);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,208.240288,-287.6983);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4013,8 +3940,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,208.240288,-287.6983);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4032,8 +3957,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_line_to(cr, 174.503906, 9.015625);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,208.240288,-287.6983);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4051,8 +3974,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_line_to(cr, 134.835938, 0.410156);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,177.35098,-300.33071);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4086,8 +4007,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,177.35098,-300.33071);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4121,8 +4040,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,144.992692,-312.994746);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4140,8 +4057,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_line_to(cr, 102.890625, 9.015625);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,144.992692,-312.994746);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4175,8 +4090,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,113.26397,-324.213031);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4194,8 +4107,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_line_to(cr, 71.421875, 9.015625);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,113.26397,-324.213031);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4229,8 +4140,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.415491,0,0,0.415491,113.26397,-324.213031);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4248,8 +4157,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_line_to(cr, 49.554688, 0.410156);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, -0.415491,0,0,0.415491,7.042384,-300.33071);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4283,8 +4190,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, -0.415491,0,0,0.415491,7.042384,-300.33071);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -4318,8 +4223,6 @@ inline void cairo_code_draw_casRuleLabel_render(cairo_t *cr)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.619105,0,0,0.619105,-25.61546,-303.069283);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
 }
@@ -4336,10 +4239,7 @@ inline int cairo_code_draw_casSLabel_get_height()
 }
 inline void cairo_code_draw_casSLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -4398,10 +4298,7 @@ inline int cairo_code_draw_casTitleLabel_get_height()
 }
 inline void cairo_code_draw_casTitleLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -5622,10 +5519,7 @@ inline int cairo_code_draw_casValueLabel_get_height()
 }
 inline void cairo_code_draw_casValueLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -5822,10 +5716,7 @@ inline int cairo_code_draw_casWaveLabel_get_height()
 }
 inline void cairo_code_draw_casWaveLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     cairo_set_line_width(cr, 1.870673);
@@ -5844,8 +5735,6 @@ inline void cairo_code_draw_casWaveLabel_render(cairo_t *cr)
     cairo_line_to(cr, 36.234375, 9.757812);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 0.619105,0,0,0.619105,-545.832268,-403.8329);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -5864,8 +5753,6 @@ inline void cairo_code_draw_casWaveLabel_render(cairo_t *cr)
     cairo_line_to(cr, 66.546875, 9.933594);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 0.619105,0,0,0.619105,-545.832268,-403.8329);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -5883,8 +5770,6 @@ inline void cairo_code_draw_casWaveLabel_render(cairo_t *cr)
     cairo_line_to(cr, 20.558594, 31.460938);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 0.619105,0,0,0.619105,-540.846778,-400.28508);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -5916,8 +5801,6 @@ inline void cairo_code_draw_casWaveLabel_render(cairo_t *cr)
     cairo_line_to(cr, 81.992188, 31.976562);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 0.619105,0,0,0.619105,-540.846778,-400.28508);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -5936,8 +5819,6 @@ inline void cairo_code_draw_casWaveLabel_render(cairo_t *cr)
     cairo_curve_to(cr, 24.433594, 61.4375, 25.546875, 53.160156, 25.546875, 53.160156);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.619105,0,0,0.619105,-541.112348,-401.35648);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -5980,8 +5861,6 @@ inline void cairo_code_draw_casWaveLabel_render(cairo_t *cr)
     cairo_line_to(cr, 75.832031, 58.597656);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-////cairo_matrix_init(&matrix, 0.619105,0,0,0.619105,-541.112348,-401.35648);
-////cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
 }
@@ -5998,10 +5877,7 @@ inline int cairo_code_draw_casWLabel_get_height()
 }
 inline void cairo_code_draw_casWLabel_render(cairo_t *cr)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
