@@ -11,7 +11,6 @@ inline int cairo_code_draw_tabDial_get_height()
 }
 inline void cairo_code_draw_tabDial_render(cairo_t *cr,float val)
 {
-    cairo_surface_t *temp_surface;
     cairo_pattern_t *pattern;
     cairo_matrix_t matrix;
 

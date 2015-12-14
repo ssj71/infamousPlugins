@@ -10,10 +10,7 @@ inline int cairo_code_draw_squareDial_get_height()
 }
 inline void cairo_code_draw_squareDial_render(cairo_t *cr, int ccw, float r, float g, float b, float val)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     cairo_set_line_width(cr, 6);
@@ -69,8 +66,6 @@ inline void cairo_code_draw_squareDial_render(cairo_t *cr, int ccw, float r, flo
 
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-173.625,-152.125);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
 }
