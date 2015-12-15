@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {30 785 630 400} type Double box UP_BOX resizable
+      xywh {3115 250 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -673,7 +673,7 @@ activate5->do_callback();
 
 
 message->copy_label("- * - INFAMOUS AGAIN - * -",RGBAsciiDisplay::WHITE_COLOR);
-graph->redraw();} selected
+graph->redraw();}
           xywh {3 68 47 107}
           code0 {\#include"draw_infamousLogo.h"}
           code1 {o->drawing_h = cairo_code_draw_infamousLogo_get_height(); o->drawing_w = cairo_code_draw_infamousLogo_get_width(); o->drawing_f = &cairo_code_draw_infamousLogoButton_render;}
@@ -1106,7 +1106,7 @@ message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
 char s[30];
 sprintf(s,"Delay LFO Amplitude %6.2f",pdxb0->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
-            tooltip {Delay LFO Amp.} xywh {150 150 4 15}
+            tooltip {Delay LFO Amp.} xywh {150 150 8 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundr_render;}
             code2 {o->floatmax = 75; o->centerpoint = pd0; o->floatvalue = 20;}
@@ -1118,7 +1118,7 @@ write_function(controller,SLFOA0,sizeof(float),0,&pos0);
 char s[30];
 sprintf(s,"Detune LFO Amplitude %6.2f",pdyb0->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
-            tooltip {Detune LFO Amp.} xywh {150 150 15 4}
+            tooltip {Detune LFO Amp.} xywh {150 150 15 8}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundr_render;}
             code2 {o->floatmax = 100; o->centerpoint = pd0; o->floatvalue = 10;}
@@ -1145,7 +1145,7 @@ message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
 char s[30];
 sprintf(s,"Delay LFO Amplitude %6.2f",pdxb1->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
-            tooltip {Delay LFO Amp.} xywh {150 150 4 15}
+            tooltip {Delay LFO Amp.} xywh {150 150 8 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundb_render;}
             code2 {o->floatmax = 75; o->centerpoint = pd1;}
@@ -1157,7 +1157,7 @@ write_function(controller,SLFOA1,sizeof(float),0,&pos1);
 char s[30];
 sprintf(s,"Detune LFO Amplitude %6.2f",pdyb1->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
-            tooltip {Detune LFO Amp.} xywh {150 150 15 4}
+            tooltip {Detune LFO Amp.} xywh {150 150 15 8}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundb_render;}
             code2 {o->floatmax = 100; o->centerpoint = pd1;}
@@ -1183,7 +1183,7 @@ message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
 char s[30];
 sprintf(s,"Delay LFO Amplitude %6.2f",pdxb2->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
-            tooltip {Delay LFO Amp.} xywh {150 150 4 15}
+            tooltip {Delay LFO Amp.} xywh {150 150 8 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundy_render;}
             code2 {o->floatmax = 75; o->centerpoint = pd2;}
@@ -1195,7 +1195,7 @@ write_function(controller,SLFOA2,sizeof(float),0,&pos2);
 char s[30];
 sprintf(s,"Detune LFO Amplitude %6.2f",pdyb2->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
-            tooltip {Detune LFO Amp.} xywh {150 150 15 4}
+            tooltip {Detune LFO Amp.} xywh {150 150 15 8}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundy_render;}
             code2 {o->floatmax = 100; o->centerpoint = pd2;}
@@ -1221,7 +1221,7 @@ message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
 char s[30];
 sprintf(s,"Delay LFO Amplitude %6.2f",pdxb3->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
-            tooltip {Delay LFO Amp.} xywh {150 150 4 15}
+            tooltip {Delay LFO Amp.} xywh {150 150 8 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundg_render;}
             code2 {o->floatmax = 75; o->centerpoint = pd3;}
@@ -1233,7 +1233,7 @@ write_function(controller,SLFOA3,sizeof(float),0,&pos3);
 char s[30];
 sprintf(s,"Detune LFO Amplitude %6.2f",pdyb3->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
-            tooltip {Detune LFO Amp.} xywh {150 150 15 4}
+            tooltip {Detune LFO Amp.} xywh {150 150 15 8}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundg_render;}
             code2 {o->floatmax = 100; o->centerpoint = pd3;}
@@ -1259,7 +1259,7 @@ message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
 char s[30];
 sprintf(s,"Delay LFO Amplitude %6.2f",pdxb4->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
-            tooltip {Delay LFO Amp.} xywh {150 150 4 15}
+            tooltip {Delay LFO Amp.} xywh {150 150 8 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundo_render;}
             code2 {o->floatmax = 75; o->centerpoint = pd4;}
@@ -1271,7 +1271,7 @@ write_function(controller,SLFOA4,sizeof(float),0,&pos4);
 char s[30];
 sprintf(s,"Detune LFO Amplitude %6.2f",pdyb4->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
-            tooltip {Detune LFO Amp.} xywh {150 150 15 4}
+            tooltip {Detune LFO Amp.} xywh {150 150 15 8}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundo_render;}
             code2 {o->floatmax = 100; o->centerpoint = pd4;}
@@ -1297,7 +1297,7 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
 char s[30];
 sprintf(s,"Delay LFO Amplitude %6.2f",pdxb5->floatvalue);
 message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
-            tooltip {Delay LFO Amp.} xywh {150 150 4 15}
+            tooltip {Delay LFO Amp.} xywh {150 150 8 15}
             code0 {\#include"draw_lushGraphXBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphXBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphXBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphXBoundp_render;}
             code2 {o->floatmax = 75; o->centerpoint = pd5;}
@@ -1308,8 +1308,8 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
 write_function(controller,SLFOA5,sizeof(float),0,&pos5);
 char s[30];
 sprintf(s,"Detune LFO Amplitude %6.2f",pdyb5->floatvalue);
-message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
-            tooltip {Detune LFO Amp.} xywh {150 150 15 4}
+message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);} selected
+            tooltip {Detune LFO Amp.} xywh {150 150 15 8}
             code0 {\#include"draw_lushGraphYBound.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphYBound_get_height(); o->drawing_w = cairo_code_draw_lushGraphYBound_get_width(); o->drawing_f = &cairo_code_draw_lushGraphYBoundp_render;}
             code2 {o->floatmax = 100; o->centerpoint = pd5;}

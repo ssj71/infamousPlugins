@@ -93,6 +93,9 @@ public:
         clickOffsetY = 0;
         mouseClicked = false;
 
+        entervalx.winder = NULL;
+        entervaly.winder = NULL;
+
         Fl_Group* tmp = Fl_Group::current();//store current group so it doesn't get lost
         Fl_Group::current(NULL);
         Xv = new Fl_Dial(0,0,0,0,NULL);
@@ -227,10 +230,10 @@ public:
             {
                 if(!Xv->tooltip())
                     Xv->copy_tooltip("X Parameter");
-                entervalx.show(floatvaluex,(char*)Xv->tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
                 if(!Yv->tooltip())
                     Yv->copy_tooltip("Y Parameter");
                 entervaly.show(floatvaluey,(char*)Yv->tooltip(),unitsy,(void*)this,set_ffffltk_valuey);
+                entervalx.show(floatvaluex,(char*)Xv->tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
             }
             return 1;
         case FL_DRAG:
