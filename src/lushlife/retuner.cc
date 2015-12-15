@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
 //
-//  Copyright (C) 2009-2011 Fons Adriaensen <fons@linuxaudio.org>
+//  Copyright (C) 2015 Spencer Jackson <ssjackson71@gmail.com>
 //    
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 //
 // -----------------------------------------------------------------------
 
+//  This code is forked from the amazing code from Fons Adriaensen
 
 #include <stdlib.h>
 #include <string.h>
@@ -363,10 +364,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 {
                     // Bias is removed after two unvoiced fragments.
                     _lastnote = -1;
-                    //_cycle[p] = _pc;
                 }
-                //else
-                    //_cycle[p] = _pc; 
                 
                 //update ratios
                 for (int shftdx = 0; shftdx < _nshift; shftdx++)
@@ -375,7 +373,6 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     if(a>24)a=24;
                     else if(a<-24)a=-24;
                     _shift[shftdx].ratio = powf (2.0f, a/12 - _error * _corrgain);
-                    //_shift[shftdx].ratio = powf (2.0f, _shift[shftdx].corroffs/12 - _error * _corrgain);
                     a = _shift[shftdx].dlfo->out(_lfoshape) + _shift[shftdx].delay;
                     if(a>112)
                         a = 112;//clamp so lfo doesn't go over bounds
@@ -398,26 +395,8 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 // of pitch periods, and to avoid reading outside
                 // the circular input buffer limits it must be at
                 // least one fragment size.
-                /*
-                float d =  _shift[shftdx].dlfo->out(_lfoshape);
-                if(_shift[shftdx].delay + d>63)
-                    d = 63 - _shift[shftdx].delay;//clamp so lfo doesn't go over bounds
-                else if(_shift[shftdx].delay + d<0)
-                    d = -_shift[shftdx].delay;
-
-                float d = _shift[shftdx].dlfo->out(_lfoshape);
-                d +=  _shift[shftdx].delay;
-                if(d>63)
-                    d = 63;//clamp so lfo doesn't go over bounds
-                else if(d<0)
-                    d = 0; 
-                */
-                float d = _shift[shftdx].d;//TODO: if this works, can remove d, its only used 1x
-                //p = (int)(_ipindex + _ipsize - _shift[shftdx].delay*_frsize) >> _ds;//find which cycle estimate to use
-                //p = (int)(_ipindex + _ipsize - d*_frsize) >> _ds;//find which cycle estimate to use
                 p = ((int)(r1+8*_frsize)>>_ds);//use cycle estimate corresponding with where we are, rather than where we want to be. May want to shift to middle of next fragment. Not sure.
                 p &= 31;
-                //p += p<0?18:0;
 
                 dr = _cycle[p] * (int)(ceilf (_frsize / _cycle[p]));//samples per ncycles  >= 1 fragment
                 dp = dr / _frsize; //ratio of complete cycle(s) to fragment (>=1)
@@ -428,10 +407,7 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                     ph /= 2;
                     dr *= 2;
                 }
-                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 10; //error in fragments 16-6 = 10 (middle of buffer if ratio=1)
-                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 66 + _shift[shftdx].delay + d; //error in fragments of how much old buffer is kept. Target is to keep it so that each fragment period ends with around ph = 4*16-6=58 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
-                //ph = ph / _frsize + 2 * _shift[shftdx].ratio - 58 + d;
-                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 122 + d;
+                ph = ph / _frsize + 2 * _shift[shftdx].ratio - 122 + _shift[shftdx].d;//error in fragments of how much old buffer is kept. Target is to keep it so that each fragment period ends with around ph = 8*16-6=122 old fragments (so near the front of the buffer). As delay or ratio grows, the target moves backward in the buffer (fewer old fragments kept) and visa versa. Higher ratios will read more samples so need to start with greater latency.
                 if (ph > 0.5f)
                 {
                     // Jump back by 'dr' frames and crossfade.

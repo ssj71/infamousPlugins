@@ -12,7 +12,6 @@
 
 typedef struct _LUSHLIFE
 {
-    //TUNERHANDLE tuner;
     Retuner* tuner;
     double sample_freq;
     float prev;
@@ -173,7 +172,6 @@ void connect_lushlife_ports(LV2_Handle handle, uint32_t port, void *data)
 void cleanup_lushlife(LV2_Handle handle)
 {
     LUSHLIFE* plug = (LUSHLIFE*)handle;
-    //RetunerFree(plug->tuner);
     delete plug->tuner;
     free(plug);
 }
