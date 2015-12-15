@@ -10,4 +10,4 @@
 <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife_ui>
     a ui:X11UI ;
     ui:binary <lushlife_ui.so> ;
-    lv2:extensionData ui:idle, ui:resize .
+    lv2:extensionData ui:idleInterface, ui:resize .

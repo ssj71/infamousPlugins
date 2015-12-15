@@ -44,7 +44,7 @@ lv2:symbol "Control_Signal" .
         lv2:microVersion 1 ;
         rdfs:comment "This envelope follower follows the volume envelope of an audio signal and produces a midi control signal. It can be used for things like a sidechained filter cutoff, ducking, or making any other effects volume responsive.";
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
-        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
+        lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui> ;
 
         lv2:port [

@@ -43,7 +43,7 @@ lv2:symbol "Modulation" .
         lv2:microVersion 1 ;
         rdfs:comment "This additive synth is controlled by a elementary cellular automaton which determines which partials sound and which are silent. It is tempo sync'd and is excellent for pulsating sounds." ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
-        lv2:optionalFeature lv2:hardRTCapable, ui:resize;
+        lv2:optionalFeature lv2:hardRTCapable ;
         lv2ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#casynth_ui> ;
 
         lv2:port [
