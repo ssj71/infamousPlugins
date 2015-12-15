@@ -1,6 +1,7 @@
 #include<unistd.h>
 #include<stdio.h>
 #include<stdint.h>
+#include<stdlib.h>
 
 void ruleprint(uint8_t x)
 {
@@ -81,7 +82,7 @@ int main(int argc, int8_t **argv)
     {
         printf("No argument! \n");
         useage();
-        return;
+        return 0;
     }
 
     ruleprint(rule);
@@ -106,4 +107,5 @@ int main(int argc, int8_t **argv)
         }
         usleep(100000);
     }
+    return 0;
 }
