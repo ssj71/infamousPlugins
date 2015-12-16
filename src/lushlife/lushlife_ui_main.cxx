@@ -115,8 +115,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           YBound::set_ffffltk_value((void*)self->pdyb0,val*100);
           break;
         case SLFOF0:
-          self->pitchfreq0->value(val);
-          self->pitchfreq0->floatvalue = val;
+          self->pitchfreq0->value(sqrt(val/5));
+          self->pitchfreq0->floatvalue = sqrt(val/5);
           self->pitchfreq0->do_callback();
           break;
         case DELAY0:
@@ -126,8 +126,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           XBound::set_ffffltk_value((void*)self->pdxb0,val);
           break;
         case DLFOF0:
-          self->delayfreq0->value(val);
-          self->delayfreq0->floatvalue = val;
+          self->delayfreq0->value(sqrt(val));
+          self->delayfreq0->floatvalue = sqrt(val);
           self->delayfreq0->do_callback();
           break;
         case GAIN0:
@@ -149,8 +149,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           YBound::set_ffffltk_value((void*)self->pdyb1,val*100);
           break;
         case SLFOF1:
-          self->pitchfreq1->value(val);
-          self->pitchfreq1->floatvalue = val;
+          self->pitchfreq1->value(sqrt(val/5));
+          self->pitchfreq1->floatvalue = sqrt(val/5);
           self->pitchfreq1->do_callback();
           break;
         case DELAY1:
@@ -160,8 +160,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           XBound::set_ffffltk_value((void*)self->pdxb1,val);
           break;
         case DLFOF1:
-          self->delayfreq1->value(val);
-          self->delayfreq1->floatvalue = val;
+          self->delayfreq1->value(sqrt(val));
+          self->delayfreq1->floatvalue = sqrt(val);
           self->delayfreq1->do_callback();
           break;
         case GAIN1:
@@ -183,8 +183,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           YBound::set_ffffltk_value((void*)self->pdyb2,val*100);
           break;
         case SLFOF2:
-          self->pitchfreq2->value(val);
-          self->pitchfreq2->floatvalue = val;
+          self->pitchfreq2->value(sqrt(val/5));
+          self->pitchfreq2->floatvalue = sqrt(val/5);
           self->pitchfreq2->do_callback();
           break;
         case DELAY2:
@@ -194,8 +194,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           XBound::set_ffffltk_value((void*)self->pdxb2,val);
           break;
         case DLFOF2:
-          self->delayfreq2->value(val);
-          self->delayfreq2->floatvalue = val;
+          self->delayfreq2->value(sqrt(val));
+          self->delayfreq2->floatvalue = sqrt(val);
           self->delayfreq2->do_callback();
           break;
         case GAIN2:
@@ -217,8 +217,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           YBound::set_ffffltk_value((void*)self->pdyb3,val*100);
           break;
         case SLFOF3:
-          self->pitchfreq3->value(val);
-          self->pitchfreq3->floatvalue = val;
+          self->pitchfreq3->value(sqrt(val/5));
+          self->pitchfreq3->floatvalue = sqrt(val/5);
           self->pitchfreq3->do_callback();
           break;
         case DELAY3:
@@ -228,8 +228,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           XBound::set_ffffltk_value((void*)self->pdxb3,val);
           break;
         case DLFOF3:
-          self->delayfreq3->value(val);
-          self->delayfreq3->floatvalue = val;
+          self->delayfreq3->value(sqrt(val));
+          self->delayfreq3->floatvalue = sqrt(val);
           self->delayfreq3->do_callback();
           break;
         case GAIN3:
@@ -251,8 +251,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           YBound::set_ffffltk_value((void*)self->pdyb4,val*100);
           break;
         case SLFOF4:
-          self->pitchfreq4->value(val);
-          self->pitchfreq4->floatvalue = val;
+          self->pitchfreq4->value(sqrt(val/5));
+          self->pitchfreq4->floatvalue = sqrt(val/5);
           self->pitchfreq4->do_callback();
           break;
         case DELAY4:
@@ -262,8 +262,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           XBound::set_ffffltk_value((void*)self->pdxb4,val);
           break;
         case DLFOF4:
-          self->delayfreq4->value(val);
-          self->delayfreq4->floatvalue = val;
+          self->delayfreq4->value(sqrt(val));
+          self->delayfreq4->floatvalue = sqrt(val);
           self->delayfreq4->do_callback();
           break;
         case GAIN4:
@@ -285,8 +285,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           YBound::set_ffffltk_value((void*)self->pdyb5,val*100);
           break;
         case SLFOF5:
-          self->pitchfreq5->value(val);
-          self->pitchfreq5->floatvalue = val;
+          self->pitchfreq5->value(sqrt(val/5));
+          self->pitchfreq5->floatvalue = sqrt(val/5);
           self->pitchfreq5->do_callback();
           break;
         case DELAY5:
@@ -296,8 +296,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           XBound::set_ffffltk_value((void*)self->pdxb5,val);
           break;
         case DLFOF5:
-          self->delayfreq5->value(val);
-          self->delayfreq5->floatvalue = val;
+          self->delayfreq5->value(sqrt(val));
+          self->delayfreq5->floatvalue = sqrt(val);
           self->delayfreq5->do_callback();
           break;
         case GAIN5:
