@@ -214,7 +214,7 @@ lv2:symbol "Control_Signal" .
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
-        ] ;
+        ] .
         #lv2:port [
         #        a lv2:OutputPort, lv2:AudioPort ; #CVPort ;
         #        lv2:index 18 ;
@@ -223,4 +223,3 @@ lv2:symbol "Control_Signal" .
         #        lv2:minimum 0.0 ;
         #        lv2:maximum 1.0 ;
         #] ;
-    .

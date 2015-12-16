@@ -10,5 +10,4 @@
 <http://ssj71.github.io/infamousPlugins/plugs.html#powerup_ui>
 	a ui:X11UI ;
 	ui:binary <powerup_ui.so> ;
-	lv2:extensionData ui:idleInterface, ui:resize ;
-	.
+	lv2:extensionData ui:idleInterface, ui:resize .

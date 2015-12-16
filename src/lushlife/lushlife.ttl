@@ -693,8 +693,7 @@
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:groups:woosh5> ; 
-        ] ;
-	.
+        ] .
 
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:00Dfault>

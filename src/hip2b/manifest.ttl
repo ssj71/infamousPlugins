@@ -10,5 +10,4 @@
 <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b_ui>
 	a ui:X11UI ;
 	ui:binary <hip2b_ui.so> ;
-	lv2:extensionData ui:idleInterface, ui:resize ;
-	.
+	lv2:extensionData ui:idleInterface, ui:resize .

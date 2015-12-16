@@ -44,5 +44,4 @@
                 lv2:minimum 1 ;
                 lv2:maximum 3 ;
                 lv2:portProperty lv2:integer ;
-        ] ;
-          .
+        ] .

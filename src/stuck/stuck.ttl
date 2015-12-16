@@ -62,11 +62,10 @@
                 lv2:minimum 0.01 ;
                 lv2:maximum 3.0 ; 
 		units:unit units:s ;
-        ] ;
+        ] .
         #lv2:port [
         #        a lv2:InputPort, lv2:AudioPort ;#CVPort ;
         #        lv2:index 5 ;
         #        lv2:symbol "TRIGGER" ;
         #        lv2:name "Trigger" ;
         #] ;
-	.
