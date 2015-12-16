@@ -1,6 +1,5 @@
 /*
- * Author: spencer jackson 2014
- *         ssjackson71@gmail.com
+ * Author: spencer jackson 2014 *         ssjackson71@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,6 +56,7 @@ public:
         lock2int = 0;
         clickOffset = 0;
         mouseClicked = false; 
+        enterval.winder = NULL;
     }
 
     int x, y, w, h;
@@ -250,6 +250,7 @@ public:
 
         clickOffset = 0;
         mouseClicked = false; 
+        enterval.winder = NULL;
     }
 
     int x, y, w, h;
