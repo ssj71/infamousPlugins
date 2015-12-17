@@ -725,3 +725,9 @@
         lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
         rdfs:label "04 Lush" ;
         rdfs:seeAlso <lushlife_presets.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:05bluebellchoir>
+        a pset:Preset ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+        rdfs:label "05 Thick as a Brick" ;
+        rdfs:seeAlso <lushlife_presets.ttl> .
