@@ -218,12 +218,6 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
     // by 1/4 of the FFT length.
 
     fi = _frindex;  // Write index in current fragment.
-    //initialize output
-    for ( i = 0; i < nfram; i++)
-    {
-        outl[i] = 0;
-        outr[i] = 0;
-    }
 
     // No assumptions are made about fragments being aligned
     // with process() calls, so we may be in the middle of
@@ -260,6 +254,13 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
         _ipbuff [_ipsize + 2] = _ipbuff [2];
         inp += k;
         if (_ipindex == _ipsize) _ipindex = 0;
+
+        //now initialize output buffer
+        for ( i = 0; i < k; i++)
+        {
+            outl[i] = 0;
+            outr[i] = 0;
+        } 
 
         // Process available samples.
         for (int shftdx = 0; shftdx < _nshift; shftdx++)
