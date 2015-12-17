@@ -1,5 +1,6 @@
 // -----------------------------------------------------------------------
 //
+//  Copyright (C) 2009-2011 Fons Adriaensen <fons@linuxaudio.org>
 //  Copyright (C) 2015 Spencer Jackson <ssjackson71@gmail.com>
 //    
 //  This program is free software; you can redistribute it and/or modify
@@ -18,7 +19,7 @@
 //
 // -----------------------------------------------------------------------
 
-//  This code is forked from the amazing code from Fons Adriaensen
+//  This code is forked from the amazing code from Fons Adriaensen, modified by spencer
 
 #include <stdlib.h>
 #include <string.h>
