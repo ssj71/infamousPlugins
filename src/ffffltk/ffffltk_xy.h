@@ -93,8 +93,10 @@ public:
         clickOffsetY = 0;
         mouseClicked = false;
 
-        entervalx.winder = NULL;
-        entervaly.winder = NULL;
+        //entervalx.winder = NULL;
+        //entervaly.winder = NULL;
+        entervals.winder = NULL;
+        entervals.setparams("X Value","","Y Value","");
 
         Fl_Group* tmp = Fl_Group::current();//store current group so it doesn't get lost
         Fl_Group::current(NULL);
@@ -113,8 +115,9 @@ public:
     int clickOffsetX;
     bool mouseClicked;
 
-    nonmodal_input entervalx;
-    nonmodal_input entervaly;
+    //nonmodal_input entervalx;
+    //nonmodal_input entervaly;
+    nonmodal_2input entervals;
 
     int drawing_w;
     int drawing_h;
@@ -228,12 +231,14 @@ public:
             //highlight = 1;
             if(Fl::event_button() == FL_MIDDLE_MOUSE || Fl::event_button() == FL_RIGHT_MOUSE)
             {
-                if(!Xv->tooltip())
+                /*if(!Xv->tooltip())
                     Xv->copy_tooltip("X Parameter");
                 if(!Yv->tooltip())
                     Yv->copy_tooltip("Y Parameter");
                 entervaly.show(floatvaluey,(char*)Yv->tooltip(),unitsy,(void*)this,set_ffffltk_valuey);
                 entervalx.show(floatvaluex,(char*)Xv->tooltip(),unitsx,(void*)this,set_ffffltk_valuex);
+                */
+                entervals.show((void*)this, floatvaluex, set_ffffltk_valuex, floatvaluey, set_ffffltk_valuey);
             }
             return 1;
         case FL_DRAG:

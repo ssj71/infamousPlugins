@@ -83,6 +83,7 @@ public:
         lock2int = 0;
         squaredmax = 0;
         drawLabel = true;
+        enterval.winder = NULL;
 
         mouseClickedY = 0;
         mouseClicked = false;

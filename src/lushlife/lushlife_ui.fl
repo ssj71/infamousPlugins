@@ -1,4 +1,4 @@
-# data file for the Fltk User Interface Designer (fluid)
+# data file for the Fltk User Interface Designer (fluid
 version 1.0300 
 header_name {.h} 
 code_name {.cxx}
@@ -8,7 +8,7 @@ class LushLifeUI {open
   } {
     Fl_Window ui {
       label {the infamous lush life} open
-      xywh {3115 250 630 400} type Double box UP_BOX resizable
+      xywh {630 400 630 400} type Double box UP_BOX resizable
       code0 {\#include"ffffltk.h"}
       code1 {\#include"lv2/lv2plug.in/ns/extensions/ui/ui.h"}
       code2 {using namespace ffffltk;}
@@ -1010,7 +1010,7 @@ message->copy_label(s, RGBAsciiDisplay::WHITE_COLOR);}
             tooltip {Dry Signal Gain/Pan} xywh {250 50 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointw_render;}
-            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1);}
+            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1); o->entervals.setparams("Dry Pan","","Dry Gain","");}
             class XYhandle
           }
           Fl_Box gp0 {
@@ -1022,7 +1022,7 @@ message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
             tooltip {Gain/Pan} xywh {250 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointr_render;}
-            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1);}
+            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1); o->entervals.setparams("Pan","","Gain","");}
             class XYhandle
           }
           Fl_Box gp1 {
@@ -1034,7 +1034,7 @@ message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
             tooltip {Gain/Pan} xywh {245 155 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointb_render;}
-            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1);}
+            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1); o->entervals.setparams("Pan","","Gain","");}
             class XYhandle
           }
           Fl_Box gp2 {
@@ -1046,7 +1046,7 @@ message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
             tooltip {Gain/Pan} xywh {245 145 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointy_render;}
-            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1);}
+            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1); o->entervals.setparams("Pan","","Gain","");}
             class XYhandle
           }
           Fl_Box gp3 {
@@ -1058,7 +1058,7 @@ message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
             tooltip {Gain/Pan} xywh {255 140 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointg_render;}
-            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1);}
+            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1); o->entervals.setparams("Pan","","Gain","");}
             class XYhandle
           }
           Fl_Box gp4 {
@@ -1070,7 +1070,7 @@ message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
             tooltip {Gain/Pan} xywh {255 140 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointo_render;}
-            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1);}
+            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1); o->entervals.setparams("Pan","","Gain","");}
             class XYhandle
           }
           Fl_Box gp5 {
@@ -1082,7 +1082,7 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
             tooltip {Gain/Pan} xywh {250 165 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointp_render;}
-            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1);}
+            code2 {o->Xv->bounds(-1,1); o->Yv->bounds(0,1); o->entervals.setparams("Pan","","Gain","");}
             class XYhandle
           }
           Fl_Box pd0 {
@@ -1098,7 +1098,7 @@ message->copy_label(s, RGBAsciiDisplay::RED_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointr_render;}
-            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300;}
+            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300; o->entervals.setparams("Delay","ms","Detune","cents");}
             class XYhandle
           }
           Fl_Box pdxb0 {
@@ -1137,7 +1137,7 @@ message->copy_label(s, RGBAsciiDisplay::BLUE_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointb_render;}
-            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300;}
+            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300; o->entervals.setparams("Delay","ms","Detune","cents");}
             class XYhandle
           }
           Fl_Box pdxb1 {
@@ -1175,7 +1175,7 @@ message->copy_label(s, RGBAsciiDisplay::YELLOW_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointy_render;}
-            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300;}
+            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300; o->entervals.setparams("Delay","ms","Detune","cents");}
             class XYhandle
           }
           Fl_Box pdxb2 {
@@ -1213,7 +1213,7 @@ message->copy_label(s, RGBAsciiDisplay::GREEN_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointg_render;}
-            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300;}
+            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300; o->entervals.setparams("Delay","ms","Detune","cents");}
             class XYhandle
           }
           Fl_Box pdxb3 {
@@ -1251,7 +1251,7 @@ message->copy_label(s, RGBAsciiDisplay::ORANGE_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointo_render;}
-            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300;}
+            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300; o->entervals.setparams("Delay","ms","Detune","cents");}
             class XYhandle
           }
           Fl_Box pdxb4 {
@@ -1289,7 +1289,7 @@ message->copy_label(s, RGBAsciiDisplay::PURPLE_COLOR);}
             tooltip {Detune/Delay} xywh {150 150 15 15}
             code0 {\#include"draw_lushGraphPoint.h"}
             code1 {o->drawing_h = cairo_code_draw_lushGraphPoint_get_height(); o->drawing_w = cairo_code_draw_lushGraphPoint_get_width(); o->drawing_f = &cairo_code_draw_lushGraphPointp_render;}
-            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300;}
+            code2 {o->Xv->bounds(0,1); o->Yv->bounds(-100,100); o->squaredmaxx = 300; o->entervals.setparams("Delay","ms","Detune","cents");}
             class XYhandle
           }
           Fl_Box pdxb5 {
