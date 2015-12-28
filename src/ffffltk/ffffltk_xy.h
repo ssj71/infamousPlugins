@@ -29,6 +29,7 @@
 #include <FL/Fl_Dial.H>
 #include <FL/Fl_Slider.H>
 #include <FL/fl_ask.H>
+#include <cairo.h>
 #include "ffffltk_input.h"
 
 //avtk drawing method (adapted)
