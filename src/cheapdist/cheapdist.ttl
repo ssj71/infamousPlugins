@@ -20,7 +20,7 @@
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This experimental distortion is a simple waveshaper approximating a reflected square, fourth, or eighth root. It does this through bit twiddling, and therefore uses no floating point operations. Its useful to have a simple amplifier to adjust input and output levels.";
-        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
+        lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#cheapdist_ui> ;
 
         lv2:port [
@@ -44,5 +44,4 @@
                 lv2:minimum 1 ;
                 lv2:maximum 3 ;
                 lv2:portProperty lv2:integer ;
-        ] ;
-          .
+        ] .

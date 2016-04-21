@@ -4,6 +4,7 @@
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix lv2ui:   <http://lv2plug.in/ns/extensions/ui#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
 @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
 @prefix param: <http://lv2plug.in/ns/ext/parameters#> .
@@ -44,7 +45,7 @@
         a lv2:Plugin, lv2:ModulatorPlugin ;
         doap:name "the infamous lush life" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
-        doap:description "an artificial double tracker" ;
+        doap:description "a synthetic double tracker" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
@@ -52,8 +53,9 @@
         ] ;
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
-        rdfs:comment "A artificial double tracker for vocals or other monophonic sounds. It is capable of everything from lush chorus, to thin doubles, to weird over-the-top effects. It is modulation ready with 6 double tracks each controllable by 2 lfos." ;
-        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
+        rdfs:comment "A synthetic double tracker for vocals or other monophonic sounds. It is capable of everything from lush chorus, to thin doubles, to weird over-the-top effects. It is modulation ready with 6 double tracks each controllable by 2 lfos." ;
+        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife_ui> ;
 
 
         lv2:port [
@@ -691,8 +693,7 @@
                 lv2:minimum -1.0 ;
                 lv2:maximum 1.0 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:groups:woosh5> ; 
-        ] ;
-	.
+        ] .
 
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:00Dfault>
@@ -723,4 +724,10 @@
         a pset:Preset ;
         lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
         rdfs:label "04 Lush" ;
+        rdfs:seeAlso <lushlife_presets.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#lushlife:preset:05bluebellchoir>
+        a pset:Preset ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#lushlife> ;
+        rdfs:label "05 Thick as a Brick" ;
         rdfs:seeAlso <lushlife_presets.ttl> .

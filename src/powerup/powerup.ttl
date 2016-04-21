@@ -21,7 +21,7 @@
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This effect outputs silence until triggered then slowly starts playing back the input audio, speeding up until playback is full speed. It adds a large amount of latency to accomplish this, so may not be usefyl live." ;
-        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
+        lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#powerup_ui> ;
 
         lv2:port [
@@ -74,11 +74,10 @@
                 lv2:minimum 0 ;
                 lv2:maximum 2000000 ; 
                 lv2:portProperty lv2:reportsLatency, lv2:integer, pprops:notOnGUI ;
-        ] ;
+        ] .
         #lv2:port [
         #        a lv2:InputPort, lv2:AudioPort ;#CVPort ;
         #        lv2:index 5 ;
         #        lv2:symbol "TRIGGER" ;
         #        lv2:name "Trigger" ;
         #] ;
-    .

@@ -26,10 +26,11 @@
 #include <FL/Fl_Dial.H>
 #include <FL/Fl_Slider.H>
 #include <FL/fl_ask.H>
+#include <cairo.h>
 #include "ffffltk_input.h"
 
 //avtk drawing method (adapted)
-static void default_bg_drawing(cairo_t *cr, float val)
+static void default_dial_drawing(cairo_t *cr, float val)
 {
 
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_ROUND);
@@ -77,11 +78,13 @@ public:
 
         drawing_w = 100;
         drawing_h = 100;
-        drawing_f = &default_bg_drawing;
+        drawing_f = &default_dial_drawing;
         floatvalue = value();
         units[0] = 0;
         lock2int = 0;
+        squaredmax = 0;
         drawLabel = true;
+        enterval.winder = NULL;
 
         mouseClickedY = 0;
         mouseClicked = false;
@@ -103,17 +106,22 @@ public:
     float floatvalue;
     char units[6];
     int lock2int;//flag to draw only integer values
+    float squaredmax;// floatvalue = value()*value()*squaredmax;
 
     static void set_ffffltk_value(void* obj, float val)
     {
         Dial* me = (Dial*)obj;
+        if(me->squaredmax)//remove squaring for bounds check
+            me->floatvalue = sqrt(val/me->squaredmax);
         if ( val > me->maximum() ) val = me->maximum();
         if ( val < me->minimum() ) val = me->minimum();
         me->set_value(val);
+        if(me->squaredmax)
+            val = sqrt(val/me->squaredmax);
         me->floatvalue = val;
 
-        me->redraw();
         me->do_callback();
+        me->redraw();
     }
 
     void draw()
@@ -146,7 +154,7 @@ public:
             if(lock2int) val = (int)val;
             val = (val-minimum())/(maximum()-minimum());
             if(drawing_f) drawing_f(cr,val);
-            else default_bg_drawing(cr,val);
+            else default_dial_drawing(cr,val);
 
             cairo_restore( cr );
 
@@ -191,7 +199,7 @@ public:
                 //}
                 //    redraw();
                 //do_callback();
-                enterval.show(value(),(char*)this->tooltip(),units,(void*)this,set_ffffltk_value);
+                enterval.show(floatvalue,(char*)this->tooltip(),units,(void*)this,set_ffffltk_value);
             }
             return 1;
         case FL_DRAG:
@@ -225,7 +233,10 @@ public:
 
                 set_value( val );
                 if(lock2int) val = (int)val;
-                floatvalue = val;
+                if(squaredmax)
+                    floatvalue = val*val*squaredmax;
+                else
+                    floatvalue = val;
 
                 mouseClickedY = Fl::event_y();
                 if(lock2int)
@@ -243,7 +254,10 @@ public:
             // highlight = 0;
             Fl_Widget::copy_label("");
             redraw();
-            floatvalue = value();
+            if(squaredmax)
+                floatvalue = value()*value()*squaredmax;
+            else
+                floatvalue = value();
             // never do anything after a callback, as the callback
             // may delete the widget!
             //}

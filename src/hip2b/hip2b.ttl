@@ -20,7 +20,7 @@
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This is a destroyer or extreme distortion which is actually a switching function with hysteresis. Basically it makes any signal sound like a square wave, and is capable of good glitch sounds when the octave is lowered." ;
-        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
+        lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b_ui> ;
 
         lv2:port [

@@ -52,7 +52,7 @@ public:
 
         drawing_w = 100;
         drawing_h = 100;
-        drawing_f = &default_display_drawing;
+        drawing_f = &default_env_display_drawing;
 
         nchars = 1;
         periods = true;

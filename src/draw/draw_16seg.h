@@ -61,7 +61,6 @@ inline void cairo_code_draw_16seg_render(cairo_t *cr, char num, uint8_t color)
     cairo_surface_t *temp_surface;
     cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -92,22 +91,6 @@ inline void cairo_code_draw_16seg_render(cairo_t *cr, char num, uint8_t color)
     pattern = cairo_pattern_create_rgba(0,0,0,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
-    /*cairo_new_path(cr);
-    cairo_move_to(cr, 3.753906, 0.761719);
-    cairo_line_to(cr, 26.492188, 0.761719);
-    cairo_curve_to(cr, 28.148438, 0.761719, 29.492188, 2.101562, 29.492188, 3.757812);
-    cairo_line_to(cr, 29.492188, 41.550781);
-    cairo_curve_to(cr, 29.492188, 43.207031, 28.148438, 44.550781, 26.492188, 44.550781);
-    cairo_line_to(cr, 3.753906, 44.550781);
-    cairo_curve_to(cr, 2.097656, 44.550781, 0.757812, 43.207031, 0.757812, 41.550781);
-    cairo_line_to(cr, 0.757812, 3.757812);
-    cairo_curve_to(cr, 0.757812, 2.101562, 2.097656, 0.761719, 3.753906, 0.761719);
-    cairo_close_path(cr);
-    cairo_set_tolerance(cr, 0.1);
-    cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-    cairo_matrix_init(&matrix, 1,0,0,1,-267,-418.09375);
-    cairo_pattern_set_matrix(pattern, &matrix);*/
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke(cr);
     /********dot************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -115,11 +98,6 @@ inline void cairo_code_draw_16seg_render(cairo_t *cr, char num, uint8_t color)
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
-//cairo_move_to(cr, 29.773438, 39.507812);//top right corner, lower part of curve
-//cairo_curve_to(cr, 29.773438, 40.652344, 28.847656, 41.578125, 27.707031, 41.578125);
-//cairo_curve_to(cr, 24.5625, 41.578125, 23.636719, 40.652344, 23.636719, 39.507812);
-//cairo_curve_to(cr, 23.636719, 38.367188, 24.5625, 37.441406, 27.707031, 37.441406);
-//cairo_curve_to(cr, 28.847656, 37.441406, 29.773438, 38.367188, 29.773438, 39.507812);
     cairo_move_to(cr, 28.667969, 38.480469);
     cairo_curve_to(cr, 28.667969, 40.191406, 27.542969, 41.578125, 26.152344, 41.578125);
     cairo_curve_to(cr, 24.761719, 41.578125, 23.636719, 40.191406, 23.636719, 38.480469);
@@ -960,10 +938,7 @@ inline void cairo_code_draw_16segbg_render(cairo_t *cr, uint8_t color)
         break;
     }
 
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -994,23 +969,6 @@ inline void cairo_code_draw_16segbg_render(cairo_t *cr, uint8_t color)
     pattern = cairo_pattern_create_rgba(0,0,0,1);
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
-    /*
-    cairo_new_path(cr);
-    cairo_move_to(cr, 3.753906, 0.761719);
-    cairo_line_to(cr, 26.492188, 0.761719);
-    cairo_curve_to(cr, 28.148438, 0.761719, 29.492188, 2.101562, 29.492188, 3.757812);
-    cairo_line_to(cr, 29.492188, 41.550781);
-    cairo_curve_to(cr, 29.492188, 43.207031, 28.148438, 44.550781, 26.492188, 44.550781);
-    cairo_line_to(cr, 3.753906, 44.550781);
-    cairo_curve_to(cr, 2.097656, 44.550781, 0.757812, 43.207031, 0.757812, 41.550781);
-    cairo_line_to(cr, 0.757812, 3.757812);
-    cairo_curve_to(cr, 0.757812, 2.101562, 2.097656, 0.761719, 3.753906, 0.761719);
-    cairo_close_path(cr);
-    cairo_set_tolerance(cr, 0.1);
-    cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-    //cairo_matrix_init(&matrix, 1,0,0,1,-267,-418.09375);
-    //cairo_pattern_set_matrix(pattern, &matrix);
-    */
     cairo_stroke(cr);
     /********dot************/
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
@@ -1018,11 +976,6 @@ inline void cairo_code_draw_16segbg_render(cairo_t *cr, uint8_t color)
     cairo_set_source(cr, pattern);
     cairo_pattern_destroy(pattern);
     cairo_new_path(cr);
-//cairo_move_to(cr, 29.773438, 39.507812);//top right corner, lower part of curve
-//cairo_curve_to(cr, 29.773438, 40.652344, 28.847656, 41.578125, 27.707031, 41.578125);
-//cairo_curve_to(cr, 24.5625, 41.578125, 23.636719, 40.652344, 23.636719, 39.507812);
-//cairo_curve_to(cr, 23.636719, 38.367188, 24.5625, 37.441406, 27.707031, 37.441406);
-//cairo_curve_to(cr, 28.847656, 37.441406, 29.773438, 38.367188, 29.773438, 39.507812);
     cairo_move_to(cr, 28.667969, 38.480469);
     cairo_curve_to(cr, 28.667969, 40.191406, 27.542969, 41.578125, 26.152344, 41.578125);
     cairo_curve_to(cr, 24.761719, 41.578125, 23.636719, 40.191406, 23.636719, 38.480469);
@@ -1315,7 +1268,6 @@ inline void cairo_code_draw_16seglt_render(cairo_t *cr, char num, uint8_t color)
     cairo_surface_t *temp_surface;
     cairo_t *old_cr;
     cairo_pattern_t *pattern;
-    cairo_matrix_t matrix;
 
     float r,g,b;//lit and dark colors;
     switch(color)

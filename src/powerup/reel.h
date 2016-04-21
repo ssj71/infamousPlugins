@@ -29,10 +29,6 @@
 #include <valarray>
 #include <string>
 
-//avtk drawing method (adapted)
-static void default_reel_drawing(cairo_t *cr,float cow)
-{
-};
 
 namespace ffffltk
 {

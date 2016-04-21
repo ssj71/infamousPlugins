@@ -62,7 +62,6 @@ void run_square(LV2_Handle handle, uint32_t nframes)
     float gstep = *plug->outgain_p - plug->gain;
     gstep /= nframes>64?nframes:64;
     if(gstep<1e-15 && gstep>-1e-15)//avoid denormals
-    if(gstep<PRACTICALLYZERO/10000)//avoid denormals
     {
         gstep = 0;
         plug->gain = *plug->output_p;

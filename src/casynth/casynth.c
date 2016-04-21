@@ -163,7 +163,6 @@ void run_casynth( LV2_Handle handle, uint32_t nframes)
     CASYNTH* synth = (CASYNTH*)handle;
     uint8_t i,j,k;
     float* buf = synth->output_p;
-    LV2_Atom_Event event;
     uint32_t frame_no = 0;
     uint32_t t = 0;
     uint8_t* message;

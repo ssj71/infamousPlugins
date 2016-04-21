@@ -24,6 +24,7 @@
 #define FFF_BUTTON_H
 
 #include <FL/Fl_Button.H>
+#include <cairo.h>
 
 static void default_bg_drawing(cairo_t *cr, int val)
 {

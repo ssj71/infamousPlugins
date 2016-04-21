@@ -10,8 +10,6 @@ inline int cairo_code_draw_ivorySlider_get_height()
 }
 inline void cairo_code_draw_ivorySlider_render(cairo_t *cr, float val)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
     cairo_matrix_t matrix;
 
@@ -29,8 +27,6 @@ inline void cairo_code_draw_ivorySlider_render(cairo_t *cr, float val)
     cairo_line_to(cr, 14.625, 154.613281);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-35.37453,-249.10291);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
 
@@ -73,8 +69,6 @@ inline void cairo_code_draw_ivorySlider_render(cairo_t *cr, float val)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-35.37453,-249.10291);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********************/
 }

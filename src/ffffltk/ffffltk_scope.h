@@ -28,6 +28,7 @@
 #include <FL/Fl.H>
 #include <valarray>
 #include <string>
+#include <cairo.h>
 
 //avtk drawing method (adapted)
 static void default_scope_drawing(cairo_t *cr,float *data,unsigned short start)

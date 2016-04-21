@@ -10,8 +10,6 @@ inline int cairo_code_draw_LED_get_height()
 }
 inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
 {
-    cairo_surface_t *temp_surface;
-    cairo_t *old_cr;
     cairo_pattern_t *pattern;
     cairo_matrix_t matrix;
 
@@ -36,12 +34,44 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
         bd = 0;
         break;
     case 4://blue
-        r = 0.055555;
-        g = 0.1;
+        r = 0.1;
+        g = 0.2;
         b = 1;
         rd = 0;
         gd = 0;
         bd = .4;
+        break;
+    case 5://orange
+        r = 1;
+        g = 0.33333;
+        b = 0;
+        rd = .3;
+        gd = .1;
+        bd = 0;
+        break;
+    case 6://yellow
+        r = 0.92157;
+        g = 0.92157;
+        b = 0;
+        rd = .2;
+        gd = .2;
+        bd = 0;
+        break;
+    case 7://purple
+        r = 0.78431;
+        g = 0;
+        b = 1;
+        rd = .1;
+        gd = .0;
+        bd = .2;
+        break;
+    case 8://white
+        r = 1;
+        g = 1;
+        b = 1;
+        rd = .1;
+        gd = .1;
+        bd = .1;
         break;
     default://red
         r = 1;
@@ -87,8 +117,6 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
     cairo_close_path(cr);
     cairo_set_tolerance(cr, 0.1);
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1,0,0,1,-60.60796,-180.04859);
-//cairo_pattern_set_matrix(pattern, &matrix);
     cairo_stroke_preserve(cr);
     /********light************/
     if(val)
@@ -133,8 +161,6 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
         cairo_close_path(cr);
         cairo_set_tolerance(cr, 0.1);
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
-//cairo_matrix_init(&matrix, 1.036663,0,0,1.036663,-63.17433,-186.99338);
-//cairo_pattern_set_matrix(pattern, &matrix);
         cairo_stroke_preserve(cr);
     }//if on
     /********************/
@@ -151,5 +177,21 @@ inline void cairo_code_draw_greenLED_render(cairo_t *cr, int val)
 inline void cairo_code_draw_blueLED_render(cairo_t *cr, int val)
 {
     cairo_code_draw_LED_render(cr, val,4);
+}
+inline void cairo_code_draw_orangeLED_render(cairo_t *cr, int val)
+{
+    cairo_code_draw_LED_render(cr, val,5);
+}
+inline void cairo_code_draw_yellowLED_render(cairo_t *cr, int val)
+{
+    cairo_code_draw_LED_render(cr, val,6);
+}
+inline void cairo_code_draw_purpleLED_render(cairo_t *cr, int val)
+{
+    cairo_code_draw_LED_render(cr, val,7);
+}
+inline void cairo_code_draw_whiteLED_render(cairo_t *cr, int val)
+{
+    cairo_code_draw_LED_render(cr, val,8);
 }
 #endif

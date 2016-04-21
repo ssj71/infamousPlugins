@@ -1,6 +1,8 @@
 #ifndef LUSHLIFE_H
 #define LUSHLIFE_H
 
+#define LUSHLIFE_URI "http://ssj71.github.io/infamousPlugins/plugs.html#lushlife"
+
 enum stuck_ports
 {
     IN =0,

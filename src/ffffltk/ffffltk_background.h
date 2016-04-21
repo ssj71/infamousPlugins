@@ -27,6 +27,7 @@
 #include <FL/Fl_Widget.H>
 #include <valarray>
 #include <string>
+#include <cairo.h>
 
 //avtk drawing method (adapted)
 static void default_bg_drawing(cairo_t *cr)

@@ -39,7 +39,9 @@ typedef struct _STUCK
     float gain;
     float env;//envelope gain to normalize compression to
     float thresh;
-    float score;
+    float savescore;
+    float oldscore[2];
+    float maxscore[5];
 
     RMS_CALC rms_calc;
 
@@ -174,11 +176,12 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 i++;
 
                 //save place if score is lower than last minimum
-                if(score<=plug->score)
+                if(score<=plug->minscore[2])
                 {
                     plug->wavesize = plug->indx2 -1;//subtract 1 because we incremented already
                     plug->score = score;
                 }
+                plug->oldscore
             }
             if(plug->indx2>=plug->wave_max)
             {

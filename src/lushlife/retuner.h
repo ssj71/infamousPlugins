@@ -1,6 +1,7 @@
 // -----------------------------------------------------------------------
 //
 //  Copyright (C) 2009-2011 Fons Adriaensen <fons@linuxaudio.org>
+//  Copyright (C) 2015 Spencer Jackson <ssjackson71@gmail.com>
 //
 //  This program is free software; you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -18,6 +19,7 @@
 //
 // -----------------------------------------------------------------------
 
+//  This code is forked from the amazing code from Fons Adriaensen, modified by spencer
 
 #ifndef __RETUNER_H
 #define __RETUNER_H
@@ -183,18 +185,12 @@ private:
     float            _notebias;
     float            _corrfilt;
     float            _corrgain;
-    //float            _corroffs;//
     int              _notemask;
     int              _notebits;
     int              _lastnote;
     int              _count;
     float            _cycle[32];
     float            _error;
-    //float            _ratio;//
-    //float            _phase;//ssj not used
-    //bool             _xfade;//
-    //float            _rindex1;//
-    //float            _rindex2;//
     float           *_ipbuff;
     float           *_xffunc;
     float           *_fftTwind;

@@ -2,7 +2,8 @@
 
 set(PLUGIN "envfollower")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -std=c99 -msse2 -mfpmath=sse -ffast-math")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 
 if(NOT LIBDIR)
   set(LIBDIR "lib")

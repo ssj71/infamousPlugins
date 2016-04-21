@@ -44,7 +44,7 @@ lv2:symbol "Control_Signal" .
         lv2:microVersion 1 ;
         rdfs:comment "This envelope follower follows the volume envelope of an audio signal and produces a midi control signal. It can be used for things like a sidechained filter cutoff, ducking, or making any other effects volume responsive.";
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
-        lv2:optionalFeature lv2:hardRTCapable, ui:resize ;
+        lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui> ;
 
         lv2:port [
@@ -121,6 +121,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 0.01 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 15.0 ;
+                units:unit units:s ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -131,6 +132,7 @@ lv2:symbol "Control_Signal" .
                 lv2:default 10.0 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 30.0 ;
+                units:unit units:s ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
@@ -214,7 +216,7 @@ lv2:symbol "Control_Signal" .
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
-        ] ;
+        ] .
         #lv2:port [
         #        a lv2:OutputPort, lv2:AudioPort ; #CVPort ;
         #        lv2:index 18 ;
@@ -223,4 +225,3 @@ lv2:symbol "Control_Signal" .
         #        lv2:minimum 0.0 ;
         #        lv2:maximum 1.0 ;
         #] ;
-    .
