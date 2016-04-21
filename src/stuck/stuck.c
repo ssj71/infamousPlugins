@@ -27,7 +27,7 @@ typedef struct _STUCK
     uint16_t indx;//current write point in buffer
     uint16_t indx2;//working/read point in buffer
     uint16_t bufsize;//size of buffer
-    uint16_t wavesize;//size of waveform
+    float wavesize;//size of waveform
     uint16_t acorr_size;//size of autocorrelation
     uint16_t xfade_size;
     uint16_t wave_min;//int16_test allowed wavesize
@@ -40,8 +40,9 @@ typedef struct _STUCK
     float env;//envelope gain to normalize compression to
     float thresh;
     float savescore;
-    float oldscore[2];
-    float maxscore[5];
+    float prevscore[2];
+    float minscore[5];
+    uint8_t save; //flag to show the next 2 scores should be saved
 
     RMS_CALC rms_calc;
 
@@ -53,6 +54,12 @@ typedef struct _STUCK
     float *release_p;
     float *dbg_p;
 } STUCK;
+
+float findminx(float arr[])
+{
+	//TODO: find out how to do this
+	//return subsample index of minima
+}
 
 void run_stuck(LV2_Handle handle, uint32_t nframes)
 {
@@ -99,7 +106,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             plug->state = INACTIVE;
             plug->gain = 0;
             plug->wavesize = plug->wave_max;
-            plug->score = 1;
+            plug->minscore[2] = 1;
+            //warning, could minima be in first 2 such that prevscore is invalid?
             rms_block_fill(&plug->rms_calc, plug->input_p,nframes);
             return;
         }
@@ -150,13 +158,32 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
                 i++;
             }
+            if(plug->indx >= plug->wave_min+plug->acorr_size)
+            {
+				float tmp,score;
+                for(k=plug->indx2; k<plug->indx2+plug->acorr_size && score<=plug->minscore[2]; k++)
+                {
+                    tmp = plug->buf[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
+                    score += tmp*tmp;
+                }
+                plug->prevscore[0] = score;
+                plug->indx2++;
+
+                for(k=plug->indx2; k<plug->indx2+plug->acorr_size && score<=plug->minscore[2]; k++)
+                {
+                    tmp = plug->buf[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
+                    score += tmp*tmp;
+                }
+                plug->prevscore[1] = score;
+                plug->indx2++;
+            }
         }
         else if(plug->state == MATCHING)//find autocorrelation
         {
             if(plug->indx2+chunk >= plug->wave_max)
             {
                 chunk = plug->wave_max - plug->indx2;
-                plug->state = LOADING_XFADE;
+                plug->state = PLAYING;
             }
             // calculate autocorrelation of sample in buffer, save the minimum
             float tmp,score;
@@ -165,7 +192,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 score = 0;
                 t=0;
 
-                for(k=plug->indx2; k<plug->indx2+plug->acorr_size && score<=plug->score; k++)
+                for(k=plug->indx2; k<plug->indx2+plug->acorr_size && score<=plug->minscore[2]; k++)
                 {
                     tmp = plug->buf[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
                     score += tmp*tmp;
@@ -179,18 +206,38 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 if(score<=plug->minscore[2])
                 {
                     plug->wavesize = plug->indx2 -1;//subtract 1 because we incremented already
-                    plug->score = score;
+                    plug->minscore[2] = score;
+                    plug->minscore[1] = plug->prevscore[1];
+                    plug->minscore[0] = plug->prevscore[0];
+                    plug->save = 2;
                 }
-                plug->oldscore
+                else if(plug->save == 2)
+                {
+                	plug->minscore[3] = score;
+                	plug->save--;
+                }
+                else if(plug->save == 1)
+                	plug->minscore[4] = score;
+                else plug->save = 0;
+                //rotate prevscore
+                plug->prevscore[0] = plug->prevscore[1];
+                plug->prevscore[1] = score;
             }
             if(plug->indx2>=plug->wave_max)
             {
                 plug->indx2 = 0;//reset indx2
+                //find subsample peak
+                plug->wavesize = findminx(plug->minscore);
+				//TODO: must calculate subsample offset so that the crossfade theoretically doesn't change the samples at all
+                //its possible that with the more accurate wavesize only 1 wave will be required
+                //so all xfading can be done here then skip straight to playing
+                //it would be nice too if this played in phase
                 //xfade in beginning of sample
                 for(k=0; k<plug->xfade_size; k++)
                     plug->buf[k] *= k/plug->xfade_size;
             }
         }
+        //CURRENTLY WE ARE NOT USING THIS STEP. WE'LL SEE IF IT WORKS WITHOUT LAYERING 2 FULL CYCLES
         else if(plug->state == LOADING_XFADE)//xfade end of buffer with start (loop it) over an entire wave and fade in drone
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
@@ -224,7 +271,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                     plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2];
             }
         }
-        else if(plug->state == XFADE_ONLY)//xfade after buffer is full
+        else if(plug->state == XFADE_ONLY)//xfade after enough samples are in buffer
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
             //decide if xfade ends in this period
@@ -243,6 +290,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             //xfade out end
             if(plug->indx2>=plug->wavesize)
             {
+				//TODO: must calculate subsample offset so that the crossfade theoretically doesn't change the samples at all
                 for(k=0; k<plug->xfade_size; k++)
                     plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2];
             }
@@ -280,7 +328,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->state = INACTIVE;
                 plug->gain = 0;
                 plug->wavesize = plug->wave_max;
-                plug->score = 1;
+                plug->minscore[2] = 1;
                 return;
             }
         }
@@ -329,14 +377,14 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->bufsize = tmp;
     plug->acorr_size = tmp>>3;//1024
     plug->xfade_size = tmp>>7;//64
-    plug->wave_max = (tmp - plug->xfade_size)>>1;//4064
+    plug->wave_max = (tmp - plug->xfade_size)>>1;//4064, or half the buffer + a crossfade
     plug->wave_min = tmp>>6;//128
     plug->wavesize = plug->wave_max;
     plug->indx = 0;
     plug->indx2 = plug->wave_min;
     plug->state = INACTIVE;
     plug->gain = 0;
-    plug->score = 1;
+    plug->minscore[2] = 1;
     plug->env = 0;
 
     rms_init(&plug->rms_calc,tmp>>3);
