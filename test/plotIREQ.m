@@ -49,6 +49,7 @@ zlim([-50 zmx+10])
 xlabel('sec')
 ylabel('Hz')
 zlabel('dB')
+colormap('jet')
 
 
 figure(1)
