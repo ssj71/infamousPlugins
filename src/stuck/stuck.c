@@ -57,8 +57,28 @@ typedef struct _STUCK
 
 float findminx(float arr[])
 {
-	//TODO: find out how to do this
 	//return subsample index of minima
+	float m2 = arr[3]-arr[1];
+	float a,b,c;
+	if(m2<0)
+	{
+		//minima is before sample
+		a = 1.5*(-arr[0] + arr[1] - 3*arr[2] + arr[3]);
+		b = 2*arr[0] - 5*arr[1] + 4*arr[2] - arr[3];
+		c = .5*(-arr[0] + arr[2]);
+
+		return 1-(-b+sqrt(b*b-4*a*c))/2*a;//its possible that this is wrong but I think b-.. will be out of domain t E[0,1]
+	}
+	else if(m2>0)
+	{
+		//minima is after sample
+		a = 1.5*(-arr[1] + arr[2] - 3*arr[3] + arr[4]);
+		b = 2*arr[1] - 5*arr[2] + 4*arr[3] - arr[4];
+		c = .5*(-arr[1] + arr[3]);
+
+		return (-b+sqrt(b*b-4*a*c))/2*a;//its possible that this is wrong but I think b-.. will be out of domain t E[0,1]
+	}
+	else return 0;
 }
 
 void run_stuck(LV2_Handle handle, uint32_t nframes)
@@ -227,7 +247,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             {
                 plug->indx2 = 0;//reset indx2
                 //find subsample peak
-                plug->wavesize = findminx(plug->minscore);
+                plug->wavesize += findminx(plug->minscore);
 				//TODO: must calculate subsample offset so that the crossfade theoretically doesn't change the samples at all
                 //its possible that with the more accurate wavesize only 1 wave will be required
                 //so all xfading can be done here then skip straight to playing
