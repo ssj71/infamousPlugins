@@ -53,6 +53,8 @@ void run_cheapoct(LV2_Handle handle, uint32_t nframes)
     uint16_t r,w,mask;
     uint8_t c;
 
+    *plug->dbg_p = 0;
+
     in = plug->input_p;
     out = plug->output_p;
     buf = plug->buf;
@@ -79,6 +81,8 @@ void run_cheapoct(LV2_Handle handle, uint32_t nframes)
         else
         {
             plug->ready = 1;
+            if( w == r)
+                *plug->dbg_p = 1;
         }
         //TODO: where to jump in overflow?
         
