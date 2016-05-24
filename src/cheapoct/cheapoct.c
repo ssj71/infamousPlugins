@@ -22,10 +22,11 @@ enum states
 
 typedef struct _OCTAVER
 {
-    uint16_t w;//current write point in buffer
-    uint16_t r;//working/read point in buffer
-    uint8_t c;
-    uint16_t mask;//mask for circulating pointers
+    uint16_t w; //current write point in buffer
+    uint16_t r; //read point in buffer
+    uint8_t  c; //counter for every other increment (ZOH)
+    uint8_t ready; //flag for if we have moved sufficiently along the wave to start looking for another jump
+    uint16_t mask; //mask for circulating pointers
 
     float *buf;
 
@@ -37,10 +38,10 @@ typedef struct _OCTAVER
 } OCTAVER;
 
 
-inline float errcalc(float prev, float samp, float fbprev, float fbsamp, float weight)
+float errcalc(float prev, float samp, float fbprev, float fbsamp, float weight)
 {
     // weight blends from absolute error (0) to derivative error (1)
-    return (1-weight)*abs(samp - fbsamp) + weight*abs((samp-prev) - (fbsamp-fbprev));
+    return (1-weight)*fabs(samp - fbsamp) + weight*fabs((samp-prev) - (fbsamp-fbprev));
 }
 
 
@@ -66,14 +67,20 @@ void run_cheapoct(LV2_Handle handle, uint32_t nframes)
 
         //now the complicated jumping logic stuff
         err = errcalc(buf[r], buf[(r-1)&mask], buf[w], buf[(w-1)&mask], *plug->weight_p);
-        if(err < *plug->tolerance_p)
+        if(err <= *plug->tolerance_p)
         {
-            //jump
-            r = w;
+            if(plug->ready)
+            {
+                //jump
+                r = w;
+                plug->ready = 0;
+            }
         }
-        //TODO: don't jump again till err gets out of tol
+        else
+        {
+            plug->ready = 1;
+        }
         //TODO: where to jump in overflow?
-        //TODO: 
         
 
         r += c++&0x01; //oh look. A zero-order hold
@@ -104,8 +111,11 @@ LV2_Handle init_cheapoct(const LV2_Descriptor *descriptor,double sample_freq, co
     plug->r = 0;
     plug->w = 0;
     plug->c = 0;
+    plug->ready = 1;
     plug->mask = tmp-1;
 
+    plug->buf[0] = 0;
+    plug->buf[tmp-1] = 0;
     return plug;
 }
 
