@@ -8,17 +8,7 @@
 #include"cheapoct.h"
 
 
-enum states
-{
-    INACTIVE = 0,
-    LOADING,
-    MATCHING,
-    LOADING_XFADE,
-    XFADE_ONLY,
-    PLAYING,
-    RELEASING,
-    QUICK_RELEASING
-};
+#define TOLERANCE .0010
 
 typedef struct _OCTAVER
 {
@@ -27,8 +17,10 @@ typedef struct _OCTAVER
     uint8_t  c; //counter for every other increment (ZOH)
     uint8_t ready; //flag for if we have moved sufficiently along the wave to start looking for another jump
     uint16_t mask; //mask for circulating pointers
+    uint16_t mingap; //distance to lowest found score
 
     float *buf;
+    float minerr; //lowest found score
 
     float *input_p;
     float *output_p;
@@ -38,10 +30,10 @@ typedef struct _OCTAVER
 } OCTAVER;
 
 
-float errcalc(float prev, float samp, float fbprev, float fbsamp, float weight)
+float errcalc(float prev, float samp, float fbprev, float fbsamp)
 {
-    // weight blends from absolute error (0) to derivative error (1)
-    return (1-weight)*fabs(samp - fbsamp) + weight*fabs((samp-prev) - (fbsamp-fbprev));
+    // absolute error plus derivative error
+    return 2*fabs(samp - fbsamp) + fabs((samp-prev) - (fbsamp-fbprev));
 }
 
 
@@ -65,10 +57,11 @@ void run_cheapoct(LV2_Handle handle, uint32_t nframes)
     for(i=0; i<nframes; i++)
     {
         buf[w] = in[i];
-        out[i] = buf[r];
+        out[i] = buf[r];// + in[i];
+
+        err = errcalc(buf[r], buf[(r-1)&mask], buf[w], buf[(w-1)&mask]);
 
         //now the complicated jumping logic stuff
-        err = errcalc(buf[r], buf[(r-1)&mask], buf[w], buf[(w-1)&mask], *plug->weight_p);
         if(err <= *plug->tolerance_p)
         {
             if(plug->ready)
@@ -76,21 +69,40 @@ void run_cheapoct(LV2_Handle handle, uint32_t nframes)
                 //jump
                 r = w;
                 plug->ready = 0;
+                *plug->dbg_p = 1;
             }
+
+			r += c++&0x01; //oh look. A zero-order hold
+			r &= mask;
+			w++;
+			w &= mask;
         }
         else
         {
             plug->ready = 1;
-            if( w == r)
-                *plug->dbg_p = 1;
-        }
-        //TODO: where to jump in overflow?
-        
+            if(err < plug->minerr)
+            {
+            	plug->minerr = err;
+            	plug->mingap = (w-r)&mask;
+            }
 
-        r += c++&0x01; //oh look. A zero-order hold
-        r &= mask;
-        w++;
-        w &= mask;
+			r += c++&0x01; //oh look. A zero-order hold
+			r &= mask;
+			w++;
+			w &= mask;
+
+            if(w==r)
+            {
+            	//we have to jump now to the best fit we got
+            	r += (mask/plug->mingap)*plug->mingap;
+            	//this is slightly flawed because it really assumes the period measured e.g. 1024 samples ago is still the best fit
+            	r &= mask;
+            	plug->minerr = 1;
+            	plug->mingap = 0;
+            }
+        }
+
+
 
     } 
 
@@ -106,17 +118,19 @@ LV2_Handle init_cheapoct(const LV2_Descriptor *descriptor,double sample_freq, co
     OCTAVER* plug = malloc(sizeof(OCTAVER));
 
     uint16_t tmp;
-    tmp = 0x8000;//15 bits
+    tmp = 0x2000;//13 bits 8192
     if(sample_freq<100000)//88.1 or 96.1kHz
-        tmp = tmp>>1;//14 bits
+        tmp = tmp>>1;//12 bits
     if(sample_freq<50000)//44.1 or 48kHz
-        tmp = tmp>>1;//13 bits //8192
+        tmp = tmp>>1;//11 2048
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->r = 0;
     plug->w = 0;
     plug->c = 0;
     plug->ready = 1;
     plug->mask = tmp-1;
+    plug->minerr = 1;
+    plug->mingap = 0;
 
     plug->buf[0] = 0;
     plug->buf[tmp-1] = 0;
@@ -134,7 +148,7 @@ void connect_cheapoct_ports(LV2_Handle handle, uint32_t port, void *data)
     case OUT:
         plug->output_p = (float*)data;
         break;
-    case TOLERANCE:
+    case TOL:
         plug->tolerance_p = (float*)data;
         break;
     case WEIGHT:

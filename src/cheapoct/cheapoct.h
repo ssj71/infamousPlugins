@@ -7,7 +7,7 @@ enum cheapoct_ports
 {
     IN =0,
     OUT,
-    TOLERANCE,
+    TOL,
     WEIGHT,
     DBG
 };
