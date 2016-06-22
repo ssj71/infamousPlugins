@@ -15,8 +15,11 @@ typedef struct _OCTAVER
     uint16_t w; //current write point in buffer
     uint16_t r; //read point in buffer
     uint8_t  c; //counter for every other increment (ZOH)
-    uint8_t ready; //flag for if we have moved sufficiently along the wave to start looking for another jump
     uint16_t mask; //mask for circulating pointers
+    uint8_t xfade; //length of crossfade
+    uint8_t xc; //counter for crossfade
+    uint8_t xm; //mask for crossfade count
+    uint8_t ready; //flag for if we have moved sufficiently along the wave to start looking for another jump
     uint16_t mingap; //distance to lowest found score
 
     float *buf;
@@ -28,13 +31,6 @@ typedef struct _OCTAVER
     float *weight_p;
     float *dbg_p;
 } OCTAVER;
-
-
-float errcalc(float prev, float samp, float fbprev, float fbsamp)
-{
-    // absolute error plus derivative error
-    return 2*fabs(samp - fbsamp) + fabs((samp-prev) - (fbsamp-fbprev));
-}
 
 
 void run_cheapoct(LV2_Handle handle, uint32_t nframes)
@@ -54,57 +50,46 @@ void run_cheapoct(LV2_Handle handle, uint32_t nframes)
     r = plug->r;
     w = plug->w;
     c = plug->c;
-    for(i=0; i<nframes; i++)
+
+    for(i=0; i<nframes && plug->xc; i++)
+    {
+        buf[w] = in[i];
+        out[i] = in[i] + (plug->xc--/((float)plug->xfade+1.0))*(buf[r] - in[i]);
+
+        r += c++&0x01; //oh look. A zero-order hold
+        r &= mask;
+        w++;
+        w &= mask;
+    }
+    for( ; i<nframes; i++)
     {
         buf[w] = in[i];
         out[i] = buf[r];// + in[i];
 
-        err = errcalc(buf[r], buf[(r-1)&mask], buf[w], buf[(w-1)&mask]);
+        r += c++&0x01; //oh look. A zero-order hold
+        r &= mask;
+        w++;
+        w &= mask;
 
-        //now the complicated jumping logic stuff
-        if(err <= *plug->tolerance_p)
+        if((w+plug->xfade)&mask == r)
         {
-            if(plug->ready)
+            plug->xc = plug->xfade;
+            for( ; i<nframes && plug->xc; i++)
             {
-                //jump
-                r = w;
-                plug->ready = 0;
-                *plug->dbg_p = 1;
-            }
+                buf[w] = in[i];
+                out[i] = in[i] + (plug->xc--/((float)plug->xfade+1.0))*(buf[r] - in[i]);
 
-			r += c++&0x01; //oh look. A zero-order hold
-			r &= mask;
-			w++;
-			w &= mask;
+                r += c++&0x01; //oh look. A zero-order hold
+                r &= mask;
+                w++;
+                w &= mask;
+            }
+            //w should == r here
         }
-        else
-        {
-            plug->ready = 1;
-            if(err < plug->minerr)
-            {
-            	plug->minerr = err;
-            	plug->mingap = (w-r)&mask;
-            }
-
-			r += c++&0x01; //oh look. A zero-order hold
-			r &= mask;
-			w++;
-			w &= mask;
-
-            if(w==r)
-            {
-            	//we have to jump now to the best fit we got
-            	r += (mask/plug->mingap)*plug->mingap;
-            	//this is slightly flawed because it really assumes the period measured e.g. 1024 samples ago is still the best fit
-            	r &= mask;
-            	plug->minerr = 1;
-            	plug->mingap = 0;
-            }
-        }
+    }
 
 
 
-    } 
 
     plug->r = r;
     plug->w = w;
@@ -118,17 +103,20 @@ LV2_Handle init_cheapoct(const LV2_Descriptor *descriptor,double sample_freq, co
     OCTAVER* plug = malloc(sizeof(OCTAVER));
 
     uint16_t tmp;
-    tmp = 0x2000;//13 bits 8192
+    tmp = 0x0400;//10 bits 1024
     if(sample_freq<100000)//88.1 or 96.1kHz
-        tmp = tmp>>1;//12 bits
+        tmp = tmp>>1;//09 bits
     if(sample_freq<50000)//44.1 or 48kHz
-        tmp = tmp>>1;//11 2048
+        tmp = tmp>>1;//08 256
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->r = 0;
     plug->w = 0;
     plug->c = 0;
-    plug->ready = 1;
     plug->mask = tmp-1;
+    plug->xfade = (tmp>>2)-1;//4 bits 16
+    plug->xc = 0;
+
+    plug->ready = 1;
     plug->minerr = 1;
     plug->mingap = 0;
 
