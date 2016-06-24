@@ -9,6 +9,7 @@
 #include"stuck.h"
 
 //#define CV_PORTS
+#define TEST
 
 enum states
 {
@@ -59,8 +60,12 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     double slope = 0;
     double interp;
 
+#ifndef TEST
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
     //for(i=0;i<nframes;i++) plug->output_p[i] = 0;
+#else
+    for(i=0;i<nframes;i++) plug->output_p[i] = 0;
+#endif
 
     interp = nframes>64?nframes:64;
 
