@@ -9,7 +9,7 @@
 #include"stuck.h"
 
 //#define CV_PORTS
-#define TEST
+//#define TEST
 
 enum states
 {
@@ -198,10 +198,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             slope = (*plug->drone_gain_p-plug->gain)/interp;
             //decide if xfade ends in this period
             if(plug->indx2+chunk >= plug->wavesize)
-                //if(plug->indx2+chunk >= 10)
             {
                 chunk = plug->wavesize - plug->indx2;
-                //chunk = 10 - plug->indx2;
                 plug->state = PLAYING;
             }
             //decide if going to overflow
@@ -216,6 +214,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
                 //still loading end of buffer
                 plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
+#ifndef TEST
+                plug->gain = 1;
+                slope = 0;
+#endif
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
             }
@@ -223,7 +225,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             if(plug->indx2>=plug->wavesize)
             {
                 for(k=0; k<plug->xfade_size; k++)
-                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2];
+                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k];
+#ifndef TEST
+                plug->output_p[i] += 2;
+#endif
             }
         }
         else if(plug->state == XFADE_ONLY)//xfade after buffer is full
@@ -239,6 +244,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             for(j=0; j<chunk; j++)
             {
                 plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
+#ifndef TEST
+                plug->gain = 1;
+                slope = 0;
+#endif
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
             }
