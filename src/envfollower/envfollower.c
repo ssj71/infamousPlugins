@@ -139,6 +139,31 @@ void connect_envfollower_ports(LV2_Handle handle, uint32_t port, void *data)
     else puts("UNKNOWN PORT YO!!");
 }
 
+void connect_envCV_ports(LV2_Handle handle, uint32_t port, void *data)
+{
+    ENVFOLLOWER* plug = (ENVFOLLOWER*)handle;
+    if(port == INPUT)           plug->input_p = (float*)data;
+    else if(port == OUTPUT)     plug->output_p = (float*)data;
+    else if(port == MIDI_OUT)   plug->midi_out_p = (LV2_Atom_Sequence*)data;
+    else if(port == CTL_IN)	plug->ctl_in_p = (float*)data;
+    else if(port == CTL_OUT)    plug->ctl_out_p = (float*)data;
+    else if(port == CV_OUT)     plug->cv_out_p = (float*)data;
+    else if(port == CHANNEL)    plug->channel_p = (float*)data;
+    else if(port == CONTROL_NO) plug->control_p = (float*)data;
+    else if(port == MINV)       plug->min_p = (float*)data;
+    else if(port == MAXV)       plug->max_p = (float*)data;
+    else if(port == REVERSE)    plug->rev_p = (float*)data;
+    else if(port == PEAKRMS)    plug->peakrms_p = (float*)data;
+    else if(port == THRESHOLD)  plug->threshold_p = (float*)data;
+    else if(port == SATURATION) plug->saturation_p = (float*)data;
+    else if(port == ATIME)      plug->atime_p = (float*)data;
+    else if(port == DTIME)      plug->dtime_p = (float*)data;
+    else if(port == CMINV)      plug->cmin_p = (float*)data;
+    else if(port == CMAXV)      plug->cmax_p = (float*)data;
+    else if(port == CREVERSE)   plug->crev_p = (float*)data;
+    else puts("UNKNOWN PORT YO!!");
+}
+
 
 void run_envfollower( LV2_Handle handle, uint32_t nframes)
 {

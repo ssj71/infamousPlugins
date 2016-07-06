@@ -225,3 +225,141 @@ lv2:symbol "Control_Signal" .
         #        lv2:minimum 0.0 ;
         #        lv2:maximum 1.0 ;
         #] ;
+
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#envfollowerCV>
+        a lv2:Plugin, lv2:EnvelopePlugin ;
+        doap:name "the infamous envelope follower (CV)" ;
+        doap:license <http://opensource.org/licenses/GPL-2.0> ;
+        doap:description "Fully featured envelope follower with Control Voltage outpu";
+        doap:maintainer [
+                foaf:name "Spencer Jackson" ;
+                foaf:homepage <http://infamousplugins.sourceforge.net> ;
+                foaf:mbox <mailto:ssjackson71@gmail.com> ;
+        ] ;
+        lv2:minorVersion 0 ;
+        lv2:microVersion 1 ;
+        rdfs:comment "This envelope follower follows the volume envelope of an audio signal and produces a midi control signal. It can be used for things like a sidechained filter cutoff, ducking, or making any other effects volume responsive. This version ouputs an LV2 Control Voltage.";
+        lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
+        lv2:optionalFeature lv2:hardRTCapable ;
+        ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui> ;
+
+        lv2:port [
+                a lv2:InputPort, lv2:AudioPort ;
+                lv2:index 0 ;
+                lv2:symbol "INPUT" ;
+                lv2:name "Audio In" ;
+        ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:AudioPort ;
+                lv2:index 1 ;
+                lv2:symbol "OUTPUT" ;
+                lv2:name "Audio Out" ;
+        ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:CVPort ;
+                lv2:index 2 ;
+                lv2:symbol "CV_OUT";
+                lv2:name "CV Out";
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+        ] .
+        lv2:port [
+                a lv2:OutputPort, lv2:ControlPort ;
+                lv2:index 3 ;
+                lv2:symbol "CTL_IN";
+                lv2:name "Input Level";
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+        ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:ControlPort ;
+                lv2:index 4 ;
+                lv2:symbol "CTL_OUT";
+                lv2:name "Control Out";
+                lv2:scalePoint [ rdfs:label "Min"; rdf:value 0.0 ] ;
+                lv2:scalePoint [ rdfs:label "Max"; rdf:value 1.0 ] ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+        ] ;
+        lv2:port [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 5 ;
+                lv2:symbol "PEAKRMS" ;
+                lv2:name "Peak/RMS" ;
+                lv2:default 0.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 6 ;
+                lv2:symbol "THRESHOLD" ;
+                lv2:name "Threshold" ;
+                lv2:default 0.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 7 ;
+                lv2:symbol "SATURATION" ;
+                lv2:name "Saturation" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 2.0 ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 8 ;
+                lv2:symbol "ATIME" ;
+                lv2:name "Attack Time" ;
+                lv2:portProperty pprops:logarithmic ;
+                lv2:default 0.01 ;
+                lv2:minimum 0.001 ;
+                lv2:maximum 15.0 ;
+                units:unit units:s ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 9 ;
+                lv2:symbol "DTIME" ;
+                lv2:name "Decay Time" ;
+                lv2:portProperty pprops:logarithmic ;
+                lv2:default 10.0 ;
+                lv2:minimum 0.001 ;
+                lv2:maximum 30.0 ;
+                units:unit units:s ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:audio> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 10 ;
+                lv2:symbol "CMINV" ;
+                lv2:name "CV Port Minimum Value" ;
+                lv2:default 0.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 11 ;
+                lv2:symbol "CMAXV" ;
+                lv2:name "CV Port Maximum Value" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 12 ;
+                lv2:symbol "CDIRECTION" ;
+                lv2:name "CV Port Direction" ;
+                lv2:portProperty lv2:integer ;
+                lv2:scalePoint [ rdfs:label "Normal"; rdf:value 0 ] ;
+                lv2:scalePoint [ rdfs:label "Reverse"; rdf:value 1 ] ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
+        ] 
+

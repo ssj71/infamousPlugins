@@ -11,3 +11,13 @@
     a ui:X11UI ;
     ui:binary <envfollower_ui.so> ;
     lv2:extensionData ui:idleInterface, ui:resize .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#envfollowerCV>
+    a lv2:Plugin, lv2:EnvelopePlugin ;
+    lv2:binary <envfollower.so> ;
+    rdfs:seeAlso <envfollower.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#envfollowerCV_ui>
+    a ui:X11UI ;
+    ui:binary <envfollowerCV_ui.so> ;
+    lv2:extensionData ui:idleInterface, ui:resize .
