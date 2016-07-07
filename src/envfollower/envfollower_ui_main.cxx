@@ -6,6 +6,7 @@
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
 #define ENVFOLLOWERUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui"
+#define ENVFOLLOWERCVUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui"
 
 static LV2UI_Handle init_envfollowerUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,
@@ -119,6 +120,56 @@ void envfollowerUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buf
     }
 }
 
+void envfollowerCVUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_size, uint32_t format, const void * buffer)
+{
+    EnvFollowerUI *self = (EnvFollowerUI*)ui;
+    if(!format)
+    {
+      float val = *(float*)buffer;
+      char str[5];
+      switch(port_index)
+      {
+        case PEAKRMS:
+          self->peakrms->value(val);
+	  break;
+        case ATIME:
+          self->attack->value(val);
+	  break;
+        case DTIME:
+          self->decay->value(val);
+	  break;
+        case THRESHOLD:
+          self->threshold->value(val);
+	  break;
+        case SATURATION:
+          self->saturation->value(val);
+	  break;
+        case CMINV:
+          self->min->value(val);
+	  break;
+        case CMAXV:
+          self->max->value(val);
+	  break;
+        case CREVERSE:
+          self->reverse->value(val);
+	  break;
+
+        case CTL_IN:
+          sprintf(str,"%1.2f",val);
+          if(strcmp(str,self->inLCD->label()))
+              self->inLCD->copy_label(str);
+          self->inScope->push_val(val);
+	  break;
+        case CTL_OUT:
+          sprintf(str,"%3.0f",val*127.0);
+          if(strcmp(str,self->outLCD->label()))
+              self->outLCD->copy_label(str);
+          self->outScope->push_val(val);
+	  break;
+      }
+    }
+}
+
 static int
 idle(LV2UI_Handle handle)
 {
@@ -154,12 +205,19 @@ extension_data(const char* uri)
   }
   return NULL;
 }
+static const LV2UI_Descriptor envfollowerCVUI_descriptor = {
+    ENVFOLLOWERUI_URI,
+    init_envfollowerUI,
+    cleanup_envfollowerUI,
+    envfollowerUI_port_event,
+    extension_data
+};
 
 static const LV2UI_Descriptor envfollowerUI_descriptor = {
     ENVFOLLOWERUI_URI,
     init_envfollowerUI,
     cleanup_envfollowerUI,
-    envfollowerUI_port_event,
+    envfollowerCVUI_port_event,
     extension_data
 };
 
@@ -169,6 +227,8 @@ const LV2UI_Descriptor* lv2ui_descriptor(uint32_t index)
     switch (index) {
     case 0:
         return &envfollowerUI_descriptor;
+    case 1:
+        return &envfollowerCVUI_descriptor;
     default:
         return NULL;
     }

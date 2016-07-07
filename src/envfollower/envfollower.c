@@ -95,6 +95,7 @@ LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate,
 
     rms_init(&plug->rms_calc,64);
 
+#ifndef CV_PORTS
     //get urid map value for midi events
     for (int i = 0; host_features[i]; i++)
     {
@@ -110,6 +111,7 @@ LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate,
     }
 
     lv2_atom_forge_init(&plug->forge,plug->urid_map);
+#endif
 
     return plug;
 }
@@ -136,7 +138,6 @@ void connect_envfollower_ports(LV2_Handle handle, uint32_t port, void *data)
     else if(port == CMINV)      plug->cmin_p = (float*)data;
     else if(port == CMAXV)      plug->cmax_p = (float*)data;
     else if(port == CREVERSE)   plug->crev_p = (float*)data;
-    else puts("UNKNOWN PORT YO!!");
 }
 
 void connect_envCV_ports(LV2_Handle handle, uint32_t port, void *data)
@@ -144,15 +145,11 @@ void connect_envCV_ports(LV2_Handle handle, uint32_t port, void *data)
     ENVFOLLOWER* plug = (ENVFOLLOWER*)handle;
     if(port == INPUT)           plug->input_p = (float*)data;
     else if(port == OUTPUT)     plug->output_p = (float*)data;
-    else if(port == MIDI_OUT)   plug->midi_out_p = (LV2_Atom_Sequence*)data;
     else if(port == CTL_IN)	plug->ctl_in_p = (float*)data;
     else if(port == CTL_OUT)    plug->ctl_out_p = (float*)data;
     else if(port == CV_OUT)     plug->cv_out_p = (float*)data;
     else if(port == CHANNEL)    plug->channel_p = (float*)data;
     else if(port == CONTROL_NO) plug->control_p = (float*)data;
-    else if(port == MINV)       plug->min_p = (float*)data;
-    else if(port == MAXV)       plug->max_p = (float*)data;
-    else if(port == REVERSE)    plug->rev_p = (float*)data;
     else if(port == PEAKRMS)    plug->peakrms_p = (float*)data;
     else if(port == THRESHOLD)  plug->threshold_p = (float*)data;
     else if(port == SATURATION) plug->saturation_p = (float*)data;
@@ -161,7 +158,6 @@ void connect_envCV_ports(LV2_Handle handle, uint32_t port, void *data)
     else if(port == CMINV)      plug->cmin_p = (float*)data;
     else if(port == CMAXV)      plug->cmax_p = (float*)data;
     else if(port == CREVERSE)   plug->crev_p = (float*)data;
-    else puts("UNKNOWN PORT YO!!");
 }
 
 
@@ -180,20 +176,20 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     if(sat <= *plug->threshold_p)
     {
         max = *plug->min_p;
+        cmax = *plug->cmin_p;
     }
-    if(max < *plug->min_p)
-    {
-        max = *plug->min_p;
-    }
+#ifdef CV_PORTS
     if(cmax < *plug->cmin_p)
     {
         cmax = *plug->cmin_p;
     }
-    float mapping = (max - *plug->min_p)/(sat - *plug->threshold_p);
-#ifdef CV_PORTS
     float cmapping = (cmax - *plug->cmin_p)/(sat - *plug->threshold_p);
-#endif
-
+#else
+    if(max < *plug->min_p)
+    {
+        max = *plug->min_p;
+    } 
+    float mapping = (max - *plug->min_p)/(sat - *plug->threshold_p);
 
     //get midi port ready
     const uint32_t capacity = plug->midi_out_p->atom.size;
@@ -201,6 +197,10 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     lv2_atom_forge_sequence_head(&plug->forge, &plug->frame, 0);
     midiatom.type = plug->midi_event_type;
     midiatom.size = 3;//midi CC
+#endif
+
+    *plug->ctl_in_p = 0;
+    *plug->ctl_out_p = 0;
 
     //recalculate filter coefficients as necessary
     if(plug->atime != *plug->atime_p)
@@ -240,7 +240,29 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
         {
             plug->out = plug->dn[0]*plug->out + plug->dn[1]*plug->current + plug->dn[2]*plug->prev;
         }
+        plug->ctl_in_p* += plug->current;
 
+#ifdef CV_PORTS
+        //now handle the Control Voltage port
+        if(plug->out <= *plug->threshold_p)
+        {
+            plug->cv_out_p[i] = *plug->cmin_p;
+        }
+        else if(plug->out >= *plug->saturation_p)
+        {
+            plug->cv_out_p[i] = *plug->cmax_p;
+        }
+        else
+        {
+            plug->cv_out_p[i] = cmapping*(plug->out - *plug->threshold_p) + *plug->cmin_p;
+        }
+        if(*plug->crev_p)
+        {
+            plug->cv_out_p[i] = *plug->cmax_p - plug->cv_out_p[i] + *plug->cmin_p;
+        }
+
+        *plug->ctl_out_p += plug->cv_out_p[i];
+#else
         //now map to the midi values
         if(plug->out <= *plug->threshold_p)
         {
@@ -275,34 +297,16 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
             lv2_atom_forge_pad(&plug->forge,3+sizeof(LV2_Atom));
         }
         plug->mprev = plug->mout;
-
-        //now handle the Control Voltage port
-#ifdef CV_PORTS
-        if(plug->out <= *plug->threshold_p)
-        {
-            plug->cv_out_p[i] = *plug->cmin_p;
-        }
-        else if(plug->out >= *plug->saturation_p)
-        {
-            plug->cv_out_p[i] = *plug->cmax_p;
-        }
-        else
-        {
-            plug->cv_out_p[i] = cmapping*(plug->out - *plug->threshold_p) + *plug->cmin_p;
-        }
-        if(*plug->crev_p)
-        {
-            plug->cv_out_p[i] = *plug->cmax_p - plug->cv_out_p[i] + *plug->cmin_p;
-        }
+        *plug->ctl_out_p += plug->mout/127.0;
 #endif
 
         //finally copy the intput to the output
         plug->output_p[i] = buf[i];
     }
 
-    //do last value to output ctl port, should maybe do average but meh...
-    *plug->ctl_in_p = plug->out;
-    *plug->ctl_out_p = plug->mout/127.0;//when CV ports are supported this will show the CV value
+    //do average for output controls
+    *plug->ctl_in_p /= nframes;
+    *plug->ctl_out_p /= nframes;
 }
 
 
@@ -327,6 +331,18 @@ static const LV2_Descriptor envfollower_descriptor=
     NULL//extension
 };
 
+static const LV2_Descriptor envfollowerCV_descriptor=
+{
+    ENVFOLLOWERCV_URI,
+    init_envfollower,
+    connect_envCV_ports,
+    NULL,//activate
+    run_envfollower,
+    NULL,//deactivate
+    cleanup_envfollower,
+    NULL//extension
+};
+
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {
@@ -334,6 +350,8 @@ const LV2_Descriptor* lv2_descriptor(uint32_t index)
     {
     case 0:
         return &envfollower_descriptor;
+    case 0:
+        return &envfollowerCV_descriptor;
     default:
         return NULL;
     }

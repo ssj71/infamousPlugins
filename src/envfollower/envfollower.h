@@ -4,6 +4,7 @@
 #define ENVFOLLOWER_H
 
 #define ENVFOLLOWER_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollower"
+#define ENVFOLLOWERCV_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollowerCV"
 
 #ifndef CV_PORTS
 
@@ -39,13 +40,13 @@ enum envCV_ports
     CV_OUT,
     CTL_IN,
     CTL_OUT,
-    PEAKRMS,
-    THRESHOLD,//6
+    PEAKRMS,//5
+    THRESHOLD,
     SATURATION,
     ATIME,
     DTIME,
-    CMINV,
-    CMAXV,//16
+    CMINV,//10
+    CMAXV,
     CREVERSE
 };
 #endif
