@@ -220,14 +220,6 @@ lv2:symbol "Control_Signal" .
                 pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#envfollower:group:ctl> ;
                 lv2:portProperty pprops:notOnGUI; #deprecated
         ] .
-        #lv2:port [
-        #        a lv2:OutputPort, lv2:AudioPort ; #CVPort ;
-        #        lv2:index 18 ;
-        #        lv2:symbol "CV_OUT";
-        #        lv2:name "CV Out";
-        #        lv2:minimum 0.0 ;
-        #        lv2:maximum 1.0 ;
-        #] ;
 
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#envfollowerCV>
@@ -266,7 +258,7 @@ lv2:symbol "Control_Signal" .
                 lv2:name "CV Out";
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-        ] .
+        ] ;
         lv2:port [
                 a lv2:OutputPort, lv2:ControlPort ;
                 lv2:index 3 ;

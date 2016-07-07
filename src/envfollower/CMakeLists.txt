@@ -30,6 +30,7 @@ add_library(${PLUGIN} SHARED
   rms_calc.h
   constants.h
 )
+set_target_properties (instrumented_target PROPERTIES COMPILE_DEFINITIONS "INSTRUMENT")
 
 add_library(${PLUGIN}_ui SHARED
   envfollower.h

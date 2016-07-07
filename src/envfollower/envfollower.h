@@ -6,8 +6,6 @@
 #define ENVFOLLOWER_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollower"
 #define ENVFOLLOWERCV_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollowerCV"
 
-#ifndef CV_PORTS
-
 enum envfollower_ports
 {
     INPUT = 0,
@@ -25,30 +23,10 @@ enum envfollower_ports
     MINV,
     MAXV,
     REVERSE,
-    CMINV,
+    CMINV = 10,
     CMAXV,//16
     CREVERSE,
-    CV_OUT
+	CV_OUT = 2
 };
-
-#else
-
-enum envCV_ports
-{
-    INPUT = 0,
-    OUTPUT,
-    CV_OUT,
-    CTL_IN,
-    CTL_OUT,
-    PEAKRMS,//5
-    THRESHOLD,
-    SATURATION,
-    ATIME,
-    DTIME,
-    CMINV,//10
-    CMAXV,
-    CREVERSE
-};
-#endif
 
 #endif
