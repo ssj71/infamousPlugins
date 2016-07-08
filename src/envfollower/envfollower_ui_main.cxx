@@ -2,11 +2,15 @@
 #include <FL/Fl_Double_Window.H>
 #include <FL/x.H>
 
+#ifdef CV_PORT
+#include "envfollowerCV_ui.h"
+#else
 #include "envfollower_ui.h"
+#endif
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
 #define ENVFOLLOWERUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui"
-#define ENVFOLLOWERCVUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui"
+#define ENVFOLLOWERCVUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollowerCV_ui"
 
 static LV2UI_Handle init_envfollowerUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,
@@ -16,7 +20,8 @@ static LV2UI_Handle init_envfollowerUI(const struct _LV2UI_Descriptor * descript
 		LV2UI_Widget * widget,
 		const LV2_Feature * const * features) 
 {
-    if(strcmp(plugin_uri, ENVFOLLOWER_URI) != 0)
+    if(strcmp(plugin_uri, ENVFOLLOWER_URI) != 0
+     && strcmp(plugin_uri, ENVFOLLOWERCV_URI) != 0)
     {
         return 0;
     }
@@ -88,12 +93,14 @@ void envfollowerUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buf
         case SATURATION:
           self->saturation->value(val);
 	  break;
+#ifndef CV_PORT
         case CHANNEL:
           self->channel->value(val);
 	  break;
         case CONTROL_NO:
           self->cc->value(val);
 	  break;
+#endif
         case MINV:
           self->min->value(val);
 	  break;
@@ -206,7 +213,7 @@ extension_data(const char* uri)
   return NULL;
 }
 static const LV2UI_Descriptor envfollowerCVUI_descriptor = {
-    ENVFOLLOWERUI_URI,
+    ENVFOLLOWERCVUI_URI,
     init_envfollowerUI,
     cleanup_envfollowerUI,
     envfollowerUI_port_event,
@@ -226,7 +233,11 @@ const LV2UI_Descriptor* lv2ui_descriptor(uint32_t index)
 {
     switch (index) {
     case 0:
+#ifdef CV_PORT
+        return &envfollowerCVUI_descriptor;
+#else
         return &envfollowerUI_descriptor;
+#endif
     case 1:
         return &envfollowerCVUI_descriptor;
     default:

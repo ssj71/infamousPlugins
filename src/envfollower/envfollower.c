@@ -99,7 +99,7 @@ LV2_Handle init_envfollower(const LV2_Descriptor *descriptor,double sample_rate,
 
 LV2_Handle init_midi_envfollower(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
-    ENVFOLLOWER* plug = init_midi_envfollower(descriptor,sample_rate, bundle_path,host_features);
+    ENVFOLLOWER* plug = init_envfollower(descriptor,sample_rate, bundle_path,host_features);
     //get urid map value for midi events
     for (int i = 0; host_features[i]; i++)
     {
@@ -169,11 +169,9 @@ void run_envfollower( LV2_Handle handle, uint32_t nframes)
     float rms;
     float sat = *plug->saturation_p;
     float max = *plug->max_p;
-    float cmax = *plug->cmax_p;
     if(sat <= *plug->threshold_p)
     {
         max = *plug->min_p;
-        cmax = *plug->cmin_p;
     }
     if(max < *plug->min_p)
     {
@@ -281,15 +279,12 @@ void run_envfollowerCV( LV2_Handle handle, uint32_t nframes)
     ENVFOLLOWER* plug = (ENVFOLLOWER*)handle;
     uint32_t i;
     float *buf = plug->input_p;
-    uint8_t msg[3];
     float peak;
     float rms;
     float sat = *plug->saturation_p;
-    float max = *plug->max_p;
     float cmax = *plug->cmax_p;
     if(sat <= *plug->threshold_p)
     {
-        max = *plug->min_p;
         cmax = *plug->cmin_p;
     }
     if(cmax < *plug->cmin_p)
@@ -411,7 +406,7 @@ const LV2_Descriptor* lv2_descriptor(uint32_t index)
     {
     case 0:
         return &envfollower_descriptor;
-    case 0:
+    case 1:
         return &envfollowerCV_descriptor;
     default:
         return NULL;

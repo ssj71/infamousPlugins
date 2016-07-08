@@ -20,6 +20,7 @@ link_directories (${LV2_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS} ${CAIRO_LIBRARY_DIRS})
 
 find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
 fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
+fltk_wrap_ui(${PLUGIN}CV_ui ${PLUGIN}CV_ui.fl)
 
 # config libraries
 
@@ -30,7 +31,6 @@ add_library(${PLUGIN} SHARED
   rms_calc.h
   constants.h
 )
-set_target_properties (instrumented_target PROPERTIES COMPILE_DEFINITIONS "INSTRUMENT")
 
 add_library(${PLUGIN}_ui SHARED
   envfollower.h
@@ -38,14 +38,25 @@ add_library(${PLUGIN}_ui SHARED
   ${${PLUGIN}_ui_FLTK_UI_SRCS}
 )
 
+add_library(${PLUGIN}CV_ui SHARED
+  envfollower.h
+  envfollower_ui_main.cxx
+  ${${PLUGIN}CV_ui_FLTK_UI_SRCS}
+)
+
+set_target_properties (${PLUGIN}CV_ui PROPERTIES COMPILE_DEFINITIONS "CV_PORT")
+
 set_target_properties(${PLUGIN} PROPERTIES PREFIX "")
 set_target_properties(${PLUGIN}_ui PROPERTIES PREFIX "")
+set_target_properties(${PLUGIN}CV_ui PROPERTIES PREFIX "")
 
 set_target_properties(${PLUGIN} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE)
 set_target_properties(${PLUGIN}_ui PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE)
+set_target_properties(${PLUGIN}CV_ui PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE)
 
 target_link_libraries(${PLUGIN} ${LV2_LIBRARIES} m)
 target_link_libraries(${PLUGIN}_ui ${LV2_LIBRARIES} ${NTK_LIBRARIES} ${CAIRO_LIBRARIES} m)
+target_link_libraries(${PLUGIN}CV_ui ${LV2_LIBRARIES} ${NTK_LIBRARIES} ${CAIRO_LIBRARIES} m)
 
 # config install
 install(TARGETS ${PLUGIN}
@@ -55,6 +66,11 @@ install(TARGETS ${PLUGIN}
 )
 
 install(TARGETS ${PLUGIN}_ui
+  LIBRARY
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
+)
+
+install(TARGETS ${PLUGIN}CV_ui
   LIBRARY
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )

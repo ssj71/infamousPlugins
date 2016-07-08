@@ -87,20 +87,20 @@ class EnvFollowerUI {open
           code2 {o->stretch = false;}
           class Background
         }
-        Fl_Box chanlab {
-          xywh {550 296 7 65}
-          code0 {\#include"draw_envLabels.h"}
-          code1 {o->drawing_h = cairo_code_draw_envChannelLabel_get_height(); o->drawing_w = cairo_code_draw_envChannelLabel_get_width(); o->drawing_f = &cairo_code_draw_envChannelLabel_render;}
-          code2 {o->stretch = false;}
-          class Background
-        }
-        Fl_Box cclab {
-          xywh {590 296 7 65}
-          code0 {\#include"draw_envLabels.h"}
-          code1 {o->drawing_h = cairo_code_draw_envControlLabel_get_height(); o->drawing_w = cairo_code_draw_envControlLabel_get_width(); o->drawing_f = &cairo_code_draw_envControlLabel_render;}
-          code2 {o->stretch = false;}
-          class Background
-        }
+#        Fl_Box chanlab {
+#          xywh {550 296 7 65}
+#          code0 {\#include"draw_envLabels.h"}
+#          code1 {o->drawing_h = cairo_code_draw_envChannelLabel_get_height(); o->drawing_w = cairo_code_draw_envChannelLabel_get_width(); o->drawing_f = &cairo_code_draw_envChannelLabel_render;}
+#          code2 {o->stretch = false;}
+#          class Background
+#        }
+#        Fl_Box cclab {
+#          xywh {590 296 7 65}
+#          code0 {\#include"draw_envLabels.h"}
+#          code1 {o->drawing_h = cairo_code_draw_envControlLabel_get_height(); o->drawing_w = cairo_code_draw_envControlLabel_get_width(); o->drawing_f = &cairo_code_draw_envControlLabel_render;}
+#          code2 {o->stretch = false;}
+#          class Background
+#        }
         Fl_Box curlab1 {
           xywh {151 352 73 7}
           code0 {\#include"draw_envLabels.h"}
@@ -136,13 +136,13 @@ class EnvFollowerUI {open
           code2 {o->stretch = false;}
           class Background
         }
-        Fl_Box midilab {
-          xywh {538 230 38 9}
-          code0 {\#include"draw_envLabels.h"}
-          code1 {o->drawing_h = cairo_code_draw_envMidiLabel_get_height(); o->drawing_w = cairo_code_draw_envMidiLabel_get_width(); o->drawing_f = &cairo_code_draw_envMidiLabel_render;}
-          code2 {o->stretch = false;}
-          class Background
-        }
+#        Fl_Box midilab {
+#          xywh {538 230 38 9}
+#          code0 {\#include"draw_envLabels.h"}
+#          code1 {o->drawing_h = cairo_code_draw_envMidiLabel_get_height(); o->drawing_w = cairo_code_draw_envMidiLabel_get_width(); o->drawing_f = &cairo_code_draw_envMidiLabel_render;}
+#          code2 {o->stretch = false;}
+#          class Background
+#        }
         Fl_Box revlab {
           xywh {417 312 74 7}
           code0 {\#include"draw_envLabels.h"}
@@ -227,22 +227,22 @@ outBound->redraw();inBound->redraw();}
           code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
           class Dial
         }
-        Fl_Dial channel {
-          callback {write_function(controller,CHANNEL,sizeof(float),0,&channel->floatvalue);}
-          tooltip {MIDI output channel} xywh {519 250 38 156} minimum 1 maximum 16 step 0.2 value 1
-          code1 {\#include"draw_ivorySlider.h"}
-          code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-          code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
-          class Dial
-        }
-        Fl_Dial cc {
-          callback {write_function(controller,CONTROL_NO,sizeof(float),0,&cc->floatvalue);}
-          tooltip {MIDI output control number} xywh {559 250 38 156} maximum 127 step 1
-          code1 {\#include"draw_ivorySlider.h"}
-          code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-          code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
-          class Dial
-        }
+#        Fl_Dial channel {
+#          callback {write_function(controller,CHANNEL,sizeof(float),0,&channel->floatvalue);}
+#          tooltip {MIDI output channel} xywh {519 250 38 156} minimum 1 maximum 16 step 0.2 value 1
+#          code1 {\#include"draw_ivorySlider.h"}
+#          code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+#          code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
+#          class Dial
+#        }
+#        Fl_Dial cc {
+#          callback {write_function(controller,CONTROL_NO,sizeof(float),0,&cc->floatvalue);}
+#          tooltip {MIDI output control number} xywh {559 250 38 156} maximum 127 step 1
+#          code1 {\#include"draw_ivorySlider.h"}
+#          code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
+#          code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
+#          class Dial
+#        }
         Fl_Box inLCD {
           tooltip {current input value} xywh {143 298 89 45}
           code0 {\#include"envdisplay.h"}
