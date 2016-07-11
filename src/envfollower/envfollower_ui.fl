@@ -205,7 +205,7 @@ inBound->redraw();outBound->redraw();}
         }
         Fl_Dial min {
           callback {write_function(controller,MINV,sizeof(float),0,&min->floatvalue);
-if(min->value() >= max->value()){max->value(min->value()+1); outBound->max=max->value()/127.0;}
+if(min->value() >= max->value()){max->value(min->value()+1); outBound->max=max->value()/127.0; max->floatvalue = max->value(); write_function(controller,MAXV,sizeof(float),0,&max->floatvalue);}
 outBound->min = min->floatvalue/127.0;
 outBound->drawlines=true;
 outBound->redraw();inBound->redraw();}
@@ -217,7 +217,7 @@ outBound->redraw();inBound->redraw();}
         }
         Fl_Dial max {
           callback {write_function(controller,MAXV,sizeof(float),0,&max->floatvalue);
-if(min->value() >= max->value()){min->value(max->value()-1); outBound->min=min->value()/127.0;}
+if(min->value() >= max->value()){min->value(max->value()-1); outBound->min=min->value()/127.0; min->floatvalue = min->value(); write_function(controller,MINV,sizeof(float),0,&min->floatvalue);}
 outBound->max = max->floatvalue/127.0;
 outBound->drawlines=true;
 outBound->redraw();inBound->redraw();}

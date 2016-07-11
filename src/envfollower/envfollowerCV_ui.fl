@@ -151,7 +151,7 @@ class EnvFollowerUI {open
           class Background
         }
         Fl_Button reverse {
-          callback {write_function(controller,REVERSE,sizeof(float),0,&reverse->floatvalue);}
+          callback {write_function(controller,CREVERSE,sizeof(float),0,&reverse->floatvalue);}
           tooltip {reverse output} xywh {439 260 30 45}
           code1 {\#include"draw_blackLEDbutton.h"}
           code2 {o->type(FL_TOGGLE_BUTTON);}
@@ -204,27 +204,27 @@ inBound->redraw();outBound->redraw();}
           class Dial
         }
         Fl_Dial min {
-          callback {write_function(controller,MINV,sizeof(float),0,&min->floatvalue);
-if(min->value() >= max->value()){max->value(min->value()+1); outBound->max=max->value()/127.0;}
-outBound->min = min->floatvalue/127.0;
+          callback {write_function(controller,CMINV,sizeof(float),0,&min->floatvalue);
+if(min->value() >= max->value()){max->value(min->value()+.01); outBound->max=max->value(); max->floatvalue=max->value(); write_function(controller,CMAXV,sizeof(float),0,&max->floatvalue);}
+outBound->min = min->floatvalue;
 outBound->drawlines=true;
 outBound->redraw();inBound->redraw();}
-          tooltip {MIDI output minimum value} xywh {330 250 38 156} maximum 126 step 1
+          tooltip {output CV minimum value} xywh {330 250 38 156} maximum .99 step .01
           code1 {\#include"draw_ivorySlider.h"}
           code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-          code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
+          code3 {o->labelcolor(FL_DARK3);o->labelsize(12);}
           class Dial
         }
         Fl_Dial max {
-          callback {write_function(controller,MAXV,sizeof(float),0,&max->floatvalue);
-if(min->value() >= max->value()){min->value(max->value()-1); outBound->min=min->value()/127.0;}
-outBound->max = max->floatvalue/127.0;
+          callback {write_function(controller,CMAXV,sizeof(float),0,&max->floatvalue);
+if(min->value() >= max->value()){min->value(max->value()-.01); outBound->min=min->value(); min->floatvalue=min->value(); write_function(controller,CMINV,sizeof(float),0,&min->floatvalue);}
+outBound->max = max->floatvalue;
 outBound->drawlines=true;
 outBound->redraw();inBound->redraw();}
-          tooltip {MIDI output maximum value} xywh {370 250 38 156} minimum 1 maximum 127 step 1 value 127
+          tooltip {output CV maximum value} xywh {370 250 38 156} minimum 0.01 maximum 1.0 step 0.01 value 1.0
           code1 {\#include"draw_ivorySlider.h"}
           code2 {o->drawing_h = cairo_code_draw_ivorySlider_get_height(); o->drawing_w = cairo_code_draw_ivorySlider_get_width(); o->drawing_f = &cairo_code_draw_ivorySlider_render;}
-          code3 {o->lock2int = true;o->labelcolor(FL_DARK3);o->labelsize(12);}
+          code3 {o->labelcolor(FL_DARK3);o->labelsize(12);}
           class Dial
         }
 #        Fl_Dial channel {

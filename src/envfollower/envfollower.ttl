@@ -37,7 +37,7 @@ lv2:symbol "Control_Signal" .
         doap:description "Fully featured envelope follower";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
-                foaf:homepage <http://infamousplugins.sourceforge.net> ;
+                foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
                 foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
         lv2:minorVersion 0 ;
@@ -229,7 +229,7 @@ lv2:symbol "Control_Signal" .
         doap:description "Fully featured envelope follower with Control Voltage output";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
-                foaf:homepage <http://infamousplugins.sourceforge.net> ;
+                foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
                 foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
         lv2:minorVersion 0 ;
