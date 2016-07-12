@@ -330,6 +330,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     STUCK* plug = malloc(sizeof(STUCK));
 
     uint16_t tmp;
+    uint8_t i;
     plug->sample_freq = sample_freq;
     tmp = 0x8000;//15 bits
     if(sample_freq<100000)//88.1 or 96.1kHz
@@ -349,6 +350,9 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->gain = 0;
     plug->score = 1;
     plug->env = 0;
+
+    //half rasied cosine
+	for (i = 0; i < plug->xfade_size; i++) plug->xfunc[i] = 0.5 * (1 - cos((M_PI * i / plug->xfade_size)));
 
     rms_init(&plug->rms_calc,tmp>>3);
 

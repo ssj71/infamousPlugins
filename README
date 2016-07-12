@@ -43,10 +43,6 @@ If you do not like GUIs or cannot fulfill the ntk dependencies, there is an opti
     sudo cmake -DCOMPONENT=no-GUI -P cmake_install.cmake
 
 
-A NOTE ABOUT CV PORTS!:
-I have commented out all the cv ports (envfollower, stuck, and the powercut/up plugins) because almost no lv2 hosts are implementing that at this time. At one time I made them audio ports so they were still accessible, but then they were frequently interpreted as second port of a stereo pair.
-If you want to re-enable the ports, in envfollower.c and stuck.c uncomment the line "//#define CV_PORTS" (remove the "//") and in the respective .ttl files, uncomment the blocks at the bottom. If you wish to use the CV ports as audio ports (required for any host but ingen at the time of writing), open the *.ttl file for that plugin and find the line with "lv2:AudioPort ; #CvPort ;" and remove "AudioPort ; #" which will cause the port to be declared as Cv rather than audio.
-
 A NOTE TO PACKAGERS:
 Each plugin can be built and installed individually by navigating to the directory src/$pluginName. If you are using guis you can do an out of source build by performing:
     mkdir build
@@ -106,8 +102,8 @@ The least significant digit corresponds to the first harmonic
 ==========================================
 2. Envelope Follower
 
-This is a fully featured envelope follower plugin. It can be used for pumping the gain with the bass or all sorts of other things that I don't really know about. I prefer doing things like having an envelope controlled distortion or flange with it. Someone just wanted it so I made it. It sends a midi control value according to the amplitude of the input audio.
-Because CV ports are not supported in hosts the parameters effecting CVs are not on the GUI. If you enable the port when you build you will need to use the host generated GUI to adjust them.
+This is a fully featured envelope follower plugin. It can be used for pumping the gain with the bass or all sorts of other things that I don't really know about. I prefer doing things like having an envelope controlled distortion or flange with it. Someone just wanted it so I made it. It sends a midi control value according to the amplitude of the input audio. I have also added a separate version that outputs an LV2 CV.
+
 
 Parameter Description: 
     PEAKRMS - blend of peak and/or rms value for amplitude
