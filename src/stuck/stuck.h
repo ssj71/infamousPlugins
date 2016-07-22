@@ -11,6 +11,7 @@ enum stuck_ports
     DRONEGAIN,
     RELEASE,
     TRIGGER,
+	OUT2,
     DBG
 };
 

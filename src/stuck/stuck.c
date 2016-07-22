@@ -52,6 +52,7 @@ typedef struct _STUCK
     float *drone_gain_p;
     float *release_p;
     float *dbg_p;
+    float *output2_p;
 
     float *xf_func;
 } STUCK;
@@ -67,8 +68,13 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
     //for(i=0;i<nframes;i++) plug->output_p[i] = 0;
 #else
-    for(i=0;i<nframes;i++) plug->output_p[i] = 0;
+    for(i=0;i<nframes;i++)
+    {
+    	plug->output_p[i] = 0;
+    	plug->output2_p[i] = 0;
+    }
 #endif
+    *plug->dbg_p = plug->wavesize;
 
     interp = nframes>64?nframes:64;
 
@@ -208,6 +214,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 //}
             }
         }
+#if(0)
         else if(plug->state == LOADING_XFADE)//xfade end of buffer with start (loop it) over an entire wave and fade in drone
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
@@ -280,9 +287,16 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->indx2 = 0;
             }
         }
+#endif
 #ifdef TEST
         else if(plug->state == DEBUGGING)//just loop buffer and track gain changes
         {
+        	if(plug->indx2<plug->wavesize)
+				for(j=0; j<chunk; j++)
+					plug->output_p[i++] = plug->buf[plug->indx2++];
+        	else if(plug->indx2 < 2*plug->wavesize && plug->indx2 < plug->bufsize)
+				for(j=0; j<chunk; j++)
+					plug->output_p[i++] = plug->buf[plug->indx2++];
 
         }
 #endif
@@ -413,6 +427,9 @@ void connect_stuck_ports(LV2_Handle handle, uint32_t port, void *data)
         break;
     case DBG:
         plug->dbg_p = (float*)data;
+        break;
+    case OUT2:
+        plug->output2_p = (float*)data;
         break;
     default:
         puts("UNKNOWN PORT YO!!");
