@@ -19,7 +19,7 @@
         ] ;
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
-        rdfs:comment "This is a tape stop with up to 10 seconds of decay time. Curvature can be added for full customization of the effect."
+        rdfs:comment "This is a tape stop with up to 10 seconds of decay time. Curvature can be added for full customization of the effect." ;
         lv2:optionalFeature lv2:hardRTCapable ;
         ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#powercut_ui> ;
 
