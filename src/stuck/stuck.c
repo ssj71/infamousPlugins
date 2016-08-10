@@ -9,7 +9,11 @@
 #include"stuck.h"
 
 //#define CV_PORTS
-#define TEST
+//#define TEST
+//#define NO_COMP
+#define LINEAR_FADE
+//#define NO_FADE
+//#define LAYER
 
 enum states
 {
@@ -64,18 +68,17 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     double slope = 0;
     double interp;
 
-#ifndef TEST
-    memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
-    //for(i=0;i<nframes;i++) plug->output_p[i] = 0;
-#else
+#ifdef TEST
+    *plug->dbg_p = plug->wavesize;
     if(plug->input_p != plug->output_p)
 		for(i=0;i<nframes;i++)
 			plug->output_p[i] = 0;
     if(plug->input_p != plug->output2_p)
 		for(i=0;i<nframes;i++)
 			plug->output2_p[i] = 0;
+#else
+    memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
 #endif
-    *plug->dbg_p = plug->wavesize;
 
     interp = nframes>64?nframes:64;
 
@@ -179,8 +182,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             //load buffer with compressed signal
             for(j=0; j<chunk; j++)
             {
-                //plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
+#ifdef NO_COMP
                 plug->buf[plug->indx++] = plug->input_p[i];//no compression
+#else
+                plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
+#endif
 #ifdef TEST
 				plug->output_p[i] = plug->output2_p[i] = 0;
 #endif
@@ -192,8 +198,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             if(plug->indx2+chunk >= plug->wave_max)
             {
                 chunk = plug->wave_max - plug->indx2;
-                //plug->state = LOADING_XFADE;
+                plug->state = LOADING_XFADE;
+#ifdef NO_FADE
                 plug->state = PLAYING;
+#endif
 #ifdef TEST
                 plug->state = DEBUGGING;
 #endif
@@ -202,8 +210,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             float tmp,score;
             for(j=0; j<chunk; j++)
             {
-                //plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
+#ifdef NO_COMP
                 plug->buf[plug->indx++] = plug->input_p[i];//no compression
+#else
+                plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
+#endif
 #ifdef TEST
 				plug->output_p[i] = plug->output2_p[i] = 0;
 #endif
@@ -228,16 +239,18 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             if(plug->indx2>=plug->wave_max)
             {
                 plug->indx2 = 0;//reset indx2
-                //xfade in beginning of sample
-                //for(k=0; k<plug->xfade_size; k++)
-                //{
-                //    plug->buf[k] *= plug->xf_func[k]; //k/plug->xfade_size;
-                //    //try fading out end
-                //    plug->buf[k] += (1-plug->xf_func[k])*plug->buf[plug->wavesize+k];
-                //}
+#ifndef NO_FADE
+                //xfade in beginning of sample, these will be halved in the next state
+                for(k=0; k<plug->xfade_size; k++)
+#ifdef LINEAR_FADE
+                    plug->buf[k] *= k/plug->xfade_size;
+#else
+                    plug->buf[k] *= plug->xf_func[k];
+#endif
+#endif
             }
         }
-#if(0)
+#ifndef TEST
         else if(plug->state == LOADING_XFADE)//xfade end of buffer with start (loop it) over an entire wave and fade in drone
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
@@ -256,28 +269,43 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             //load buffer with xfade
             for(j=0; j<chunk; j++)
             {
+                //still loading end of buffer
+#ifdef NO_COMP
+                plug->buf[plug->indx++] = plug->input_p[i];//no compression
+#else
+                plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
+#endif
+
+#ifdef LAYER
             	//layer 2 full cycles on top of each other
                 plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
-                //still loading end of buffer
-                //plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
-                plug->buf[plug->indx++] = plug->input_p[i];//no compression
-#ifndef TEST
-                plug->gain = 1;
-                slope = 0;
 #endif
+
+                //but now also playing back start of buffer
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
+
             }
-            //xfade out end
-            if(plug->indx2>=plug->wavesize)
+            //xfade out end if we're there else we'll do it in the next state
+            if(plug->indx2>=plug->wavesize)//TODO: SHOULD THIS BE 2x?
             {
-                //for(k=0; k<plug->xfade_size; k++)
-                //    //plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k];
-                //    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k];
-                plug->indx2 = 0;
-#ifndef TEST
-                plug->output_p[i] += 2;
+#ifndef NO_FADE
+                for(k=0; k<plug->xfade_size; k++)
+#ifdef LAYER
+#ifdef LINEAR_FADE
+                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k];
+#else // constant power
+                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k];
 #endif
+#else //no layer, use next cycle rather than the 3rd
+#ifdef LINEAR_FADE
+                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k+plug->wavesize];
+#else // constant power
+                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k+plug->wavesize];
+#endif//linear_fade
+#endif//layer
+#endif//no_fade
+                plug->indx2 = 0;
             }
         }
         else if(plug->state == XFADE_ONLY)//xfade after buffer is full, in practice we never get here, but we might change our smoothing strategy again
@@ -292,11 +320,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             //xfade buffer
             for(j=0; j<chunk; j++)
             {
+#ifdef LAYER
             	//continue layering the 2 cycles
                 plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
-#ifndef TEST
-                plug->gain = 1;
-                slope = 0;
 #endif
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
@@ -304,9 +330,22 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             //xfade out end
             if(plug->indx2>=plug->wavesize)
             {
-                //for(k=0; k<plug->xfade_size; k++)
-                //    //plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2];
-                //    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k];
+#ifndef NO_FADE
+                for(k=0; k<plug->xfade_size; k++)
+#ifdef LAYER
+#ifdef LINEAR_FADE
+                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k];
+#else // constant power
+                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k];
+#endif
+#else //no layer, use next cycle rather than the 3rd
+#ifdef LINEAR_FADE
+                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k+plug->wavesize];
+#else // constant power
+                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k+plug->wavesize];
+#endif//linear_fade
+#endif//layer
+#endif//no_fade
                 plug->indx2 = 0;
             }
         }
@@ -346,7 +385,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == PLAYING)//just loop buffer and track gain changes
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
-            *plug->dbg_p = plug->wavesize;
             for(j=0; j<chunk; j++)
             {
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
@@ -424,7 +462,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
         tmp = tmp>>1;//13 bits //8192
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
-    plug->acorr_size = tmp>>3;//1024
+    plug->acorr_size = tmp>>3;//1024 if you mess with this, keep in mind it may need change in the default score value
     plug->xfade_size = tmp>>7;//64
     plug->wave_max = (tmp - plug->xfade_size)>>1;//4064
     plug->wave_min = tmp>>6;//128
