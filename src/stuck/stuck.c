@@ -10,10 +10,18 @@
 
 //#define CV_PORTS
 //#define TEST
-//#define NO_COMP
+#define NO_COMP
 #define LINEAR_FADE
-//#define NO_FADE
-//#define LAYER
+#define NO_FADE
+#define LAYER
+//#define SHOW_BUF
+#define AUTOCORR
+
+#ifdef AUTOCORR
+#define START_SCORE 0
+#else //least squared error
+#define START_SCORE 200
+#endif
 
 enum states
 {
@@ -39,12 +47,12 @@ typedef struct _STUCK
     uint16_t wave_min;//int16_test allowed wavesize
     uint16_t wave_max;//int32_test allowed wavesize
     uint8_t state;
+    uint8_t dbg;//used for whatever, delete it
     double sample_freq;
 
     float *buf;
     float gain;
     float env;//envelope gain to normalize compression to
-    float thresh;
     float score;
 
     RMS_CALC rms_calc;
@@ -116,7 +124,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             plug->state = INACTIVE;
             plug->gain = 0;
             plug->wavesize = plug->wave_max;
-            plug->score = 200;
+            plug->score = START_SCORE;
             rms_block_fill(&plug->rms_calc, plug->input_p,nframes);
             return;
         }
@@ -160,7 +168,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             plug->state = INACTIVE;
             plug->gain = 0;
             plug->wavesize = plug->wave_max;
-            plug->score = 200;
+            plug->score = START_SCORE;
             rms_block_fill(&plug->rms_calc, plug->input_p,nframes);
             return;
         }
@@ -224,13 +232,22 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 t=0;
                 for(k=plug->indx2; k<plug->indx2+plug->acorr_size && score<=plug->score; k++)
                 {
+#ifdef AUTOCORR
+                    score += plug->buf[k]*plug->buf[t++];
+#else
                     tmp = plug->buf[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
                     score += tmp*tmp;
+#endif
                 }
                 plug->indx2++;
 
+#ifdef AUTOCORR
+                //save place if score is higher than last highest
+                if(score>=plug->score)
+#else
                 //save place if score is lower than last minimum
                 if(score<=plug->score)
+#endif
                 {
                     plug->wavesize = plug->indx2 -1;//subtract 1 because we incremented already
                     plug->score = score;
@@ -257,12 +274,14 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             //decide if xfade ends in this period
             if(plug->indx2+chunk >= plug->wavesize)
             {
+            	//this means it has already played through the loop once and finished the xfade (layering really)
                 chunk = plug->wavesize - plug->indx2;
                 plug->state = PLAYING;
             }
             //decide if going to overflow
             if(plug->indx+chunk >= plug->bufsize)
             {
+            	//this means we've already filled the buffer, but haven't finished the xfade
                 chunk = plug->bufsize - plug->indx;
                 plug->state = XFADE_ONLY;
             }
@@ -287,21 +306,21 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 
             }
             //xfade out end if we're there else we'll do it in the next state
-            if(plug->indx2>=plug->wavesize)//TODO: SHOULD THIS BE 2x?
+            if(plug->indx2>=plug->wavesize)//TODO: this must actually be ==
             {
 #ifndef NO_FADE
                 for(k=0; k<plug->xfade_size; k++)
 #ifdef LAYER
 #ifdef LINEAR_FADE
-                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k];
+                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+plug->wavesize+k];
 #else // constant power
-                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k];
+                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+plug->wavesize+k];
 #endif
 #else //no layer, use next cycle rather than the 3rd
 #ifdef LINEAR_FADE
-                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k+plug->wavesize];
+                    plug->buf[k] += (1-k/plug->xfade_size)*plug->buf[plug->indx2+k];
 #else // constant power
-                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k+plug->wavesize];
+                    plug->buf[k] += (1-plug->xf_func[k])*plug->buf[plug->indx2+k];
 #endif//linear_fade
 #endif//layer
 #endif//no_fade
@@ -328,21 +347,21 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->gain += slope;
             }
             //xfade out end
-            if(plug->indx2>=plug->wavesize)
+            if(plug->indx2>=plug->wavesize)//TODO: this must acutally be ==
             {
 #ifndef NO_FADE
                 for(k=0; k<plug->xfade_size; k++)
 #ifdef LAYER
 #ifdef LINEAR_FADE
-                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k];
+                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+plug->wavesize+k];
 #else // constant power
-                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k];
+                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+plug->wavesize+k];
 #endif
 #else //no layer, use next cycle rather than the 3rd
 #ifdef LINEAR_FADE
-                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+k+plug->wavesize];
+                    plug->buf[k] += (1-k/plug->xfade_size)*plug->buf[plug->indx2+k];
 #else // constant power
-                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+k+plug->wavesize];
+                    plug->buf[k] += (1-plug->xf_func[k])*plug->buf[plug->indx2+k];
 #endif//linear_fade
 #endif//layer
 #endif//no_fade
@@ -385,12 +404,37 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == PLAYING)//just loop buffer and track gain changes
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
+#ifdef SHOW_BUF
+            for(j=0; j<chunk; j++)
+            {
+            if(plug->dbg&1)//TODO: remove this line
+                plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
+            else //rm
+            {
+            plug->output_p[i++] = 0;//rm
+            plug->indx2++;//rm
+            }
+                plug->gain += slope;
+                //plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0;
+                if(plug->dbg&2 && plug->indx2>=plug->wavesize)//rm and uncomment above
+                {
+                	plug->indx2 = 0;
+                	plug->dbg++;
+                }
+                else if(plug->indx2>=plug->bufsize)
+                {
+                	plug->indx2 = 0;
+                	plug->dbg++;
+                }
+            }
+#else
             for(j=0; j<chunk; j++)
             {
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0;
             }
+#endif
         }
         else if(plug->state == RELEASING)
         {
@@ -414,7 +458,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->state = INACTIVE;
                 plug->gain = 0;
                 plug->wavesize = plug->wave_max;
-                plug->score = 200;
+                plug->score = START_SCORE;
                 return;
             }
         }
@@ -440,7 +484,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->indx2 = plug->wave_min;
                 plug->state = LOADING;
                 plug->wavesize = plug->wave_max;
-                plug->score = 200;
+                plug->score = START_SCORE;
                 plug->env = plug->rms_calc.rms;
             }
         }
@@ -463,7 +507,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->bufsize = tmp;
     plug->acorr_size = tmp>>3;//1024 if you mess with this, keep in mind it may need change in the default score value
-    plug->xfade_size = tmp>>7;//64
+    plug->xfade_size = tmp>>6;//128
     plug->wave_max = (tmp - plug->xfade_size)>>1;//4064
     plug->wave_min = tmp>>6;//128
     plug->wavesize = plug->wave_max;
@@ -471,8 +515,9 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->indx2 = plug->wave_min;
     plug->state = INACTIVE;
     plug->gain = 0;
-    plug->score = 200;
+    plug->score = START_SCORE;
     plug->env = 0;
+    plug->dbg = 0;
 
     //half rasied cosine for equal power xfade
     plug->xf_func = (float*)malloc(plug->xfade_size*sizeof(float));
