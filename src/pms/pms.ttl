@@ -9,7 +9,7 @@
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#pms>
         a lv2:Plugin, lv2:PitchPlugin ;
-        doap:name "the infamous cheap octave" ;
+        doap:name "the infamous playback modulation shifter" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
         doap:description "a playback rate modulating shifter";
         doap:maintainer [

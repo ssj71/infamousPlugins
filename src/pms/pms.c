@@ -1,4 +1,4 @@
-//Spencer Jackson
+    //Spencer Jackson
 //pms.c
 #include<lv2.h>
 #include<stdlib.h>
@@ -17,6 +17,9 @@ typedef struct _PMS
     float *buf;
     float r; //read point in buffer
     uint16_t prog; //number of samples passed in the period
+    float sample_freq;
+    float period;
+    int8_t sign;
 
     float *input_p;
     float *output_p;
@@ -31,8 +34,9 @@ void run_pms(LV2_Handle handle, uint32_t nframes)
 {
     PMS* plug = (PMS*)handle;
     float* in, *out, *buf;
-    uint16_t i,j, chunk;
-    uint16_t w,t1,t2,rint,tmp;
+    uint16_t i, chunk;
+    uint32_t j, rint;
+    uint16_t w,t1,t2;
     float r, step, smooth, stub;
 
     *plug->dbg_p = 0;
@@ -44,52 +48,77 @@ void run_pms(LV2_Handle handle, uint32_t nframes)
     w = plug->w;
 
     step = powf(2.0,*plug->shift_p/12.0);
-    t1 = .01**plug->duty_p * plug->sample_freq/(1000.0**plug->period_p);// samples of low rate
-    t2 = (1 -.01**plug->duty_p) * plug->sample_freq/(1000.0**plug->period_p);// samples of high rate
+    t1 = .01**plug->duty_p * 0.001**plug->period_p * plug->sample_freq;// samples of low rate
+    t2 = (1 -.01**plug->duty_p) * 0.001**plug->period_p * plug->sample_freq;// samples of high rate
 
+    plug->period += plug->sign*rand()/(float)RAND_MAX; 
+    if(plug->period >= 20)
+        plug->sign = -5;
+    else if(plug->period < 5)
+        plug->sign = 5;
     for(i=0; i<nframes; )
     {
+        //t1 = .01**plug->duty_p * 0.001*plug->period * plug->sample_freq;// samples of low rate
+        //t2 = (1 -.01**plug->duty_p) * 0.001*plug->period * plug->sample_freq;// samples of high rate
         if(plug->prog < t1)
         {
             //slow mo
-        	chunk = t1 - plug->prog;
-        	if(chunk > nframes - i)
-        		chunk = nframes - i;
-        	for( ; --chunk; i++ )
-        	{
-				buf[w++] = in[i];
-				rint = (uint16_t)r;
-				out[i] = buf[rint];// TODO: add interpolation
-				r += step; 
+            chunk = t1 - plug->prog;
+            if(chunk > nframes - i)
+                chunk = nframes - i;
+            for(chunk += i ; i!=chunk; i++ )
+            {
+                buf[w++] = in[i];
+                rint = (uint16_t)r;
+                out[i] = buf[rint];// TODO: add interpolation
+                r += step; 
+                r = fmod(r,0xffff);
+                //if(r > 0xffff)
+                //    r -= 0xffff;
                 plug->prog++;
             }
         }
         else
         {
             //fast play
-        	chunk = t2 + t1 - plug->prog;
-            smooth = (w - r)/chunk;
-        	if(chunk > nframes - i)
-        		chunk = nframes - i;
+            chunk = t2 + t1 - plug->prog;
+            smooth = (w + chunk - r)/(float)chunk;
+            if(r>w)
+                smooth = (w + chunk - r + 0xffff)/(float)chunk;
+            if(chunk > nframes - i)
+                chunk = nframes - i;
             if(smooth < 1)
                 chunk = 0; //I don't know if we should ever get here
-        	for( ; --chunk; i++ )
-        	{
-				buf[w++] = in[i];
-				rint = (uint16_t)r;
+            for(chunk += i ; i!=chunk; i++ )
+            {
+                buf[w++] = in[i];
+                rint = r;
                 stub = 1.- (r - rint); //how much of this sample is left
-				out[i] = stub*buf[rint]; // subsample
-                for(j=rint+1; j<r+smooth; j++) //full samples in between
-                    out[i] += buf[j];
-                rint = (uint16_t)(r+smooth)
+                rint &= 0xffff;
+                out[i] = stub*buf[rint]; // subsample
+                for(j=rint+1; j<=r+smooth-stub; j++) //full samples in between
+                    out[i] += buf[j&0xffff];
+                rint = r+smooth;
                 stub = r + smooth - rint; //how much of this sample is used here (rest will be in the next smoothing
-				out[i] += stub*buf[rint]; // subsample
-				out[i] /= smooth;
-				r += smooth; 
+                rint &= 0xffff;
+                out[i] += stub*buf[rint]; // subsample
+                out[i] /= smooth;
+                r += smooth; 
+                r = fmod(r,0xffff);
+                //if(r > 0xffff)
+                //    r -= 0xffff;
                 plug->prog++;
             }
             if(plug->prog >= t1 + t2)
+            {
                 plug->prog = 0;
+                r = w;
+                plug->period += plug->sign*rand()/RAND_MAX; 
+                if(plug->period >= 20)
+                    plug->sign = -5;
+                else if(plug->period < 5)
+                    plug->sign = 5;
+            }
         }
     } 
 
@@ -101,6 +130,8 @@ void run_pms(LV2_Handle handle, uint32_t nframes)
 
 LV2_Handle init_pms(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
 {
+    uint16_t i;
+
     PMS* plug = malloc(sizeof(PMS));
 
     //this makes the max period a function of samplerate, but you're dumb if you are using anything but 44100 or 48k
@@ -108,6 +139,8 @@ LV2_Handle init_pms(const LV2_Descriptor *descriptor,double sample_freq, const c
     plug->r = 0;
     plug->w = 0;
     plug->prog = 0;
+    plug->sign = 5;
+    plug->period = 5;
 
     plug->sample_freq = sample_freq;
 
