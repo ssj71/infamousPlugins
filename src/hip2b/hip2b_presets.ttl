@@ -1,0 +1,114 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:00crackle>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b> ;
+	lv2:port [
+		lv2:symbol "DOWN" ;
+		pset:value 0.002
+	] , [
+		lv2:symbol "IN_GAIN" ;
+		pset:value 1.17089927
+	] , [
+		lv2:symbol "OCTAVE" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "OUT_GAIN" ;
+		pset:value 1.25059986
+	] , [
+		lv2:symbol "UP" ;
+		pset:value 0.0023
+	] , [
+		lv2:symbol "WETDRY" ;
+		pset:value 0.23030002
+	] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:01sputter>
+	lv2:port [
+		lv2:symbol "DOWN" ;
+		pset:value 0.04599999
+	] , [
+		lv2:symbol "IN_GAIN" ;
+		pset:value 1.00239992
+	] , [
+		lv2:symbol "OCTAVE" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "OUT_GAIN" ;
+		pset:value 0.63380009
+	] , [
+		lv2:symbol "UP" ;
+		pset:value 0.04570001
+	] , [
+		lv2:symbol "WETDRY" ;
+		pset:value 0.84280002
+	] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:02glitchy_octave>
+	lv2:port [
+		lv2:symbol "DOWN" ;
+		pset:value 0.02539999
+	] , [
+		lv2:symbol "IN_GAIN" ;
+		pset:value 1.08200037
+	] , [
+		lv2:symbol "OCTAVE" ;
+		pset:value -1.0
+	] , [
+		lv2:symbol "OUT_GAIN" ;
+		pset:value 1.25059986
+	] , [
+		lv2:symbol "UP" ;
+		pset:value 0.01540001
+	] , [
+		lv2:symbol "WETDRY" ;
+		pset:value 0.23030002
+	] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:03always_on>
+	lv2:port [
+		lv2:symbol "DOWN" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "IN_GAIN" ;
+		pset:value 1.97960007
+	] , [
+		lv2:symbol "OCTAVE" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "OUT_GAIN" ;
+		pset:value 0.42120031
+	] , [
+		lv2:symbol "UP" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "WETDRY" ;
+		pset:value 0.72090012
+	] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:04nes_bass>
+	lv2:port [
+		lv2:symbol "DOWN" ;
+		pset:value -0.00440001
+	] , [
+		lv2:symbol "IN_GAIN" ;
+		pset:value 2.0
+	] , [
+		lv2:symbol "OCTAVE" ;
+		pset:value -2.0
+	] , [
+		lv2:symbol "OUT_GAIN" ;
+		pset:value 0.32809997
+	] , [
+		lv2:symbol "UP" ;
+		pset:value 0.01540001
+	] , [
+		lv2:symbol "WETDRY" ;
+		pset:value 1.0
+	] .

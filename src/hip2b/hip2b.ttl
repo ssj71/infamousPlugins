@@ -2,6 +2,7 @@
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
 
@@ -94,3 +95,33 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 2.0 ;
         ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:00crackle>
+        a pset:Preset ;
+	rdfs:label "00 Crackle" ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b> ;
+        rdfs:seeAlso <hip2b_presets.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:01sputter>
+        a pset:Preset ;
+	rdfs:label "01 Sputter" ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b> ;
+        rdfs:seeAlso <hip2b_presets.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:02glitchy_octave>
+        a pset:Preset ;
+	rdfs:label "02 Glitchy Octave" ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b> ;
+        rdfs:seeAlso <hip2b_presets.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:03always_on>
+        a pset:Preset ;
+	rdfs:label "03 Always On (and LOUD)" ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b> ;
+        rdfs:seeAlso <hip2b_presets.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#hip2b:preset:04nes_bass>
+        a pset:Preset ;
+	rdfs:label "04 NES_BASS" ;
+        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b> ;
+        rdfs:seeAlso <hip2b_presets.ttl> .
