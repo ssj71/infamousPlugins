@@ -362,7 +362,7 @@ void filternate(float* num, uint8_t numsize, float*den, uint8_t densize, uint16_
 //in - array index for input in buf note this assumes buffer is a 2^16 array
 //out - array index for output in buf
 //buf - array containing input and output samples
-void delaynate(float* taps, uint16_t* dels, uint8_t ntaps, uint16_t in uint16_t out, float* buf)
+void delaynate(float* taps, uint16_t* dels, uint8_t ntaps, uint16_t in, uint16_t out, float* buf)
 {
     uint16_t i;
     buf[out] = 0;
@@ -371,6 +371,48 @@ void delaynate(float* taps, uint16_t* dels, uint8_t ntaps, uint16_t in uint16_t 
         buf[out] += (float)taps[i]*buf[in-dels[i]];
     }
 }
+
+//using symmetry and sparseness of allpass filter banks this is just a more compact function to apply filters
+//taps - gains for the numerator
+//dels - delay lengths (samples) for taps
+//ntaps - number of taps including 0th
+//in - array index for input in buf note this assumes buffer is a 2^16 array
+//out - array index for output in buf
+//buf - array containing input and output samples
+void apbfilternate(float* taps, uint16_t* dels, uint8_t ntaps, uint16_t in, uint16_t out, float* buf)
+{
+    uint16_t i;
+    buf[out] = 0;
+    for(i=0; i<ntaps; i++)
+    {
+        buf[out] += taps[i]*buf[in-dels[i]] + taps[ntaps-i]*buf[out-dels[ntaps-i]];
+    }
+}
+
+
+//cascade a Schroeder Allpass Filter onto the previous sparse filter
+//gain -
+//del - delay length (samples)
+//numtaps - numerator in/output array (must be numntaps+1)
+//numdels - numerator in/output array (must be numntaps+1)
+//numntaps - number of populated taps in the array
+//dentaps - denominator in/output array (must be del+1)
+//dendels - denominator in/output array (must be del+1)
+//denntaps - number of populated taps in the array
+void schroder(float gain, uint16_t del, float* taps, float* dels, uint8_t *ntaps)
+{
+	uint16_t i;
+	num[0] = -g;
+	/* I'll do it later, just using a matlab script now
+	if(*ntaps)
+	for(i=1,i<del,i++)
+	{
+		num[i] = 0;
+	}
+	*/
+
+}
+
 
 //cheby
 
@@ -470,6 +512,26 @@ void butter(uint8_t order, float cutoff, FILTERTYPE type, float Ts, float* buf, 
     }
 }
 
+//sparse tf's always have dels and taps sorted by delay
+void printsparsetf(float *numtaps, uint16_t *numdels, uint8_t numntaps, float* dentaps, uint16_t *dendels, uint8_t denntaps)
+{
+    uint16_t i,j=0;
+    uint16_t nnum = numdels[numntaps];
+    uint16_t nden = dendels[denntaps];
+    for(i=0; i<nnum-1; i++)
+    	if(i==numdels[j])
+			printf(" %f z^%i  +",numtaps[j++],nnum-i-1);
+    printf(" %f\n",numtaps[j]);
+    for(i=0; i<numntaps; i++)
+        printf("-----------");
+    printf("-----------\n");
+    j = 0;
+    for(i=0; i<nden-1; i++)
+    	if(i==numdels[j])
+			printf(" %f z^%i  +",dentaps[j++],nden-i-1);
+    printf(" %f\n",dentaps[j]);
+
+}
 
 void printtf(float *num, uint8_t nnum, float* den, uint8_t nden)
 {
