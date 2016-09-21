@@ -41,25 +41,25 @@ typedef struct _STUCK
 } STUCK;
 
 //cascaded bank of schroeder all pass filters ripped out of freeverb
-inline void filternate(uint16_t in, uint16_t out, float* buf)
+void filternate(uint16_t in, uint16_t out, float* buf)
 {
     buf[out] = 0;
 
-	buf[out] += .0625*(buf[in] + buf[out-1563]);
-	buf[out] += -.125*(buf[in-225] + buf[out-1338]);
-	buf[out] += -.125*(buf[in-341] + buf[out-1222]);
-	buf[out] += -.125*(buf[in-556] + buf[out-1122]);
-	buf[out] += -.125*(buf[in-566] + buf[out-1007]);
-	buf[out] +=  .25*(buf[in-666] + buf[out-997]);
-	buf[out] +=  .25*(buf[in-781] + buf[out-897]);
-	buf[out] +=  .25*(buf[in-782] + buf[out-782]);
-	buf[out] +=  .25*(buf[in-897] + buf[out-781]);
-	buf[out] += -.5*(buf[in-997] + buf[out-666]);
-	buf[out] += -.5*(buf[in-1007] + buf[out-566]);
-	buf[out] += -.5*(buf[in-1122] + buf[out-556]);
-	buf[out] += -.5*(buf[in-1222] + buf[out-341]);
-	buf[out] += -.5*(buf[in-1338] + buf[out-225]);
-	buf[out] += buf[in-1563];
+	buf[out] += .0625*(buf[in] + buf[(uint16_t)(out-1563)]);
+	buf[out] += -.125*(buf[(uint16_t)(in-225)] + buf[(uint16_t)(out-1338)]);
+	buf[out] += -.125*(buf[(uint16_t)(in-341)] + buf[(uint16_t)(out-1222)]);
+	buf[out] += -.125*(buf[(uint16_t)(in-556)] + buf[(uint16_t)(out-1122)]);
+	buf[out] += -.125*(buf[(uint16_t)(in-566)] + buf[(uint16_t)(out-1007)]);
+	buf[out] +=  .25*(buf[(uint16_t)(in-666)] + buf[(uint16_t)(out-997)]);
+	buf[out] +=  .25*(buf[(uint16_t)(in-781)] + buf[(uint16_t)(out-897)]);
+	buf[out] +=  .25*(buf[(uint16_t)(in-782)] + buf[(uint16_t)(out-782)]);
+	buf[out] +=  .25*(buf[(uint16_t)(in-897)] + buf[(uint16_t)(out-781)]);
+	buf[out] += -.5*(buf[(uint16_t)(in-997)] + buf[(uint16_t)(out-666)]);
+	buf[out] += -.5*(buf[(uint16_t)(in-1007)] + buf[(uint16_t)(out-566)]);
+	buf[out] += -.5*(buf[(uint16_t)(in-1122)] + buf[(uint16_t)(out-556)]);
+	buf[out] += -.5*(buf[(uint16_t)(in-1222)] + buf[(uint16_t)(out-341)]);
+	buf[out] += -.5*(buf[(uint16_t)(in-1338)] + buf[(uint16_t)(out-225)]);
+	buf[out] += buf[(uint16_t)(in-1563)];
 }
 
 void run_stuck(LV2_Handle handle, uint32_t nframes)
@@ -82,6 +82,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             plug->state = LOADING;
             //any on-trigger events here
         }
+        else
+        	return;
     }
     else if(plug->state < PLAYING)
     {
@@ -117,9 +119,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
             //decide if reaching minimum length in this period
-            if(plug->w+chunk >= plug->time)
+            if(chunk >= plug->time)
             {
-                chunk = plug->time - plug->w;
+                chunk = plug->time;
                 plug->state = PLAYING;
             }
             for(j=0; j<chunk; j++)
@@ -128,6 +130,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             	filternate(plug->w++, plug->r, plug->buf);
             	plug->output_p[i++] += plug->gain*plug->r++;
                 plug->gain += slope;
+                plug->time--;
             }
         }
         else if(plug->state == PLAYING)//just run the filter and track gain changes
@@ -160,6 +163,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             	//done, now get ready for next trigger
                 plug->state = INACTIVE;
                 plug->gain = 0;
+				plug->time = .1*plug->sample_freq;
 				for(j=0;j<(uint16_t)(plug->r-plug->w);j++)
 					plug->buf[(uint16_t)(plug->w+j)]  = 0;
                 return;
@@ -184,6 +188,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             {
             	//done, start next trigger
                 plug->state = LOADING;
+				plug->time = .1*plug->sample_freq;
                 plug->gain = 0;
 				for(j=0;j<(uint16_t)(plug->r-plug->w);j++)
 					plug->buf[(uint16_t)(plug->w+j)]  = 0;
