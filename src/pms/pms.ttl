@@ -47,7 +47,7 @@
                 lv2:index 3 ;
                 lv2:symbol "PERIOD" ;
                 lv2:name "Period" ;
-                lv2:default 1.46 ;
+                lv2:default 25.0 ;
                 lv2:minimum 0.046 ;
                 lv2:maximum 1000.0 ;
                 units:unit units:ms ;
@@ -56,7 +56,7 @@
                 lv2:index 4 ;
                 lv2:symbol "DUTY" ;
                 lv2:name "Pulse Width" ;
-                lv2:default 80.0 ;
+                lv2:default 95.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 100.0 ;
                 units:unit units:pc ;

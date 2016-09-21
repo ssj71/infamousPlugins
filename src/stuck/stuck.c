@@ -59,7 +59,7 @@ inline void filternate(uint16_t in, uint16_t out, float* buf)
 	buf[out] += -.5*(buf[in-1122] + buf[out-556]);
 	buf[out] += -.5*(buf[in-1222] + buf[out-341]);
 	buf[out] += -.5*(buf[in-1338] + buf[out-225]);
-	buf[out] += buf[in-1563] + buf[out];
+	buf[out] += buf[in-1563];
 }
 
 void run_stuck(LV2_Handle handle, uint32_t nframes)

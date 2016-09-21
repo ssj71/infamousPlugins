@@ -1,6 +1,6 @@
 Welcome to the INFAMOUS Plugins README
 
-These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use (exceptions are noted in the description). Installation is discussed first here, then the plugins below.
+These are audio plugins in the LV2 format, developed for linux. Most are suitable for live use (exceptions are noted in the description). Installation is discussed first here, then the plugins below. Some are experimental/not that useful so they are not included in the batch install but are described below in case you might find them interesting.
 
 To install, fulfill the dependencies (below), then run the commands:
     mkdir build
@@ -30,27 +30,22 @@ Dependencies:
     zita-resampler
     fftw3
 
-If you do not have ntk and ntk-fluid already installed use the commands:
+If you do not have ntk and ntk-fluid already installed use these commands to install:
     git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
     cd ntk
     ./waf configure
     ./waf
     sudo ./waf install
 
-If you do not like GUIs or cannot fulfill the ntk dependencies, there is an option to build without GUIs. Use the commands:
-    cmake
-    make no-GUI
-    sudo cmake -DCOMPONENT=no-GUI -P cmake_install.cmake
+If you do not like GUIs or cannot fulfill the ntk dependencies, cmake will detect that cairo and/or ntk aren't installed and will only install the host-generated UI versions.  
 
-
-A NOTE TO PACKAGERS:
+HOW TO INSTALL THE "EXPERIMENTAL" PLUGINS:
 Each plugin can be built and installed individually by navigating to the directory src/$pluginName. If you are using guis you can do an out of source build by performing:
     mkdir build
     cd build
     cmake ..
     make
-    sudo make install
-
+    sudo make install 
 
 
 Now lets talk about what you're installing:
@@ -182,7 +177,7 @@ I wanted a whammy style pitchshifter and found folks weren't quite satisfied wit
 =================================
 9. duffer
 
-This is a duffing oscillator driven by the input. The duffing oscillator is interesting because it exhibits chaos. The system is simulated by a standard RK4 algorithm, but with each input sample treated as a full second to get more movement from the model. If none of that makes sense just know its not the most musical thing, but you can have a bit of fun making weird noises with it. It can be thought of a bit like a speaker but instead of moving a paper cone, the coil drives a spring side to side that has 2 magnets pulling it in opposite directions all the time (creating non-linear and chaotic behavior). This plugin has a check; if the output begins to grow too large it will reset the state to zero and resume, to allow unstable settings. There is an output to indicate if this condition is being triggered. Its not a big deal when this is triggered, but know that you're more hearing that artificial nonlinearity of the reset than the dynamics of the actual system, and that's not as scientifically intriguing. One tip: when using negative spring nonlinearities keep the spring stiffness very large if you want to avoid triggering the instability reset.
+*NOT INSTALLED BY DEFAULT* This is a duffing oscillator driven by the input. The duffing oscillator is interesting because it exhibits chaos. The system is simulated by a standard RK4 algorithm, but with each input sample treated as a full second to get more movement from the model. If none of that makes sense just know its not the most musical thing, but you can have a bit of fun making weird noises with it. It can be thought of a bit like a speaker but instead of moving a paper cone, the coil drives a spring side to side that has 2 magnets pulling it in opposite directions all the time (creating non-linear and chaotic behavior). This plugin has a check; if the output begins to grow too large it will reset the state to zero and resume, to allow unstable settings. There is an output to indicate if this condition is being triggered. Its not a big deal when this is triggered, but know that you're more hearing that artificial nonlinearity of the reset than the dynamics of the actual system, and that's not as scientifically intriguing. One tip: when using negative spring nonlinearities keep the spring stiffness very large if you want to avoid triggering the instability reset.
 
     DAMPING - damps the "spring"
     SPRING NONLINEARITY - changes the nature of the "spring"
@@ -211,4 +206,13 @@ This is a simulated double tracking plugin capable of everything from a thin bea
       DELAY LFO AMT - millisecond range the channel's lay is modulated
       DELAY LFO FREQ - frequency of the delay modulation for the channel
 
+=================================
+11. playback modulation shifter
+
+*NOT INSTALLED BY DEAULT* An experimental plugin that plays back the audio at a reduced rate for a pitch shift, then raises playback rate to catch up to the input. You can select what the period of this cycle is and the duty cycle or percentage of the cycle is the low playback rate. The low rate is determined by the pitch setting.
+
+
+    SHIFT - pitch adjustment in semitones
+    PERIOD - time in milliseconds of the cycle of low then high playback rate
+    DUTY - percentage of the cycle that is low playback rate 
 
