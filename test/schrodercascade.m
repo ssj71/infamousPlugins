@@ -15,10 +15,10 @@ N4 = 341; % delay of the next schroeder filter
 
 
 pkg load control
-AP1 = tf([-g1 zeros(1,N1-1) 1], [1 zeros(1,N1-1) -g1])
-AP2 = tf([-g2 zeros(1,N2-1) 1], [1 zeros(1,N2-1) -g2])
-AP3 = tf([-g3 zeros(1,N3-1) 1], [1 zeros(1,N3-1) -g3])
-AP4 = tf([-g4 zeros(1,N4-1) 1], [1 zeros(1,N4-1) -g4])
+AP1 = tf([-g1 zeros(1,N1-1) 1], [1 zeros(1,N1-1) -g1],1)
+AP2 = tf([-g2 zeros(1,N2-1) 1], [1 zeros(1,N2-1) -g2],1)
+AP3 = tf([-g3 zeros(1,N3-1) 1], [1 zeros(1,N3-1) -g3],1)
+AP4 = tf([-g4 zeros(1,N4-1) 1], [1 zeros(1,N4-1) -g4],1)
 
 AP1*AP2*AP3*AP4
 
