@@ -46,19 +46,20 @@ void filternate(uint16_t in, uint16_t out, float* buf)
     buf[out] = 0;
 
 	buf[out] += .0625*(buf[in] - buf[(uint16_t)(out-1563)]);
-	buf[out] += -.125*(buf[(uint16_t)(in-225)] - buf[(uint16_t)(out-1338)]);
-	buf[out] += -.125*(buf[(uint16_t)(in-341)] - buf[(uint16_t)(out-1222)]);
-	buf[out] += -.125*(buf[(uint16_t)(in-556)] - buf[(uint16_t)(out-1122)]);
-	buf[out] += -.125*(buf[(uint16_t)(in-566)] - buf[(uint16_t)(out-1007)]);
-	buf[out] +=  .25*(buf[(uint16_t)(in-666)] - buf[(uint16_t)(out-997)]);
-	buf[out] +=  .25*(buf[(uint16_t)(in-781)] - buf[(uint16_t)(out-897)]);
-	buf[out] +=  .25*(buf[(uint16_t)(in-782)] - buf[(uint16_t)(out-782)]);
-	buf[out] +=  .25*(buf[(uint16_t)(in-897)] - buf[(uint16_t)(out-781)]);
-	buf[out] += -.5*(buf[(uint16_t)(in-997)] - buf[(uint16_t)(out-666)]);
-	buf[out] += -.5*(buf[(uint16_t)(in-1007)] - buf[(uint16_t)(out-566)]);
-	buf[out] += -.5*(buf[(uint16_t)(in-1122)] - buf[(uint16_t)(out-556)]);
-	buf[out] += -.5*(buf[(uint16_t)(in-1222)] - buf[(uint16_t)(out-341)]);
-	buf[out] += -.5*(buf[(uint16_t)(in-1338)] - buf[(uint16_t)(out-225)]);
+	buf[out] += -.125*(  buf[(uint16_t)(in-225)] - buf[(uint16_t)(out-1338)]
+	                   + buf[(uint16_t)(in-341)] - buf[(uint16_t)(out-1222)]
+	                   + buf[(uint16_t)(in-441)] - buf[(uint16_t)(out-1122)]
+	                   + buf[(uint16_t)(in-556)] - buf[(uint16_t)(out-1007)]);
+	buf[out] += .25*(  buf[(uint16_t)(in-566)] - buf[(uint16_t)(out-997)]
+	                 + buf[(uint16_t)(in-666)] - buf[(uint16_t)(out-897)]
+	                 + buf[(uint16_t)(in-781)] - buf[(uint16_t)(out-782)]
+	                 + buf[(uint16_t)(in-782)] - buf[(uint16_t)(out-781)]
+	                 + buf[(uint16_t)(in-897)] - buf[(uint16_t)(out-666)]
+	                 + buf[(uint16_t)(in-997)] - buf[(uint16_t)(out-566)]);
+	buf[out] += -.5*(  buf[(uint16_t)(in-1007)] - buf[(uint16_t)(out-556)]
+	                 + buf[(uint16_t)(in-1122)] - buf[(uint16_t)(out-441)]
+	                 + buf[(uint16_t)(in-1222)] - buf[(uint16_t)(out-341)]
+	                 + buf[(uint16_t)(in-1338)] - buf[(uint16_t)(out-225)]);
 	buf[out] += buf[(uint16_t)(in-1563)];
 }
 
@@ -128,7 +129,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             {
             	plug->buf[plug->w] = plug->input_p[i];
             	filternate(plug->w++, plug->r, plug->buf);
-            	plug->output_p[i++] += plug->gain*plug->r++;
+            	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
                 plug->gain += slope;
                 plug->time--;
             }
@@ -139,7 +140,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             for(j=0; j<chunk; j++)
             {
             	filternate(plug->w++, plug->r, plug->buf);
-            	plug->output_p[i++] += plug->gain*plug->r++;
+            	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
                 plug->gain += slope;
             }
         }
@@ -155,7 +156,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             for(j=0; j<chunk; j++)
             {
             	filternate(plug->w++, plug->r, plug->buf);
-            	plug->output_p[i++] += plug->gain*plug->r++;
+            	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
                 plug->gain += slope;
             }
             if(plug->gain <= -slope)
@@ -181,7 +182,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             for(j=0; j<chunk; j++)
             {
             	filternate(plug->w++, plug->r, plug->buf);
-            	plug->output_p[i++] += plug->gain*plug->r++;
+            	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
                 plug->gain += slope;
             }
             if(plug->gain <= -slope)
