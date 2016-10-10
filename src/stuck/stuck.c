@@ -10,7 +10,9 @@
 enum states
 {
     INACTIVE = 0,
+    LOADING_ENV,
     LOADING,
+    FEEDBACK,
     PLAYING,
     RELEASING,
     QUICK_RELEASING
@@ -24,7 +26,7 @@ typedef struct _STUCK
 	uint16_t w;//filter input
 	uint16_t time;//length of input sample to fiterbank
 
-	float gain;
+	float gain,env;
     double sample_freq;
 
     float *buf;
@@ -67,7 +69,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 {
     STUCK* plug = (STUCK*)handle;
     uint32_t i,j,chunk=0;
-    double slope = 0;
+    float slope = 0, slope2 = 0;
     double interp;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
@@ -80,7 +82,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         //decide if triggered
         if(*plug->stick_it_p >= 1)
         {
-            plug->state = LOADING;
+            plug->state = LOADING_ENV;
+            plug->env = 0;
             //any on-trigger events here
         }
         else
@@ -116,14 +119,32 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     for(i=0; i<nframes;)
     {
         chunk = nframes - i;
-        if(plug->state == LOADING)//load enough frames to start calculating the autocorrelation
+        if(plug->state == LOADING_ENV)//fade in the input to the filters 10ms
+        {
+            slope = 1/(.01*plug->sample_freq);
+            //decide if reaching minimum length in this period
+            if(plug->time - chunk >= .09*plug->sample_freq)
+            {
+                chunk = plug->time - .09*plug->sample_freq;
+                plug->state = LOADING;
+            }
+            for(j=0; j<chunk; j++)
+            {
+            	plug->buf[plug->w] = plug->env*plug->input_p[i];
+                plug->env += slope;
+            	filternate(plug->w++, plug->r, plug->buf);
+                plug->time--;
+            }
+        }
+        else if(plug->state == LOADING)//continue loading and start playing back too, 90ms
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
             //decide if reaching minimum length in this period
             if(chunk >= plug->time)
             {
                 chunk = plug->time;
-                plug->state = PLAYING;
+                plug->state = FEEDBACK;
+                plug->env = 1;
             }
             for(j=0; j<chunk; j++)
             {
@@ -132,6 +153,27 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
                 plug->gain += slope;
                 plug->time--;
+            }
+        }
+        else if(plug->state == FEEDBACK)//transition from 100% input to 100% feedback, 10ms
+        {
+            slope = (*plug->drone_gain_p-plug->gain)/interp;
+            slope2 = -1/(.01*plug->sample_freq);
+            //decide if reaching minimum length in this period
+            if(plug->time + chunk >= .01*plug->sample_freq)
+            {
+                chunk = .01*plug->sample_freq - plug->time; 
+                plug->state = PLAYING;
+            }
+            for(j=0; j<chunk; j++)
+            {
+                plug->buf[plug->w] *= 1-plug->env;
+            	plug->buf[plug->w] += plug->env*plug->input_p[i];
+                plug->env += slope2;
+            	filternate(plug->w++, plug->r, plug->buf);
+            	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
+                plug->gain += slope;
+                plug->time++;
             }
         }
         else if(plug->state == PLAYING)//just run the filter and track gain changes
@@ -164,6 +206,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             	//done, now get ready for next trigger
                 plug->state = INACTIVE;
                 plug->gain = 0;
+                plug->env = 0;
 				plug->time = .1*plug->sample_freq;
 				for(j=0;j<(uint16_t)(plug->r-plug->w);j++)
 					plug->buf[(uint16_t)(plug->w+j)]  = 0;
@@ -177,7 +220,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             if(plug->gain + chunk*slope < slope)
             {
                 chunk = -plug->gain/slope;
-                plug->state = LOADING;
+                plug->state = LOADING_ENV;
             }
             for(j=0; j<chunk; j++)
             {
@@ -188,9 +231,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             if(plug->gain <= -slope)
             {
             	//done, start next trigger
-                plug->state = LOADING;
+                plug->state = LOADING_ENV;
 				plug->time = .1*plug->sample_freq;
                 plug->gain = 0;
+                plug->env = 0;
 				for(j=0;j<(uint16_t)(plug->r-plug->w);j++)
 					plug->buf[(uint16_t)(plug->w+j)]  = 0;
             }
@@ -212,6 +256,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->buf = (float*)malloc(0xffff*sizeof(float));
     plug->state = INACTIVE;
     plug->gain = 0;
+    plug->env = 0;
 
     //init buffer
     plug->buf[0] = 0;
