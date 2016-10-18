@@ -7,6 +7,8 @@
 #include<math.h>
 #include"stuck.h"
 
+#define LEN .015 //sample length in seconds
+
 enum states
 {
     INACTIVE = 0,
@@ -121,11 +123,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         chunk = nframes - i;
         if(plug->state == LOADING_ENV)//fade in the input to the filters 10ms
         {
-            slope = 1/(.01*plug->sample_freq);
+            slope = 1/(.1*LEN*plug->sample_freq);
             //decide if reaching minimum length in this period
-            if(plug->time - chunk <= .09*plug->sample_freq)
+            if(plug->time - chunk <= .9*LEN*plug->sample_freq)
             {
-                chunk = plug->time - .09*plug->sample_freq;
+                chunk = plug->time - .9*LEN*plug->sample_freq;
                 plug->state = LOADING;
             }
             for(j=0; j<chunk; j++)
@@ -158,11 +160,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == FEEDBACK)//transition from 100% input to 100% feedback, 10ms
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
-            slope2 = -1/(.01*plug->sample_freq);
+            slope2 = -1/(.1*LEN*plug->sample_freq);
             //decide if reaching minimum length in this period
-            if(plug->time + chunk >= .01*plug->sample_freq)
+            if(plug->time + chunk >= .1*LEN*plug->sample_freq)
             {
-                chunk = .01*plug->sample_freq - plug->time; 
+                chunk = .1*LEN*plug->sample_freq - plug->time;
                 plug->state = PLAYING;
             }
             for(j=0; j<chunk; j++)
@@ -207,7 +209,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->state = INACTIVE;
                 plug->gain = 0;
                 plug->env = 0;
-				plug->time = .1*plug->sample_freq;
+				plug->time = LEN*plug->sample_freq;
 				for(j=0;j<(uint16_t)(plug->r-plug->w);j++)
 					plug->buf[(uint16_t)(plug->w+j)]  = 0;
                 return;
@@ -232,7 +234,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             {
             	//done, start next trigger
                 plug->state = LOADING_ENV;
-				plug->time = .1*plug->sample_freq;
+				plug->time = LEN*plug->sample_freq;
                 plug->gain = 0;
                 plug->env = 0;
 				for(j=0;j<(uint16_t)(plug->r-plug->w);j++)
@@ -249,7 +251,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
 
     uint16_t i;
     plug->sample_freq = sample_freq;
-    plug->time = .1*sample_freq;//as long as this stays longer than the longest filter tap (currently 1563) then the in and out won't overlap and we'll have 100%FB
+    plug->time = LEN*sample_freq;//as long as this stays longer than the longest filter tap (currently 1563) then the in and out won't overlap and we'll have 100%FB
 
     plug->r = plug->time;
     plug->w = 0;
