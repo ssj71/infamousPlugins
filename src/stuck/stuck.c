@@ -123,14 +123,14 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         {
             slope = 1/(.01*plug->sample_freq);
             //decide if reaching minimum length in this period
-            if(plug->time - chunk >= .09*plug->sample_freq)
+            if(plug->time - chunk <= .09*plug->sample_freq)
             {
                 chunk = plug->time - .09*plug->sample_freq;
                 plug->state = LOADING;
             }
             for(j=0; j<chunk; j++)
             {
-            	plug->buf[plug->w] = plug->env*plug->input_p[i];
+            	plug->buf[plug->w] = plug->env*plug->input_p[i++];
                 plug->env += slope;
             	filternate(plug->w++, plug->r, plug->buf);
                 plug->time--;
