@@ -135,7 +135,7 @@ LV2_Handle init_pms(const LV2_Descriptor *descriptor,double sample_freq, const c
     PMS* plug = malloc(sizeof(PMS));
 
     //this makes the max period a function of samplerate, but you're dumb if you are using anything but 44100 or 48k
-    plug->buf = (float*)malloc(0xffff*sizeof(float));
+    plug->buf = (float*)malloc(0x10000*sizeof(float));
     plug->r = 0;
     plug->w = 0;
     plug->prog = 0;
