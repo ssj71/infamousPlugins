@@ -8,15 +8,15 @@
 #include"stuck.h"
 
 #define LEN .025 //sample length in seconds
-#define FADE .1 //time (relative to LEN) to fade in sample
-#define XFADE 2 //time (relative to LEN) to xfade to 100% fb
+#define FADEIN .1 //time (relative to LEN) to fade in sample
+#define FADEOUT 2 //time (relative to LEN) to xfade to 100% fb
 
 enum states
 {
     INACTIVE = 0,
     LOADING_ENV,
     LOADING,
-    FEEDBACK,
+    FADE,
     PLAYING,
     RELEASING,
     QUICK_RELEASING
@@ -45,27 +45,136 @@ typedef struct _STUCK
 
 } STUCK;
 
+// 8 parallel comb filters with 100% feedback going to a
 //cascaded bank of schroeder all pass filters ripped out of freeverb
 void filternate(uint16_t in, uint16_t out, float* buf)
 {
-    buf[out] = 0;
+	uint16_t mid,N;
+	float sum;
 
-	buf[out] += .0625*(buf[in] - buf[(uint16_t)(out-1563)]);
-	buf[out] += -.125*(  buf[(uint16_t)(in-225)] - buf[(uint16_t)(out-1338)]
-	                   + buf[(uint16_t)(in-341)] - buf[(uint16_t)(out-1222)]
-	                   + buf[(uint16_t)(in-441)] - buf[(uint16_t)(out-1122)]
-	                   + buf[(uint16_t)(in-556)] - buf[(uint16_t)(out-1007)]);
-	buf[out] += .25*(  buf[(uint16_t)(in-566)] - buf[(uint16_t)(out-997)]
-	                 + buf[(uint16_t)(in-666)] - buf[(uint16_t)(out-897)]
-	                 + buf[(uint16_t)(in-781)] - buf[(uint16_t)(out-782)]
-	                 + buf[(uint16_t)(in-782)] - buf[(uint16_t)(out-781)]
-	                 + buf[(uint16_t)(in-897)] - buf[(uint16_t)(out-666)]
-	                 + buf[(uint16_t)(in-997)] - buf[(uint16_t)(out-566)]);
-	buf[out] += -.5*(  buf[(uint16_t)(in-1007)] - buf[(uint16_t)(out-556)]
-	                 + buf[(uint16_t)(in-1122)] - buf[(uint16_t)(out-441)]
-	                 + buf[(uint16_t)(in-1222)] - buf[(uint16_t)(out-341)]
-	                 + buf[(uint16_t)(in-1338)] - buf[(uint16_t)(out-225)]);
-	buf[out] += buf[(uint16_t)(in-1563)];
+	mid = in;
+	sum = 0;
+
+	N = 1557;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(in-N)] + buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1617;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(in-N)] + buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1491;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(in-N)] + buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1422;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(in-N)] + buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1277;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(in-N)] + buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1356;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(in-N)] + buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1188;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(in-N)] + buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1116;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(in-N)] + buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+
+	//store the sum
+	mid += 1563+1;
+	buf[mid] = sum;
+
+	//now the AP section
+    buf[out] = 0;
+	buf[out] += .0625*(buf[mid] - buf[(uint16_t)(out-1563)]);
+	buf[out] += -.125*(  buf[(uint16_t)(mid-225)] - buf[(uint16_t)(out-1338)]
+	                   + buf[(uint16_t)(mid-341)] - buf[(uint16_t)(out-1222)]
+	                   + buf[(uint16_t)(mid-441)] - buf[(uint16_t)(out-1122)]
+	                   + buf[(uint16_t)(mid-556)] - buf[(uint16_t)(out-1007)]);
+	buf[out] += .25*(  buf[(uint16_t)(mid-566)] - buf[(uint16_t)(out-997)]
+	                 + buf[(uint16_t)(mid-666)] - buf[(uint16_t)(out-897)]
+	                 + buf[(uint16_t)(mid-781)] - buf[(uint16_t)(out-782)]
+	                 + buf[(uint16_t)(mid-782)] - buf[(uint16_t)(out-781)]
+	                 + buf[(uint16_t)(mid-897)] - buf[(uint16_t)(out-666)]
+	                 + buf[(uint16_t)(mid-997)] - buf[(uint16_t)(out-566)]);
+	buf[out] += -.5*(  buf[(uint16_t)(mid-1007)] - buf[(uint16_t)(out-556)]
+	                 + buf[(uint16_t)(mid-1122)] - buf[(uint16_t)(out-441)]
+	                 + buf[(uint16_t)(mid-1222)] - buf[(uint16_t)(out-341)]
+	                 + buf[(uint16_t)(mid-1338)] - buf[(uint16_t)(out-225)]);
+	buf[out] += buf[(uint16_t)(mid-1563)];
+}
+//same as filternate but assumes input is 0
+void filternate(uint16_t in, uint16_t out, float* buf)
+{
+	uint16_t mid,N;
+	float sum;
+
+	mid = in;
+	sum = 0;
+
+	N = 1557;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1617;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1491;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1422;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1277;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1356;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1188;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+	N = 1116;
+	mid += N+1;
+	buf[mid] = buf[(uint16_t)(mid-N)];
+	sum += buf[mid];
+
+	//store the sum
+	mid += 1563+1;
+	buf[mid] = sum;
+
+	//now the AP section
+    buf[out] = 0;
+	buf[out] += .0625*(buf[mid] - buf[(uint16_t)(out-1563)]);
+	buf[out] += -.125*(  buf[(uint16_t)(mid-225)] - buf[(uint16_t)(out-1338)]
+	                   + buf[(uint16_t)(mid-341)] - buf[(uint16_t)(out-1222)]
+	                   + buf[(uint16_t)(mid-441)] - buf[(uint16_t)(out-1122)]
+	                   + buf[(uint16_t)(mid-556)] - buf[(uint16_t)(out-1007)]);
+	buf[out] += .25*(  buf[(uint16_t)(mid-566)] - buf[(uint16_t)(out-997)]
+	                 + buf[(uint16_t)(mid-666)] - buf[(uint16_t)(out-897)]
+	                 + buf[(uint16_t)(mid-781)] - buf[(uint16_t)(out-782)]
+	                 + buf[(uint16_t)(mid-782)] - buf[(uint16_t)(out-781)]
+	                 + buf[(uint16_t)(mid-897)] - buf[(uint16_t)(out-666)]
+	                 + buf[(uint16_t)(mid-997)] - buf[(uint16_t)(out-566)]);
+	buf[out] += -.5*(  buf[(uint16_t)(mid-1007)] - buf[(uint16_t)(out-556)]
+	                 + buf[(uint16_t)(mid-1122)] - buf[(uint16_t)(out-441)]
+	                 + buf[(uint16_t)(mid-1222)] - buf[(uint16_t)(out-341)]
+	                 + buf[(uint16_t)(mid-1338)] - buf[(uint16_t)(out-225)]);
+	buf[out] += buf[(uint16_t)(mid-1563)];
 }
 
 void run_stuck(LV2_Handle handle, uint32_t nframes)
@@ -124,11 +233,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         chunk = nframes - i;
         if(plug->state == LOADING_ENV)//fade in the input to the filters 10ms
         {
-            slope = 1/(FADE*LEN*plug->sample_freq);
+            slope = 1/(FADEIN*LEN*plug->sample_freq);
             //decide if reaching minimum length in this period
-            if(chunk > plug->time || plug->time - chunk <= (1-FADE)*LEN*plug->sample_freq)
+            if(chunk > plug->time || plug->time - chunk <= (1-FADEIN)*LEN*plug->sample_freq)
             {
-                chunk = plug->time - (1-FADE)*LEN*plug->sample_freq;
+                chunk = plug->time - (1-FADEIN)*LEN*plug->sample_freq;
                 plug->state = LOADING;
             }
             for(j=0; j<chunk; j++)
@@ -146,7 +255,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             if(chunk >= plug->time)
             {
                 chunk = plug->time;
-                plug->state = FEEDBACK;
+                plug->state = FADE;
                 plug->env = 1;
             }
             for(j=0; j<chunk; j++)
@@ -159,20 +268,19 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->time--;
             }
         }
-        else if(plug->state == FEEDBACK)//transition from 100% input to 100% feedback, 10ms
+        else if(plug->state == FADE)//envelope out signal
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
-            slope2 = -1/(XFADE*LEN*plug->sample_freq);
+            slope2 = -1/(FADEOUT*LEN*plug->sample_freq);
             //decide if reaching minimum length in this period
-            if(plug->time + chunk >= XFADE*LEN*plug->sample_freq)
+            if(plug->time + chunk >= FADEOUT*LEN*plug->sample_freq)
             {
-                chunk = XFADE*LEN*plug->sample_freq - plug->time;
+                chunk = FADEOUT*LEN*plug->sample_freq - plug->time;
                 plug->state = PLAYING;
             }
             for(j=0; j<chunk; j++)
             {
-                plug->buf[plug->w] *= 1-plug->env;
-            	plug->buf[plug->w] += plug->env*plug->input_p[i];
+            	plug->buf[plug->w] = plug->env*plug->input_p[i];
                 plug->env += slope2;
             	filternate(plug->w++, plug->r, plug->buf);
             	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
@@ -185,7 +293,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             slope = (*plug->drone_gain_p-plug->gain)/interp;
             for(j=0; j<chunk; j++)
             {
-            	filternate(plug->w++, plug->r, plug->buf);
+            	perpetuate(plug->w++, plug->r, plug->buf);
             	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
                 plug->gain += slope;
             }
@@ -201,7 +309,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             }
             for(j=0; j<chunk; j++)
             {
-            	filternate(plug->w++, plug->r, plug->buf);
+            	perpetuate(plug->w++, plug->r, plug->buf);
             	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
                 plug->gain += slope;
             }
@@ -228,7 +336,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             }
             for(j=0; j<chunk; j++)
             {
-            	filternate(plug->w++, plug->r, plug->buf);
+            	perpetuate(plug->w++, plug->r, plug->buf);
             	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
                 plug->gain += slope;
             }
