@@ -7,7 +7,7 @@
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#pms>
+<http://ssj71.github.io/infamousPlugins/plugs.html#falter>
         a lv2:Plugin, lv2:FilterPlugin ;
         doap:name "the infamous falter" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;

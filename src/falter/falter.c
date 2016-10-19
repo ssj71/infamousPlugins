@@ -71,9 +71,6 @@ LV2_Handle init_falter(const LV2_Descriptor *descriptor,double sample_rate, cons
 
     plug->sample_rate = sample_rate;
 
-    plug->buf[0] = 0;
-    for(i=1;i;i++)
-        plug->buf[i] = 0;
     return plug;
 }
 
