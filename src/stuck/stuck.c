@@ -7,7 +7,9 @@
 #include<math.h>
 #include"stuck.h"
 
-#define LEN .015 //sample length in seconds
+#define LEN .025 //sample length in seconds
+#define FADE .1 //time (relative to LEN) to fade in sample
+#define XFADE 2 //time (relative to LEN) to xfade to 100% fb
 
 enum states
 {
@@ -20,7 +22,6 @@ enum states
     QUICK_RELEASING
 };
 
-//TODO: probably ought to envelope the input sample
 typedef struct _STUCK
 {
 	uint8_t state;
@@ -123,18 +124,18 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         chunk = nframes - i;
         if(plug->state == LOADING_ENV)//fade in the input to the filters 10ms
         {
-            slope = 1/(.1*LEN*plug->sample_freq);
+            slope = 1/(FADE*LEN*plug->sample_freq);
             //decide if reaching minimum length in this period
-            if(plug->time - chunk <= .9*LEN*plug->sample_freq)
+            if(chunk > plug->time || plug->time - chunk <= (1-FADE)*LEN*plug->sample_freq)
             {
-                chunk = plug->time - .9*LEN*plug->sample_freq;
+                chunk = plug->time - (1-FADE)*LEN*plug->sample_freq;
                 plug->state = LOADING;
             }
             for(j=0; j<chunk; j++)
             {
             	plug->buf[plug->w] = plug->env*plug->input_p[i++];
                 plug->env += slope;
-            	filternate(plug->w++, plug->r, plug->buf);
+            	filternate(plug->w++, plug->r++, plug->buf);
                 plug->time--;
             }
         }
@@ -150,6 +151,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             }
             for(j=0; j<chunk; j++)
             {
+            	//plug->buf[plug->w] = plug->input_p[i];
             	plug->buf[plug->w] = plug->input_p[i];
             	filternate(plug->w++, plug->r, plug->buf);
             	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
@@ -160,11 +162,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == FEEDBACK)//transition from 100% input to 100% feedback, 10ms
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
-            slope2 = -1/(.1*LEN*plug->sample_freq);
+            slope2 = -1/(XFADE*LEN*plug->sample_freq);
             //decide if reaching minimum length in this period
-            if(plug->time + chunk >= .1*LEN*plug->sample_freq)
+            if(plug->time + chunk >= XFADE*LEN*plug->sample_freq)
             {
-                chunk = .1*LEN*plug->sample_freq - plug->time;
+                chunk = XFADE*LEN*plug->sample_freq - plug->time;
                 plug->state = PLAYING;
             }
             for(j=0; j<chunk; j++)
