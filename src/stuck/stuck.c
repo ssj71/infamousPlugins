@@ -17,6 +17,7 @@ enum states
     LOADING_ENV,
     LOADING,
     FADE,
+	FLUSH,
     PLAYING,
     RELEASING,
     QUICK_RELEASING
@@ -261,7 +262,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             }
             for(j=0; j<chunk; j++)
             {
-            	//plug->buf[plug->w] = plug->input_p[i];
             	plug->buf[plug->w] = plug->input_p[i];
             	filternate(plug->w++, plug->r, plug->buf);
             	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
@@ -274,17 +274,34 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             slope = (*plug->drone_gain_p-plug->gain)/interp;
             slope2 = -1/(FADEOUT*LEN*plug->sample_freq);
             //decide if reaching minimum length in this period
-            if(plug->time + chunk >= 1700)//FADEOUT*LEN*plug->sample_freq)
+            if(plug->time + FADEOUT*LEN*plug->sample_freq)
             {
-                //chunk = FADEOUT*LEN*plug->sample_freq - plug->time;
-                chunk = 1700 - plug->time;
-                plug->state = PLAYING;
+                chunk = FADEOUT*LEN*plug->sample_freq - plug->time;
+                plug->state = FLUSH;
             }
             for(j=0; j<chunk; j++)
             {
             	plug->buf[plug->w] = plug->env*plug->input_p[i];
-            	plug->buf[plug->w] = 0; //for now let's try without envelope, still gotta clear out the input history anyway
                 plug->env += slope2;
+            	filternate(plug->w++, plug->r, plug->buf);
+            	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
+                plug->gain += slope;
+                plug->time++;
+            }
+            if(plug->time >= FADEOUT*LEN*plug->sample_freq)
+            	plug->time = 0;//reset time for flushing
+        }
+        else if(plug->state == FLUSH)//just run the filter but input zeros and track gain changes
+        {
+            if(plug->time + chunk >= 1700)//FADEOUT*LEN*plug->sample_freq)
+            {
+                chunk = 1700 - plug->time;
+                plug->state = PLAYING;
+            }
+            slope = (*plug->drone_gain_p-plug->gain)/interp;
+            for(j=0; j<chunk; j++)
+            {
+            	plug->buf[plug->w] = 0;
             	filternate(plug->w++, plug->r, plug->buf);
             	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
                 plug->gain += slope;
