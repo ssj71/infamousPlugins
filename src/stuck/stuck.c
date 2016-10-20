@@ -112,7 +112,7 @@ void filternate(uint16_t in, uint16_t out, float* buf)
 	buf[out] += buf[(uint16_t)(mid-1563)];
 }
 //same as filternate but assumes input is 0
-void filternate(uint16_t in, uint16_t out, float* buf)
+void perpetuate(uint16_t in, uint16_t out, float* buf)
 {
 	uint16_t mid,N;
 	float sum;
@@ -194,7 +194,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         //decide if triggered
         if(*plug->stick_it_p >= 1)
         {
-            plug->state = LOADING_ENV;
+            //plug->state = LOADING_ENV;
+            plug->state = LOADING; //first try without envelope
             plug->env = 0;
             //any on-trigger events here
         }
@@ -273,14 +274,16 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             slope = (*plug->drone_gain_p-plug->gain)/interp;
             slope2 = -1/(FADEOUT*LEN*plug->sample_freq);
             //decide if reaching minimum length in this period
-            if(plug->time + chunk >= FADEOUT*LEN*plug->sample_freq)
+            if(plug->time + chunk >= 1700)//FADEOUT*LEN*plug->sample_freq)
             {
-                chunk = FADEOUT*LEN*plug->sample_freq - plug->time;
+                //chunk = FADEOUT*LEN*plug->sample_freq - plug->time;
+                chunk = 1700 - plug->time;
                 plug->state = PLAYING;
             }
             for(j=0; j<chunk; j++)
             {
             	plug->buf[plug->w] = plug->env*plug->input_p[i];
+            	plug->buf[plug->w] = 0; //for now let's try without envelope, still gotta clear out the input history anyway
                 plug->env += slope2;
             	filternate(plug->w++, plug->r, plug->buf);
             	plug->output_p[i++] += plug->gain*plug->buf[plug->r++];
@@ -320,8 +323,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->gain = 0;
                 plug->env = 0;
 				plug->time = LEN*plug->sample_freq;
-				for(j=0;j<(uint16_t)(plug->r-plug->w);j++)
-					plug->buf[(uint16_t)(plug->w+j)]  = 0;
+				for(j=0;j<(uint16_t)(plug->r-plug->w+1600);j++)
+					plug->buf[(uint16_t)(plug->w+j-1600)]  = 0;
                 return;
             }
         }
@@ -347,8 +350,8 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 				plug->time = LEN*plug->sample_freq;
                 plug->gain = 0;
                 plug->env = 0;
-				for(j=0;j<(uint16_t)(plug->r-plug->w);j++)
-					plug->buf[(uint16_t)(plug->w+j)]  = 0;
+				for(j=0;j<(uint16_t)(plug->r-plug->w+1600);j++)
+					plug->buf[(uint16_t)(plug->w+j-1600)]  = 0;
             }
         }
     }
@@ -363,7 +366,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->sample_freq = sample_freq;
     plug->time = LEN*sample_freq;//as long as this stays longer than the longest filter tap (currently 1563) then the in and out won't overlap and we'll have 100%FB
 
-    plug->r = plug->time;
+    plug->r = 47050;//plug->time; need enough gap for all the filter intermediates
     plug->w = 0;
     plug->buf = (float*)malloc(0xffff*sizeof(float));
     plug->state = INACTIVE;
