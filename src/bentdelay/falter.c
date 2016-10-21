@@ -56,7 +56,7 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
 
 LV2_Handle init_falter(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
-    uint16_t i,tmp;
+    uint16_t tmp;
 
     FALTER* plug = malloc(sizeof(FALTER));
 

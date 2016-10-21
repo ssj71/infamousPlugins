@@ -7,11 +7,11 @@
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#falter>
-        a lv2:Plugin, lv2:FilterPlugin ;
-        doap:name "the infamous falter" ;
+<http://ssj71.github.io/infamousPlugins/plugs.html#bentdelay>
+        a lv2:Plugin, lv2:DelayPlugin ;
+        doap:name "the infamous bent delay" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
-        doap:description "a strange comb filter";
+        doap:description "a circuit-bent delay";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
@@ -19,7 +19,7 @@
         ] ;
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
-        rdfs:comment "This experimental filter subtracts a downsampled (aliased) delayed signal from the original. Might be just a usual comb filter." ;
+        rdfs:comment "This experimental delay subtracts a downsampled (aliased) delayed signal from the original. Makes bright gritty slapback sounds." ;
         lv2:optionalFeature lv2:hardRTCapable ;
 
         lv2:port [
