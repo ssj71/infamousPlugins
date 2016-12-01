@@ -19,13 +19,14 @@ typedef struct _FALTER
     float *output_p;
     float *decimate_p;
     float *delay_p;
+    float *feedback_p;
 } FALTER;
 
 
 void run_falter(LV2_Handle handle, uint32_t nframes)
 {
     FALTER* plug = (FALTER*)handle;
-    float* in, *out, *buf;
+    float* in, *out, *buf, fb;
     uint16_t i,w, pdelay, ndelay, mask, downmask;
 
     in = plug->input_p;
@@ -34,6 +35,7 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
     w = plug->w;
     mask = plug->mask;
     downmask = (mask<<(uint8_t)*plug->decimate_p)&mask;
+    fb = plug->feedback_p*;
 
 
     pdelay = ndelay = 0;
@@ -46,7 +48,7 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
     {
         buf[w] = in[i];
         out[i] = buf[(w-pdelay)&mask] - buf[(w-ndelay)&downmask];
-        //buf[w] += fb*out[i]
+        buf[w] += fb*out[i]
         w++;
         w &= mask;
     } 
@@ -92,6 +94,9 @@ void connect_falter_ports(LV2_Handle handle, uint32_t port, void *data)
         break;
     case DELAY:
         plug->delay_p = (float*)data;
+        break;
+    case FEEDBACK:
+        plug->feedback_p = (float*)data;
         break;
     default:
         puts("UNKNOWN PORT YO!!");
