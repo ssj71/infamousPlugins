@@ -44,9 +44,11 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
 
     for (i=0;i<nframes;i++)
     {
-        buf[w++] = in[i];
-        w &= mask;
+        buf[w] = in[i];
         out[i] = buf[(w-pdelay)&mask] - buf[(w-ndelay)&downmask];
+        //buf[w] += fb*out[i]
+        w++;
+        w &= mask;
     } 
 
     plug->w = w;
@@ -60,7 +62,7 @@ LV2_Handle init_falter(const LV2_Descriptor *descriptor,double sample_rate, cons
 
     FALTER* plug = malloc(sizeof(FALTER));
 
-    tmp = 0x8000;
+    tmp = 0x8000;//for 196k
     if(sample_rate<100000)//88.2 or 96kHz
         tmp = tmp>>1;
     if(sample_rate<50000)//44.1 or 48kHz
