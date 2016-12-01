@@ -63,8 +63,8 @@ LV2_Handle init_falter(const LV2_Descriptor *descriptor,double sample_rate, cons
     FALTER* plug = malloc(sizeof(FALTER));
 
     tmp = 0x8000;//for 196k
-    if(sample_rate<100000)//88.2 or 96kHz
-        tmp = tmp>>1;
+    //if(sample_rate<100000)//88.2 or 96kHz //I'm commenting this out so that we have longer delay times available
+    //    tmp = tmp>>1;                     //if using 196k then it will wrap around once you've exceeded the 16 bits, but who seriously uses 196k?
     if(sample_rate<50000)//44.1 or 48kHz
         tmp = tmp>>1;
     plug->buf = (float*)malloc(tmp*sizeof(float));
