@@ -43,7 +43,9 @@
                 lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
-		lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+                lv2:portProperty lv2:enabled ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 3 ;
@@ -52,7 +54,7 @@
                 lv2:default 0.50 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 2.0 ;
-		units:unit units:coef ;
+                units:unit units:coef ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 4 ;
@@ -61,7 +63,7 @@
                 lv2:default 0.5 ;
                 lv2:minimum 0.01 ;
                 lv2:maximum 3.0 ; 
-		units:unit units:s ;
+                units:unit units:s ;
         ] .
 #        lv2:port [
 #                a lv2:OutputPort, lv2:AudioPort ;#CVPort ;
