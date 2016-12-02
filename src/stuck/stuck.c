@@ -10,12 +10,12 @@
 
 //#define CV_PORTS
 //#define TEST
-#define NO_COMP
+//#define NO_COMP
 #define LINEAR_FADE
-#define NO_FADE
-#define LAYER 2
+//#define NO_FADE
+#define LAYER
 //#define SHOW_BUF
-#define AUTOCORR
+//#define AUTOCORR
 
 #ifdef AUTOCORR
 #define START_SCORE 0
@@ -47,7 +47,6 @@ typedef struct _STUCK
     uint16_t wave_min;//int16_test allowed wavesize
     uint16_t wave_max;//int32_test allowed wavesize
     uint8_t state;
-    uint8_t layers;
     uint8_t dbg;//used for whatever, delete it
     double sample_freq;
 
@@ -123,7 +122,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             plug->indx = 0;
             plug->indx2 = plug->wave_min;
             plug->state = INACTIVE;
-			plug->layers = 0;
             plug->gain = 0;
             plug->wavesize = plug->wave_max;
             plug->score = START_SCORE;
@@ -168,7 +166,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             plug->indx = 0;
             plug->indx2 = plug->wave_min;
             plug->state = INACTIVE;
-            plug->layers = 0;
             plug->gain = 0;
             plug->wavesize = plug->wave_max;
             plug->score = START_SCORE;
@@ -267,10 +264,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 #else
                     plug->buf[k] *= plug->xf_func[k];
 #endif
-#ifdef LAYER
-                for(k=0; k<plug->wavesize; k++)
-                    plug->buf[k] *= 1/LAYER;
-#endif
 #endif
             }
         }
@@ -304,7 +297,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 
 #ifdef LAYER
             	//layer 2 full cycles on top of each other
-                plug->buf[plug->indx2] += (1/LAYER)*plug->buf[plug->indx2+plug->wavesize*plug->layers];
+                plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
 #endif
 
                 //but now also playing back start of buffer
@@ -319,22 +312,18 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 for(k=0; k<plug->xfade_size; k++)
 #ifdef LAYER
 #ifdef LINEAR_FADE
-                    plug->buf[k] += (1/LAYER)*(1-k/plug->xfade_size)*plug->buf[plug->wavesize*plug->layers+k];
+                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+plug->wavesize+k];
 #else // constant power
-                    plug->buf[k] += (1/LAYER)*(1-plug->xf_func[k])*plug->buf[plug->wavesize*plug->layers+k];
+                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+plug->wavesize+k];
 #endif
 #else //no layer, use next cycle rather than the 3rd
 #ifdef LINEAR_FADE
-                    plug->buf[k] += (1-k/plug->xfade_size)*plug->buf[plug->wavesize+k];
+                    plug->buf[k] += (1-k/plug->xfade_size)*plug->buf[plug->indx2+k];
 #else // constant power
-                    plug->buf[k] += (1-plug->xf_func[k])*plug->buf[plug->wavesize+k];
+                    plug->buf[k] += (1-plug->xf_func[k])*plug->buf[plug->indx2+k];
 #endif//linear_fade
 #endif//layer
 #endif//no_fade
-#ifdef LAYER
-                if(++plug->layers < LAYER)
-                	plug->state = LOADING_XFADE;
-#endif
                 plug->indx2 = 0;
             }
         }
@@ -352,7 +341,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             {
 #ifdef LAYER
             	//continue layering the 2 cycles
-                plug->buf[plug->indx2] += (1/LAYER)*plug->buf[plug->indx2+plug->wavesize*plug->layers];
+                plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
 #endif
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
@@ -364,9 +353,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 for(k=0; k<plug->xfade_size; k++)
 #ifdef LAYER
 #ifdef LINEAR_FADE
-                    plug->buf[k] += (1/LAYER)*(1-k/plug->xfade_size)*plug->buf[plug->wavesize*plug->layers+k];
+                    plug->buf[k] += .5*(1-k/plug->xfade_size)*plug->buf[plug->indx2+plug->wavesize+k];
 #else // constant power
-                    plug->buf[k] += (1/LAYER)*(1-plug->xf_func[k])*plug->buf[plug->wavesize*plug->layers+k];
+                    plug->buf[k] += .5*(1-plug->xf_func[k])*plug->buf[plug->indx2+plug->wavesize+k];
 #endif
 #else //no layer, use next cycle rather than the 3rd
 #ifdef LINEAR_FADE
@@ -467,7 +456,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->indx = 0;
                 plug->indx2 = plug->wave_min;
                 plug->state = INACTIVE;
-                plug->layers = 0;
                 plug->gain = 0;
                 plug->wavesize = plug->wave_max;
                 plug->score = START_SCORE;
@@ -495,7 +483,6 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->indx = 0;
                 plug->indx2 = plug->wave_min;
                 plug->state = LOADING;
-				plug->layers = 0;
                 plug->wavesize = plug->wave_max;
                 plug->score = START_SCORE;
                 plug->env = plug->rms_calc.rms;
@@ -527,7 +514,6 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->indx = 0;
     plug->indx2 = plug->wave_min;
     plug->state = INACTIVE;
-    plug->layers = 0;
     plug->gain = 0;
     plug->score = START_SCORE;
     plug->env = 0;
