@@ -35,7 +35,7 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
     w = plug->w;
     mask = plug->mask;
     downmask = (mask<<(uint8_t)*plug->decimate_p)&mask;
-    fb = plug->feedback_p*;
+    fb = *plug->feedback_p/100;
 
 
     pdelay = ndelay = 0;
@@ -48,7 +48,7 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
     {
         buf[w] = in[i];
         out[i] = buf[(w-pdelay)&mask] - buf[(w-ndelay)&downmask];
-        buf[w] += fb*out[i]
+        buf[w] += fb*out[i];
         w++;
         w &= mask;
     } 
@@ -60,15 +60,15 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
 
 LV2_Handle init_falter(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
-    uint16_t tmp;
+    uint32_t tmp;
 
     FALTER* plug = malloc(sizeof(FALTER));
 
-    tmp = 0x8000;//for 196k
+    tmp = 0x10000;//for 196k
     //if(sample_rate<100000)//88.2 or 96kHz //I'm commenting this out so that we have longer delay times available
-    //    tmp = tmp>>1;                     //if using 196k then it will wrap around once you've exceeded the 16 bits, but who seriously uses 196k?
-    if(sample_rate<50000)//44.1 or 48kHz
-        tmp = tmp>>1;
+    //    tmp = tmp>>1;                     //if using higher sampling rates then it will wrap around once you've 
+    //if(sample_rate<50000)//44.1 or 48kHz  //exceeded the 16 bits, but who seriously uses 196k?exceeded the 16 bits, but who seriously uses 196k?
+    //    tmp = tmp>>1;
     plug->buf = (float*)malloc(tmp*sizeof(float));
     plug->w = 0;
     plug->mask = tmp-1;
