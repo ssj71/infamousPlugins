@@ -110,6 +110,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case SHIFT0:
           XYhandle::set_ffffltk_valuey((void*)self->pd0,val*100);
+          self->pdxb0->update_position();
+          self->pdyb0->update_position(); 
           break;
         case SLFOA0:
           YBound::set_ffffltk_value((void*)self->pdyb0,val*100);
@@ -121,6 +123,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case DELAY0:
           XYhandle::set_ffffltk_valuex((void*)self->pd0,val);
+          self->pdxb0->update_position();
+          self->pdyb0->update_position(); 
           break;
         case DLFOA0:
           XBound::set_ffffltk_value((void*)self->pdxb0,val);
@@ -144,6 +148,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case SHIFT1:
           XYhandle::set_ffffltk_valuey((void*)self->pd1,val*100);
+          self->pdxb1->update_position();
+          self->pdyb1->update_position(); 
           break;
         case SLFOA1:
           YBound::set_ffffltk_value((void*)self->pdyb1,val*100);
@@ -155,6 +161,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case DELAY1:
           XYhandle::set_ffffltk_valuex((void*)self->pd1,val);
+          self->pdxb1->update_position();
+          self->pdyb1->update_position(); 
           break;
         case DLFOA1:
           XBound::set_ffffltk_value((void*)self->pdxb1,val);
@@ -178,6 +186,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case SHIFT2:
           XYhandle::set_ffffltk_valuey((void*)self->pd2,val*100);
+          self->pdxb2->update_position();
+          self->pdyb2->update_position(); 
           break;
         case SLFOA2:
           YBound::set_ffffltk_value((void*)self->pdyb2,val*100);
@@ -189,6 +199,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case DELAY2:
           XYhandle::set_ffffltk_valuex((void*)self->pd2,val);
+          self->pdxb2->update_position();
+          self->pdyb2->update_position(); 
           break;
         case DLFOA2:
           XBound::set_ffffltk_value((void*)self->pdxb2,val);
@@ -212,6 +224,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case SHIFT3:
           XYhandle::set_ffffltk_valuey((void*)self->pd3,val*100);
+          self->pdxb3->update_position();
+          self->pdyb3->update_position(); 
           break;
         case SLFOA3:
           YBound::set_ffffltk_value((void*)self->pdyb3,val*100);
@@ -223,6 +237,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case DELAY3:
           XYhandle::set_ffffltk_valuex((void*)self->pd3,val);
+          self->pdxb3->update_position();
+          self->pdyb3->update_position(); 
           break;
         case DLFOA3:
           XBound::set_ffffltk_value((void*)self->pdxb3,val);
@@ -246,6 +262,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case SHIFT4:
           XYhandle::set_ffffltk_valuey((void*)self->pd4,val*100);
+          self->pdxb4->update_position();
+          self->pdyb4->update_position(); 
           break;
         case SLFOA4:
           YBound::set_ffffltk_value((void*)self->pdyb4,val*100);
@@ -257,6 +275,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case DELAY4:
           XYhandle::set_ffffltk_valuex((void*)self->pd4,val);
+          self->pdxb4->update_position();
+          self->pdyb4->update_position(); 
           break;
         case DLFOA4:
           XBound::set_ffffltk_value((void*)self->pdxb4,val);
@@ -280,6 +300,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case SHIFT5:
           XYhandle::set_ffffltk_valuey((void*)self->pd5,val*100);
+          self->pdxb5->update_position();
+          self->pdyb5->update_position(); 
           break;
         case SLFOA5:
           YBound::set_ffffltk_value((void*)self->pdyb5,val*100);
@@ -291,6 +313,8 @@ void lushlifeUI_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer
           break;
         case DELAY5:
           XYhandle::set_ffffltk_valuex((void*)self->pd5,val);
+          self->pdxb5->update_position();
+          self->pdyb5->update_position(); 
           break;
         case DLFOA5:
           XBound::set_ffffltk_value((void*)self->pdxb5,val);

@@ -99,7 +99,7 @@ public:
         if(x > g->x()+g->w()) dontdraw = true;
         else dontdraw = false;
         Fl_Widget::position(x,y);
-        do_callback();
+        //do_callback();
         g->redraw();
         redraw();
     }

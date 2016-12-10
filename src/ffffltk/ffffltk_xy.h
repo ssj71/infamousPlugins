@@ -147,7 +147,7 @@ public:
         me->x = ( (val - me->Xv->minimum()) / (me->Xv->maximum() - me->Xv->minimum()) ) * (g->w() - me->w) + g->x();
 
         me->position(me->x,me->y);
-        me->do_callback();
+        //me->do_callback();
         me->redraw();
         g->redraw();
     }
@@ -167,7 +167,7 @@ public:
         me->y = ( (me->Yv->maximum() - val) / (me->Yv->maximum() - me->Yv->minimum()) ) * (g->h() - me->h) + g->y();
 
         me->position(me->x,me->y);
-        me->do_callback();
+        //me->do_callback();
         me->redraw();
         g->redraw();
     }
