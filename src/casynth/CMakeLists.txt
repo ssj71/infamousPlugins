@@ -1,8 +1,7 @@
 #CMake file for infamous casynth
 cmake_minimum_required(VERSION 2.8)
 
-set(PLUGIN "casynth")
-
+set(PLUGIN "casynth") 
 include(CheckCCompilerFlag)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -std=c99")
 check_c_compiler_flag("-msse2 -mfpmath=sse" SUPPORTS_SSE )
@@ -46,7 +45,7 @@ install(TARGETS ${PLUGIN}
   LIBRARY
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
-install (FILES manifest.ttl ${PLUGIN}.ttl
+install (FILES manifest.ttl ${PLUGIN}.ttl ${PLUGIN}_presets.ttl
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
 

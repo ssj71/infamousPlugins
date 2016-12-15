@@ -188,7 +188,7 @@ void run_powerup(LV2_Handle handle, uint32_t nframes)
 
 LV2_Handle init_powerup(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
 {
-    POWERUP* plug = malloc(sizeof(POWERUP));
+    POWERUP* plug = (POWERUP*)malloc(sizeof(POWERUP));
 
     uint32_t tmp;
     plug->sample_freq = sample_freq;
