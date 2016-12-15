@@ -3,8 +3,17 @@ cmake_minimum_required(VERSION 2.8)
 
 set(PLUGIN "casynth")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -msse2 -mfpmath=sse -ffast-math")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
+include(CheckCCompilerFlag)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -std=c99")
+check_c_compiler_flag("-msse2 -mfpmath=sse" SUPPORTS_SSE )
+check_c_compiler_flag("-ffast-math" SUPPORTS_FAST_MATH )
+if(SUPPORTS_SSE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse2 -mfpmath=sse")
+endif(SUPPORTS_SSE)
+if(SUPPORTS_FAST_MATH)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffast-math")
+endif(SUPPORTS_FAST_MATH) 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g") 
 
 if(NOT LIBDIR)
   set(LIBDIR "lib")
@@ -25,8 +34,7 @@ link_directories (${LV2_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS} ${CAIRO_LIBRARY_DIRS})
 add_library(${PLUGIN} SHARED
   casynth.c
   waves.c
-  note.c
-
+  note.c 
 )
 
 set_target_properties(${PLUGIN} PROPERTIES PREFIX "")

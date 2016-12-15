@@ -3,7 +3,16 @@ cmake_minimum_required(VERSION 2.8)
 
 set(PLUGIN "cheapdist")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -msse2 -mfpmath=sse -ffast-math")
+include(CheckCCompilerFlag)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
+check_c_compiler_flag("-msse2 -mfpmath=sse" SUPPORTS_SSE )
+check_c_compiler_flag("-ffast-math" SUPPORTS_FAST_MATH )
+if(SUPPORTS_SSE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse2 -mfpmath=sse")
+endif(SUPPORTS_SSE)
+if(SUPPORTS_FAST_MATH)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffast-math")
+endif(SUPPORTS_FAST_MATH) 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 
 if(NOT LIBDIR)

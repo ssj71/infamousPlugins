@@ -1,11 +1,23 @@
 #CMake file for infamous ewham
+cmake_minimum_required(VERSION 2.8)
 
 set(PLUGIN "ewham")
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -Wall -g -msse2 -mfpmath=sse -ffast-math")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
+include(CheckCCompilerFlag)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
+#CHECK_CXX_COMPILER_FLAG("-msse2 -mfpmath=sse" SUPPORTS_SSE )
+#CHECK_CXX_COMPILER_FLAG("-ffast-math" SUPPORTS_FAST_MATH )
+check_c_compiler_flag("-msse2 -mfpmath=sse" SUPPORTS_SSE )
+check_c_compiler_flag("-ffast-math" SUPPORTS_FAST_MATH )
+if(SUPPORTS_SSE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse2 -mfpmath=sse")
+endif(SUPPORTS_SSE)
+if(SUPPORTS_FAST_MATH)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffast-math")
+endif(SUPPORTS_FAST_MATH) 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 
 if(NOT LIBDIR)
   set(LIBDIR "lib")

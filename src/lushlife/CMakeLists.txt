@@ -1,11 +1,20 @@
-#CMake file for infamous stuck
+#CMake file for infamous
 cmake_minimum_required(VERSION 2.8)
 
 set(PLUGIN "lushlife")
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/")
 
-set(CMAKE_CXX_FLAGS "-Wall -g -msse2 -mfpmath=sse -ffast-math ")
+include(CheckCXXCompilerFlag)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
+check_cxx_compiler_flag("-msse2 -mfpmath=sse" SUPPORTS_SSE )
+check_cxx_compiler_flag("-ffast-math" SUPPORTS_FAST_MATH )
+if(SUPPORTS_SSE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2 -mfpmath=sse")
+endif(SUPPORTS_SSE)
+if(SUPPORTS_FAST_MATH)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math")
+endif(SUPPORTS_FAST_MATH) 
 
 if(NOT LIBDIR)
   set(LIBDIR "lib")
