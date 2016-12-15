@@ -249,7 +249,7 @@ lv2:symbol "Modulation" .
                 lv2:index 18 ;
                 lv2:symbol "AMOD_FREQ" ;
                 lv2:name "AM Frequency" ;
-                lv2:portProperty pprops:logarithmic ;
+                #lv2:portProperty pprops:logarithmic ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 110.0 ;
@@ -287,95 +287,95 @@ lv2:symbol "Modulation" .
                 lv2:index 21 ;
                 lv2:symbol "FMOD_FREQ" ;
                 lv2:name "FM Frequency" ;
-                lv2:portProperty pprops:logarithmic ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 110.0 ;
-                units:unit units:hz ;
-                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:mod> ;
-        ], [
-                a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 22 ;
-                lv2:symbol "FMOD_GAIN" ;
-                lv2:name "FM Gain" ;
-                lv2:default 0.10 ;
-                lv2:minimum -4.00 ;
-                lv2:maximum 4.00 ;
-                units:unit units:semitone12TET ;
-                pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:mod> ;
-        ].
+                    #lv2:portProperty pprops:logarithmic ;
+                    lv2:default 0.0 ;
+                    lv2:minimum 0.0 ;
+                    lv2:maximum 110.0 ;
+                    units:unit units:hz ;
+                    pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:mod> ;
+            ], [
+                    a lv2:InputPort, lv2:ControlPort ;
+                    lv2:index 22 ;
+                    lv2:symbol "FMOD_GAIN" ;
+                    lv2:name "FM Gain" ;
+                    lv2:default 0.10 ;
+                    lv2:minimum -4.00 ;
+                    lv2:maximum 4.00 ;
+                    units:unit units:semitone12TET ;
+                    pg:group <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:group:mod> ;
+            ].
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:00Dfault>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "00 Dfault" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:00Dfault>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "00 Dfault" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:01RawSaw>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "01 RawSaw" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:01RawSaw>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "01 RawSaw" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:02RawSqr>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "02 RawSqr" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:02RawSqr>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "02 RawSqr" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:03Rule30>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "03 Rule30" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:03Rule30>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "03 Rule30" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:04Rule110>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "04 Rule110" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:04Rule110>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "04 Rule110" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:05Chimin>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "05 Chimin" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:05Chimin>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "05 Chimin" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:06Downer>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "06 Downer" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:06Downer>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "06 Downer" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:07Growe>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "07 Growe" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:07Growe>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "07 Growe" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:08HapE>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "08 HapE" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:08HapE>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "08 HapE" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:09Jangley>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "09 Jangley" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:09Jangley>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "09 Jangley" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:10Phazour>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "10 Phazour" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:10Phazour>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "10 Phazour" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
-<http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:11Phoney>
-        a pset:Preset ;
-        lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
-        rdfs:label "11 Phoney" ;
-        rdfs:seeAlso <casynth_presets.ttl> .
+    <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:11Phoney>
+            a pset:Preset ;
+            lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#casynth> ;
+            rdfs:label "11 Phoney" ;
+            rdfs:seeAlso <casynth_presets.ttl> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#casynth:preset:12Roar>
         a pset:Preset ;
