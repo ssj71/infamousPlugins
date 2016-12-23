@@ -1,0 +1,84 @@
+/* = CONTAINER
+================================================ */
+.stuck {
+    background-image:url(/resources/background.png{{{ns}}});
+    background-position:center center;
+    background-repeat:no-repeat;
+    background-size:256px 400px;
+    /*border-radius: 21px;*/
+    height:400px;
+    position:absolute;
+    width:256px;
+    padding: 10px 10px 10px 5px;
+    text-align: center;
+}
+
+/* = LIGHT ON/OFF
+================================================ */
+.stuck .mod-control-image#led {
+    background-position:center center;
+    background-repeat:no-repeat;
+    left:77px;
+    bottom:217px;
+    width:18px;
+    height:18px;
+    position:absolute;
+}
+.stuck .mod-control-image#led .mod-switch-image.off{
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+}
+.stuck .mod-control-image#led .mod-switch-image.on{
+    background-image:url(/resources/led-enabled.png{{{ns}}});
+}
+
+/* = Toggle
+================================================ */
+.stuck .mod-toggle {
+    background-image:url(/resources/switch-key.png{{{ns}}});
+    background-position:bottom center;
+    background-repeat:no-repeat;
+    /*background-size:auto 120px;*/
+    cursor:pointer;
+    left:43px;
+    bottom:191px;
+    width:22px;
+    height:72px;
+    margin: 4px auto 0 auto;
+}
+
+.stuck .mod-toggle.on {
+    background-position: top center !important;
+}
+
+
+/* = KNOBS
+================================================ */
+
+.stuck .mod-knob {
+    display:inline-block;
+    height:71px;
+    width:71px;
+    margin:1px 1px;
+    overflow:hidden;
+    position:relative;
+}
+/*
+.stuck .mod-knob .mod-knob-image {
+    background-image:url(/resources/aluminium.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 60px;
+    height:60px;
+    width:60px;
+    margin:0 auto;
+} 
+*/
+
+.stuck .mod-knob#gain { 
+    left:50px;
+    bottom:280px;
+}
+
+.stuck .mod-knob#release { 
+    left:147px;
+    bottom:280px;
+}

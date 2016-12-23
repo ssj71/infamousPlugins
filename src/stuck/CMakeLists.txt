@@ -46,7 +46,7 @@ install(TARGETS ${PLUGIN}
   LIBRARY
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
-install (FILES manifest.ttl ${PLUGIN}.ttl
+install (FILES manifest.ttl ${PLUGIN}.ttl modgui.ttl
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
 
@@ -70,5 +70,16 @@ if(CAIRO_FOUND AND NTK_FOUND)
 
 else()
     message(WARNING "UI Libraries Missing, no GUI will be installed")
+    if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
+        install (FILES 
+          modgui/${plugin}.html 
+          modgui/${plugin}.css
+          modgui/stuckbg.svg
+          modgui/led-bypassed.png
+          modgui/led-enabled.png
+          modgui/switch-key.png
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
+        )
+    endif()
 endif()
 

@@ -1,0 +1,13 @@
+@prefix modgui: <http://moddevices.com/ns/modgui#> .
+@prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
+
+<https://ssj71.github.io/infamousPlugins/plugs.html#stuck>
+    modgui:gui [
+        modgui:resourcesDirectory <modgui> ;
+        modgui:iconTemplate <modgui/stuck.html> ;
+        modgui:stylesheet <modgui/stuck.css> ;
+        #modgui:screenshot <modgui/screenshot-stuck.png> ;
+        #modgui:thumbnail <modgui/thumbnail-stuck.png> ;
+        modgui:brand "infamous" ;
+        modgui:label "stuck" ;
+    ] .
