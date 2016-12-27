@@ -20,6 +20,13 @@
         ] ;
         mod:brand "infamous";        
         mod:label "stuck"; 
+        modgui:gui [
+            modgui:resourcesDirectory <modgui> ;
+            modgui:iconTemplate <modgui/stuck.html> ;
+            modgui:stylesheet <modgui/stuck.css> ;
+            modgui:brand "infamous" ;
+            modgui:label "stuck" ;
+        ] .
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This effect samples the input, detects the primary waveform, and creates a drone of the note played when triggered. It is polyphonic and matches your tone. It may have pulsing/shimmering sounds on fuller chords." ;

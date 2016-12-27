@@ -72,8 +72,8 @@ else()
     message(WARNING "UI Libraries Missing, no GUI will be installed")
     if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
         install (FILES 
-          modgui/${plugin}.html 
-          modgui/${plugin}.css
+          modgui/${PLUGIN}.html 
+          modgui/${PLUGIN}.css
           modgui/stuckbg.svg
           modgui/led-bypassed.png
           modgui/led-enabled.png

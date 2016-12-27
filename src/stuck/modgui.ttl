@@ -1,7 +1,7 @@
 @prefix modgui: <http://moddevices.com/ns/modgui#> .
 @prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
 
-<https://ssj71.github.io/infamousPlugins/plugs.html#stuck>
+<http://ssj71.github.io/infamousPlugins/plugs.html#stuck>
     modgui:gui [
         modgui:resourcesDirectory <modgui> ;
         modgui:iconTemplate <modgui/stuck.html> ;
