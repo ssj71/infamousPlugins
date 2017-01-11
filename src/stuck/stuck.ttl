@@ -7,6 +7,7 @@
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 @prefix mod: <http://moddevices.com/ns/mod#>.
+@prefix modgui: <http://moddevices.com/ns/modgui#>.
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#stuck>
         a lv2:Plugin, lv2:DelayPlugin ;

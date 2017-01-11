@@ -4,7 +4,9 @@
 #include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "draw/draw_tabDial.h"
 
+//to use this you must remove 'inline' from the function
 // gcc -Wall -g make_knob_image.c -lm `pkg-config --cflags --libs cairo` -o knobmake
 
 #ifndef min
@@ -16,58 +18,6 @@
 
 const double scale_zero = 20 * (M_PI/180); // defines "dead zone" for knobs
 
-static void paint_knob_state(cairo_t *cr, int knob_size, int knob_offset, double knobstate)
-{
-    /** set knob size **/
-    int arc_offset = knob_offset;
-    double knob_x = knob_size-arc_offset;
-    double knob_y = knob_size-arc_offset;
-    double knobx = arc_offset/2;
-    double knobx1 = knob_x/2;
-    double knoby = arc_offset/2;
-    double knoby1 = knob_y/2;
-
-    /** create the knob, set the knob and border color to your needs,
-     *  or set knob color alpa to 0.0 to draw only the border **/
-    cairo_arc(cr,knobx1+arc_offset/2, knoby1+arc_offset/2, knob_x/2.1, 0, 2 * M_PI );
-    cairo_set_source_rgba (cr, 0.6, 0.6, 0.6, 1.0); // knob color
-    cairo_fill_preserve (cr);
-   
-    cairo_set_source_rgb (cr, 0.2, 0.2, 0.2); // knob border color
-    cairo_set_line_width(cr,min(5, max(2,knob_x/30)));
-    cairo_stroke(cr);
-
-    /** calculate the pointer **/
-    double angle = scale_zero + knobstate * 2 * (M_PI - scale_zero);
-    double pointer_off =knob_x/10;
-    double radius = min(knob_x-pointer_off, knob_y-pointer_off) / 2;
-    double length_x = (knobx+radius+pointer_off/2) - radius * sin(angle);
-    double length_y = (knoby+radius+pointer_off/2) + radius * cos(angle);
-    double radius_x = (knobx+radius+pointer_off/2) - radius/ 1.5 * sin(angle);
-    double radius_y = (knoby+radius+pointer_off/2) + radius/ 1.5 * cos(angle);
-
-    /** create the rotating pointer on the knob,
-     * set the color to your needs **/
-    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
-    cairo_set_line_join(cr, CAIRO_LINE_JOIN_BEVEL);
-    cairo_move_to(cr, radius_x, radius_y);
-    cairo_line_to(cr,length_x,length_y);
-
-    cairo_set_source_rgb (cr, 0.2, 0.2, 0.2); // knob pointer color
-    cairo_set_line_width(cr,min(5, max(2,knob_x/30)));
-    cairo_stroke(cr);
-
-    /** 3d shading comment out, or set alpa to 0.0, for flat knobs
-     * or set alpa to a higher value for more shading effect **/
-    cairo_arc(cr,knobx1+arc_offset/2, knoby1+arc_offset/2, knob_x/2.1, 0, 2 * M_PI );
-    cairo_pattern_t*pat =
-        cairo_pattern_create_radial (knobx1+arc_offset-knob_x/6,knoby1+arc_offset-knob_x/6, 1,knobx1+arc_offset,knoby1+arc_offset,knob_x/2.1 );
-    cairo_pattern_add_color_stop_rgba (pat, 0,  0.8, 0.8, 0.8, 0.2);
-    cairo_pattern_add_color_stop_rgba (pat, 1,  0.0, 0.0, 0.0, 0.2);
-    cairo_set_source (cr, pat);
-    cairo_fill (cr);
-    cairo_pattern_destroy (pat);
-}
 
 int main(int argc, char* argv[])
 {
@@ -102,7 +52,9 @@ int main(int argc, char* argv[])
 
     /** draw the knob per frame to image **/
     for (int i = 0; i < knob_frames; i++) {
-        paint_knob_state(crf, knob_size, knob_offset, (double)((double)i/ knob_frames));
+        //paint_knob_state(crf, knob_size, knob_offset, (double)((double)i/ knob_frames));
+        cairo_translate(cr,knob_size,0);
+        cairo_code_draw_tabDial_render(cr,(float)i/knob_frames);
         cairo_set_source_surface(cr, frame, knob_size*i, 0);
         cairo_paint(cr);
         cairo_set_operator(crf,CAIRO_OPERATOR_CLEAR);

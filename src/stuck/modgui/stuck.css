@@ -20,9 +20,9 @@
     background-position:center center;
     background-repeat:no-repeat;
     left:82px;
-    bottom:170px;
-    height:18px;
-    width:18px;
+    bottom:168px;
+    height:22px;
+    width:20px;
     position:absolute;
 }
 .stuck .mod-light.on{
@@ -90,30 +90,32 @@
 ================================================ */
 
 .stuck .mod-knob {
+/*
     display:inline-block;
+    overflow:hidden;
+*/
+    position:absolute;
     height:71px;
     width:71px;
-    margin:1px 1px;
-    overflow:hidden;
-    position:relative;
 }
-/*
+
 .stuck .mod-knob .mod-knob-image {
-    background-image:url(/resources/aluminium.png{{{ns}}});
+    background-image:url(/resources/tabDial.svg{{{ns}}});
     background-repeat:no-repeat;
-    background-size:auto 60px;
+    background-size:cover auto;
+    /*
     height:60px;
     width:60px;
     margin:0 auto;
+    */
 } 
-*/
 
 .stuck .mod-knob#gain { 
     left:50px;
-    bottom:280px;
+    top:280px;
 }
 
 .stuck .mod-knob#release { 
     left:147px;
-    bottom:280px;
+    top:280px;
 }
