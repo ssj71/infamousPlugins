@@ -15,6 +15,22 @@
 
 /* = LIGHT ON/OFF
 ================================================ */
+.stuck .mod-light {
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+    background-position:center center;
+    background-repeat:no-repeat;
+    left:82px;
+    bottom:170px;
+    height:18px;
+    width:18px;
+    position:absolute;
+}
+.stuck .mod-light.on{
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+}
+.stuck .mod-light.off{
+    background-image:url(/resources/led-enabled.png{{{ns}}});
+}
 /* old light
 .stuck .mod-control-image#led {
     background-position:center center;
@@ -38,12 +54,13 @@
     background-image:url(/resources/switch-key.png{{{ns}}});
     background-position:bottom center;
     background-repeat:no-repeat;
-    /*background-size:auto 120px;*/
+    background-size:auto 120px;
+    position:absolute;
     cursor:pointer;
     left:43px;
-    bottom:191px;
-    width:22px;
-    height:72px;
+    bottom:148px;
+    width:40px;
+    height:60px;
     margin: 4px auto 0 auto;
 }
 .stuck .mod-footswitch.on {
