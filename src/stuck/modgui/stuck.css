@@ -90,32 +90,36 @@
 ================================================ */
 
 .stuck .mod-knob {
-/*
     display:inline-block;
     overflow:hidden;
-*/
-    position:absolute;
-    height:71px;
-    width:71px;
+    position:relative;
 }
 
 .stuck .mod-knob .mod-knob-image {
-    background-image:url(/resources/tabDial.svg{{{ns}}});
+    background-image:url(/resources/tabDial64.svg{{{ns}}});
     background-repeat:no-repeat;
-    background-size:cover auto;
-    /*
-    height:60px;
-    width:60px;
+    background-size:auto 71px; 
+    background-position:left center;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+    height:71px;
+    width:71px;
     margin:0 auto;
-    */
 } 
 
-.stuck .mod-knob#gain { 
+.stuck .mod-knob#stuckgain { 
     left:50px;
     top:280px;
+    position:absolute;
 }
 
-.stuck .mod-knob#release { 
+.stuck .mod-knob#stuckrelease { 
     left:147px;
     top:280px;
+    position:absolute;
+}
+
+.stuck .mod-pedal-input, .stuck .mod-pedal-output {
+    top:160px;
 }

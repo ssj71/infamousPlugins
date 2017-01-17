@@ -53,13 +53,17 @@ int main(int argc, char* argv[])
     /** draw the knob per frame to image **/
     for (int i = 0; i < knob_frames; i++) {
         //paint_knob_state(crf, knob_size, knob_offset, (double)((double)i/ knob_frames));
-        cairo_translate(cr,knob_size,0);
-        cairo_code_draw_tabDial_render(cr,(float)i/knob_frames);
+        cairo_save(cr);
+        cairo_translate(cr,i*knob_size,0);
+        cairo_code_draw_tabDial_render(cr,(float)i/(knob_frames-1));
+        cairo_restore(cr);
+        /*
         cairo_set_source_surface(cr, frame, knob_size*i, 0);
         cairo_paint(cr);
         cairo_set_operator(crf,CAIRO_OPERATOR_CLEAR);
         cairo_paint(crf);
         cairo_set_operator(crf,CAIRO_OPERATOR_OVER);
+        */
     }
 
     /** save to png file **/
