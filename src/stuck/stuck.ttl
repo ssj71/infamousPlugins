@@ -13,7 +13,7 @@
         a lv2:Plugin, lv2:DelayPlugin ;
         doap:name "the infamous stuck" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
-        doap:description "a sound retainer/sample and overlay effect";
+        doap:description "a sound retainer/hold/sustenudo effect";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;

@@ -31,7 +31,7 @@
 .stuck .mod-light.off{
     background-image:url(/resources/led-enabled.png{{{ns}}});
 }
-/* old light
+/* old light*/
 .stuck .mod-control-image#led {
     background-position:center center;
     background-repeat:no-repeat;
@@ -62,23 +62,29 @@
     width:40px;
     height:60px;
     margin: 4px auto 0 auto;
+    z-index:1000;
 }
 .stuck .mod-footswitch.on {
     background-position: top center !important;
 }
-/* old toggle
-.stuck .mod-toggle {
+.stuck .mod-footswitch.off {
+    background-position: bottom center !important;
+}
+/* old toggle*/
+/*
+.stuck .mod-knob .mod-toggle {
     background-image:url(/resources/switch-key.png{{{ns}}});
     background-position:bottom center;
     background-repeat:no-repeat;
-    /*background-size:auto 120px;*/
-/*
+    background-size:auto 120px;
+    position:absolute;
     cursor:pointer;
     left:43px;
-    bottom:191px;
-    width:22px;
-    height:72px;
+    bottom:148px;
+    width:40px;
+    height:60px;
     margin: 4px auto 0 auto;
+    z-index: 1000;
 }
 
 .stuck .mod-toggle.on {
@@ -88,7 +94,6 @@
 
 /* = KNOBS
 ================================================ */
-
 .stuck .mod-knob {
     display:inline-block;
     overflow:hidden;
@@ -106,6 +111,7 @@
     height:71px;
     width:71px;
     margin:0 auto;
+    z-index: 30;
 } 
 
 .stuck .mod-knob#stuckgain { 
