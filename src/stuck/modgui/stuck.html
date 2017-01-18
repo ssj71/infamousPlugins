@@ -5,16 +5,16 @@
     </div>
     <div class="mod-knob" id="stuckrelease" title="release time (sec)">
       <div class="mod-knob-image" mod-role="input-control-port" mod-port-symbol="RELEASE"></div>
-    <!--
-    <div class="mod-light on" mod-role="bypass-light"></div>
-    <div class="mod-footswitch" mod-role="bypass"></div>
-    !-->
+    </div>
     <div class="mod-footswitch" title="Switch on/off hold."
+      mod-widget="switch"
       mod-role="input-control-port"
       mod-port-symbol="STICK_IT" >
     </div>
-    <div class="mod-control">
-      <div class="mod-control-image" id="led" mod-role="input-control-port" mod-port-symbol="STICK_IT" mod-widget="switch"></div>
+    <div class="mod-light" title="Switch on/off hold."
+      mod-widget="switch"
+      mod-role="input-control-port"
+      mod-port-symbol="STICK_IT" >
     </div>
     <div class="mod-pedal-input">
       {{#effect.ports.audio.input}}

@@ -26,26 +26,10 @@
     position:absolute;
 }
 .stuck .mod-light.on{
-    background-image:url(/resources/led-bypassed.png{{{ns}}});
+    background-image:url(/resources/led-enabled.png{{{ns}}});
 }
 .stuck .mod-light.off{
-    background-image:url(/resources/led-enabled.png{{{ns}}});
-}
-/* old light*/
-.stuck .mod-control-image#led {
-    background-position:center center;
-    background-repeat:no-repeat;
-    left:77px;
-    bottom:217px;
-    width:18px;
-    height:18px;
-    position:absolute;
-}
-.stuck .mod-control-image#led .mod-switch-image.off{
     background-image:url(/resources/led-bypassed.png{{{ns}}});
-}
-.stuck .mod-control-image#led .mod-switch-image.on{
-    background-image:url(/resources/led-enabled.png{{{ns}}});
 }
 
 /* = Toggle
@@ -62,7 +46,6 @@
     width:40px;
     height:60px;
     margin: 4px auto 0 auto;
-    z-index:1000;
 }
 .stuck .mod-footswitch.on {
     background-position: top center !important;
@@ -70,27 +53,6 @@
 .stuck .mod-footswitch.off {
     background-position: bottom center !important;
 }
-/* old toggle*/
-/*
-.stuck .mod-knob .mod-toggle {
-    background-image:url(/resources/switch-key.png{{{ns}}});
-    background-position:bottom center;
-    background-repeat:no-repeat;
-    background-size:auto 120px;
-    position:absolute;
-    cursor:pointer;
-    left:43px;
-    bottom:148px;
-    width:40px;
-    height:60px;
-    margin: 4px auto 0 auto;
-    z-index: 1000;
-}
-
-.stuck .mod-toggle.on {
-    background-position: top center !important;
-}
-
 
 /* = KNOBS
 ================================================ */
