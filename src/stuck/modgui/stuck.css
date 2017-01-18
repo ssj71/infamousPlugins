@@ -109,13 +109,13 @@
 } 
 
 .stuck .mod-knob#stuckgain { 
-    left:50px;
+    left:47px;
     top:280px;
     position:absolute;
 }
 
 .stuck .mod-knob#stuckrelease { 
-    left:147px;
+    left:144px;
     top:280px;
     position:absolute;
 }

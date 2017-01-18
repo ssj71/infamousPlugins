@@ -23,11 +23,30 @@
         mod:label "ewham"; 
         modgui:gui [
             modgui:resourcesDirectory <modgui> ;
-            modgui:iconTemplate <modgui/ewham.html> ;
-            modgui:stylesheet <modgui/ewham.css> ;
+            modgui:iconTemplate <modgui/icon-the-infamous-ewham.html> ;
+            modgui:stylesheet <modgui/stylesheet-the-infamous-ewham.css> ;
+            modgui:screenshot <modgui/screenshot-the-infamous-ewham.png> ;
+            modgui:thumbnail <modgui/thumbnail-the-infamous-ewham.png> ;
             modgui:brand "infamous" ;
             modgui:label "ewham" ;
-        ] .
+            modgui:model "boxy" ;
+            modgui:panel "1-select-2-knobs" ;
+            modgui:color "dots" ;
+            modgui:knob "steel" ;
+            modgui:port [
+                lv2:index 0 ;
+                lv2:symbol "MODE" ;
+                lv2:name "Mode" ;
+            ] , [
+                lv2:index 1 ;
+                lv2:symbol "START" ;
+                lv2:name "Start" ;
+            ] , [
+                lv2:index 2 ;
+                lv2:symbol "FINISH" ;
+                lv2:name "Finish" ;
+            ] ;
+        ] ;
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This shifter works well for monophonic sounds, allowing an easy control to change the shifting interval. Any interval between 2 octaves down and 3 octaves up is available. It also has controls that will slide to the nearest semitone after being adjusted, or to jump directly from semitone to semitone. It also provides a dry mix for chorus effects." ;
