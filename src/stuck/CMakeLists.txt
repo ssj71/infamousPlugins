@@ -78,6 +78,7 @@ else()
           modgui/led-bypassed.png
           modgui/led-enabled.png
           modgui/switch-key.png
+          modgui/tabDial64.svg
           DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
         )
     endif()
