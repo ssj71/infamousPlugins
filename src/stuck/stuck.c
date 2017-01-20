@@ -9,7 +9,8 @@
 #include"stuck.h"
 
 //#define CV_PORTS
-//#define AUTOCORR
+#define AUTOCORR
+//#define COMP
 
 #ifdef AUTOCORR
 #define START_SCORE 0
@@ -48,6 +49,7 @@ typedef struct _STUCK
     float gain;
     float env;//envelope gain to normalize compression to
     float score;
+    float shortscore;
 
     RMS_CALC rms_calc;
 
@@ -85,11 +87,16 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 #endif
         {
             plug->state = LOADING;
+#ifdef COMP
             plug->env = plug->rms_calc.rms;
         }
         else
         {
             rms_block_fill(&plug->rms_calc, plug->input_p,nframes);
+#else
+        }
+        else{
+#endif
             return;
         }
     }
@@ -109,7 +116,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             plug->gain = 0;
             plug->wavesize = plug->wave_max;
             plug->score = START_SCORE;
+            plug->shortscore = .25*START_SCORE;
+#ifdef COMP
             rms_block_fill(&plug->rms_calc, plug->input_p,nframes);
+#endif
             return;
         }
     }
@@ -137,10 +147,12 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         {
             plug->state = QUICK_RELEASING;
         }
+#ifdef COMP
         else
         {
             rms_block_fill(&plug->rms_calc, plug->input_p,nframes);
         }
+#endif
     }
 
     //now run the state machine
@@ -158,7 +170,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             //load buffer with compressed signal
             for(j=0; j<chunk; j++)
             {
+#ifdef COMP
                 plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
+#else
+                plug->buf[plug->indx++] = plug->input_p[i];
+#endif
                 i++;
             }
         }
@@ -173,33 +189,43 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             float tmp,score;
             for(j=0; j<chunk; j++)
             {
+#ifdef COMP
                 plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
+#else
+                plug->buf[plug->indx++] = plug->input_p[i];
+#endif
                 i++;
 
                 score = 0;
                 t=0;
-                for(k=plug->indx2; k<plug->indx2+plug->acorr_size && score<=plug->score; k++)
+#ifdef AUTOCORR
+                for(k=plug->indx2; k<plug->indx2+(plug->acorr_size>>2); k++)
                 {
-#ifdef AUTOCORR
                     score += plug->buf[k]*plug->buf[t++];
-#else
-                    tmp = plug->buf[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
-                    score += tmp*tmp;
-#endif
                 }
-                plug->indx2++;
-
-#ifdef AUTOCORR
+                if(score >= plug->shortscore)
+                {
+                    //full calc
+                    plug->shortscore = .9*score;
+                    for( ; k<plug->indx2+plug->acorr_size; k++)
+                        score += plug->buf[k]*plug->buf[t++];
+                }
                 //save place if score is higher than last highest
                 if(score>=plug->score)
 #else
+                for(k=plug->indx2; k<plug->indx2+plug->acorr_size && score<=plug->score; k++)
+                {
+                    tmp = plug->buf[k] - plug->buf[t++];//jsyk this isn't the strict definition of an autocorrelation, a variation on the principle
+                    score += tmp*tmp;
+                }
                 //save place if score is lower than last minimum
                 if(score<=plug->score)
 #endif
                 {
-                    plug->wavesize = plug->indx2 -1;//subtract 1 because we incremented already
+                    plug->wavesize = plug->indx2;
                     plug->score = score;
                 }
+                plug->indx2++;
             }
             if(plug->indx2>=plug->wave_max)
             {
@@ -230,7 +256,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             for(j=0; j<chunk; j++)
             {
                 //still loading end of buffer
+#ifdef COMP
                 plug->buf[plug->indx++] = plug->input_p[i]*plug->env/rms_shift(&plug->rms_calc,plug->input_p[i]);
+#else
+                plug->buf[plug->indx++] = plug->input_p[i];
+#endif
 
             	//layer 2 full cycles on top of each other
                 plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
@@ -306,6 +336,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->gain = 0;
                 plug->wavesize = plug->wave_max;
                 plug->score = START_SCORE;
+                plug->shortscore = .25*START_SCORE;
                 return;
             }
         }
@@ -324,7 +355,9 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->gain += slope;
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0;
             }
+#ifdef COMP
             rms_block_fill(&plug->rms_calc, plug->input_p,chunk);
+#endif
             if(plug->gain <= -slope)
             {
                 plug->indx = 0;
@@ -332,7 +365,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->state = LOADING;
                 plug->wavesize = plug->wave_max;
                 plug->score = START_SCORE;
+                plug->shortscore = .25*START_SCORE;
+#ifdef COMP
                 plug->env = plug->rms_calc.rms;
+#endif
             }
         }
     }
@@ -363,6 +399,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->state = INACTIVE;
     plug->gain = 0;
     plug->score = START_SCORE;
+    plug->shortscore = .25*START_SCORE;
     plug->env = 0;
     plug->dbg = 0;
 
