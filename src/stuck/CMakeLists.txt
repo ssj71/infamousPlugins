@@ -46,7 +46,7 @@ install(TARGETS ${PLUGIN}
   LIBRARY
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
-install (FILES manifest.ttl ${PLUGIN}.ttl modgui.ttl
+install (FILES manifest.ttl ${PLUGIN}.ttl
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
 
