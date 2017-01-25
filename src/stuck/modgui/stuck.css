@@ -48,10 +48,10 @@
     margin: 4px auto 0 auto;
 }
 .stuck .mod-footswitch.on {
-    background-position: top center !important;
+    background-position: bottom center !important;
 }
 .stuck .mod-footswitch.off {
-    background-position: bottom center !important;
+    background-position: top center !important;
 }
 
 /* = KNOBS
