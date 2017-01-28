@@ -25,6 +25,8 @@
             modgui:resourcesDirectory <modgui> ;
             modgui:iconTemplate <modgui/stuck.html> ;
             modgui:stylesheet <modgui/stuck.css> ;
+            modgui:screenshot <modgui/screenshot-stuck.png> ;
+            modgui:thumbnail <modgui/thumbnail-stuck.png> ;
             modgui:brand "infamous" ;
             modgui:label "stuck" ;
         ] ;
