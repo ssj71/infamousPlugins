@@ -4,12 +4,10 @@
 #include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "draw/draw_reel.h"
-#include "draw/draw_powerbg.h"
-#include "draw/draw_pwrLabels.h"
+#include "draw/draw_powerButton.h"
 
 //to use this you must remove 'inline' from the function
-// gcc -Wall -g make_bg.c -lm `pkg-config --cflags --libs cairo` -o bgmake
+// gcc -Wall -g make_button.c -lm `pkg-config --cflags --libs cairo` -o buttonmake
 
 #ifndef min
 #define min(x, y) ((x) < (y) ? (x) : (y))
@@ -25,13 +23,13 @@ int main(int argc, char* argv[])
 {
 
     int knob_offset = 0;
-    int imgw = 487;
-    int imgh = 318;
+    int imgw = 160;
+    int imgh = 64;
    
     char png_file[80];
     char svg_file[80];
-    sprintf(png_file, "bg.png");
-    sprintf(svg_file, "bg.svg");
+    sprintf(png_file, "button.png");
+    sprintf(svg_file, "button.svg");
 
     /** use this instead the svg surface when you don't need the svg format **/
     //cairo_surface_t *frame = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, knob_size, knob_size);
@@ -39,38 +37,14 @@ int main(int argc, char* argv[])
     cairo_t *crf = cairo_create(frame);
     /** use this instead the svg surface when you don't need the svg format **/
     //cairo_surface_t *knob_img = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, knob_image_widht, knob_size);
-    cairo_surface_t *knob_img = cairo_svg_surface_create(svg_file, imgw, imgh);
+    cairo_surface_t *knob_img = cairo_svg_surface_create(svg_file, imgw, imgh*2);
     cairo_t *cr = cairo_create(knob_img);
 
     /** draw the widgets to image **/
-    cairo_save(cr);
-    cairo_translate(cr,0,0);
-    cairo_code_draw_powerbg_render(cr);
-    cairo_restore(cr);
+    cairo_code_draw_powerButton_render(cr,0);
 
-    cairo_save(cr);
-    cairo_translate(cr,19,25);
-    cairo_code_draw_pwrcutLabel_render(cr);
-    cairo_restore(cr);
-
-    cairo_save(cr);
-    cairo_translate(cr,32,175);
-    cairo_code_draw_pwrdecaytLabel_render(cr);
-    cairo_restore(cr);
-
-    cairo_save(cr);
-    cairo_translate(cr,163,175);
-    cairo_code_draw_pwrdecaycLabel_render(cr);
-    cairo_restore(cr);
-
-    cairo_save(cr);
-    cairo_translate(cr,286,8);
-    cairo_code_draw_reel_logo_render(cr);
-    cairo_translate(cr,190.5,190.5);
-    cairo_rotate(cr,.7);//radians I presume
-    cairo_translate(cr,-190.5,-190.5);
-    cairo_code_draw_reel_render(cr);
-    cairo_restore(cr);
+    cairo_translate(cr,0,imgh);
+    cairo_code_draw_powerButton_render(cr,1);
 
     /** save to png file **/
     cairo_surface_flush(knob_img);
