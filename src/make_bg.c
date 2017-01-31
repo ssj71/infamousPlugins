@@ -24,18 +24,10 @@ const double scale_zero = 20 * (M_PI/180); // defines "dead zone" for knobs
 int main(int argc, char* argv[])
 {
 
-    int knob_size = atoi(argv[1]);
-    int knob_frames = atoi(argv[2]);
-    int knob_image_width = knob_size * knob_frames;
     int knob_offset = 0;
     int imgw = 487;
     int imgh = 318;
-    if (argc >= 4) {
-        knob_offset = atoi(argv[3]);
-    }
    
-    char* sz = argv[1];
-    char* fr = argv[2];
     char png_file[80];
     char svg_file[80];
     sprintf(png_file, "bg.png");
