@@ -79,6 +79,8 @@ else()
           modgui/led-enabled.png
           modgui/switch-key.png
           modgui/tabDial64.svg
+          modgui/screenshot-stuck.png
+          modgui/thumbnail-stuck.png
           DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
         )
     endif()
