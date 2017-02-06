@@ -88,7 +88,7 @@
                 lv2:minimum 0 ;
                 lv2:maximum 3 ; 
                 lv2:scalePoint [ rdfs:label "Classic Shift"; rdf:value 0 ] ;
-                lv2:scalePoint [ rdfs:label "Harmomizer"; rdf:value 1 ] ;
+                lv2:scalePoint [ rdfs:label "Harmonizer"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Chorus"; rdf:value 2 ] ;
                 lv2:portProperty lv2:integer ;
         ], [
