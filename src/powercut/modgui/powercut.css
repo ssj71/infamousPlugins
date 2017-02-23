@@ -17,16 +17,16 @@
 /* = Toggle
 ================================================ */
 .powercut .mod-footswitch {
-    background-image:url(/resources/powerbutton.png{{{ns}}});
+    background-image:url(/resources/powerbutton.svg{{{ns}}});
     background-position:bottom center;
     background-repeat:no-repeat;
     background-size:auto 120px;
     position:absolute;
     cursor:pointer;
     left:42px;
-    bottom:80px;
+    top:80px;
     width:160px;
-    height:64px;
+    height:60px;
     margin: 4px auto 0 auto;
 }
 .powercut .mod-footswitch.on {
@@ -45,7 +45,7 @@
 }
 
 .powercut .mod-knob .mod-knob-image {
-    background-image:url(/resources/tabDial64.svg{{{ns}}});
+    background-image:url(/resources/silverDial64.png{{{ns}}});
     background-repeat:no-repeat;
     background-size:auto 77px; 
     background-position:left center;

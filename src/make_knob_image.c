@@ -4,7 +4,7 @@
 #include <libgen.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "draw/draw_tabDial.h"
+#include "draw/draw_silverDial.h"
 
 //to use this you must remove 'inline' from the function
 // gcc -Wall -g make_knob_image.c -lm `pkg-config --cflags --libs cairo` -o knobmake
@@ -14,6 +14,9 @@
 #endif
 #ifndef max
 #define max(x, y) ((x) < (y) ? (y) : (x))
+#endif
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
 #endif
 
 const double scale_zero = 20 * (M_PI/180); // defines "dead zone" for knobs
@@ -55,7 +58,7 @@ int main(int argc, char* argv[])
         //paint_knob_state(crf, knob_size, knob_offset, (double)((double)i/ knob_frames));
         cairo_save(cr);
         cairo_translate(cr,i*knob_size,0);
-        cairo_code_draw_tabDial_render(cr,(float)i/(knob_frames-1));
+        cairo_code_draw_silverDial_render(cr,(float)i/(knob_frames-1));
         cairo_restore(cr);
         /*
         cairo_set_source_surface(cr, frame, knob_size*i, 0);
