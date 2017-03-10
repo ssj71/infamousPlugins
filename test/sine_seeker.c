@@ -24,6 +24,44 @@ float mySinAbs(float x)
     float y = 1.27323954474*x - 0.40528473456*x*fabs(x);
     return 0.225*(y*fabs(y) - y) + y;
 }
+float mySin1Abs(float x)
+{
+    float y = fabs(x);
+    y *= x;
+    y *= -0.40528473456;
+    x *= 1.27323954474;
+    y += x;
+    x = fabs(y);
+    x *= y;
+    x -= y;
+    x *= 0.225;
+    return x + y;
+}
+float myIntSinAbs(uint32_t i)
+{
+    float x = INT2FLOAT*i;
+    float y = 1.27323954474*x - 0.40528473456*x*fabs(x);
+    return 0.225*(y*fabs(y) - y) + y;
+}
+float myintSin1f(float i)
+{
+    int32_t y,m,x;
+    x = FLOAT2INT*i;
+    y = x>>15;
+    m = y>>31;
+    y *= ((y^m)-m)>>1;
+    x -= y;
+    x >>= 15;
+
+    m = x>>31;
+    y = x;
+    y *= (y^m)-m;
+    y >>= 16;
+    y *= 37549;
+    x *= 32334;
+    y += x;
+    return INT2FLOAT*y;
+}
 
 int32_t intSinOld(int32_t x)
 {
@@ -51,15 +89,29 @@ int32_t intSinOldIf(int32_t x)
 
 int32_t intSin(int32_t x)
 {
-    int32_t y,m,tmp;
+    int32_t y,m;
     y = x>>15;
     m = y>>16;
-    tmp = (y*((y^m)-m));
     y = (x - (((y>>1)*((y^m)-m))))>>15;
     m = y>>16;
     return 37549*((y*((y^m)-m))>>16) +32334*y;
 } 
-int32_t intSin1(int32_t x)
+int32_t intSinAbs(int32_t x)
+{
+    int32_t y;
+    y = x>>15;
+    y = (x - ((y*labs(y))>>1))>>15;
+    return 37549*((y*labs(y))>>16) +32334*y;
+} 
+int32_t intSinIf(int32_t x)
+{
+    int32_t y,m;
+    y = x>>15;
+    y = (x - ((y>>1)*(y<0?-y:y)))>>15;
+    return 37549*((y*(y<0?-y:y))>>16) +32334*y;
+} 
+
+int32_t intSin1(int32_t x)//same as intsin but ~1 op per line
 {
     int32_t y,m;
     y = x>>15;
@@ -76,20 +128,39 @@ int32_t intSin1(int32_t x)
     x *= 32334;
     return y+x;
 }
-int32_t intSinAbs(int32_t x)
-{
-    int32_t y;
-    y = x>>15;
-    y = (x - ((y*labs(y))>>1))>>15;
-    return 37549*((y*labs(y))>>16) +32334*y;
-} 
-int32_t intSinIf(int32_t x)
+int32_t intSin1Abs(int32_t x)
 {
     int32_t y,m;
     y = x>>15;
-    y = (x - ((y>>1)*(y<0?-y:y)))>>15;
-    return 37549*((y*(y<0?-y:y))>>16) +32334*y;
-} 
+    y *= labs(y>>1);//((y^m)-m)>>1;
+    x -= y;
+    x >>= 15;
+
+    y = x;
+    y *= labs(y);
+    y >>= 16;
+    y *= 37549;
+    x *= 32334;
+    return y+x;
+}
+float intSin1f(int32_t x)
+{
+    int32_t y,m;
+    y = x>>15;
+    m = y>>31;
+    y *= ((y^m)-m)>>1;
+    x -= y;
+    x >>= 15;
+
+    m = x>>31;
+    y = x;
+    y *= (y^m)-m;
+    y >>= 16;
+    y *= 37549;
+    x *= 32334;
+    y += x;
+    return INT2FLOAT*y;
+}
 
 
 void accuracy(uint32_t samples)
@@ -138,6 +209,44 @@ void accuracy(uint32_t samples)
         phase += dphase; 
     }
     printf("mySinAbs\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
+
+    max = min = 0;
+    phase = -M_PI;
+    for(i=0;i<samples;i++)
+    {
+        err = sin(phase) - mySin1Abs(phase);
+        if(err > max)
+        {
+            max = err;
+            pmax = phase;
+        }
+        else if (err < min)
+        {
+            min = err;
+            pmin = phase;
+        }
+        phase += dphase; 
+    }
+    printf("mySin1Abs\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
+
+    max = min = 0;
+    phase = -M_PI;
+    for(i=0;i<samples;i++)
+    {
+        err = sin(phase) - myintSin1f(phase);
+        if(err > max)
+        {
+            max = err;
+            pmax = phase;
+        }
+        else if (err < min)
+        {
+            min = err;
+            pmin = phase;
+        }
+        phase += dphase; 
+    }
+    printf("myintSin1f\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
 
     //int versions
     idphase = FLOAT2INT*dphase;
@@ -223,9 +332,30 @@ void accuracy(uint32_t samples)
             pmin = phase;
         }
         phase += dphase; 
-        iphase += idphase;
+        iphase = phase*FLOAT2INT;
     }
     printf("intSin1\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
+
+    max = min = 0;
+    phase = -M_PI;
+    iphase = -0x80000000;
+    for(i=0;i<samples;i++)
+    {
+        err = sin(phase) - INT2FLOAT*intSin1Abs(iphase);
+        if(err > max)
+        {
+            max = err;
+            pmax = phase;
+        }
+        else if (err < min)
+        {
+            min = err;
+            pmin = phase;
+        }
+        phase += dphase; 
+        iphase = phase*FLOAT2INT;
+    }
+    printf("intSin1Abs\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
 
     max = min = 0;
     phase = -M_PI;
@@ -289,6 +419,48 @@ void accuracy(uint32_t samples)
         iphase += idphase;
     }
     printf("intSinOldIf\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
+
+    max = min = 0;
+    phase = -M_PI;
+    iphase = -0x80000000;
+    for(i=0;i<samples;i++)
+    {
+        err = sin(phase) - myIntSinAbs(iphase);
+        if(err > max)
+        {
+            max = err;
+            pmax = phase;
+        }
+        else if (err < min)
+        {
+            min = err;
+            pmin = phase;
+        }
+        phase += dphase; 
+        iphase = phase*FLOAT2INT;
+    }
+    printf("myIntSinAbs\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
+
+    max = min = 0;
+    phase = -M_PI;
+    iphase = -0x80000000;
+    for(i=0;i<samples;i++)
+    {
+        err = sin(phase) - intSin1f(iphase);
+        if(err > max)
+        {
+            max = err;
+            pmax = phase;
+        }
+        else if (err < min)
+        {
+            min = err;
+            pmin = phase;
+        }
+        phase += dphase; 
+        iphase = phase*FLOAT2INT;
+    }
+    printf("intSin1f\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
 }
 
 int main()
@@ -332,6 +504,6 @@ int main()
     printf("\n");
 
 
-    accuracy(10000);
+    accuracy(1000000);
     return 0;
 }
