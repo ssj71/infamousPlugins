@@ -161,6 +161,20 @@ float intSin1f(int32_t x)
     y += x;
     return INT2FLOAT*y;
 }
+float myintSin1Abs(int32_t xi)
+{
+    float x = INT2FLOAT*xi;
+    float y = fabs(x);
+    y *= x;
+    y *= -0.40528473456;
+    x *= 1.27323954474;
+    y += x;
+    x = fabs(y);
+    x *= y;
+    x -= y;
+    x *= 0.225;
+    return x + y;
+}
 
 
 void accuracy(uint32_t samples)
@@ -461,7 +475,42 @@ void accuracy(uint32_t samples)
         iphase = phase*FLOAT2INT;
     }
     printf("intSin1f\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
+
+    max = min = 0;
+    phase = -M_PI;
+    iphase = -0x80000000;
+    for(i=0;i<samples;i++)
+    {
+        err = sin(phase) - myintSin1f(iphase);
+        if(err > max)
+        {
+            max = err;
+            pmax = phase;
+        }
+        else if (err < min)
+        {
+            min = err;
+            pmin = phase;
+        }
+        phase += dphase; 
+        iphase = phase*FLOAT2INT;
+    }
+    printf("myintSin1f\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
 }
+
+//naive implementation
+float square(int32_t x)
+{
+    return ((x>>30)&0x1)+1.0;
+}
+// (abs(x-d)-abs(x+d) + abs(x-1+d)-abs(x+1-d) + 2x)/(-2d)
+float abssquare(int32_t x)
+{
+    const int32_t 
+    return 
+}
+//1/(1+(x/c)^n) Butterworth function
+
 
 int main()
 {
