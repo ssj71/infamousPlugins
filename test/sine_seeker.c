@@ -494,23 +494,80 @@ void accuracy(uint32_t samples)
         }
         phase += dphase; 
         iphase = phase*FLOAT2INT;
-    }
-    printf("myintSin1f\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
+    } printf("myintSin1f\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
 }
 
 //naive implementation
 float square(int32_t x)
 {
-    return ((x>>30)&0x1)+1.0;
+    return (float)((x&0x80000000)>>30)-1.0;
 }
 // (abs(x-d)-abs(x+d) + abs(x-1+d)-abs(x+1-d) + 2x)/(-2d)
 float abssquare(int32_t x)
 {
-    const int32_t 
-    return 
+    const int32_t d = 1<<24;
+    const int32_t d2 = 0x80000000-d;
+    return (float)(labs(x-d)-labs(x+d)) + (float)(labs(x-d2)-labs(x+d2)) + (float)2.0*x;
+}
+float abssquaref(int32_t xi)
+{
+    const float d = .01;
+    const int32_t d2 = 1-d;
+    float x = xi/(float)0x80000000;
+    return fabs(x-d)-fabs(x+d) + fabs(x-d2)-fabs(x+d2) + 2.0*x;
 }
 //1/(1+(x/c)^n) Butterworth function
+float buttersquare(int32_t x)
+{
+    float y = 2.0*x;
+    y *= y; //^2
+    y *= y; //^4
+    y *= y; //^8
+    y *= y; //^16
+    y *= y; //^32
+    y += 1;
+    return 1/y; 
+}
+float buttersquare2(int32_t x)
+{
+    float y = 2.0*x;
+    y *= y; //^2
+    y *= y*y; //^6
+    y *= y*y; //^24
+    y *= y*y; //^72
+    y += 1;
+    return 1/y;
+}
 
+void testsquares()
+{
+    uint8_t i;
+    int32_t points[] = {-0x7fffffff,-0xc0000000,-0xe0000000,-1,0,0x40000000,0x7fffffff};
+    printf("\nalg   -max -half, -quarter -1, 0 half max");
+
+    printf("\n%s ","square");
+    for(i=0; i<7;i++)
+        printf("%f ",square(points[i]));
+
+    printf("\n%s ","abssquare");
+    for(i=0; i<7;i++)
+        printf("%f ",abssquare(points[i]));
+
+    printf("\n%s ","abssquaref");
+    for(i=0; i<7;i++)
+        printf("%f ",abssquaref(points[i]));
+
+    printf("\n%s ","buttersquare");
+    for(i=0; i<7;i++)
+
+        printf("%f ",buttersquare(points[i]));
+
+    printf("\n%s ","buttersquare2");
+    for(i=0; i<7;i++)
+        printf("%f ",buttersquare2(points[i]));
+
+    printf("\n");
+}
 
 int main()
 {
@@ -553,6 +610,9 @@ int main()
     printf("\n");
 
 
-    accuracy(1000000);
+    //accuracy(1000000);
+
+    testsquares();
+
     return 0;
 }
