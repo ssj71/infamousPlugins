@@ -190,6 +190,25 @@ void accuracy(uint32_t samples)
     phase = -M_PI;
     for(i=0;i<samples;i++)
     {
+        err = sin(phase) - sinf(phase);
+        if(err > max)
+        {
+            max = err;
+            pmax = phase;
+        }
+        else if (err < min)
+        {
+            min = err;
+            pmin = phase;
+        }
+        phase += dphase; 
+    }
+    printf("sinf\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
+
+    max = min = 0;
+    phase = -M_PI;
+    for(i=0;i<samples;i++)
+    {
         err = sin(phase) - mySin(phase);
         if(err > max)
         {
@@ -494,7 +513,8 @@ void accuracy(uint32_t samples)
         }
         phase += dphase; 
         iphase = phase*FLOAT2INT;
-    } printf("myintSin1f\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
+    }
+    printf("myintSin1f\nmin %f, @%f\nmax %f, @%f\n\n",min,pmin,max,pmax);
 }
 
 //naive implementation
@@ -538,35 +558,175 @@ float buttersquare2(int32_t x)
     y += 1;
     return 1/y;
 }
+float ifsquare(int32_t x)
+{
+    if(x < -0x7f000000 || x > 0x7f000000)
+        return (x+0x7fffffff)/0x7f0000000;
+    else if(x < -0x01000000)
+        return -1;
+    else if(x < 0x01000000)
+        return x/0x7f0000000;
+    else
+        return 1; 
+}
 
-void testsquares()
+void testsquares(int32_t samples)
 {
     uint8_t i;
-    int32_t points[] = {-0x7fffffff,-0xc0000000,-0xe0000000,-1,0,0x40000000,0x7fffffff};
+    int32_t idphase,pmin,pmax, points[] = {-0x7fffffff,-0xc0000000,-0xe0000000,-1,0,0x40000000,0x7fffffff};
     printf("\nalg   -max -half, -quarter -1, 0 half max");
+    float v,min,max;
+
+    idphase = FLOAT2INT*dphase;
 
     printf("\n%s ","square");
     for(i=0; i<7;i++)
         printf("%f ",square(points[i]));
 
+    min = max = 0;
+    iphase = -0x80000000; 
+    for(i=0;i<samples;i++)
+    {
+        v = square(iphase);
+        iphase += idphase;
+        if(v > max)
+        {
+            max = v;
+            pmax = iphase;
+        }
+        else if (v < min)
+        {
+            min = v;
+            pmin = iphase;
+        }
+        phase += dphase; 
+        iphase += idphase;
+    }
+    printf("square\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
+
     printf("\n%s ","abssquare");
     for(i=0; i<7;i++)
         printf("%f ",abssquare(points[i]));
+    min = max = 0;
+    iphase = -0x80000000; 
+    for(i=0;i<samples;i++)
+    {
+        v = square(iphase);
+        iphase += idphase;
+        if(v > max)
+        {
+            max = v;
+            pmax = iphase;
+        }
+        else if (v < min)
+        {
+            min = v;
+            pmin = iphase;
+        }
+        phase += dphase; 
+        iphase += idphase;
+    }
+    printf("abssquare\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
 
     printf("\n%s ","abssquaref");
     for(i=0; i<7;i++)
         printf("%f ",abssquaref(points[i]));
+    min = max = 0;
+    iphase = -0x80000000; 
+    for(i=0;i<samples;i++)
+    {
+        v = square(iphase);
+        iphase += idphase;
+        if(v > max)
+        {
+            max = v;
+            pmax = iphase;
+        }
+        else if (v < min)
+        {
+            min = v;
+            pmin = iphase;
+        }
+        phase += dphase; 
+        iphase += idphase;
+    }
+    printf("abssquaref\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
 
     printf("\n%s ","buttersquare");
     for(i=0; i<7;i++)
 
         printf("%f ",buttersquare(points[i]));
+    min = max = 0;
+    iphase = -0x80000000; 
+    for(i=0;i<samples;i++)
+    {
+        v = square(iphase);
+        iphase += idphase;
+        if(v > max)
+        {
+            max = v;
+            pmax = iphase;
+        }
+        else if (v < min)
+        {
+            min = v;
+            pmin = iphase;
+        }
+        phase += dphase; 
+        iphase += idphase;
+    }
+    printf("buttersquare\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
 
     printf("\n%s ","buttersquare2");
     for(i=0; i<7;i++)
         printf("%f ",buttersquare2(points[i]));
+    min = max = 0;
+    iphase = -0x80000000; 
+    for(i=0;i<samples;i++)
+    {
+        v = square(iphase);
+        iphase += idphase;
+        if(v > max)
+        {
+            max = v;
+            pmax = iphase;
+        }
+        else if (v < min)
+        {
+            min = v;
+            pmin = iphase;
+        }
+        phase += dphase; 
+        iphase += idphase;
+    }
+    printf("buttersquare2\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
+
+    printf("\n%s ","ifsquare");
+    for(i=0; i<7;i++)
+        printf("%f ",ifsquare(points[i]));
+    min = max = 0;
+    iphase = -0x80000000; 
+    for(i=0;i<samples;i++)
+    {
+        v = square(iphase);
+        iphase += idphase;
+        if(v > max)
+        {
+            max = v;
+            pmax = iphase;
+        }
+        else if (v < min)
+        {
+            min = v;
+            pmin = iphase;
+        }
+        phase += dphase; 
+        iphase += idphase;
+    }
+    printf("ifsquare\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
 
     printf("\n");
+
 }
 
 int main()
