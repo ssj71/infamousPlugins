@@ -539,45 +539,45 @@ float abssquaref(int32_t xi)
 //1/(1+(x/c)^n) Butterworth function
 float buttersquare(int32_t x)
 {
-    float y = 2.0*x;
+    int32_t y = x/0x20000000;
     y *= y; //^2
     y *= y; //^4
     y *= y; //^8
     y *= y; //^16
     y *= y; //^32
+    y *= y; //^64
     y += 1;
-    return 1/y; 
+    return 1.0/y; 
 }
 float buttersquare2(int32_t x)
 {
-    float y = 2.0*x;
+    int32_t y = x/0x20000000;
     y *= y; //^2
     y *= y*y; //^6
     y *= y*y; //^24
     y *= y*y; //^72
     y += 1;
-    return 1/y;
+    return 1.0/y;
 }
 float ifsquare(int32_t x)
 {
     if(x < -0x7f000000 || x > 0x7f000000)
-        return (x+0x7fffffff)/0x7f0000000;
+        return -(x+0x7fffffff)/(float)0x7f0000000;
     else if(x < -0x01000000)
-        return -1;
+        return -1.0;
     else if(x < 0x01000000)
-        return x/0x7f0000000;
+        return x/(float)0x7f0000000;
     else
-        return 1; 
+        return 1.0; 
 }
 
 void testsquares(int32_t samples)
 {
-    uint8_t i;
-    int32_t idphase,pmin,pmax, points[] = {-0x7fffffff,-0xc0000000,-0xe0000000,-1,0,0x40000000,0x7fffffff};
+    int32_t i,iphase,idphase,pmin,pmax, points[] = {-0x7fffffff,-0xc0000000,-0xe0000000,-1,0,0x40000000,0x7fffffff};
     printf("\nalg   -max -half, -quarter -1, 0 half max");
     float v,min,max;
 
-    idphase = FLOAT2INT*dphase;
+    idphase = 0x100000000/samples;
 
     printf("\n%s ","square");
     for(i=0; i<7;i++)
@@ -599,7 +599,6 @@ void testsquares(int32_t samples)
             min = v;
             pmin = iphase;
         }
-        phase += dphase; 
         iphase += idphase;
     }
     printf("square\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
@@ -611,7 +610,7 @@ void testsquares(int32_t samples)
     iphase = -0x80000000; 
     for(i=0;i<samples;i++)
     {
-        v = square(iphase);
+        v = abssquare(iphase);
         iphase += idphase;
         if(v > max)
         {
@@ -623,7 +622,6 @@ void testsquares(int32_t samples)
             min = v;
             pmin = iphase;
         }
-        phase += dphase; 
         iphase += idphase;
     }
     printf("abssquare\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
@@ -635,7 +633,7 @@ void testsquares(int32_t samples)
     iphase = -0x80000000; 
     for(i=0;i<samples;i++)
     {
-        v = square(iphase);
+        v = abssquaref(iphase);
         iphase += idphase;
         if(v > max)
         {
@@ -647,7 +645,6 @@ void testsquares(int32_t samples)
             min = v;
             pmin = iphase;
         }
-        phase += dphase; 
         iphase += idphase;
     }
     printf("abssquaref\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
@@ -660,7 +657,7 @@ void testsquares(int32_t samples)
     iphase = -0x80000000; 
     for(i=0;i<samples;i++)
     {
-        v = square(iphase);
+        v = buttersquare(iphase);
         iphase += idphase;
         if(v > max)
         {
@@ -672,7 +669,6 @@ void testsquares(int32_t samples)
             min = v;
             pmin = iphase;
         }
-        phase += dphase; 
         iphase += idphase;
     }
     printf("buttersquare\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
@@ -684,7 +680,7 @@ void testsquares(int32_t samples)
     iphase = -0x80000000; 
     for(i=0;i<samples;i++)
     {
-        v = square(iphase);
+        v = buttersquare2(iphase);
         iphase += idphase;
         if(v > max)
         {
@@ -696,7 +692,6 @@ void testsquares(int32_t samples)
             min = v;
             pmin = iphase;
         }
-        phase += dphase; 
         iphase += idphase;
     }
     printf("buttersquare2\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
@@ -708,7 +703,7 @@ void testsquares(int32_t samples)
     iphase = -0x80000000; 
     for(i=0;i<samples;i++)
     {
-        v = square(iphase);
+        v = ifsquare(iphase);
         iphase += idphase;
         if(v > max)
         {
@@ -720,7 +715,6 @@ void testsquares(int32_t samples)
             min = v;
             pmin = iphase;
         }
-        phase += dphase; 
         iphase += idphase;
     }
     printf("ifsquare\nmin %f, @%i\nmax %f, @%i\n\n",min,pmin,max,pmax);
@@ -770,9 +764,9 @@ int main()
     printf("\n");
 
 
-    //accuracy(1000000);
+    accuracy(1000000);
 
-    testsquares();
+    testsquares(1000000);
 
     return 0;
 }
