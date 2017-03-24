@@ -571,6 +571,21 @@ float ifsquare(int32_t x)
         return 1.0; 
 }
 
+float ifsquaref(float x)
+{
+    const float s = .18237;
+    const float sl = (M_PI-.18237)/2;
+    const float sh = (M_PI+.18237)/2;
+    if(x < -sh || x > sh)
+        return -1;
+    else if(x < -sl)
+        return s*(x + M_PI/2.0);//slope up
+    else if(x < sl)
+        return 1;
+    else
+        return -s*(x + M_PI/2.0);//slope down
+}
+
 void testsquares(int32_t samples)
 {
     int32_t i,iphase,idphase,pmin,pmax, points[] = {-0x7fffffff,-0xc0000000,-0xe0000000,-1,0,0x40000000,0x7fffffff};

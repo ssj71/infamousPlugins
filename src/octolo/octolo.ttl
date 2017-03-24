@@ -37,8 +37,20 @@
         lv2:port [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 2 ;
-                lv2:symbol "PERIOD" ;
-                lv2:name "Period" ;
+                lv2:symbol "ENABLE" ;
+                lv2:name "Enable" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+                lv2:designation lv2:enabled ;
+        ], [
+        lv2:port [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 2 ;
+                lv2:symbol "LENGTH" ;
+                lv2:name "Length" ;
                 lv2:default 1.0 ;
                 lv2:minimum 0.01 ;
                 lv2:maximum 8.0 ;
@@ -82,35 +94,32 @@
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 4 ;
-                lv2:symbol "PHASEDOWN" ;
-                lv2:name "Phase Down" ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 360.0 ;
-                units:unit units:degree ;
+                lv2:symbol "SHAPE" ;
+                lv2:name "Shape" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 2 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:enumeration ;
+                lv2:scalePoint [ rdfs:label "Sine"; rdf:value 0 ] ;
+                lv2:scalePoint [ rdfs:label "Square"; rdf:value 1 ] ;
+                lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 2 ] ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 4 ;
-                lv2:symbol "PHASEUP" ;
-                lv2:name "Phase Up" ;
-                lv2:default 0.0 ;
-                lv2:minimum 0.0 ;
-                lv2:maximum 360.0 ;
-                units:unit units:degree ;
-        ], [
-                a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 4 ;
+                lv2:index 5 ;
                 lv2:symbol "SEQUENCE" ;
                 lv2:name "Sequence" ;
                 lv2:default 0 ;
                 lv2:minimum 0 ;
-                lv2:maximum 4 ;
+                lv2:maximum 5 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:enumeration ;
                 lv2:scalePoint [ rdfs:label "Sync"; rdf:value 0 ] ;
-                lv2:scalePoint [ rdfs:label "Alternate"; rdf:value 1 ] ;
-                lv2:scalePoint [ rdfs:label "Step"; rdf:value 1 ] ;
-                lv2:scalePoint [ rdfs:label "Cycle"; rdf:value 2 ] ;
+                lv2:scalePoint [ rdfs:label "Alternate 1 Oct"; rdf:value 1 ] ;
+                lv2:scalePoint [ rdfs:label "Alternate 2 Oct"; rdf:value 2 ] ;
+                lv2:scalePoint [ rdfs:label "Step"; rdf:value 3 ] ;
+                lv2:scalePoint [ rdfs:label "Cycle Up"; rdf:value 4 ] ;
+                lv2:scalePoint [ rdfs:label "Cycle Down"; rdf:value 5 ] ;
         ], [
                 a lv2:OutputPort, lv2:ControlPort ;
                 lv2:index 5 ;

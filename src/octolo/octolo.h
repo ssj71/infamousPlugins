@@ -7,13 +7,13 @@ enum octolo_ports
 {
     IN =0,
     OUT,
-    PERIOD,
+    ENABLE,
+    LENGTH,
     DRY,
     WET,
     OCTDOWN,
     OCTUP,
-    PHASEDOWN,
-    PHASEUP,
+    SHAPE,
     SEQUENCE,
     DBG
 };
