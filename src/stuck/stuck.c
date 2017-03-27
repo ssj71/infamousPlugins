@@ -47,6 +47,7 @@ typedef struct _STUCK
 
     float *buf;
     float gain;
+    float dgain;
     float env;//envelope gain to normalize compression to
     float score;
     float shortscore;
@@ -60,7 +61,7 @@ typedef struct _STUCK
     float *drone_gain_p;
     float *release_p;
     float *dbg_p;
-    float *output2_p;
+    float *dry_p;
 
     float *xf_func;
 } STUCK;
@@ -69,7 +70,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 {
     STUCK* plug = (STUCK*)handle;
     uint32_t i,j,k,t,chunk=0;
-    double slope = 0;
+    double slope = 0, dslope = 0;
     double interp;
 
     memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
@@ -238,6 +239,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == LOADING_XFADE)//xfade end of buffer with start (loop it) over an entire wave and fade in drone
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
+            dslope = (*plug->dry_p-plug->dgain)/interp;
             //decide if xfade ends in this period
             if(plug->indx2+chunk >= plug->wavesize)
             {
@@ -266,8 +268,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
                 plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
 
                 //but now also playing back start of buffer
+                plug->output_p[i] *= plug->dgain;
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
+                plug->dgain += dslope;
 
             }
             //xfade out end if we're there else we'll do it in the next state
@@ -281,6 +285,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == XFADE_ONLY)//xfade after buffer is full, in practice we never get here, but we might change our smoothing strategy again
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
+            dslope = (*plug->dry_p-plug->gain)/interp;
             //decide if xfade ends in this period
             if(plug->indx2+chunk >= plug->wavesize)
             {
@@ -292,8 +297,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             {
             	//continue layering the 2 cycles
                 plug->buf[plug->indx2] = .5*plug->buf[plug->indx2+plug->wavesize] + .5*plug->buf[plug->indx2];
+                plug->output_p[i] *= plug->dgain;
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
+                plug->dgain += dslope;
             }
             //xfade out end
             if(plug->indx2>=plug->wavesize)//TODO: this must acutally be ==
@@ -306,16 +313,20 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == PLAYING)//just loop buffer and track gain changes
         {
             slope = (*plug->drone_gain_p-plug->gain)/interp;
+            dslope = (*plug->dry_p-plug->dgain)/interp;
             for(j=0; j<chunk; j++)
             {
+                plug->output_p[i] *= plug->dgain;
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
+                plug->dgain += dslope;
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0;
             }
         }
         else if(plug->state == RELEASING)
         {
             slope = -*plug->drone_gain_p/(*plug->release_p*plug->sample_freq);
+            dslope = -*plug->dry_p/(*plug->release_p*plug->sample_freq);
             //decide if released in this period
             if(plug->gain + chunk*slope < slope)
             {
@@ -324,8 +335,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             }
             for(j=0; j<chunk; j++)
             {
+                plug->output_p[i] *= plug->dgain;
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
+                plug->dgain += dslope;
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0;
             }
             if(plug->gain <= -slope)
@@ -343,6 +356,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
         else if(plug->state == QUICK_RELEASING)
         {
             slope = -*plug->drone_gain_p/(double)plug->wave_min;
+            dslope = -*plug->dry_p/(double)plug->wave_min;
             //decide if released in this period
             if(plug->gain + chunk*slope < slope)
             {
@@ -351,8 +365,10 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
             }
             for(j=0; j<chunk; j++)
             {
+                plug->output_p[i] *= plug->dgain;
                 plug->output_p[i++] += plug->gain*plug->buf[plug->indx2++];
                 plug->gain += slope;
+                plug->dgain += dslope;
                 plug->indx2 = plug->indx2<plug->wavesize?plug->indx2:0;
             }
 #ifdef COMP
@@ -435,11 +451,8 @@ void connect_stuck_ports(LV2_Handle handle, uint32_t port, void *data)
     case RELEASE:
         plug->release_p = (float*)data;
         break;
-    case DBG:
-        plug->dbg_p = (float*)data;
-        break;
-    case OUT2:
-        plug->output2_p = (float*)data;
+    case DRY:
+        plug->dry_p = (float*)data;
         break;
     default:
         puts("UNKNOWN PORT YO!!");

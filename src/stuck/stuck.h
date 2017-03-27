@@ -10,9 +10,7 @@ enum stuck_ports
     STICKIT,
     DRONEGAIN,
     RELEASE,
-	OUT2,
-    DBG,
-	TRIGGER
+	DRY,
 };
 
 #endif
