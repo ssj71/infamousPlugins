@@ -7,9 +7,8 @@
 #include<math.h>
 #include"octolo.h"
 
-//OCTOLO - Playback Modulation Shifter (what else could it stand for?)
+//OCTOLO - octaver and tremolo had a baby and this is it
 
-#define TOLERANCE .0010
 
 typedef struct _OCTOLO
 {
