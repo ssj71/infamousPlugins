@@ -42,6 +42,7 @@ typedef struct _STUCK
     uint16_t wave_min;//int16_test allowed wavesize
     uint16_t wave_max;//int32_test allowed wavesize
     uint8_t state;
+    uint8_t stack;
     uint8_t dbg;//used for whatever, delete it
     double sample_freq;
 
@@ -72,7 +73,11 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
     double slope = 0;
     double interp;
 
-    memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
+    if(plug->stack)
+        for(i=0;i<nframes;i++)
+            plug->output_p = 0;
+    else
+        memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
 
     interp = nframes>64?nframes:64;
 
@@ -401,6 +406,7 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
     plug->score = START_SCORE;
     plug->shortscore = .25*START_SCORE;
     plug->env = 0;
+    plug->stack = 0;
     plug->dbg = 0;
 
     //half rasied cosine for equal power xfade
@@ -409,6 +415,13 @@ LV2_Handle init_stuck(const LV2_Descriptor *descriptor,double sample_freq, const
 
     rms_init(&plug->rms_calc,tmp>>3);
 
+    return plug;
+}
+
+LV2_Handle init_stuckstacker(const LV2_Descriptor *descriptor,double sample_freq, const char *bundle_path,const LV2_Feature * const* host_features)
+{
+    STUCK* plug = (STUCK*)init_stuck(descriptor, sample_freq, bundle_path, host_features);
+    plug->stack = 1;
     return plug;
 }
 
@@ -466,6 +479,17 @@ static const LV2_Descriptor stuck_descriptor=
     cleanup_stuck,
     0//extension
 };
+static const LV2_Descriptor stuckstacker_descriptor=
+{
+    STUCKSTACKER_URI,
+    init_stuckstacker,
+    connect_stuck_ports,
+    0,//activate
+    run_stuck,
+    0,//deactivate
+    cleanup_stuck,
+    0//extension
+};
 
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor* lv2_descriptor(uint32_t index)
@@ -474,6 +498,8 @@ const LV2_Descriptor* lv2_descriptor(uint32_t index)
     {
     case 0:
         return &stuck_descriptor;
+    case 1:
+        return &stuckstacker_descriptor;
     default:
         return 0;
     }

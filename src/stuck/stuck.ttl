@@ -78,17 +78,73 @@
                 lv2:maximum 3.0 ; 
                 units:unit units:s ;
         ] .
-#        lv2:port [
-#                a lv2:OutputPort, lv2:AudioPort ;#CVPort ;
-#                lv2:index 5 ;
-#                lv2:symbol "OUT2" ;
-#                lv2:name "OUt2" ;
-#        ] ;
-#        lv2:port [
-#                a lv2:OutputPort, lv2:ControlPort ;
-#                lv2:index 6 ;
-#                lv2:symbol "DBG" ;
-#                lv2:name "Debug" ;
-#                lv2:minimum 0.00 ;
-#                lv2:maximum 5000.0 ; 
-#        ] .
+
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#stuckstacker>
+        a lv2:Plugin, lv2:DelayPlugin ;
+        doap:name "the infamous stuck stacker" ;
+        doap:license <http://opensource.org/licenses/GPL-2.0> ;
+        doap:description "a sound retainer/hold/sustenudo effect with no dry signal";
+        doap:maintainer [
+                foaf:name "Spencer Jackson" ;
+                foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
+                foaf:mbox <mailto:ssjackson71@gmail.com> ;
+        ] ;
+        mod:brand "infamous";        
+        mod:label "stuck stacker"; 
+        modgui:gui [
+            modgui:resourcesDirectory <modgui> ;
+            modgui:iconTemplate <modgui/stuck.html> ;
+            modgui:stylesheet <modgui/stuck.css> ;
+            modgui:screenshot <modgui/screenshot-stuck.png> ;
+            modgui:thumbnail <modgui/thumbnail-stuck.png> ;
+            modgui:brand "infamous" ;
+            modgui:label "stuck stacker" ;
+        ] ;
+        lv2:minorVersion 0 ;
+        lv2:microVersion 1 ;
+        rdfs:comment "This is the same as the infamous stuck except it does not pass the dry signal. This makes it more suited to stacking several together and building sustained chords from a single voice." ;
+        lv2:optionalFeature lv2:hardRTCapable ;
+        ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#stuckstacker_ui> ;
+
+        lv2:port [
+                a lv2:InputPort, lv2:AudioPort ;
+                lv2:index 0 ;
+                lv2:symbol "INPUT" ;
+                lv2:name "Audio In" ;
+        ] ;
+        lv2:port [
+                a lv2:OutputPort, lv2:AudioPort ;
+                lv2:index 1 ;
+                lv2:symbol "OUTPUT" ;
+                lv2:name "Audio Out" ;
+        ] ;
+        lv2:port [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 2 ;
+                lv2:symbol "STICK_IT" ;
+                lv2:name "Stick it!" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 3 ;
+                lv2:symbol "DRONE_GAIN" ;
+                lv2:name "Drone Gain" ;
+                lv2:default 0.50 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 2.0 ;
+                units:unit units:coef ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 4 ;
+                lv2:symbol "RELEASE" ;
+                lv2:name "Release" ;
+                lv2:default 0.5 ;
+                lv2:minimum 0.01 ;
+                lv2:maximum 3.0 ; 
+                units:unit units:s ;
+        ] .

@@ -8,6 +8,7 @@
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
 #define STUCKUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#stuck_ui"
+#define STUCKSTACKERUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#stuckstacker_ui"
 
 static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,
@@ -17,7 +18,10 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
 		LV2UI_Widget * widget,
 		const LV2_Feature * const * features) 
 {
-    if(strcmp(plugin_uri, STUCK_URI) != 0)
+    if(strcmp(plugin_uri, STUCK_URI) == 0) ;
+    else if(strcmp(plugin_uri, STUCKSTACKER_URI) == 0) ;
+        //add label
+    else
     {
         return 0;
     }
@@ -41,7 +45,7 @@ static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
            resize = (LV2UI_Resize*)features[i]->data;
         }
 
-    }
+    } 
 
     self->ui = self->show();
     fl_open_display();
@@ -129,6 +133,13 @@ static const LV2UI_Descriptor stuckUI_descriptor = {
     stuckUI_port_event,
     extension_data
 };
+static const LV2UI_Descriptor stuckstackerUI_descriptor = {
+    STUCKSTACKERUI_URI,
+    init_stuckUI,
+    cleanup_stuckUI,
+    stuckUI_port_event,
+    extension_data
+};
 
 LV2_SYMBOL_EXPORT 
 const LV2UI_Descriptor* lv2ui_descriptor(uint32_t index) 
@@ -136,6 +147,8 @@ const LV2UI_Descriptor* lv2ui_descriptor(uint32_t index)
     switch (index) {
     case 0:
         return &stuckUI_descriptor;
+    case 1:
+        return &stuckstackerUI_descriptor;
     default:
         return NULL;
     }

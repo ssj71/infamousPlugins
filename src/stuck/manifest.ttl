@@ -11,3 +11,13 @@
 	a ui:X11UI ;
 	ui:binary <stuck_ui.so> ;
 	lv2:extensionData ui:idleInterface, ui:resize .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#stuckstacker>
+        a lv2:Plugin, lv2:DelayPlugin ;
+        lv2:binary <stuck.so> ;
+        rdfs:seeAlso <stuck.ttl> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#stuckstacker_ui>
+	a ui:X11UI ;
+	ui:binary <stuck_ui.so> ;
+	lv2:extensionData ui:idleInterface, ui:resize .
