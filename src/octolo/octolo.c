@@ -1,6 +1,9 @@
     //Spencer Jackson
 //octolo.c
 #include<lv2.h>
+#include<lv2/lv2plug.in/ns/ext/urid/urid.h>
+#include<lv2/lv2plug.in/ns/ext/atom/util.h>
+#include<lv2/lv2plug.in/ns/ext/time/time.h>
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
@@ -53,34 +56,46 @@ enum oct {
     MID = 1,
     DOWN = 2,
     DRY = 3
-}
+};
 
 typedef struct _OCTOLO
 {
     uint16_t w; //current write point in buffer
+    float r[3]; //read points in buffer (up and dn oct)
     float *buf;
-    float r[3]; //read point in buffer (up and dn oct)
+    uint8_t stereo;
+    uint8_t func;
+    uint8_t seq;
     uint8_t step; //current point in sequence
-    float osf[3]; //phase offset
+    float phase;
+    float ofs[3]; //phase offset
     float sample_freq;
     float period;
+    float tempo;
     float gain[4];
+    float gainr[4];
 
     LV2_Atom_Sequence* atom_in_p; 
     float *input_p;
     float *output_p;
+    float *outputr_p;
+    float *enable_p;
     float *length_p;
-    float *md_p;
     float *dry_p;
+    float *md_p;
     float *dn_p;
     float *up_p;
+    float *mdp_p;
+    float *dnp_p;
+    float *upp_p;
     float *shape_p;
     float *seq_p;
     float *overlap_p;
 
-    struct URI
+    struct _URI
     {
         LV2_URID atom_blank;
+        LV2_URID atom_object;
         LV2_URID atom_long;
         LV2_URID atom_float;
         LV2_URID time_position;
@@ -90,7 +105,7 @@ typedef struct _OCTOLO
         LV2_URID time_frame;
         LV2_URID time_fps;
         
-    }
+    } URI;
 } OCTOLO;
 
 //NOTE these three functions are scaled and shifted to output E(0,1) rather than E(-1,1)
@@ -99,7 +114,7 @@ float mycos(float x)
 {
     float y;
     x += M_PI/2.0;
-    x -= (x>M_PI)&(2*M_PI);
+    x -= (x>M_PI)*(2*M_PI);
 
     y = fabs(x);
     y *= x;
@@ -145,26 +160,24 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     OCTOLO* plug = (OCTOLO*)handle;
     float* in, *out, *buf;
     float phase,dphase,ofs[3],gain[4];
-    float tmp,gainstep, tempo;
+    float tmp,gainstep;
     float rdn;
     uint16_t rup, rmd;
     uint16_t i,w, chunk,evchunk;
     uint8_t j,seq,step,ofsf,on[3];
-    LV2_Atom tempoatom;
+    LV2_Atom* tempoatom;
     const LV2_Atom_Object* obj;
-    const LV2_Atom_Event ev;
+    LV2_Atom_Event* ev;
     float (*func)(float);
 
-    const uint16_t cycles[3][5] = 
+    const uint16_t cycles[3][6] = 
     {    //sync  alt1    alt2    step    cyclup cycldn
         {0xffff, 0x5555, 0xaaaa, 0x8888, 0x4924, 0x9249},
         {0xffff, 0xaaaa, 0xaaaa, 0x5555, 0x2492, 0x2492},
         {0xffff, 0x5555, 0x5555, 0x2222, 0x9249, 0x4924},
     };
 
-    const float *(shapes)(float)[3] = {mycos,mysquare,mytri};
-
-    *plug->dbg_p = 0;
+    float (*shapes[3])(float) = {mycos,mysquare,mytri};
 
     in = plug->input_p;
     out = plug->output_p;
@@ -186,20 +199,23 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     }
     gain[DRY] = plug->gain[DRY];
 
+    //get atom events started
+    ev = lv2_atom_sequence_begin(&(plug->atom_in_p)->body);
+
     if( (!tmp && gain[DRY] == 1.0 ) && !*plug->enable_p)
     {//shortcut, effect disabled
         //copy input
         memcpy(out,in,sizeof(float)*nframes);
         //get new tempos 
-        while(!lv2_atom_object_is_end(&(plug->atom_in_p)->body,(plug->atom_in_p)->atom.size, ev))
+        while(!lv2_atom_sequence_is_end(&(plug->atom_in_p)->body,(plug->atom_in_p)->atom.size, ev))
         {
-            ev = lv2_atom_object_next(ev);
-            if(ev.body.type == plug->URI.atom_object || ev.body.type == plug->URI.atom_blank)
+            ev = lv2_atom_sequence_next(ev);
+            if(ev->body.type == plug->URI.atom_object || ev->body.type == plug->URI.atom_blank)
             {
                 obj = (const LV2_Atom_Object*)&ev->body;
-                if(obj->body.otype = plug->URI.time_barbeat)
+                if(obj->body.otype == plug->URI.time_barbeat)
                 {
-                    lv2_atom_object_get(obj,plug->URI.LV2_TIME__beatsPerMinute,&tempoatom)
+                    lv2_atom_object_get(obj,plug->URI.time_bpm,&tempoatom);
                     if(tempoatom && tempoatom->type == plug->URI.atom_float)
                     {
                         plug->tempo = ((LV2_Atom_Float*)tempoatom)->body;
@@ -216,43 +232,44 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     rdn = plug->r[DOWN];
     func = shapes[plug->func];
     if(*plug->enable_p)
-        gainstep = *plug->dry_p - plug->gain;
+        gainstep = *plug->dry_p - plug->gain[DRY];
     else
-        gainstep = 1.0 - plug->gain;
+        gainstep = 1.0 - plug->gain[DRY];
     gainstep /= nframes>64?nframes:64;
 
-    tempo = plug->tempo;
     dphase = 2*M_PI/plug->period;
     tmp = 2*(rmd - rup)*phase;//if up was mid cycle, this calculates it based on the old phase
     if(tmp > dphase && (((cycles[UP][seq])>>step)&0x0001))
         dphase = tmp; 
 
-    ev = lv2_atom_object_begin(&(plug->atom_in_p)->body);
 
     //max period is 1.4 sec = .67
-    for(i<0;i<=nframes;i++)
+    for(i=0;i<=nframes;i++)
     {
         evchunk = nframes - i;
         tmp = 0;//use this as exit flag
-        while(!lv2_atom_object_is_end(&(plug->atom_in_p)->body,(plug->atom_in_p)->atom.size, ev) && !tmp)
+        while(!lv2_atom_sequence_is_end(&(plug->atom_in_p)->body,(plug->atom_in_p)->atom.size, ev) && !tmp)
         {
-            ev = lv2_atom_object_next(ev);
-            if(ev.body.type == plug->URI.atom_object || ev.body.type == plug->URI.atom_blank)
+            ev = lv2_atom_sequence_next(ev);
+            if(ev)
             {
-                obj = (const LV2_Atom_Object*)&ev->body;
-                if(obj->body.otype = plug->URI.time_barbeat)
+                if(ev->body.type == plug->URI.atom_object || ev->body.type == plug->URI.atom_blank)
                 {
-                    lv2_atom_object_get(obj,plug->URI.LV2_TIME__beatsPerMinute,&tempoatom)
-                    if(tempoatom && tempoatom->type == plug->URI.atom_float)
+                    obj = (const LV2_Atom_Object*)&(ev->body);
+                    if(obj->body.otype == plug->URI.time_barbeat)
                     {
-                        tmp = ((LV2_Atom_Float*)tempoatom)->body;
-                        if(tmp != plug->tempo)
+                        lv2_atom_object_get(obj,plug->URI.time_bpm,&tempoatom);
+                        if(tempoatom && tempoatom->type == plug->URI.atom_float)
                         {
-                            evchunk = ev->time.frames-i; 
-                            plug->tempo = tmp;
+                            tmp = ((LV2_Atom_Float*)tempoatom)->body;
+                            if(tmp != plug->tempo)
+                            {
+                                evchunk = ev->time.frames-i; 
+                                plug->tempo = tmp;
+                            }
+                            else
+                                tmp = 0;
                         }
-                        else
-                            tmp = 0;
                     }
                 }
             }
@@ -284,8 +301,11 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 if(phase > 0)
                 {//transition to next state
                     if(*plug->overlap_p)
-                        ++step %= 12;
-                    func = shapes[*plug->shape_p];
+                    {
+                        step++;
+                        step %= 12;
+                    }
+                    func = shapes[(uint8_t)*plug->shape_p];
                     for(j=0;j<3;j++)
                     {
                         if(plug->ofs[j]) //we can only transition if we are at the end of a cycle (or off)
@@ -343,12 +363,13 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 i++;
             }
 
-            if(phase > PI)
+            if(phase > M_PI)
             {
                 phase -= 2*M_PI;
-                ++step %= 12;
+                step++;
+                step %= 12;
                 seq = (uint8_t)*plug->seq_p;
-                func = shapes[*plug->shape_p];
+                func = shapes[(uint8_t)*plug->shape_p];
                 for(j=0;j<3;j++)
                 {//go through voices
                     if(!plug->ofs[j])
@@ -406,13 +427,14 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     plug->step = step;
     plug->seq = seq;
     plug->phase = phase;
-    plug->gain = gain;
     for(j=0;j<3;j++)
     {
         plug->ofs[j] = ofs[j];
-        if(func) = shapes[j]//this only works while there are 3 shapes
+        plug->gain[j] = gain[j];
+        if(func == shapes[j])//this only works while there are 3 shapes
             plug->func = j;
     }
+    plug->gain[DRY] = gain[DRY];
     plug->r[UP]  = rup;
     plug->r[MID] = rmd;
     plug->r[DOWN]= rdn;
@@ -457,6 +479,7 @@ LV2_Handle init_octolo(const LV2_Descriptor *descriptor,double sample_freq, cons
             if (urid_map)
             {
                 plug->URI.atom_blank = urid_map->map(urid_map->handle, LV2_ATOM__Blank);
+                plug->URI.atom_object = urid_map->map(urid_map->handle, LV2_ATOM__Object);
                 plug->URI.atom_long = urid_map->map(urid_map->handle, LV2_ATOM__Long);
                 plug->URI.atom_float = urid_map->map(urid_map->handle, LV2_ATOM__Float);
                 plug->URI.time_position = urid_map->map(urid_map->handle, LV2_TIME__Position);
@@ -492,7 +515,7 @@ void connect_octolo_ports(LV2_Handle handle, uint32_t port, void *data)
     case LENGTH:
         plug->length_p = (float*)data;
         break;
-    case DRY:
+    case DRYG:
         plug->dry_p = (float*)data;
         break;
     case WET:
@@ -511,6 +534,64 @@ void connect_octolo_ports(LV2_Handle handle, uint32_t port, void *data)
         plug->seq_p = (float*)data;
         break;
     case OVERLAP:
+        plug->overlap_p = (float*)data;
+        break;
+    default:
+        puts("UNKNOWN PORT YO!!");
+    }
+}
+
+void connect_stereoctolo_ports(LV2_Handle handle, uint32_t port, void *data)
+{
+    OCTOLO* plug = (OCTOLO*)handle;
+    switch(port)
+    {
+    case SATOM_IN:
+        plug->atom_in_p = (LV2_Atom_Sequence*)data;
+        break;
+    case SIN:
+        plug->input_p = (float*)data;
+        break;
+    case SOUTL:
+        plug->output_p = (float*)data;
+        break;
+    case SOUTR:
+        plug->outputr_p = (float*)data;
+        break;
+    case SENABLE:
+        plug->enable_p = (float*)data;
+        break;
+    case SLENGTH:
+        plug->length_p = (float*)data;
+        break;
+    case SDRYG:
+        plug->dry_p = (float*)data;
+        break;
+    case SWET:
+        plug->md_p = (float*)data;
+        break;
+    case SOCTDOWN:
+        plug->dn_p = (float*)data;
+        break;
+    case SOCTUP:
+        plug->up_p = (float*)data;
+        break;
+    case SWETP:
+        plug->mdp_p = (float*)data;
+        break;
+    case SOCTDOWNP:
+        plug->dnp_p = (float*)data;
+        break;
+    case SOCTUPP:
+        plug->upp_p = (float*)data;
+        break;
+    case SSHAPE:
+        plug->shape_p = (float*)data;
+        break;
+    case SSEQUENCE:
+        plug->seq_p = (float*)data;
+        break;
+    case SOVERLAP:
         plug->overlap_p = (float*)data;
         break;
     default:
@@ -537,6 +618,17 @@ static const LV2_Descriptor octolo_descriptor=
     0//extension
 };
 
+static const LV2_Descriptor steroctolo_descriptor=
+{
+    STEREOCTOLO_URI,
+    init_octolo,
+    connect_stereoctolo_ports,
+    0,//activate
+    run_octolo,
+    0,//deactivate
+    cleanup_octolo,
+    0//extension
+};
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {

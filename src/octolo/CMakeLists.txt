@@ -31,8 +31,7 @@ link_directories (${LV2_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS} ${CAIRO_LIBRARY_DIRS})
 # config libraries
 
 add_library(${PLUGIN} SHARED
-  pms.c
-  pms.h
+  octolo.c
 ) 
 
 set_target_properties(${PLUGIN} PROPERTIES PREFIX "")

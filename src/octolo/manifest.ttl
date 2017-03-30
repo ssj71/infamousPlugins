@@ -3,7 +3,7 @@
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#octolo>
-        a lv2:Plugin, lv2:ModulationPlugin ;
+        a lv2:Plugin, lv2:ModulatorPlugin ;
         lv2:binary <octolo.so> ;
         rdfs:seeAlso <octolo.ttl> .
 
