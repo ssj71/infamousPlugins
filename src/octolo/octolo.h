@@ -5,7 +5,8 @@
 
 enum octolo_ports
 {
-    IN =0,
+    ATOM_IN =0,
+    IN,
     OUT,
     ENABLE,
     LENGTH,
@@ -15,7 +16,7 @@ enum octolo_ports
     OCTUP,
     SHAPE,
     SEQUENCE,
-    DBG
+    OVERLAP
 };
 
 #endif

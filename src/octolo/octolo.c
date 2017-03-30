@@ -9,45 +9,13 @@
 
 //OCTOLO - octaver and tremolo had a baby and this is it
 
+#ifndef M_PI
+#define M_PI 3.1415926535897932384626433832795
+#endif
 
-typedef struct _OCTOLO
-{
-    uint16_t w; //current write point in buffer
-    float *buf;
-    float r[3]; //read point in buffer (up and dn oct)
-    uint8_t step; //current point in sequence
-    float osf[3]; //phase offset
-    float sample_freq;
-    float period;
-    float gain;
 
-    float *input_p;
-    float *output_p;
-    float *period_p;
-    float *md_p;
-    float *dry_p;
-    float *dn_p;
-    float *up_p;
-    float *shape_p;
-    float *seq_p;
-    float *dbg_p;
 
-    struct URI
-    {
-        LV2_URID atom_blank;
-        LV2_URID atom_long;
-        LV2_URID atom_float;
-        LV2_URID time_position;
-        LV2_URID time_barbeat;
-        LV2_URID time_bpm;
-        LV2_URID time_speed;
-        LV2_URID time_frame;
-        LV2_URID time_fps;
-        
-    }
-} OCTOLO;
-
-//
+// SEQUENCES
 // read right bit to left (seq>>step)
 // sync
 //  1111 1111 1111 1111 0xFFFF
@@ -87,11 +55,96 @@ enum oct {
     DRY = 3
 }
 
+typedef struct _OCTOLO
+{
+    uint16_t w; //current write point in buffer
+    float *buf;
+    float r[3]; //read point in buffer (up and dn oct)
+    uint8_t step; //current point in sequence
+    float osf[3]; //phase offset
+    float sample_freq;
+    float period;
+    float gain[4];
+
+    LV2_Atom_Sequence* atom_in_p; 
+    float *input_p;
+    float *output_p;
+    float *length_p;
+    float *md_p;
+    float *dry_p;
+    float *dn_p;
+    float *up_p;
+    float *shape_p;
+    float *seq_p;
+    float *overlap_p;
+
+    struct URI
+    {
+        LV2_URID atom_blank;
+        LV2_URID atom_long;
+        LV2_URID atom_float;
+        LV2_URID time_position;
+        LV2_URID time_barbeat;
+        LV2_URID time_bpm;
+        LV2_URID time_speed;
+        LV2_URID time_frame;
+        LV2_URID time_fps;
+        
+    }
+} OCTOLO;
+
+//NOTE these three functions are scaled and shifted to output E(0,1) rather than E(-1,1)
+//this is mysin with a pi/2 phase shift
+float mycos(float x)
+{
+    float y;
+    x += M_PI/2.0;
+    x -= (x>M_PI)&(2*M_PI);
+
+    y = fabs(x);
+    y *= x;
+    y *= -0.40528473456;
+    x *= 1.27323954474;
+    y += x;
+    x = fabs(y);
+    x *= y;
+    x -= y;
+    x *= 0.225;
+    x += y;
+
+    //shift up
+    x *= .5; 
+    return x+.5;
+}
+
+float mysquare(float x)
+{
+    const float s = .18237;
+    const float sl = (M_PI-s)/2;
+    const float sh = (M_PI+s)/2;
+    if(x < -sh || x > sh)
+        return 0;
+    else if(x < -sl)
+        return s*(x + M_PI/2.0)+1;//slope up
+    else if(x < sl)
+        return 1;
+    else
+        return -s*(x + M_PI/2.0)+1;//slope down
+}
+
+float mytri(float x)
+{
+    if(x < 0)
+        return 1+x/M_PI;
+    else 
+        return 1-x/M_PI;
+}
+
 void run_octolo(LV2_Handle handle, uint32_t nframes)
 {
     OCTOLO* plug = (OCTOLO*)handle;
     float* in, *out, *buf;
-    float phase,dphase,ofs[3];
+    float phase,dphase,ofs[3],gain[4];
     float tmp,gainstep, tempo;
     float rdn;
     uint16_t rup, rmd;
@@ -109,7 +162,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
         {0xffff, 0x5555, 0x5555, 0x2222, 0x9249, 0x4924},
     };
 
-    const float *(shapes)(float)[3] = {mysin,mysquare,mytri};
+    const float *(shapes)(float)[3] = {mycos,mysquare,mytri};
 
     *plug->dbg_p = 0;
 
@@ -119,27 +172,60 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     w = plug->w;
     step = plug->step;
     phase = plug->phase;
-    seq = (uint8_t)*plug->seq_p;
+    seq = plug->seq;//(uint8_t)*plug->seq_p;
     ofsf = 0;
     if(plug->ofs[0] || plug->ofs[1] || plug->ofs[2] || *plug->overlap_p)
         ofsf = 1;
+    tmp  = 0;
     for(j=0;j<3;j++)
     {
         on[j] = ((cycles[j][seq])>>step)&0x0001;
         ofs[j] = plug->ofs[j];
+        gain[j] = plug->gain[j];
+        tmp += gain[j];
     }
+    gain[DRY] = plug->gain[DRY];
+
+    if( (!tmp && gain[DRY] == 1.0 ) && !*plug->enable_p)
+    {//shortcut, effect disabled
+        //copy input
+        memcpy(out,in,sizeof(float)*nframes);
+        //get new tempos 
+        while(!lv2_atom_object_is_end(&(plug->atom_in_p)->body,(plug->atom_in_p)->atom.size, ev))
+        {
+            ev = lv2_atom_object_next(ev);
+            if(ev.body.type == plug->URI.atom_object || ev.body.type == plug->URI.atom_blank)
+            {
+                obj = (const LV2_Atom_Object*)&ev->body;
+                if(obj->body.otype = plug->URI.time_barbeat)
+                {
+                    lv2_atom_object_get(obj,plug->URI.LV2_TIME__beatsPerMinute,&tempoatom)
+                    if(tempoatom && tempoatom->type == plug->URI.atom_float)
+                    {
+                        plug->tempo = ((LV2_Atom_Float*)tempoatom)->body;
+                    }
+                }
+            }
+        }
+        //all done!
+        return; 
+    }
+
     rup = plug->r[UP];
     rmd = plug->r[MID];
     rdn = plug->r[DOWN];
     func = shapes[plug->func];
-    gainstep = *plug->dry_p - plug->gain;
+    if(*plug->enable_p)
+        gainstep = *plug->dry_p - plug->gain;
+    else
+        gainstep = 1.0 - plug->gain;
     gainstep /= nframes>64?nframes:64;
 
+    tempo = plug->tempo;
     dphase = 2*M_PI/plug->period;
     tmp = 2*(rmd - rup)*phase;//if up was mid cycle, this calculates it based on the old phase
     if(tmp > dphase && (((cycles[UP][seq])>>step)&0x0001))
         dphase = tmp; 
-
 
     ev = lv2_atom_object_begin(&(plug->atom_in_p)->body);
 
@@ -157,18 +243,90 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 if(obj->body.otype = plug->URI.time_barbeat)
                 {
                     lv2_atom_object_get(obj,plug->URI.LV2_TIME__beatsPerMinute,&tempoatom)
+                    if(tempoatom && tempoatom->type == plug->URI.atom_float)
+                    {
+                        tmp = ((LV2_Atom_Float*)tempoatom)->body;
+                        if(tmp != plug->tempo)
+                        {
+                            evchunk = ev->time.frames-i; 
+                            plug->tempo = tmp;
+                        }
+                        else
+                            tmp = 0;
+                    }
                 }
             }
         }
-        else
 
-        //evchunk from events
-        chunk = -phase/dphase;
-        if(evchunk < chunk)
-            chunk = evchunk;
-        if(ofsf && chunk > 0)
+        while(evchunk)
         {
-            //process current place to 0
+            chunk = -phase/dphase;
+            if(evchunk < chunk)
+                chunk = evchunk;
+            if(ofsf && chunk > 0)
+            {
+                //process current place to 0
+                evchunk -= chunk;
+                for( ; chunk; chunk--)
+                { 
+                    //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
+                    buf[w++] = in[i];
+                    out[i] =  gain[DRY ]*buf[rmd];
+                    out[i] += gain[UP  ]*on[UP  ]*func(phase+ofs[UP  ])*( buf[rup] + buf[rup+1] );
+                    out[i] += gain[MID ]*on[MID ]*func(phase+ofs[MID ])*buf[rmd];
+                    out[i] += gain[DOWN]*on[DOWN]*func(phase+ofs[DOWN])*buf[(uint16_t)rdn];
+                    rup += 2;
+                    rmd += 1;
+                    rdn = rdn>0xFFFF?0:rdn+.5;
+                    gain[DRY] += gainstep;
+                    i++;
+                }
+                if(phase > 0)
+                {//transition to next state
+                    if(*plug->overlap_p)
+                        ++step %= 12;
+                    func = shapes[*plug->shape_p];
+                    for(j=0;j<3;j++)
+                    {
+                        if(plug->ofs[j]) //we can only transition if we are at the end of a cycle (or off)
+                        {
+                            if(((cycles[j][seq])>>step)&0x0001)
+                            {//turn on
+                                plug->ofs[j] = -M_PI;
+                                on[j] = 1;
+                                switch(j)
+                                {
+                                case UP:
+                                    rup = w-1-ceil(2.0*plug->period);
+                                    gain[UP] = .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
+                                    dphase = 2*M_PI/plug->period;
+                                    break;
+                                case MID:
+                                    rmd = w-1;
+                                    gain[MID] = *plug->md_p**plug->enable_p;
+                                    break;
+                                case DOWN:
+                                    rdn = w-1;
+                                    gain[DOWN] = *plug->dn_p**plug->enable_p;
+                                    break;
+                                }
+                            }
+                            else
+                            {//turn off
+                                plug->ofs[j] = 0;
+                                on[j] = 0;
+                                if(j==UP)
+                                    dphase = 2*M_PI/plug->period; 
+                            }
+                        }//if voice is offset
+                    }//for voices
+                }//if done with half cycle
+            }//if processing half cycles
+
+            //process current place to pi
+            chunk = (M_PI-phase)/dphase;
+            if(evchunk < chunk)
+                chunk = evchunk;
             evchunk -= chunk;
             for( ; chunk; chunk--)
             { 
@@ -181,120 +339,72 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 rup += 2;
                 rmd += 1;
                 rdn = rdn>0xFFFF?0:rdn+.5;
-                gain[3] += gainstep;
+                gain[DRY] += gainstep;
                 i++;
             }
-            if(phase > 0)
-            {//transition to next state
-                if(*plug->overlap_p)
-                    ++step %= 12;
+
+            if(phase > PI)
+            {
+                phase -= 2*M_PI;
+                ++step %= 12;
+                seq = (uint8_t)*plug->seq_p;
                 func = shapes[*plug->shape_p];
                 for(j=0;j<3;j++)
-                {
-                    if(plug->ofs[j]) //we can only transition if we are at the end of a cycle (or off)
-                    {
+                {//go through voices
+                    if(!plug->ofs[j])
+                    {//can only transition at end of cycle
                         if(((cycles[j][seq])>>step)&0x0001)
                         {//turn on
-                            plug->ofs[j] = -M_PI;
+                            plug->ofs[j] = 0;
                             on[j] = 1;
                             switch(j)
                             {
                             case UP:
                                 rup = w-1-ceil(2.0*plug->period);
-                                gain[UP] = .5**plug->up_p;//.5 is for the AA filter
+                                gain[UP] = .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
                                 dphase = 2*M_PI/plug->period;
                                 break;
                             case MID:
                                 rmd = w-1;
-                                gain[MID] = *plug->md_p;
+                                gain[MID] = *plug->md_p**plug->enable_p;
                                 break;
                             case DOWN:
                                 rdn = w-1;
-                                gain[DOWN] = *plug->dn_p;
+                                gain[DOWN] = *plug->dn_p**plug->enable_p;
                                 break;
                             }
                         }
                         else
                         {//turn off
-                            plug->ofs[j] = 0;
+                            plug->ofs[j] = *plug->overlap_p*M_PI;
                             on[j] = 0;
                             if(j==UP)
                                 dphase = 2*M_PI/plug->period; 
                         }
-                    }
-                }
-            }
-        }
-
-        //process current place to pi
-        chunk = -phase/dphase;
-        if(evchunk < chunk)
-            chunk = evchunk;
-        for( ; chunk; chunk--)
-        { 
-            //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
-            //TODO: gain[UP] should be half to do the filter
-            buf[w++] = in[i];
-            out[i] =  gain[DRY ]*buf[rmd];
-            out[i] += gain[UP  ]*on[UP  ]*func(phase+ofs[UP  ])*( buf[rup] + buf[rup+1] );
-            out[i] += gain[MID ]*on[MID ]*func(phase+ofs[MID ])*buf[rmd];
-            out[i] += gain[DOWN]*on[DOWN]*func(phase+ofs[DOWN])*buf[(uint16_t)rdn];
-            rup += 2;
-            rmd += 1;
-            rdn = rdn>0xFFFF?0:rdn+.5;
-            gain[3] += gainstep;
-            i++;
-        }
-        if(phase > PI)
-        {
-            phase -= 2*M_PI;
-            ++step %= 12;
-            func = shapes[*plug->shape_p];
-            for(j=0;j<3;j++)
-            {//go through voices
-                if(!plug->ofs[j])
-                {//can only transition at end of cycle
-                    if(((cycles[j][seq])>>step)&0x0001)
-                    {//turn on
-                        plug->ofs[j] = 0;
-                        on[j] = 1;
-                        switch(j)
-                        {
-                        case UP:
-                            rup = w-1-ceil(2.0*plug->period);
-                            gain[UP] = .5**plug->up_p;//.5 is for the AA filter
-                            dphase = 2*M_PI/plug->period;
-                            break;
-                        case MID:
-                            rmd = w-1;
-                            gain[MID] = *plug->md_p;
-                            break;
-                        case DOWN:
-                            rdn = w-1;
-                            gain[DOWN] = *plug->dn_p;
-                            break;
-                        }
-                    }
+                    }//if not offset
                     else
-                    {//turn off
-                        plug->ofs[j] = *plug->overlap_p*M_PI;
-                        on[j] = 0;
-                        if(j==UP)
-                            dphase = 2*M_PI/plug->period; 
+                    {//gotta wrap the offset
+                        plug->ofs[j] = M_PI;
                     }
-                }
-                else
-                {//gotta wrap the offset
-                    plug->ofs[j] = M_PI;
-                }
-            }
-        }
-
-        
-    }
+                }//for voices
+            }//if done with cycle
+        }//while evchunk
+        //now we've processed up until that last atom, we can apply the new speed
+        plug->period = 60*plug->sample_freq**plug->length_p/plug->tempo;
+        if(*plug->overlap_p)
+            plug->period *= 2;
+        //disallow too slow of trem
+        while(plug->period >= 0x8000)
+            plug->period *= .5;
+        tmp = 2*M_PI/plug->period;
+        if(tmp > dphase)
+            dphase = tmp; 
+        //otherwise we'll wait until UP is at a safe place 
+    }//for i
 
     //keep state stuff for next time;
     plug->step = step;
+    plug->seq = seq;
     plug->phase = phase;
     plug->gain = gain;
     for(j=0;j<3;j++)
@@ -323,12 +433,13 @@ LV2_Handle init_octolo(const LV2_Descriptor *descriptor,double sample_freq, cons
     {
         plug->r[i] = 0;
         plug->ofs[i] = 0;
+        plug->gain[i] = 0;
     }
+    plug->gain[DRY] = 0;
     plug->w = 0;
     plug->period = sample_freq;
     plug->step = 12;
     plug->phase = -M_PI;
-    plug->gain = 0;
 
     plug->sample_freq = sample_freq;
 
@@ -366,14 +477,20 @@ void connect_octolo_ports(LV2_Handle handle, uint32_t port, void *data)
     OCTOLO* plug = (OCTOLO*)handle;
     switch(port)
     {
+    case ATOM_IN:
+        plug->atom_in_p = (LV2_Atom_Sequence*)data;
+        break;
     case IN:
         plug->input_p = (float*)data;
         break;
     case OUT:
         plug->output_p = (float*)data;
         break;
-    case PERIOD:
-        plug->period_p = (float*)data;
+    case ENABLE:
+        plug->enable_p = (float*)data;
+        break;
+    case LENGTH:
+        plug->length_p = (float*)data;
         break;
     case DRY:
         plug->dry_p = (float*)data;
@@ -393,8 +510,8 @@ void connect_octolo_ports(LV2_Handle handle, uint32_t port, void *data)
     case SEQUENCE:
         plug->seq_p = (float*)data;
         break;
-    case DBG:
-        plug->dbg_p = (float*)data;
+    case OVERLAP:
+        plug->overlap_p = (float*)data;
         break;
     default:
         puts("UNKNOWN PORT YO!!");
