@@ -17,6 +17,8 @@
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
                 foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
+        mod:brand "infamous";        
+        mod:label "bent delay"; 
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This experimental delay subtracts a downsampled (aliased) delayed signal from the original. Makes bright gritty slapback sounds." ;

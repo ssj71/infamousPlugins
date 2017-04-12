@@ -94,7 +94,7 @@
         mod:label "stuck stacker"; 
         modgui:gui [
             modgui:resourcesDirectory <modgui> ;
-            modgui:iconTemplate <modgui/stuck.html> ;
+            modgui:iconTemplate <modgui/stuckstacker.html> ;
             modgui:stylesheet <modgui/stuck.css> ;
             modgui:screenshot <modgui/screenshot-stuck.png> ;
             modgui:thumbnail <modgui/thumbnail-stuck.png> ;

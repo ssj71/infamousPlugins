@@ -19,12 +19,14 @@
         a lv2:Plugin, lv2:GeneratorPlugin ;
         doap:name "the infamous mindi" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
-        doap:description "simple midi message generator";
+        doap:description "mini midi message generator";
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
                 foaf:mbox <mailto:ssjackson71@gmail.com> ;
         ] ;
+        mod:brand "infamous";        
+        mod:label "mindi"; 
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This is a simple midi message generator that sends a message when you change its message value. It usually requires the host automating it to really be useful." ;
