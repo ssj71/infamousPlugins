@@ -305,7 +305,8 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                         step++;
                         step %= 12;
                     }
-                    func = shapes[(uint8_t)*plug->shape_p];
+                    plug->func = (uint8_t)*plug->shape_p;
+                    func = shapes[plug->func];
                     for(j=0;j<3;j++)
                     {
                         if(plug->ofs[j]) //we can only transition if we are at the end of a cycle (or off)
@@ -369,7 +370,8 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 step++;
                 step %= 12;
                 seq = (uint8_t)*plug->seq_p;
-                func = shapes[(uint8_t)*plug->shape_p];
+                plug->func = (uint8_t)*plug->shape_p;
+                func = shapes[plug->func];
                 for(j=0;j<3;j++)
                 {//go through voices
                     if(!plug->ofs[j])
@@ -459,18 +461,22 @@ LV2_Handle init_octolo(const LV2_Descriptor *descriptor,double sample_freq, cons
     }
     plug->gain[DRY] = 0;
     plug->w = 0;
-    plug->period = sample_freq;
+    plug->func = 0;
+    plug->seq = 0;
     plug->step = 12;
     plug->phase = -M_PI;
 
     plug->sample_freq = sample_freq;
+    plug->period = sample_freq;
+    plug->tempo = 120;
+
 
     //init buf
     plug->buf[0] = 0;
     for(i=1;i;i++)
         plug->buf[i] = 0;
 
-    //get urid map value for midi events
+    //get urid map value for tempo sync
     for (int i = 0; host_features[i]; i++)
     {
         if (strcmp(host_features[i]->URI, LV2_URID__map) == 0)
