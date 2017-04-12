@@ -75,6 +75,7 @@ else()
           modgui/${PLUGIN}.html 
           modgui/${PLUGIN}.css
           modgui/stuckbg.svg
+          modgui/stacker.svg
           modgui/led-bypassed.png
           modgui/led-enabled.png
           modgui/switch-key.png

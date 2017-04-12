@@ -31,6 +31,22 @@
 .stuck .mod-light.off{
     background-image:url(/resources/led-bypassed.png{{{ns}}});
 }
+.stuck .mod-lightbackward {
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+    background-position:center center;
+    background-repeat:no-repeat;
+    left:82px;
+    bottom:168px;
+    height:22px;
+    width:20px;
+    position:absolute;
+}
+.stuck .mod-lightbackward.on{
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+}
+.stuck .mod-lightbackward.off{
+    background-image:url(/resources/led-enabled.png{{{ns}}});
+}
 
 /* = Toggle
 ================================================ */
@@ -52,6 +68,12 @@
 }
 .stuck .mod-footswitch.off {
     background-position: top center !important;
+}
+.stuck .mod-footswitch#stuckbackwardswitch.on {
+    background-position: top center !important;
+}
+.stuck .mod-footswitch#stuckbackwardswitch.off {
+    background-position: bottom center !important;
 }
 
 /* = KNOBS
