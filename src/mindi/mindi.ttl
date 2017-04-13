@@ -13,6 +13,8 @@
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 @prefix pprops:   <http://lv2plug.in/ns/ext/port-props#> .
+@prefix mod: <http://moddevices.com/ns/mod#> .
+@prefix modgui: <http://moddevices.com/ns/modgui#> .
 
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#mindi>
