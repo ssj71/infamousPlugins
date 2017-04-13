@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "draw/draw_silverDial.h"
+#include "draw/draw_squareDial.h"
 
 //to use this you must remove 'inline' from the function
 // gcc -Wall -g make_knob_image.c -lm `pkg-config --cflags --libs cairo` -o knobmake
@@ -57,8 +58,14 @@ int main(int argc, char* argv[])
     for (int i = 0; i < knob_frames; i++) {
         //paint_knob_state(crf, knob_size, knob_offset, (double)((double)i/ knob_frames));
         cairo_save(cr);
-        cairo_translate(cr,i*knob_size,0);
-        cairo_code_draw_silverDial_render(cr,(float)i/(knob_frames-1));
+        cairo_translate(cr,i*(knob_size+knob_offset),0);
+        //cairo_code_draw_silverDial_render(cr,(float)i/(knob_frames-1));
+        cairo_code_draw_squareDialbccw_render(cr,(float)i/(knob_frames-1));
+        //cairo_code_draw_squareDialbccw_render(cr,(float)i/(knob_frames-1));
+        //cairo_code_draw_squareDialgccw_render(cr,(float)i/(knob_frames-1));
+        //cairo_code_draw_squareDialo_render(cr,(float)i/(knob_frames-1));
+        //cairo_code_draw_squareDialy_render(cr,(float)i/(knob_frames-1));
+        //cairo_code_draw_squareDialpccw_render(cr,(float)i/(knob_frames-1));
         cairo_restore(cr);
         /*
         cairo_set_source_surface(cr, frame, knob_size*i, 0);

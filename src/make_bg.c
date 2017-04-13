@@ -7,6 +7,7 @@
 #include "draw/draw_reel.h"
 #include "draw/draw_powerbg.h"
 #include "draw/draw_pwrLabels.h"
+#include "draw/draw_hip2bg.h"
 
 //to use this you must remove 'inline' from the function
 // gcc -Wall -g make_bg.c -lm `pkg-config --cflags --libs cairo` -o bgmake
@@ -25,8 +26,8 @@ int main(int argc, char* argv[])
 {
 
     int knob_offset = 0;
-    int imgw = 487;
-    int imgh = 318;
+    int imgw = 400;
+    int imgh = 400;
    
     char png_file[80];
     char svg_file[80];
@@ -43,6 +44,8 @@ int main(int argc, char* argv[])
     cairo_t *cr = cairo_create(knob_img);
 
     /** draw the widgets to image **/
+    cairo_code_draw_hip2bg_render(cr);
+#if(0)
     cairo_save(cr);
     cairo_translate(cr,0,0);
     cairo_code_draw_powerbg_render(cr);
@@ -71,6 +74,7 @@ int main(int argc, char* argv[])
     cairo_translate(cr,-190.5,-190.5);
     cairo_code_draw_reel_render(cr);
     cairo_restore(cr);
+#endif
 
     /** save to png file **/
     cairo_surface_flush(knob_img);

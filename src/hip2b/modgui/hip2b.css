@@ -1,0 +1,122 @@
+/* = CONTAINER
+================================================ */
+.hip2b {
+    background-image:url(/resources/hip2bg.svg{{{ns}}});
+    background-position:center center;
+    background-repeat:no-repeat;
+    background-size:400px 400px;
+    /*border-radius: 21px;*/
+    height:400px;
+    position:absolute;
+    width:400px;
+    padding: 10px 10px 10px 5px;
+    text-align: center;
+}
+
+/* = FOOTSWITCH
+================================================ */
+.hip2b .mod-footswitch {
+    background-image:url(/resources/footswitch.png{{{ns}}});
+    background-position:bottom center;
+    background-repeat:no-repeat;
+    background-size:auto 132px;
+    cursor:pointer;
+    height:70px;
+    width: 70px;
+    margin: 4px auto 0 auto; 
+    position: absolute;
+    left: 44px;
+    top: 36px;
+    z-index: 20;
+}
+
+/* = LIGHT ON/OFF
+================================================ */
+.hip2b .mod-light {
+    background-position:center center;
+    background-repeat:no-repeat;
+    background-size:contain;
+    top:53px;
+    height:32px;
+    width:46px;
+    left:183px; /* 35+44=79 162+44=206 */
+    position:absolute;
+}
+.hip2b .mod-light.on{
+    background-image:url(/resources/led-enabled.png{{{ns}}});
+}
+.hip2b .mod-light.off{
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+}
+
+/* = KNOBS
+================================================ */
+.hip2b .mod-knob {
+    display:inline-block;
+    overflow:hidden;
+    position:relative;
+}
+
+.hip2b .mod-knob#hip2bout .mod-knob-image {
+    background-image:url(/resources/squareDialb64.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 89px; 
+    background-position:left center;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+    height:89px;
+    width:89px;
+    margin:0 auto;
+    z-index: 50;
+}
+.hip2b .mod-knob#hip2bmix .mod-knob-image {
+    background-image:url(/resources/squareDialb64.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 89px; 
+    background-position:left center;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+    height:89px;
+    width:89px;
+    margin:0 auto;
+    z-index: 50;
+}
+.hip2b .mod-knob .mod-knob-image {
+    background-image:url(/resources/squareDial64.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 89px; 
+    background-position:left center;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+    height:89px;
+    width:89px;
+    margin:0 auto;
+    z-index: 50;
+} 
+
+.hip2b .mod-knob#hip2bin { 
+    left:35px;
+    top:146px;
+    position:absolute;
+}
+
+.hip2b .mod-knob#hip2bout { 
+    left:162px;
+    top:146px;
+    position:absolute;
+}
+
+.hip2b .mod-knob#hip2boct { 
+    left:35px;
+    top:258px;
+    position:absolute;
+}
+
+.hip2b .mod-knob#hip2bmix { 
+    left:162px;
+    top:258px;
+    position:absolute;
+}
