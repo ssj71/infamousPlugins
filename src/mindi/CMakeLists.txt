@@ -54,7 +54,7 @@ if(NOT CAIRO_FOUND OR NOT NTK_FOUND)
 #        install (DIRECTORY modgui/
 #          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
 #        )
-    endif()
+#    endif()
 endif()
 #else()
 #    find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
