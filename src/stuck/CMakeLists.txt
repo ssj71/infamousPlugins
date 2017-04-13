@@ -73,6 +73,7 @@ else()
     if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
         install (FILES 
           modgui/${PLUGIN}.html 
+          modgui/stuckstacker.html 
           modgui/${PLUGIN}.css
           modgui/stuckbg.svg
           modgui/stacker.svg
