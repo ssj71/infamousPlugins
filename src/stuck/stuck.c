@@ -75,7 +75,7 @@ void run_stuck(LV2_Handle handle, uint32_t nframes)
 
     if(plug->stack)
         for(i=0;i<nframes;i++)
-            plug->output_p = 0;
+            plug->output_p[i] = 0;
     else
         memcpy(plug->output_p,plug->input_p,nframes*sizeof(float));
 
