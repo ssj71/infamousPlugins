@@ -21,13 +21,14 @@ typedef struct _FALTER
     float *decimate_p;
     float *delay_p;
     float *feedback_p;
+    float *separate_p;
 } FALTER;
 
 
 void run_falter(LV2_Handle handle, uint32_t nframes)
 {
     FALTER* plug = (FALTER*)handle;
-    float* in, *out, *buf, *fbuf, fb;
+    float* in, *out, *buf, *fbuf, fb,separate;
     uint16_t i,w, pdelay, ndelay, mask, downmask;
 
     in = plug->input_p;
@@ -38,6 +39,8 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
     mask = plug->mask;
     downmask = (mask<<(uint8_t)*plug->decimate_p)&mask;
     fb = *plug->feedback_p/100;
+    if(*plug->separate_p)
+        separate = 1;
 
 
     pdelay = ndelay = 0;
@@ -49,8 +52,9 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
     for (i=0;i<nframes;i++)
     {
         buf[w] = in[i];
-        out[i] = buf[(w-pdelay)&mask] - buf[(w-ndelay)&downmask] + fbuf[(w-pdelay-ndelay)&mask];
+        out[i] = buf[(w-pdelay)&mask] - buf[(w-ndelay)&downmask] + (separate)*fbuf[(w-pdelay-ndelay)&mask];
         fbuf[w] = fb*out[i];
+        buf[w] += (1-separate)*fb*out[i];
         w++;
         w &= mask;
     } 
@@ -100,6 +104,9 @@ void connect_falter_ports(LV2_Handle handle, uint32_t port, void *data)
         break;
     case FEEDBACK:
         plug->feedback_p = (float*)data;
+        break;
+    case SEPARATE:
+        plug->separate_p = (float*)data;
         break;
     default:
         puts("UNKNOWN PORT YO!!");
