@@ -12,6 +12,7 @@ typedef struct _FALTER
 {
     uint16_t w;
     float *buf;
+    float *fbuf;
     uint16_t mask;
     float sample_rate;
 
@@ -26,12 +27,13 @@ typedef struct _FALTER
 void run_falter(LV2_Handle handle, uint32_t nframes)
 {
     FALTER* plug = (FALTER*)handle;
-    float* in, *out, *buf, fb;
+    float* in, *out, *buf, *fbuf, fb;
     uint16_t i,w, pdelay, ndelay, mask, downmask;
 
     in = plug->input_p;
     out = plug->output_p;
     buf = plug->buf;
+    fbuf = plug->fbuf;
     w = plug->w;
     mask = plug->mask;
     downmask = (mask<<(uint8_t)*plug->decimate_p)&mask;
@@ -47,8 +49,8 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
     for (i=0;i<nframes;i++)
     {
         buf[w] = in[i];
-        out[i] = buf[(w-pdelay)&mask] - buf[(w-ndelay)&downmask];
-        buf[w] += fb*out[i];
+        out[i] = buf[(w-pdelay)&mask] - buf[(w-ndelay)&downmask] + fbuf[(w-pdelay-ndelay)&mask];
+        fbuf[w] = fb*out[i];
         w++;
         w &= mask;
     } 
@@ -70,6 +72,7 @@ LV2_Handle init_falter(const LV2_Descriptor *descriptor,double sample_rate, cons
     //if(sample_rate<50000)//44.1 or 48kHz  //exceeded the 16 bits, but who seriously uses 196k?exceeded the 16 bits, but who seriously uses 196k?
     //    tmp = tmp>>1;
     plug->buf = (float*)malloc(tmp*sizeof(float));
+    plug->fbuf = (float*)malloc(tmp*sizeof(float));
     plug->w = 0;
     plug->mask = tmp-1;
 
@@ -107,6 +110,7 @@ void cleanup_falter(LV2_Handle handle)
 {
     FALTER* plug = (FALTER*)handle;
     free(plug->buf);
+    free(plug->fbuf);
     free(plug);
 }
 
