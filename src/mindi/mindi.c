@@ -32,6 +32,7 @@
 
 typedef struct _MINDI
 {
+    float enable;
     float data1;
     float data2;
 
@@ -43,6 +44,7 @@ typedef struct _MINDI
 
     //ports
     LV2_Atom_Sequence* midi_out_p;
+    float* enable_p;
     float* msgtype_p;
     float* chan_p; 
     float* data1_p;
@@ -53,6 +55,7 @@ typedef struct _MINDI
 LV2_Handle init_mindi(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     MINDI* plug = malloc(sizeof(MINDI));
+    plug->enable = 0;
     plug->data1 = 0;
     plug->data2 = 0;
 
@@ -80,6 +83,7 @@ void connect_mindi_ports(LV2_Handle handle, uint32_t port, void *data)
 {
     MINDI* plug = (MINDI*)handle;
     if(port == MIDI_OUT)    plug->midi_out_p = (LV2_Atom_Sequence*)data;
+    else if(port == ENABLE)plug->enable_p = (float*)data;
     else if(port == MSGTYPE)plug->msgtype_p = (float*)data;
     else if(port == CHAN)   plug->chan_p = (float*)data;
     else if(port == DATA1)  plug->data1_p = (float*)data;
@@ -93,8 +97,9 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
     uint8_t msg[3];
 
 
-    if(plug->data1 != *plug->data1_p || plug->data2 != *plug->data2_p)
+    if(plug->data1 != *plug->data1_p || plug->data2 != *plug->data2_p || (*plug->enable_p && plug->enable != *plug->enable_p))
     {
+        plug->enable = *plug->enable_p;
         plug->data1 = *plug->data1_p;
         plug->data2 = *plug->data2_p;
         //get midi port ready

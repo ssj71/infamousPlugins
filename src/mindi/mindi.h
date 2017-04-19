@@ -8,6 +8,7 @@
 enum mindi_ports
 {
     MIDI_OUT = 0,
+    ENABLE,
     MSGTYPE,
     CHAN,
     DATA1,
