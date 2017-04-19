@@ -238,13 +238,13 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     gainstep /= nframes>64?nframes:64;
 
     dphase = 2*M_PI/plug->period;
-    tmp = 2*(rmd - rup)*phase;//if up was mid cycle, this calculates it based on the old phase
-    if(tmp > dphase && (((cycles[UP][seq])>>step)&0x0001))
+    tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
+    if(tmp <1 && tmp > dphase && (((cycles[UP][seq])>>step)&0x0001))
         dphase = tmp; 
 
 
     //max period is 1.4 sec = .67
-    for(i=0;i<=nframes;i++)
+    for(i=0;i<nframes;i++)
     {
         evchunk = nframes - i;
         tmp = 0;//use this as exit flag
@@ -296,6 +296,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                     rmd += 1;
                     rdn = rdn>0xFFFF?0:rdn+.5;
                     gain[DRY] += gainstep;
+                    phase += dphase;
                     i++;
                 }
                 if(phase > 0)
@@ -345,7 +346,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
             }//if processing half cycles
 
             //process current place to pi
-            chunk = (M_PI-phase)/dphase;
+            chunk = ceil((M_PI-phase)/dphase);
             if(evchunk < chunk)
                 chunk = evchunk;
             evchunk -= chunk;
@@ -361,10 +362,11 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 rmd += 1;
                 rdn = rdn>0xFFFF?0:rdn+.5;
                 gain[DRY] += gainstep;
+                phase += dphase;
                 i++;
             }
 
-            if(phase > M_PI)
+            if(phase >= M_PI)
             {
                 phase -= 2*M_PI;
                 step++;
