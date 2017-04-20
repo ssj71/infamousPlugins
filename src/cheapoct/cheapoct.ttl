@@ -19,7 +19,7 @@
         ] ;
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
-        rdfs:comment "This experimental octave shifter uses no fft, no spectral techniques but instead just uses a zero order hold to downsample until it finds a place it can smoothly jump to. In ideal circumstances it has a maximum of 1 wavecycle latency but the quality isn't great."
+        rdfs:comment "This experimental octave shifter uses no fft, no spectral techniques but instead just uses a zero order hold to downsample until it finds a place it can smoothly jump to. In ideal circumstances it has a maximum of 1 wavecycle latency but the quality isn't great." ;
         lv2:optionalFeature lv2:hardRTCapable ;
 
         lv2:port [
