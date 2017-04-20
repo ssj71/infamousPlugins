@@ -319,7 +319,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                                 switch(j)
                                 {
                                 case UP:
-                                    rup = w-1-ceil(2.0*plug->period);
+                                    rup = w-1-ceil(plug->period);
                                     gain[UP] = .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
                                     dphase = 2*M_PI/plug->period;
                                     break;
@@ -385,7 +385,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                             switch(j)
                             {
                             case UP:
-                                rup = w-1-ceil(2.0*plug->period);
+                                rup = w-1-ceil(plug->period);
                                 gain[UP] = .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
                                 dphase = 2*M_PI/plug->period;
                                 break;
