@@ -163,7 +163,8 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     float tmp,gainstep;
     float rdn;
     uint16_t rup, rmd;
-    uint16_t i,w, chunk,evchunk;
+    uint16_t i,w, evchunk;
+    int16_t chunk;
     uint8_t j,seq,step,ofsf,on[3];
     LV2_Atom* tempoatom;
     const LV2_Atom_Object* obj;
@@ -310,11 +311,11 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                     func = shapes[plug->func];
                     for(j=0;j<3;j++)
                     {
-                        if(plug->ofs[j]) //we can only transition if we are at the end of a cycle (or off)
+                        if(ofs[j]) //we can only transition if we are at the end of a cycle (or off)
                         {
                             if(((cycles[j][seq])>>step)&0x0001)
                             {//turn on
-                                plug->ofs[j] = -M_PI;
+                                ofs[j] = -M_PI;
                                 on[j] = 1;
                                 switch(j)
                                 {
@@ -335,7 +336,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                             }
                             else
                             {//turn off
-                                plug->ofs[j] = 0;
+                                ofs[j] = 0;
                                 on[j] = 0;
                                 if(j==UP)
                                     dphase = 2*M_PI/plug->period; 
@@ -376,11 +377,11 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 func = shapes[plug->func];
                 for(j=0;j<3;j++)
                 {//go through voices
-                    if(!plug->ofs[j])
+                    if(!ofs[j])
                     {//can only transition at end of cycle
                         if(((cycles[j][seq])>>step)&0x0001)
                         {//turn on
-                            plug->ofs[j] = 0;
+                            ofs[j] = 0;
                             on[j] = 1;
                             switch(j)
                             {
@@ -401,15 +402,15 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                         }
                         else
                         {//turn off
-                            plug->ofs[j] = *plug->overlap_p*M_PI;
+                            ofs[j] = *plug->overlap_p*M_PI;
                             on[j] = 0;
                             if(j==UP)
                                 dphase = 2*M_PI/plug->period; 
                         }
-                    }//if not offset
+                  ,  }//if not offset
                     else
                     {//gotta wrap the offset
-                        plug->ofs[j] = M_PI;
+                        ofs[j] = M_PI;
                     }
                 }//for voices
             }//if done with cycle
@@ -419,7 +420,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
         if(*plug->overlap_p)
             plug->period *= 2;
         //disallow too slow of trem
-        while(plug->period >= 0x8000)
+        while(plug->period >= 0x10000)
             plug->period *= .5;
         tmp = 2*M_PI/plug->period;
         if(tmp > dphase)
