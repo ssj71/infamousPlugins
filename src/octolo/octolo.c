@@ -164,7 +164,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     float rdn;
     uint16_t rup, rmd;
     uint16_t i,w, evchunk;
-    int16_t chunk;
+    int32_t chunk;
     uint8_t j,seq,step,ofsf,on[3];
     LV2_Atom* tempoatom;
     const LV2_Atom_Object* obj;
@@ -240,7 +240,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
 
     dphase = 2*M_PI/plug->period;
     tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
-    if(tmp <1 && tmp > dphase && (((cycles[UP][seq])>>step)&0x0001))
+    if(tmp <1 && tmp > dphase && gain[UP])
         dphase = tmp; 
 
 
@@ -300,7 +300,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                     phase += dphase;
                     i++;
                 }
-                if(phase > 0)
+                if(phase+dphase > 0)
                 {//transition to next state
                     if(*plug->overlap_p)
                     {
@@ -337,6 +337,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                             else
                             {//turn off
                                 ofs[j] = 0;
+                                gain[j] = 0;
                                 on[j] = 0;
                                 if(j==UP)
                                     dphase = 2*M_PI/plug->period; 
@@ -347,7 +348,8 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
             }//if processing half cycles
 
             //process current place to pi
-            chunk = ceil((M_PI-phase)/dphase);
+            chunk = ceil((M_PI-phase)/dphase);//TODO: remove
+            chunk = (M_PI-phase)/dphase;
             if(evchunk < chunk)
                 chunk = evchunk;
             evchunk -= chunk;
@@ -367,7 +369,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 i++;
             }
 
-            if(phase >= M_PI)
+            if(phase+dphase >= M_PI)
             {
                 phase -= 2*M_PI;
                 step++;
@@ -404,10 +406,11 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                         {//turn off
                             ofs[j] = *plug->overlap_p*M_PI;
                             on[j] = 0;
+                            gain[j] = 0;
                             if(j==UP)
                                 dphase = 2*M_PI/plug->period; 
                         }
-                  ,  }//if not offset
+                    }//if not offset
                     else
                     {//gotta wrap the offset
                         ofs[j] = M_PI;
@@ -627,7 +630,7 @@ static const LV2_Descriptor octolo_descriptor=
     0//extension
 };
 
-static const LV2_Descriptor steroctolo_descriptor=
+static const LV2_Descriptor stereoctolo_descriptor=
 {
     STEREOCTOLO_URI,
     init_octolo,
