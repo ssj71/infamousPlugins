@@ -12,7 +12,6 @@ typedef struct _FALTER
 {
     uint16_t w;
     float *buf;
-    float *fbuf;
     uint16_t mask;
     float sample_rate;
 
@@ -21,40 +20,30 @@ typedef struct _FALTER
     float *decimate_p;
     float *delay_p;
     float *feedback_p;
-    float *separate_p;
 } FALTER;
 
 
 void run_falter(LV2_Handle handle, uint32_t nframes)
 {
     FALTER* plug = (FALTER*)handle;
-    float* in, *out, *buf, *fbuf, fb,separate;
-    uint16_t i,w, pdelay, ndelay, mask, downmask;
+    float* in, *out, *buf, fb;
+    uint16_t i,w, delay, mask, downmask;
 
     in = plug->input_p;
     out = plug->output_p;
     buf = plug->buf;
-    fbuf = plug->fbuf;
     w = plug->w;
     mask = plug->mask;
     downmask = (mask<<(uint8_t)*plug->decimate_p)&mask;
-    fb = *plug->feedback_p/100;
-    if(*plug->separate_p)
-        separate = 1;
+    fb = *plug->feedback_p/100; 
 
-
-    pdelay = ndelay = 0;
-    if(*plug->delay_p < 0)
-        ndelay = -*plug->delay_p*plug->sample_rate/1000;
-    else
-        pdelay = *plug->delay_p*plug->sample_rate/1000;
+    delay = *plug->delay_p*plug->sample_rate/1000.0;
 
     for (i=0;i<nframes;i++)
     {
         buf[w] = in[i];
-        out[i] = buf[(w-pdelay)&mask] - buf[(w-ndelay)&downmask] + (separate)*fbuf[(w-pdelay-ndelay)&mask];
-        fbuf[w] = fb*out[i];
-        buf[w] += (1-separate)*fb*out[i];
+        out[i] = buf[w] - buf[(w-delay)&downmask];
+        buf[w] -= fb*out[i];
         w++;
         w &= mask;
     } 
@@ -76,7 +65,6 @@ LV2_Handle init_falter(const LV2_Descriptor *descriptor,double sample_rate, cons
     //if(sample_rate<50000)//44.1 or 48kHz  //exceeded the 16 bits, but who seriously uses 196k?exceeded the 16 bits, but who seriously uses 196k?
     //    tmp = tmp>>1;
     plug->buf = (float*)malloc(tmp*sizeof(float));
-    plug->fbuf = (float*)malloc(tmp*sizeof(float));
     plug->w = 0;
     plug->mask = tmp-1;
 
@@ -105,9 +93,6 @@ void connect_falter_ports(LV2_Handle handle, uint32_t port, void *data)
     case FEEDBACK:
         plug->feedback_p = (float*)data;
         break;
-    case SEPARATE:
-        plug->separate_p = (float*)data;
-        break;
     default:
         puts("UNKNOWN PORT YO!!");
     }
@@ -117,7 +102,6 @@ void cleanup_falter(LV2_Handle handle)
 {
     FALTER* plug = (FALTER*)handle;
     free(plug->buf);
-    free(plug->fbuf);
     free(plug);
 }
 
