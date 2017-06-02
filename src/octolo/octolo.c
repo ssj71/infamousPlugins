@@ -134,17 +134,17 @@ float mycos(float x)
 
 float mysquare(float x)
 {
-    const float s = .18237;
-    const float sl = (M_PI-s)/2;
-    const float sh = (M_PI+s)/2;
+    const float s = 1/.05;//denominator is the width of the sloped part
+    const float sl = (M_PI-1/s)/2;
+    const float sh = (M_PI+1/s)/2;
     if(x < -sh || x > sh)
         return 0;
     else if(x < -sl)
-        return s*(x + M_PI/2.0)+1;//slope up
+        return s*(x + sh);//slope up
     else if(x < sl)
         return 1;
     else
-        return -s*(x + M_PI/2.0)+1;//slope down
+        return -s*(x - sh);//slope down
 }
 
 float mytri(float x)
@@ -165,7 +165,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     uint16_t rup, rmd;
     uint16_t i,w, evchunk;
     int32_t chunk;
-    uint8_t j,seq,step,ofsf,on[3];
+    uint8_t j,seq,step,ofsf;
     LV2_Atom* tempoatom;
     const LV2_Atom_Object* obj;
     LV2_Atom_Event* ev;
@@ -193,7 +193,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     tmp  = 0;
     for(j=0;j<3;j++)
     {
-        on[j] = ((cycles[j][seq])>>step)&0x0001;
         ofs[j] = plug->ofs[j];
         gain[j] = plug->gain[j];
         tmp += gain[j];
@@ -240,8 +239,8 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
 
     dphase = 2*M_PI/plug->period;
     tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
-    if(tmp <1 && tmp > dphase && gain[UP])
-        dphase = tmp; 
+    //if(tmp <1 && tmp > dphase && gain[UP])
+    //    dphase = tmp; 
 
 
     //max period is 1.4 sec = .67
@@ -290,9 +289,9 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                     //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
                     buf[w++] = in[i];
                     out[i] =  gain[DRY ]*buf[rmd];
-                    out[i] += gain[UP  ]*on[UP  ]*func(phase+ofs[UP  ])*( buf[rup] + buf[rup+1] );
-                    out[i] += gain[MID ]*on[MID ]*func(phase+ofs[MID ])*buf[rmd];
-                    out[i] += gain[DOWN]*on[DOWN]*func(phase+ofs[DOWN])*buf[(uint16_t)rdn];
+                    out[i] += gain[UP  ]*func(phase+ofs[UP  ])*( buf[rup] + buf[rup+1] );
+                    out[i] += gain[MID ]*func(phase+ofs[MID ])*buf[rmd];
+                    out[i] += gain[DOWN]*func(phase+ofs[DOWN])*buf[(uint16_t)rdn];
                     rup += 2;
                     rmd += 1;
                     rdn = rdn>0xFFFF?0:rdn+.5;
@@ -316,7 +315,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                             if(((cycles[j][seq])>>step)&0x0001)
                             {//turn on
                                 ofs[j] = -M_PI;
-                                on[j] = 1;
                                 switch(j)
                                 {
                                 case UP:
@@ -337,8 +335,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                             else
                             {//turn off
                                 ofs[j] = 0;
-                                gain[j] = 0;
-                                on[j] = 0;
+                                gain[j] *= 1-*plug->overlap_p;
                                 if(j==UP)
                                     dphase = 2*M_PI/plug->period; 
                             }
@@ -358,9 +355,9 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
                 buf[w++] = in[i];
                 out[i] =  gain[DRY ]*buf[rmd];
-                out[i] += gain[UP  ]*on[UP  ]*func(phase+ofs[UP  ])*( buf[rup] + buf[rup+1] );
-                out[i] += gain[MID ]*on[MID ]*func(phase+ofs[MID ])*buf[rmd];
-                out[i] += gain[DOWN]*on[DOWN]*func(phase+ofs[DOWN])*buf[(uint16_t)rdn];
+                out[i] += gain[UP  ]*func(phase+ofs[UP  ])*( buf[rup] + buf[rup+1] );
+                out[i] += gain[MID ]*func(phase+ofs[MID ])*buf[rmd];
+                out[i] += gain[DOWN]*func(phase+ofs[DOWN])*buf[(uint16_t)rdn];
                 rup += 2;
                 rmd += 1;
                 rdn = rdn>0xFFFF?0:rdn+.5;
@@ -382,9 +379,8 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                     if(!ofs[j])
                     {//can only transition at end of cycle
                         if(((cycles[j][seq])>>step)&0x0001)
-                        {//turn on
+                        {//turn n
                             ofs[j] = 0;
-                            on[j] = 1;
                             switch(j)
                             {
                             case UP:
@@ -405,8 +401,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                         else
                         {//turn off
                             ofs[j] = *plug->overlap_p*M_PI;
-                            on[j] = 0;
-                            gain[j] = 0;
+                            gain[j] *= *plug->overlap_p;
                             if(j==UP)
                                 dphase = 2*M_PI/plug->period; 
                         }
