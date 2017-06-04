@@ -72,6 +72,7 @@ typedef struct _OCTOLO
     float sample_freq;
     float period;
     float tempo;
+    float slope;
     float gain[4];
     float gainr[4];
 
@@ -89,6 +90,7 @@ typedef struct _OCTOLO
     float *dnp_p;
     float *upp_p;
     float *shape_p;
+    float *slope_p;
     float *seq_p;
     float *overlap_p;
 
@@ -132,6 +134,23 @@ float mycos(float x)
     return x+.5;
 }
 
+//s E (0,pi/2)
+float myslope(float x,float s,float sl,float sh)
+{
+    //const float s = 1/.05;//denominator is the width of the sloped part
+    //s = 1/(s*M_PI/2);
+    //const float sl = (M_PI-1/s)/2;
+    //const float sh = (M_PI+1/s)/2;
+    if(x < -sh || x > sh)
+        return 0;
+    else if(x < -sl)
+        return s*(x + sh);//slope up
+    else if(x < sl)
+        return 1;
+    else
+        return -s*(x - sh);//slope down
+}
+
 float mysquare(float x)
 {
     const float s = 1/.05;//denominator is the width of the sloped part
@@ -160,7 +179,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     OCTOLO* plug = (OCTOLO*)handle;
     float* in, *out, *buf;
     float phase,dphase,ofs[3],gain[4];
-    float tmp,gainstep;
+    float tmp,gainstep,slope,sl,sh,sd;
     float rdn;
     uint16_t rup, rmd;
     uint16_t i,w, evchunk;
@@ -187,6 +206,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     step = plug->step;
     phase = plug->phase;
     seq = plug->seq;//(uint8_t)*plug->seq_p;
+    slope = plug->slope;
     ofsf = 0;
     if(plug->ofs[0] || plug->ofs[1] || plug->ofs[2] || *plug->overlap_p)
         ofsf = 1;
@@ -308,6 +328,9 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                     }
                     plug->func = (uint8_t)*plug->shape_p;
                     func = shapes[plug->func];
+                    slope = (2/M_PI)/(*plug->slope_p); 
+                    sl = (M_PI-1/slope)/2;
+                    sh = (M_PI+1/slope)/2;
                     for(j=0;j<3;j++)
                     {//voices
                         if(ofs[j]) 
@@ -374,6 +397,9 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 seq = (uint8_t)*plug->seq_p;
                 plug->func = (uint8_t)*plug->shape_p;
                 func = shapes[plug->func];
+                plug->slope = (2/M_PI)/(*plug->slope_p); 
+                sl = (M_PI-1/s)/2;
+                sh = (M_PI+1/s)/2;
                 for(j=0;j<3;j++)
                 {//go through voices
                     if(!ofs[j])
@@ -442,6 +468,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     plug->r[MID] = rmd;
     plug->r[DOWN]= rdn;
     plug->w = w; 
+    plug->slope = slope;
 
     return;
 }
@@ -470,6 +497,7 @@ LV2_Handle init_octolo(const LV2_Descriptor *descriptor,double sample_freq, cons
     plug->sample_freq = sample_freq;
     plug->period = sample_freq;
     plug->tempo = 120;
+    plug->slope = 2/M_PI;
 
 
     //init buf
@@ -533,6 +561,9 @@ void connect_octolo_ports(LV2_Handle handle, uint32_t port, void *data)
         break;
     case OCTUP:
         plug->up_p = (float*)data;
+        break;
+    case SLOPE:
+        plug->slope_p = (float*)data;
         break;
     case SHAPE:
         plug->shape_p = (float*)data;
