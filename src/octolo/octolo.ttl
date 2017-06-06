@@ -106,16 +106,11 @@
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 9 ;
-                lv2:symbol "SHAPE" ;
-                lv2:name "Shape" ;
-                lv2:default 0 ;
-                lv2:minimum 0 ;
-                lv2:maximum 2 ;
-                lv2:portProperty lv2:integer ;
-                lv2:portProperty lv2:enumeration ;
-                lv2:scalePoint [ rdfs:label "Sine"; rdf:value 0 ] ;
-                lv2:scalePoint [ rdfs:label "Square"; rdf:value 1 ] ;
-                lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 2 ] ;
+                lv2:symbol "SLOPE" ;
+                lv2:name "Slope" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.001 ;
+                lv2:maximum 1.0 ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 10 ;

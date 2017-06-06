@@ -15,7 +15,7 @@ enum octolo_ports
     WET,
     OCTDOWN,
     OCTUP,
-    SHAPE,
+    SLOPE,
     SEQUENCE,
     OVERLAP
 };
@@ -34,7 +34,7 @@ enum stereoctolo_ports
     SOCTDOWNP,
     SOCTUP,
     SOCTUPP,
-    SSHAPE,
+    SSLOPE,
     SSEQUENCE,
     SOVERLAP
 };

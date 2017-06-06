@@ -64,7 +64,6 @@ typedef struct _OCTOLO
     float r[3]; //read points in buffer (up and dn oct)
     float *buf;
     uint8_t stereo;
-    uint8_t func;
     uint8_t seq;
     uint8_t step; //current point in sequence
     float phase;
@@ -110,37 +109,9 @@ typedef struct _OCTOLO
     } URI;
 } OCTOLO;
 
-//NOTE these three functions are scaled and shifted to output E(0,1) rather than E(-1,1)
-//this is mysin with a pi/2 phase shift
-float mycos(float x)
-{
-    float y;
-    x += M_PI/2.0;
-    x -= (x>M_PI)*(2*M_PI);
-
-    y = fabs(x);
-    y *= x;
-    y *= -0.40528473456;
-    x *= 1.27323954474;
-    y += x;
-    x = fabs(y);
-    x *= y;
-    x -= y;
-    x *= 0.225;
-    x += y;
-
-    //shift up
-    x *= .5; 
-    return x+.5;
-}
-
 //s E (0,pi/2)
 float myslope(float x,float s,float sl,float sh)
 {
-    //const float s = 1/.05;//denominator is the width of the sloped part
-    //s = 1/(s*M_PI/2);
-    //const float sl = (M_PI-1/s)/2;
-    //const float sh = (M_PI+1/s)/2;
     if(x < -sh || x > sh)
         return 0;
     else if(x < -sl)
@@ -149,29 +120,6 @@ float myslope(float x,float s,float sl,float sh)
         return 1;
     else
         return -s*(x - sh);//slope down
-}
-
-float mysquare(float x)
-{
-    const float s = 1/.05;//denominator is the width of the sloped part
-    const float sl = (M_PI-1/s)/2;
-    const float sh = (M_PI+1/s)/2;
-    if(x < -sh || x > sh)
-        return 0;
-    else if(x < -sl)
-        return s*(x + sh);//slope up
-    else if(x < sl)
-        return 1;
-    else
-        return -s*(x - sh);//slope down
-}
-
-float mytri(float x)
-{
-    if(x < 0)
-        return 1+x/M_PI;
-    else 
-        return 1-x/M_PI;
 }
 
 void run_octolo(LV2_Handle handle, uint32_t nframes)
@@ -179,7 +127,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     OCTOLO* plug = (OCTOLO*)handle;
     float* in, *out, *buf;
     float phase,dphase,ofs[3],gain[4];
-    float tmp,gainstep,slope,sl,sh,sd;
+    float tmp,gainstep,slope,sl,sh;
     float rdn;
     uint16_t rup, rmd;
     uint16_t i,w, evchunk;
@@ -188,7 +136,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     LV2_Atom* tempoatom;
     const LV2_Atom_Object* obj;
     LV2_Atom_Event* ev;
-    float (*func)(float);
 
     const uint16_t cycles[3][6] = 
     {    //sync  alt1    alt2    step    cyclup cycldn
@@ -196,8 +143,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
         {0xffff, 0xaaaa, 0xaaaa, 0x5555, 0x2492, 0x2492},
         {0xffff, 0x5555, 0x5555, 0x2222, 0x9249, 0x4924},
     };
-
-    float (*shapes[3])(float) = {mycos,mysquare,mytri};
 
     in = plug->input_p;
     out = plug->output_p;
@@ -250,7 +195,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     rup = plug->r[UP];
     rmd = plug->r[MID];
     rdn = plug->r[DOWN];
-    func = shapes[plug->func];
     if(*plug->enable_p)
         gainstep = *plug->dry_p - plug->gain[DRY];
     else
@@ -309,9 +253,9 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                     //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
                     buf[w++] = in[i];
                     out[i] =  gain[DRY ]*buf[rmd];
-                    out[i] += gain[UP  ]*func(phase+ofs[UP  ])*( buf[rup] + buf[rup+1] );
-                    out[i] += gain[MID ]*func(phase+ofs[MID ])*buf[rmd];
-                    out[i] += gain[DOWN]*func(phase+ofs[DOWN])*buf[(uint16_t)rdn];
+                    out[i] += gain[UP  ]*myslope(phase+ofs[UP  ],slope,sl,sh)*( buf[rup] + buf[rup+1] );
+                    out[i] += gain[MID ]*myslope(phase+ofs[MID ],slope,sl,sh)*buf[rmd];
+                    out[i] += gain[DOWN]*myslope(phase+ofs[DOWN],slope,sl,sh)*buf[(uint16_t)rdn];
                     rup += 2;
                     rmd += 1;
                     rdn = rdn>0xFFFF?0:rdn+.5;
@@ -326,8 +270,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                         step++;
                         step %= 12;
                     }
-                    plug->func = (uint8_t)*plug->shape_p;
-                    func = shapes[plug->func];
                     slope = (2/M_PI)/(*plug->slope_p); 
                     sl = (M_PI-1/slope)/2;
                     sh = (M_PI+1/slope)/2;
@@ -378,9 +320,9 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
                 buf[w++] = in[i];
                 out[i] =  gain[DRY ]*buf[rmd];
-                out[i] += gain[UP  ]*func(phase+ofs[UP  ])*( buf[rup] + buf[rup+1] );
-                out[i] += gain[MID ]*func(phase+ofs[MID ])*buf[rmd];
-                out[i] += gain[DOWN]*func(phase+ofs[DOWN])*buf[(uint16_t)rdn];
+                out[i] += gain[UP  ]*myslope(phase+ofs[UP  ],slope,sl,sh)*( buf[rup] + buf[rup+1] );
+                out[i] += gain[MID ]*myslope(phase+ofs[MID ],slope,sl,sh)*buf[rmd];
+                out[i] += gain[DOWN]*myslope(phase+ofs[DOWN],slope,sl,sh)*buf[(uint16_t)rdn];
                 rup += 2;
                 rmd += 1;
                 rdn = rdn>0xFFFF?0:rdn+.5;
@@ -395,11 +337,9 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 step++;
                 step %= 12;
                 seq = (uint8_t)*plug->seq_p;
-                plug->func = (uint8_t)*plug->shape_p;
-                func = shapes[plug->func];
-                plug->slope = (2/M_PI)/(*plug->slope_p); 
-                sl = (M_PI-1/s)/2;
-                sh = (M_PI+1/s)/2;
+                slope = (2/M_PI)/(*plug->slope_p); 
+                sl = (M_PI-1/slope)/2;
+                sh = (M_PI+1/slope)/2;
                 for(j=0;j<3;j++)
                 {//go through voices
                     if(!ofs[j])
@@ -460,8 +400,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     {
         plug->ofs[j] = ofs[j];
         plug->gain[j] = gain[j];
-        if(func == shapes[j])//this only works while there are 3 shapes
-            plug->func = j;
     }
     plug->gain[DRY] = gain[DRY];
     plug->r[UP]  = rup;
@@ -489,7 +427,6 @@ LV2_Handle init_octolo(const LV2_Descriptor *descriptor,double sample_freq, cons
     }
     plug->gain[DRY] = 0;
     plug->w = 0;
-    plug->func = 0;
     plug->seq = 0;
     plug->step = 12;
     plug->phase = -M_PI;
@@ -565,9 +502,6 @@ void connect_octolo_ports(LV2_Handle handle, uint32_t port, void *data)
     case SLOPE:
         plug->slope_p = (float*)data;
         break;
-    case SHAPE:
-        plug->shape_p = (float*)data;
-        break;
     case SEQUENCE:
         plug->seq_p = (float*)data;
         break;
@@ -623,8 +557,8 @@ void connect_stereoctolo_ports(LV2_Handle handle, uint32_t port, void *data)
     case SOCTUPP:
         plug->upp_p = (float*)data;
         break;
-    case SSHAPE:
-        plug->shape_p = (float*)data;
+    case SSLOPE:
+        plug->slope_p = (float*)data;
         break;
     case SSEQUENCE:
         plug->seq_p = (float*)data;
@@ -674,6 +608,8 @@ const LV2_Descriptor* lv2_descriptor(uint32_t index)
     {
     case 0:
         return &octolo_descriptor;
+    case 1:
+        return &stereoctolo_descriptor;
     default:
         return 0;
     }
