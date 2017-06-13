@@ -305,3 +305,19 @@
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
         ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:00straighttrem>
+    a pset:Preset ;
+	rdfs:label "00 Straight Trem" ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+    rdfs:seeAlso <octolo_pressets.ttl> .
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:01chopperdown>
+    a pset:Preset ;
+	rdfs:label "01 Chopper Down" ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+    rdfs:seeAlso <octolo_pressets.ttl> .
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:02arp>
+    a pset:Preset ;
+	rdfs:label "01 Arp" ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+    rdfs:seeAlso <octolo_pressets.ttl> .
