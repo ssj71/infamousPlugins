@@ -70,6 +70,11 @@ typedef struct
     char* units;
 }tk_dial_stuff;
 
+typedef struct
+{
+    cairo_t **cr;
+    cairo_surface_t **surf; 
+}tk_draw_stuff;
 
 // main properties and table
 typedef enum
@@ -101,12 +106,14 @@ typedef struct tk_table
     uint8_t *layer;
     //value could be any type so be careful here
     void **value;
+    //these allow shaders to cache cairo data
+    void **drawstuff; 
     //a string pointer for tooltips
     char **tip;
     //property flags
     uint16_t *props;
     //draw function
-    void (**draw_f)(cairo_t*, float, float, void*); //surface, w, h, value
+    void (**draw_f)(cairo_t*, float, float, void*, void*); //surface, w, h, cache, value
     //built in callback, must not be 0
     void (**cb_f)(struct tk_table*, const PuglEvent*, uint16_t); 
     //user callback, runs after the cb_f
