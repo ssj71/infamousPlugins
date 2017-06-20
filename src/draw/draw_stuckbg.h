@@ -1,18 +1,14 @@
 #ifndef DRAW_STUCKBG_H
 #define DRAW_STUCKBG_H
-inline int cairo_code_draw_stuckbg_get_width()
-{
-    return 256;
-}
-inline int cairo_code_draw_stuckbg_get_height()
-{
-    return 400;
-}
-inline void cairo_code_draw_stuckbg_render(cairo_t *cr)
+//256x400
+void draw_stuckbg(cairo_t *cr, float w, float h, void* cache, void* valp )
 {
     cairo_surface_t *temp_surface;
     cairo_t *old_cr;
     cairo_pattern_t *pattern;
+    float scale = w/256.0;
+    cairo_save(cr);
+    cairo_scale(cr,scale,scale);
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(1,1,1,1);
@@ -2444,5 +2440,6 @@ inline void cairo_code_draw_stuckbg_render(cairo_t *cr)
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
     cairo_stroke_preserve(cr);
     /********************/
+    cairo_restore(cr);
 }
 #endif

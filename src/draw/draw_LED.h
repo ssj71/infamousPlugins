@@ -14,6 +14,19 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
     cairo_matrix_t matrix;
 
     float r,g,b, rd,gd,bd;
+    float scale,shiftx,shifty;
+    shiftx = shifty = 0;
+    scale = w/19.0;
+    if(scale < h/19.0)
+        shifty = h-scale*19.0;
+    else
+    {
+        scale = h/19.0;
+        shiftx = w-scale*19.0;
+    }
+    cairo_save(cr);
+    cairo_scale(cr,scale,scale);
+    cairo_translate(cr,shiftx,shifty);
 
     switch(color)
     {
@@ -164,34 +177,35 @@ inline void cairo_code_draw_LED_render(cairo_t *cr, int val, uint8_t color)
         cairo_stroke_preserve(cr);
     }//if on
     /********************/
+    cairo_restore(cr);
 }
 
-inline void cairo_code_draw_redLED_render(cairo_t *cr, int val)
+void draw_redLED(cairo_t *cr, float w, float h, void* cache, void* val)
 {
-    cairo_code_draw_LED_render(cr, val,0);
+    cairo_code_draw_LED_render(cr, w, h, *(uint8_t*)val,0);
 }
-inline void cairo_code_draw_greenLED_render(cairo_t *cr, int val)
+void draw_greenLED(cairo_t *cr, float w, float h, void* cache, void* val)
 {
-    cairo_code_draw_LED_render(cr, val,3);
+    cairo_code_draw_LED_render(cr, w, h, *(uint8_t*)val,3);
 }
-inline void cairo_code_draw_blueLED_render(cairo_t *cr, int val)
+void draw_blueLED(cairo_t *cr, float w, float h, void* cache, void* val)
 {
-    cairo_code_draw_LED_render(cr, val,4);
+    cairo_code_draw_LED_render(cr, w, h, *(uint8_t*)val,4);
 }
-inline void cairo_code_draw_orangeLED_render(cairo_t *cr, int val)
+void draw_orangeLED(cairo_t *cr, float w, float h, void* cache, void* val)
 {
-    cairo_code_draw_LED_render(cr, val,5);
+    cairo_code_draw_LED_render(cr, w, h, *(uint8_t*)val,5);
 }
-inline void cairo_code_draw_yellowLED_render(cairo_t *cr, int val)
+void draw_yellowLED(cairo_t *cr, float w, float h, void* cache, void* val)
 {
-    cairo_code_draw_LED_render(cr, val,6);
+    cairo_code_draw_LED_render(cr, w, h, *(uint8_t*)val,6);
 }
-inline void cairo_code_draw_purpleLED_render(cairo_t *cr, int val)
+void draw_purpleLED(cairo_t *cr, float w, float h, void* cache, void* val)
 {
-    cairo_code_draw_LED_render(cr, val,7);
+    cairo_code_draw_LED_render(cr, w, h, *(uint8_t*)val,7);
 }
-inline void cairo_code_draw_whiteLED_render(cairo_t *cr, int val)
+void draw_whiteLED(cairo_t *cr, float w, float h, void* cache, void* val)
 {
-    cairo_code_draw_LED_render(cr, val,8);
+    cairo_code_draw_LED_render(cr, w, h, *(uint8_t*)val,8);
 }
 #endif

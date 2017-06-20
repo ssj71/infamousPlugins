@@ -1,17 +1,23 @@
 #ifndef DRAW_TOGGLESWITCH_H
 #define DRAW_TOGGLESWITCH_H
-inline int cairo_code_draw_toggleSwitch_get_width()
-{
-    return 11;
-}
-inline int cairo_code_draw_toggleSwitch_get_height()
-{
-    return 36;
-}
-inline void cairo_code_draw_toggleSwitch_render(cairo_t *cr, int val)
+void draw_toggleSwitch(cairo_t *cr, float w, float h, void* cache, void* val)
 {
     cairo_pattern_t *pattern;
     cairo_matrix_t matrix;
+    float scale,shiftx,shifty;
+    shiftx = shifty = 0;
+    scale = w/11.0;
+    if(scale < h/36.0)
+        shifty = h-scale*36.0;
+    else
+    {
+        scale = h/36.0;
+        shiftx = w-scale*11.0;
+    }
+
+    cairo_save(cr);
+    cairo_scale(cr,scale,scale);
+    cairo_translate(cr,shiftx,shifty);
 
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     pattern = cairo_pattern_create_rgba(0,0,0,1);
@@ -48,7 +54,7 @@ inline void cairo_code_draw_toggleSwitch_render(cairo_t *cr, int val)
     cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
     cairo_stroke_preserve(cr);
     /********************/
-    if(val)
+    if(*(uint8_t*)val)
     {
         cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
         pattern = cairo_pattern_create_radial(-209.03572, 554.65656, 0, -209.03572, 554.65656, 6.726976);
@@ -150,5 +156,6 @@ inline void cairo_code_draw_toggleSwitch_render(cairo_t *cr, int val)
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_DEFAULT);
         cairo_stroke_preserve(cr);
     }//if on
+    cairo_restore(cr);
 }
 #endif
