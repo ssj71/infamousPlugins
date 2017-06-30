@@ -29,14 +29,14 @@ enum stereoctolo_ports
     SLENGTH,
     SDRYG,
     SWET,
-    SWETP,
     SOCTDOWN,
-    SOCTDOWNP,
     SOCTUP,
-    SOCTUPP,
     SSLOPE,
     SSEQUENCE,
-    SOVERLAP
+    SOVERLAP,
+    SPSEQ,
+    SWIDTH,
+    SPOFFS,
 };
 
 #endif

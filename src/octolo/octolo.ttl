@@ -16,6 +16,7 @@
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
         doap:description "an octaved tremolo";
         doap:maintainer [
+                a foaf:Person ;
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
                 foaf:mbox <mailto:ssjackson71@gmail.com> ;
@@ -67,6 +68,7 @@
                 lv2:maximum 8.0 ;
                 units:unit units:beat ;
                 #lv2:portProperty pprops:logarithmic ;
+                rdfs:comment "number of beats for each tremolo fade in/out" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 5 ;
@@ -76,6 +78,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
+                rdfs:comment "gain of dry signal (no tremolo effect)" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 6 ;
@@ -85,6 +88,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
+                rdfs:comment "gain of unshifted voice (only tremolo)" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 7 ;
@@ -94,6 +98,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
+                rdfs:comment "gain of octave down voice" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 8 ;
@@ -103,6 +108,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
+                rdfs:comment "gain of octave up voice" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 9 ;
@@ -111,6 +117,7 @@
                 lv2:default 1.0 ;
                 lv2:minimum 0.001 ;
                 lv2:maximum 1.0 ;
+                rdfs:comment "speed of the voice fade in/out, low values are smooth, high values a square wave" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 10 ;
@@ -127,6 +134,7 @@
                 lv2:scalePoint [ rdfs:label "Step"; rdf:value 3 ] ;
                 lv2:scalePoint [ rdfs:label "Cycle Up"; rdf:value 4 ] ;
                 lv2:scalePoint [ rdfs:label "Cycle Down"; rdf:value 5 ] ;
+                rdfs:comment "alternate playing voices in a pattern, if voice gain is 0 there will be silence at that point in the sequence" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 11 ;
@@ -137,6 +145,7 @@
                 lv2:maximum 1.0 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
+                rdfs:comment "fade in next voice in sequence before the current has finished fading out" ;
         ] .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#stereoctolo>
@@ -151,7 +160,7 @@
         ] ;
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
-        rdfs:comment "a combination octaver and tremolo with pan, mix, phase control, and sequencing";
+        rdfs:comment "a combination stereo octaver and tremolo with width, mix, phase control, and sequencing";
         lv2:optionalFeature lv2:hardRTCapable ;
 
         lv2:port [
@@ -185,7 +194,7 @@
                 lv2:index 4 ;
                 lv2:symbol "ENABLE" ;
                 lv2:name "Enable" ;
-                lv2:default 0 ;
+                lv2:default 1 ;
                 lv2:minimum 0 ;
                 lv2:maximum 1 ;
                 lv2:portProperty lv2:integer ;
@@ -202,6 +211,7 @@
                 lv2:maximum 8.0 ;
                 units:unit units:beat ;
                 #lv2:portProperty pprops:logarithmic ;
+                rdfs:comment "number of beats for each tremolo fade in/out" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 6 ;
@@ -211,6 +221,7 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
+                rdfs:comment "gain of dry signal (no tremolo effect)" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 7 ;
@@ -220,69 +231,41 @@
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
+                rdfs:comment "gain of unshifted voice (only tremolo)" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 8 ;
-                lv2:symbol "WETP" ;
-                lv2:name "Wet Pan" ;
-                lv2:default 0.0 ;
-                lv2:minimum -1.0 ;
-                lv2:maximum 1.0 ;
-                units:unit units:coef ;
-        ], [
-                a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 9 ;
                 lv2:symbol "OCTDOWN" ;
                 lv2:name "Octave Down" ;
                 lv2:default 0.5 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
+                rdfs:comment "gain of octave down voice" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 10 ;
-                lv2:symbol "OCTDOWNP" ;
-                lv2:name "Octave Down Pan" ;
-                lv2:default 0.0 ;
-                lv2:minimum -1.0 ;
-                lv2:maximum 1.0 ;
-                units:unit units:coef ;
-        ], [
-                a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 11 ;
+                lv2:index 9 ;
                 lv2:symbol "OCTUP" ;
                 lv2:name "Octave Up" ;
                 lv2:default 0.5 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 units:unit units:coef ;
+                rdfs:comment "gain of octave up voice" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 12 ;
-                lv2:symbol "OCTUPP" ;
-                lv2:name "Octave Up Pan" ;
-                lv2:default 0.0 ;
-                lv2:minimum -1.0 ;
+                lv2:index 10 ;
+                lv2:symbol "SLOPE" ;
+                lv2:name "Slope" ;
+                lv2:default 1.0 ;
+                lv2:minimum 0.001 ;
                 lv2:maximum 1.0 ;
-                units:unit units:coef ;
+                rdfs:comment "speed of the voice fade in/out, low values are smooth, high values a square wave" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 13 ;
-                lv2:symbol "SHAPE" ;
-                lv2:name "Shape" ;
-                lv2:default 0 ;
-                lv2:minimum 0 ;
-                lv2:maximum 2 ;
-                lv2:portProperty lv2:integer ;
-                lv2:portProperty lv2:enumeration ;
-                lv2:scalePoint [ rdfs:label "Sine"; rdf:value 0 ] ;
-                lv2:scalePoint [ rdfs:label "Square"; rdf:value 1 ] ;
-                lv2:scalePoint [ rdfs:label "Triangle"; rdf:value 2 ] ;
-        ], [
-                a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 14 ;
+                lv2:index 11 ;
                 lv2:symbol "SEQUENCE" ;
-                lv2:name "Sequence" ;
+                lv2:name "Voice Sequence" ;
                 lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 5 ;
@@ -294,9 +277,10 @@
                 lv2:scalePoint [ rdfs:label "Step"; rdf:value 3 ] ;
                 lv2:scalePoint [ rdfs:label "Cycle Up"; rdf:value 4 ] ;
                 lv2:scalePoint [ rdfs:label "Cycle Down"; rdf:value 5 ] ;
+                rdfs:comment "alternate playing voices in a pattern, if voice gain is 0 there will be silence at that point in the sequence" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
-                lv2:index 15 ;
+                lv2:index 12 ;
                 lv2:symbol "OVERLAP" ;
                 lv2:name "Overlap" ;
                 lv2:default 0.0 ;
@@ -304,6 +288,42 @@
                 lv2:maximum 1.0 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
+                rdfs:comment "fade in next voice in sequence before the current has finished fading out" ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 13 ;
+                lv2:symbol "PSEQUENCE" ;
+                lv2:name "Pan Sequence" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 5 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:enumeration ;
+                lv2:scalePoint [ rdfs:label "Center"; rdf:value 0 ] ;
+                lv2:scalePoint [ rdfs:label "Alternate"; rdf:value 1 ] ;
+                lv2:scalePoint [ rdfs:label "Step"; rdf:value 2 ] ;
+                lv2:scalePoint [ rdfs:label "Cycle"; rdf:value 3 ] ;
+                rdfs:comment "alternate panning in a pattern, if voice gain is 0 there will be silence at that point in the sequence" ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 14 ;
+                lv2:symbol "WIDTH" ;
+                lv2:name "Pan Width" ;
+                lv2:default 0.7 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 1.0 ;
+                lv2:portProperty lv2:integer ;
+                rdfs:comment "width of panning, 0 is all centered, 1 is hard panned" ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 15 ;
+                lv2:symbol "POFFS" ;
+                lv2:name "Pan Seq. Offset" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 3 ;
+                lv2:portProperty lv2:integer ;
+                rdfs:comment "offset of pan sequence to change which voices are panned where" ;
         ] .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:00straighttrem>

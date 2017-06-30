@@ -46,10 +46,28 @@
 //  0010 0100 1001 0010 0x2492
 //  1001 0010 0100 1001 0x9249
 // 
-// cyce dn
+// cycle dn
 //  1001 0010 0100 1001 0x9249
 //  0010 0100 1001 0010 0x2492
 //  0100 1001 0010 0100 0x4924
+
+
+// PAN SEQUENCES
+// center
+//  1111 1111 1111 1111 0xFFFF
+//  1111 1111 1111 1111 0xFFFF
+//
+// alt
+//  0101 0101 0101 0101 0x5555
+//  1010 1010 1010 1010 0x5555
+//
+// step
+//  0111 0111 0111 0111 0x7777
+//  1101 1101 1101 1101 0xDDDD
+//
+// cycle
+//  1011 1011 1011 1011 0xBBBB
+//  1110 1110 1110 1110 0xEEEE
 
 enum oct {
     UP = 0,
@@ -402,6 +420,305 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
         plug->gain[j] = gain[j];
     }
     plug->gain[DRY] = gain[DRY];
+    plug->r[UP]  = rup;
+    plug->r[MID] = rmd;
+    plug->r[DOWN]= rdn;
+    plug->w = w; 
+    plug->slope = slope;
+
+    return;
+}
+
+//Lets wait and see what people think would be best
+// sequenced hard pans
+// adjustable, per-voice pans
+//
+// sequences allow everything and more
+// just add width control and sequence offset
+//
+void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
+{
+    OCTOLO* plug = (OCTOLO*)handle;
+    float* in, *outl,*outr, *buf;
+    float phase,dphase,ofs[3],gainl[4],gainr[3];
+    float tmp,gainstep,slope,sl,sh;
+    float rdn;
+    uint16_t rup, rmd;
+    uint16_t i,w, evchunk;
+    int32_t chunk;
+    uint8_t j,seq,step,ofsf;
+    LV2_Atom* tempoatom;
+    const LV2_Atom_Object* obj;
+    LV2_Atom_Event* ev;
+
+    const uint16_t cycles[3][6] = 
+    {    //sync  alt1    alt2    step    cyclup cycldn
+        {0xffff, 0x5555, 0xaaaa, 0x8888, 0x4924, 0x9249},
+        {0xffff, 0xaaaa, 0xaaaa, 0x5555, 0x2492, 0x2492},
+        {0xffff, 0x5555, 0x5555, 0x2222, 0x9249, 0x4924},
+    };
+
+    in = plug->input_p;
+    outl = plug->output_p;
+    outr = plug->outputr_p;
+    buf = plug->buf;
+    w = plug->w;
+    step = plug->step;
+    phase = plug->phase;
+    seq = plug->seq;//(uint8_t)*plug->seq_p;
+    slope = plug->slope;
+    ofsf = 0;
+    if(plug->ofs[0] || plug->ofs[1] || plug->ofs[2] || *plug->overlap_p)
+        ofsf = 1;
+    tmp  = 0;
+    for(j=0;j<3;j++)
+    {
+        ofs[j] = plug->ofs[j];
+        gainl[j] = plug->gain[j];
+        gainr[j] = plug->gainr[j];
+        tmp += gainl[j];
+    }
+    gainl[DRY] = plug->gain[DRY];
+
+    //get atom events started
+    ev = lv2_atom_sequence_begin(&(plug->atom_in_p)->body);
+
+    if( (!tmp && gainl[DRY] == 1.0 ) && !*plug->enable_p)
+    {//shortcut, effect disabled
+        //copy input
+        memcpy(outl,in,sizeof(float)*nframes);
+        memcpy(outr,in,sizeof(float)*nframes);
+        //get new tempos 
+        while(!lv2_atom_sequence_is_end(&(plug->atom_in_p)->body,(plug->atom_in_p)->atom.size, ev))
+        {
+            ev = lv2_atom_sequence_next(ev);
+            if(ev->body.type == plug->URI.atom_object || ev->body.type == plug->URI.atom_blank)
+            {
+                obj = (const LV2_Atom_Object*)&ev->body;
+                if(obj->body.otype == plug->URI.time_barbeat)
+                {
+                    lv2_atom_object_get(obj,plug->URI.time_bpm,&tempoatom);
+                    if(tempoatom && tempoatom->type == plug->URI.atom_float)
+                    {
+                        plug->tempo = ((LV2_Atom_Float*)tempoatom)->body;
+                    }
+                }
+            }
+        }
+        //all done!
+        return; 
+    }
+
+    rup = plug->r[UP];
+    rmd = plug->r[MID];
+    rdn = plug->r[DOWN];
+    if(*plug->enable_p)
+        gainstep = *plug->dry_p - plug->gain[DRY];
+    else
+        gainstep = 1.0 - plug->gain[DRY];
+    gainstep /= nframes>64?nframes:64;
+
+    dphase = 2*M_PI/plug->period;
+    tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
+    //if(tmp <1 && tmp > dphase && gain[UP])
+    //    dphase = tmp; 
+
+
+    //max period is 1.4 sec = .67
+    for(i=0;i<nframes;i++)
+    {
+        evchunk = nframes - i;
+        tmp = 0;//use this as exit flag
+        while(!lv2_atom_sequence_is_end(&(plug->atom_in_p)->body,(plug->atom_in_p)->atom.size, ev) && !tmp)
+        {
+            ev = lv2_atom_sequence_next(ev);
+            if(ev)
+            {
+                if(ev->body.type == plug->URI.atom_object || ev->body.type == plug->URI.atom_blank)
+                {
+                    obj = (const LV2_Atom_Object*)&(ev->body);
+                    if(obj->body.otype == plug->URI.time_barbeat)
+                    {
+                        lv2_atom_object_get(obj,plug->URI.time_bpm,&tempoatom);
+                        if(tempoatom && tempoatom->type == plug->URI.atom_float)
+                        {
+                            tmp = ((LV2_Atom_Float*)tempoatom)->body;
+                            if(tmp != plug->tempo)
+                            {
+                                evchunk = ev->time.frames-i; 
+                                plug->tempo = tmp;
+                            }
+                            else
+                                tmp = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        while(evchunk)
+        {
+            chunk = -phase/dphase;
+            if(evchunk < chunk)
+                chunk = evchunk;
+            if(ofsf && chunk > 0)
+            {
+                //process current place to 0
+                evchunk -= chunk;
+                for( ; chunk; chunk--)
+                { 
+                    //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
+                    buf[w++] = in[i];
+                    outl[i] =  gainl[DRY ]*buf[rmd];
+                    outl[i] += gainl[UP  ]*myslope(phase+ofs[UP  ],slope,sl,sh)*( buf[rup] + buf[rup+1] );
+                    outl[i] += gainl[MID ]*myslope(phase+ofs[MID ],slope,sl,sh)*buf[rmd];
+                    outl[i] += gainl[DOWN]*myslope(phase+ofs[DOWN],slope,sl,sh)*buf[(uint16_t)rdn];
+                    rup += 2;
+                    rmd += 1;
+                    rdn = rdn>0xFFFF?0:rdn+.5;
+                    gainl[DRY] += gainstep;
+                    phase += dphase;
+                    i++;
+                }
+                if(phase+dphase > 0)
+                {//transition to next state
+                    if(*plug->overlap_p)
+                    {
+                        step++;
+                        step %= 12;
+                    }
+                    slope = (2/M_PI)/(*plug->slope_p); 
+                    sl = (M_PI-1/slope)/2;
+                    sh = (M_PI+1/slope)/2;
+                    for(j=0;j<3;j++)
+                    {//voices
+                        if(ofs[j]) 
+                        {//we can only transition if we are at the end of a cycle (or off)
+                            if(((cycles[j][seq])>>step)&0x0001)
+                            {//turn on
+                                ofs[j] = -M_PI;
+                                switch(j)
+                                {
+                                case UP:
+                                    rup = w-1-ceil(plug->period);
+                                    gainl[UP] = .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
+                                    dphase = 2*M_PI/plug->period;
+                                    break;
+                                case MID:
+                                    rmd = w-1;
+                                    gainl[MID] = *plug->md_p**plug->enable_p;
+                                    break;
+                                case DOWN:
+                                    rdn = w-1;
+                                    gainl[DOWN] = *plug->dn_p**plug->enable_p;
+                                    break;
+                                }
+                            }
+                            else
+                            {//turn off
+                                ofs[j] = 0;
+                                gainl[j] = 0;
+                                if(j==UP)
+                                    dphase = 2*M_PI/plug->period; 
+                            }
+                        }//if voice is offset
+                    }//for voices
+                }//if done with half cycle
+            }//if processing half cycles
+
+            //process current place to pi
+            chunk = ceil((M_PI-phase)/dphase);//TODO: remove
+            chunk = (M_PI-phase)/dphase;
+            if(evchunk < chunk)
+                chunk = evchunk;
+            evchunk -= chunk;
+            for( ; chunk; chunk--)
+            { 
+                //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
+                buf[w++] = in[i];
+                outl[i] =  gainl[DRY ]*buf[rmd];
+                outl[i] += gainl[UP  ]*myslope(phase+ofs[UP  ],slope,sl,sh)*( buf[rup] + buf[rup+1] );
+                outl[i] += gainl[MID ]*myslope(phase+ofs[MID ],slope,sl,sh)*buf[rmd];
+                outl[i] += gainl[DOWN]*myslope(phase+ofs[DOWN],slope,sl,sh)*buf[(uint16_t)rdn];
+                rup += 2;
+                rmd += 1;
+                rdn = rdn>0xFFFF?0:rdn+.5;
+                gainl[DRY] += gainstep;
+                phase += dphase;
+                i++;
+            }
+
+            if(phase+dphase >= M_PI)
+            {
+                phase -= 2*M_PI;
+                step++;
+                step %= 12;
+                seq = (uint8_t)*plug->seq_p;
+                slope = (2/M_PI)/(*plug->slope_p); 
+                sl = (M_PI-1/slope)/2;
+                sh = (M_PI+1/slope)/2;
+                for(j=0;j<3;j++)
+                {//go through voices
+                    if(!ofs[j])
+                    {//can only transition at end of cycle
+                        if(((cycles[j][seq])>>step)&0x0001)
+                        {//turn on
+                            ofs[j] = 0;
+                            switch(j)
+                            {
+                            case UP:
+                                rup = w-1-ceil(plug->period);
+                                gainl[UP] = .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
+                                dphase = 2*M_PI/plug->period;
+                                break;
+                            case MID:
+                                rmd = w-1;
+                                gainl[MID] = *plug->md_p**plug->enable_p;
+                                break;
+                            case DOWN:
+                                rdn = w-1;
+                                gainl[DOWN] = *plug->dn_p**plug->enable_p;
+                                break;
+                            }
+                        }
+                        else
+                        {//turn off
+                            ofs[j] = *plug->overlap_p*M_PI;
+                            gainl[j] = 0;
+                            if(j==UP)
+                                dphase = 2*M_PI/plug->period; 
+                        }
+                    }//if not offset
+                    else
+                    {//gotta wrap the offset
+                        ofs[j] = M_PI;
+                    }
+                }//for voices
+            }//if done with cycle
+        }//while evchunk
+        //now we've processed up until that last atom, we can apply the new speed
+        plug->period = 60*plug->sample_freq**plug->length_p/plug->tempo;
+        if(*plug->overlap_p)
+            plug->period *= 2;
+        //disallow too slow of trem
+        while(plug->period >= 0x10000)
+            plug->period *= .5;
+        tmp = 2*M_PI/plug->period;
+        if(tmp > dphase)
+            dphase = tmp; 
+        //otherwise we'll wait until UP is at a safe place 
+    }//for i
+
+    //keep state stuff for next time;
+    plug->step = step;
+    plug->seq = seq;
+    plug->phase = phase;
+    for(j=0;j<3;j++)
+    {
+        plug->ofs[j] = ofs[j];
+        plug->gain[j] = gainl[j];
+    }
+    plug->gain[DRY] = gainl[DRY];
     plug->r[UP]  = rup;
     plug->r[MID] = rmd;
     plug->r[DOWN]= rdn;
