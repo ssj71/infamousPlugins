@@ -103,13 +103,13 @@ typedef struct _OCTOLO
     float *md_p;
     float *dn_p;
     float *up_p;
-    float *mdp_p;
-    float *dnp_p;
-    float *upp_p;
     float *shape_p;
     float *slope_p;
     float *seq_p;
     float *overlap_p;
+    float *panseq_p;
+    float *width_p;
+    float *panoffset_p;
 
     struct _URI
     {
@@ -865,15 +865,6 @@ void connect_stereoctolo_ports(LV2_Handle handle, uint32_t port, void *data)
     case SOCTUP:
         plug->up_p = (float*)data;
         break;
-    case SWETP:
-        plug->mdp_p = (float*)data;
-        break;
-    case SOCTDOWNP:
-        plug->dnp_p = (float*)data;
-        break;
-    case SOCTUPP:
-        plug->upp_p = (float*)data;
-        break;
     case SSLOPE:
         plug->slope_p = (float*)data;
         break;
@@ -882,6 +873,15 @@ void connect_stereoctolo_ports(LV2_Handle handle, uint32_t port, void *data)
         break;
     case SOVERLAP:
         plug->overlap_p = (float*)data;
+        break;
+    case SPSEQ:
+        plug->panseq_p = (float*)data;
+        break;
+    case SWIDTH:
+        plug->width_p = (float*)data;
+        break;
+    case SPOFFS:
+        plug->panoffset_p = (float*)data;
         break;
     default:
         puts("UNKNOWN PORT YO!!");
