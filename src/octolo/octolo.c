@@ -1,4 +1,4 @@
-    //Spencer Jackson
+//Spencer Jackson
 //octolo.c
 #include<lv2.h>
 #include<lv2/lv2plug.in/ns/ext/urid/urid.h>
@@ -51,7 +51,7 @@
 //  0010 0100 1001 0010 0x2492
 //  0100 1001 0010 0100 0x4924
 
-
+//pcycles
 // PAN SEQUENCES
 // center
 //  1111 1111 1111 1111 0xFFFF
@@ -60,6 +60,10 @@
 // alt
 //  0101 0101 0101 0101 0x5555
 //  1010 1010 1010 1010 0x5555
+//
+// alt2
+//  0011 0011 0011 0011 0x3333
+//  1100 1100 1100 1100 0xCCCC
 //
 // step
 //  0111 0111 0111 0111 0x7777
@@ -456,6 +460,11 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
         {0xffff, 0x5555, 0xaaaa, 0x8888, 0x4924, 0x9249},
         {0xffff, 0xaaaa, 0xaaaa, 0x5555, 0x2492, 0x2492},
         {0xffff, 0x5555, 0x5555, 0x2222, 0x9249, 0x4924},
+    };
+    const uint16_t pcycles[2][6] = 
+    {    //sync  alt    alt2    step    cycle
+        {0xffff, 0x5555, 0x3333, 0x7777, 0xBBBB},
+        {0xffff, 0x5555, 0xCCCC, 0xDDDD, 0xEEEE},
     };
 
     in = plug->input_p;
