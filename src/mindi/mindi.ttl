@@ -29,6 +29,15 @@
         ] ;
         mod:brand "infamous";        
         mod:label "mindi"; 
+        modgui:gui [
+            modgui:resourcesDirectory <modgui> ;
+            modgui:iconTemplate <modgui/mindi.html> ;
+            modgui:stylesheet <modgui/mindi.css> ;
+            modgui:screenshot <modgui/screenshot-mindi.png> ;
+            modgui:thumbnail <modgui/thumbnail-mindi.png> ;
+            modgui:brand "infamous" ;
+            modgui:label "mindi" ;
+        ] ;
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
         rdfs:comment "This is a simple midi message generator that sends a message when you change its message value. It usually requires the host automating it to really be useful." ;
@@ -99,4 +108,25 @@
                 lv2:minimum 0 ;
                 lv2:maximum 127 ;
                 lv2:portProperty lv2:integer ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 6 ;
+                lv2:symbol "DELAY" ;
+                lv2:name "1st Msg Repeat Delay Time" ;
+                lv2:default 0.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 2000.0 ;
+                units:unit units:ms ;
+                lv2:scalePoint [ rdfs:label "Off"; rdf:value 0.0 ] ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 7 ;
+                lv2:symbol "AUTOFF" ;
+                lv2:name "Auto Note-Off" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+                rdfs:comment "This will send a note off when enable is set to 0 when mindi is configured to send note-on messages, only the note configuration set at that time is sent" ;
         ] .

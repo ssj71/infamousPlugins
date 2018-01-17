@@ -12,7 +12,9 @@ enum mindi_ports
     MSGTYPE,
     CHAN,
     DATA1,
-    DATA2
+    DATA2,
+    DELAY,
+    AUTOFF
 };
 
 #endif

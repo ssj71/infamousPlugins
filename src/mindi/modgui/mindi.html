@@ -1,0 +1,74 @@
+<div class="mod-pedal x42-midifilter{{{cns}}} mindi">
+    <div mod-role="drag-handle" class="mod-drag-handle"></div>
+    <div class="x42-plugin-name"><h1>mindi</h1></div>
+
+    <div class="mod-light on" mod-role="bypass-light"></div>
+    <div class="mod-footswitch" mod-role="bypass"></div>
+
+    <div style="position:absolute;left:10px;bottom:25px;">
+      <img src="/resources/infamousLogo.svg{{{ns}}}" style="width:44px;height:88px;">
+    </div>
+
+    <div class="mod-enum-top-group clearfix">
+        <div class="mod-control-group mod-enumerated-group bottom float">
+            <span class="mod-knob-title">Channel</span>
+            <div class="mod-enumerated" mod-role="input-control-port" mod-port-symbol="CHAN" mod-widget="custom-select">
+                <div mod-role="input-control-value" mod-port-symbol="CHAN" class="mod-enumerated-selected"></div>
+                <div class="mod-enumerated-list">
+                    <div mod-role="enumeration-option" mod-port-value="0">0</div>
+                    <div mod-role="enumeration-option" mod-port-value="1">1</div>
+                    <div mod-role="enumeration-option" mod-port-value="2">2</div>
+                    <div mod-role="enumeration-option" mod-port-value="3">3</div>
+                    <div mod-role="enumeration-option" mod-port-value="4">4</div>
+                    <div mod-role="enumeration-option" mod-port-value="5">5</div>
+                    <div mod-role="enumeration-option" mod-port-value="6">6</div>
+                    <div mod-role="enumeration-option" mod-port-value="7">7</div>
+                    <div mod-role="enumeration-option" mod-port-value="8">8</div>
+                    <div mod-role="enumeration-option" mod-port-value="9">9</div>
+                    <div mod-role="enumeration-option" mod-port-value="10">10</div>
+                    <div mod-role="enumeration-option" mod-port-value="11">11</div>
+                    <div mod-role="enumeration-option" mod-port-value="12">12</div>
+                    <div mod-role="enumeration-option" mod-port-value="13">13</div>
+                    <div mod-role="enumeration-option" mod-port-value="14">14</div>
+                    <div mod-role="enumeration-option" mod-port-value="15">15</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mod-control-group mod-enumerated-group bottom float" style="width:150px">
+            <span class="mod-knob-title">Message Type</span>
+            <div class="mod-enumerated" mod-role="input-control-port" mod-port-symbol="MSGTYPE" mod-widget="custom-select">
+                <div mod-role="input-control-value" mod-port-symbol="MSGTYPE" class="mod-enumerated-selected"></div>
+                <div class="mod-enumerated-list">
+                    <div mod-role="enumeration-option" mod-port-value="8">Note Off</div>
+                    <div mod-role="enumeration-option" mod-port-value="9">Note On</div>
+                    <div mod-role="enumeration-option" mod-port-value="10">Poly Pressure</div>
+                    <div mod-role="enumeration-option" mod-port-value="11">Control Change</div>
+                    <div mod-role="enumeration-option" mod-port-value="12">Program Change</div>
+                    <div mod-role="enumeration-option" mod-port-value="13">Chan. Pressure</div>
+                    <div mod-role="enumeration-option" mod-port-value="14">Pitchbend</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mod-control-group top clearfix">
+        <div class="mod-knob">
+            <span class="mod-knob-title">Note/CC/PG Number</span>
+            <div class="mod-knob-n128-image" mod-role="input-control-port" mod-port-symbol="DATA1"></div>
+        </div>
+        <div class="mod-knob">
+            <span class="mod-knob-title">Value</span>
+            <div class="mod-knob-n128-image" mod-role="input-control-port" mod-port-symbol="DATA2"></div>
+        </div>
+    </div>
+
+
+    <div class="mod-pedal-output">
+        {{#effect.ports.midi.output}}
+        <div class="mod-output mod-output-disconnected" title="{{name}}" mod-role="output-midi-port" mod-port-symbol="{{symbol}}">
+            <div class="mod-pedal-output-image"></div>
+        </div>
+        {{/effect.ports.midi.output}}
+    </div>
+</div>

@@ -4,6 +4,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
+#include<stdbool.h>
 #include<math.h>
 #include<lv2.h>
 #include<lv2/lv2plug.in/ns/ext/urid/urid.h>
@@ -35,6 +36,10 @@ typedef struct _MINDI
     float enable;
     float data1;
     float data2;
+    float startup;
+    float msPerFrame;
+    bool oneshot;
+    bool notesent;
 
     //midi
     LV2_URID_Map* urid_map;
@@ -49,15 +54,21 @@ typedef struct _MINDI
     float* chan_p; 
     float* data1_p;
     float* data2_p;
+    float* delay_p;
+    float* autoff_p;
 } MINDI;
 
 //main functions
 LV2_Handle init_mindi(const LV2_Descriptor *descriptor,double sample_rate, const char *bundle_path,const LV2_Feature * const* host_features)
 {
     MINDI* plug = malloc(sizeof(MINDI));
-    plug->enable = 0;
+    plug->enable = 1;
     plug->data1 = 0;
     plug->data2 = 0;
+    plug->startup = 0;
+    plug->msPerFrame = 1000.0/sample_rate;
+    plug->oneshot = false;
+    plug->notesent = false;
 
     //get urid map value for midi events
     for (int i = 0; host_features[i]; i++)
@@ -88,6 +99,8 @@ void connect_mindi_ports(LV2_Handle handle, uint32_t port, void *data)
     else if(port == CHAN)   plug->chan_p = (float*)data;
     else if(port == DATA1)  plug->data1_p = (float*)data;
     else if(port == DATA2)  plug->data2_p = (float*)data;
+    else if(port == DELAY)  plug->delay_p = (float*)data;
+    else if(port == AUTOFF)  plug->autoff_p = (float*)data;
 }
 
 void run_mindi( LV2_Handle handle, uint32_t nframes)
@@ -97,9 +110,20 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
     uint8_t msg[3];
 
 
-    if(plug->data1 != *plug->data1_p || plug->data2 != *plug->data2_p || (*plug->enable_p && plug->enable != *plug->enable_p))
+    if( (*plug->enable_p && 
+          ( (plug->data1 != *plug->data1_p) || 
+            (plug->data2 != *plug->data2_p) || 
+            (plug->enable != *plug->enable_p) ||
+            (!plug->oneshot && plug->startup > *plug->delay_p) )
+        ) ||
+        (!*plug->enable_p && plug->notesent && *plug->msgtype_p == 0x09) 
+      )
     {
-        plug->enable = *plug->enable_p;
+        if(plug->startup >= *plug->delay_p)
+            plug->oneshot = true;
+        if(!plug->oneshot)
+            plug->startup += nframes*plug->msPerFrame;
+
         plug->data1 = *plug->data1_p;
         plug->data2 = *plug->data2_p;
         //get midi port ready
@@ -111,6 +135,15 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
 
         //make event
         msg[0] = (((uint8_t)*plug->msgtype_p)<<4) + (uint8_t)(*plug->chan_p);
+        //convert to note-off if appropriate
+        if(!*plug->enable_p && plug->notesent && *plug->msgtype_p == 0x09)
+        {
+            plug->notesent = false;
+            msg[0] -= 0x10;
+        }
+        else if(*plug->autoff_p && *plug->msgtype_p == 0x09)
+            plug->notesent = true; 
+
         msg[1] = MIDI_DATA_MASK & (uint8_t)*plug->data1_p;
         msg[2] = MIDI_DATA_MASK & (uint8_t)*plug->data2_p;
         midiatom.type = plug->midi_ev_urid;
@@ -136,6 +169,9 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
         lv2_atom_forge_raw(&plug->forge,msg,midiatom.size);
         lv2_atom_forge_pad(&plug->forge,midiatom.size+sizeof(LV2_Atom));
     }
+    else if(!plug->oneshot && plug->startup)
+        plug->startup += nframes*plug->msPerFrame;
+    plug->enable = *plug->enable_p;
 }
 
 void cleanup_mindi(LV2_Handle handle)
