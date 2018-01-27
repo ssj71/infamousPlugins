@@ -433,6 +433,17 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     return;
 }
 
+//get an approximate sin/cos pan
+//input pan E[-1,1]
+void pan_law(float pan, float *l, float *r)
+{
+    float ysin,ycos;
+    ysin = -pan - pan*pan;
+    ycos = ysin - pan;
+    *l = 0.225*(ysin*(ysin>0?ysin:-ysin) - ysin) + ysin;
+    *r = 0.225*(ycos*(ycos>0?ycos:-ycos) - ycos) + ycos;
+}
+
 //Lets wait and see what people think would be best
 // sequenced hard pans
 // adjustable, per-voice pans
