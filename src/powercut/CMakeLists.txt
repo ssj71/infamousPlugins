@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 set(PLUGIN "powercut")
 
 include(CheckCCompilerFlag)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -Og")
 check_c_compiler_flag("-msse2 -mfpmath=sse" SUPPORTS_SSE )
 check_c_compiler_flag("-ffast-math" SUPPORTS_FAST_MATH )
 if(SUPPORTS_SSE)

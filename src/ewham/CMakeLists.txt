@@ -6,7 +6,7 @@ set(PLUGIN "ewham")
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/")
 
 include(CheckCCompilerFlag)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g -Og")
 #CHECK_CXX_COMPILER_FLAG("-msse2 -mfpmath=sse" SUPPORTS_SSE )
 #CHECK_CXX_COMPILER_FLAG("-ffast-math" SUPPORTS_FAST_MATH )
 check_c_compiler_flag("-msse2 -mfpmath=sse" SUPPORTS_SSE )
