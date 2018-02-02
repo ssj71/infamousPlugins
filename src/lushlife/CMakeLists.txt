@@ -6,7 +6,7 @@ set(PLUGIN "lushlife")
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/")
 
 include(CheckCXXCompilerFlag)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g -Og")
 check_cxx_compiler_flag("-msse2 -mfpmath=sse" SUPPORTS_SSE )
 check_cxx_compiler_flag("-ffast-math" SUPPORTS_FAST_MATH )
 if(SUPPORTS_SSE)

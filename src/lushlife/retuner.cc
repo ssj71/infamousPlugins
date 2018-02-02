@@ -366,7 +366,10 @@ int Retuner::process (int nfram, float *inp, float *outl, float *outr)
                 {
                     // Bias is removed after two unvoiced fragments.
                     _lastnote = -1;
+                    _cycle[p] = _cycle[(p-1)&31];
                 }
+                else
+                    _cycle[p] = _cycle[(p-1)&31];
                 
                 //update ratios
                 for (int shftdx = 0; shftdx < _nshift; shftdx++)
