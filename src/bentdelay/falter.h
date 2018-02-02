@@ -9,7 +9,7 @@ enum falter_ports
     OUT,
     DECIMATE,
     DELAY,
-    FEEDBACK,
+    FEEDBACK
 };
 
 #endif

@@ -27,7 +27,7 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
 {
     FALTER* plug = (FALTER*)handle;
     float* in, *out, *buf, fb;
-    uint16_t i,w, pdelay, ndelay, mask, downmask;
+    uint16_t i,w, delay, mask, downmask;
 
     in = plug->input_p;
     out = plug->output_p;
@@ -35,20 +35,15 @@ void run_falter(LV2_Handle handle, uint32_t nframes)
     w = plug->w;
     mask = plug->mask;
     downmask = (mask<<(uint8_t)*plug->decimate_p)&mask;
-    fb = *plug->feedback_p/100;
+    fb = *plug->feedback_p/100; 
 
-
-    pdelay = ndelay = 0;
-    if(*plug->delay_p < 0)
-        ndelay = -*plug->delay_p*plug->sample_rate/1000;
-    else
-        pdelay = *plug->delay_p*plug->sample_rate/1000;
+    delay = *plug->delay_p*plug->sample_rate/1000.0;
 
     for (i=0;i<nframes;i++)
     {
         buf[w] = in[i];
-        out[i] = buf[(w-pdelay)&mask] - buf[(w-ndelay)&downmask];
-        buf[w] += fb*out[i];
+        out[i] = buf[w] - buf[(w-delay)&downmask];
+        buf[w] -= fb*out[i];
         w++;
         w &= mask;
     } 
