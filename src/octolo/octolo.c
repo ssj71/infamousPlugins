@@ -70,8 +70,8 @@
 //  1101 1101 1101 1101 0xDDDD
 //
 // cycle
-//  1011 1011 1011 1011 0xBBBB
-//  1110 1110 1110 1110 0xEEEE
+//  1011 0110 1101 1011 0xB6DB
+//  0110 1101 1011 0110 0x6DB6
 
 enum oct {
     UP = 0,
@@ -131,7 +131,7 @@ typedef struct _OCTOLO
     } URI;
 } OCTOLO;
 
-//s E (0,pi/2)
+//s E (0,pi/2) -> (triangle,square)
 float myslope(float x,float s,float sl,float sh)
 {
     if(x < -sh || x > sh)
@@ -174,6 +174,8 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     phase = plug->phase;
     seq = plug->seq;//(uint8_t)*plug->seq_p;
     slope = plug->slope;
+    sl = (M_PI-1/slope)/2;
+    sh = (M_PI+1/slope)/2;
     ofsf = 0;
     if(plug->ofs[0] || plug->ofs[1] || plug->ofs[2] || *plug->overlap_p)
         ofsf = 1;
@@ -224,9 +226,9 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     gainstep /= nframes>64?nframes:64;
 
     dphase = 2*M_PI/plug->period;
-    tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
+    //tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
     //if(tmp <1 && tmp > dphase && gain[UP])
-    //    dphase = tmp; 
+    //    dphase = tmp;
 
 
     //max period is 1.4 sec = .67
@@ -332,7 +334,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
             }//if processing half cycles
 
             //process current place to pi
-            chunk = ceil((M_PI-phase)/dphase);//TODO: remove
+            //chunk = ceil((M_PI-phase)/dphase);//TODO: remove
             chunk = (M_PI-phase)/dphase;
             if(evchunk < chunk)
                 chunk = evchunk;
@@ -474,8 +476,8 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
     };
     const uint16_t pcycles[2][6] = 
     {    //sync  alt    alt2    step    cycle
-        {0xffff, 0x5555, 0x3333, 0x7777, 0xBBBB},
-        {0xffff, 0x5555, 0xCCCC, 0xDDDD, 0xEEEE},
+        {0xffff, 0x5555, 0x3333, 0x7777, 0xB6DB},
+        {0xffff, 0x5555, 0xCCCC, 0xDDDD, 0x6DB6},
     };
 
     in = plug->input_p;
@@ -539,9 +541,9 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
     gainstep /= nframes>64?nframes:64;
 
     dphase = 2*M_PI/plug->period;
-    tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
+    //tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
     //if(tmp <1 && tmp > dphase && gain[UP])
-    //    dphase = tmp; 
+    //    dphase = tmp;
 
 
     //max period is 1.4 sec = .67
