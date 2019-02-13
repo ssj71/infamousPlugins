@@ -91,7 +91,7 @@ typedef struct _OCTOLO
     float phase;
     float ofs[3]; //phase offset
     float sample_freq;
-    float period;
+    float period; //frames per trem cycle
     float tempo;
     float slope;
     float gain[4];
@@ -131,7 +131,8 @@ typedef struct _OCTOLO
     } URI;
 } OCTOLO;
 
-//s E (0,pi/2) -> (triangle,square)
+//x E [-pi,pi]
+//s E (0,pi/2) -> (triangle,square) _/--\_
 float myslope(float x,float s,float sl,float sh)
 {
     if(x < -sh || x > sh)
@@ -225,7 +226,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
         gainstep = 1.0 - plug->gain[DRY];
     gainstep /= nframes>64?nframes:64;
 
-    dphase = 2*M_PI/plug->period;
+    dphase = 2*M_PI/plug->period; //delta phase per frame
     //tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
     //if(tmp <1 && tmp > dphase && gain[UP])
     //    dphase = tmp;
@@ -294,7 +295,8 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                         step++;
                         step %= 12;
                     }
-                    slope = (2/M_PI)/(*plug->slope_p); 
+                    //TODO: this is all wrong, slope sl sh
+                    slope = 1/(M_PI*(1.001-*plug->slope_p));
                     sl = (M_PI-1/slope)/2;
                     sh = (M_PI+1/slope)/2;
                     for(j=0;j<3;j++)
@@ -361,7 +363,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                 step++;
                 step %= 12;
                 seq = (uint8_t)*plug->seq_p;
-                slope = (2/M_PI)/(*plug->slope_p); 
+                slope = 1/(M_PI*(1.001-*plug->slope_p));
                 sl = (M_PI-1/slope)/2;
                 sh = (M_PI+1/slope)/2;
                 for(j=0;j<3;j++)
@@ -411,8 +413,8 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
         while(plug->period >= 0x10000)
             plug->period *= .5;
         tmp = 2*M_PI/plug->period;
-        if(tmp > dphase)
-            dphase = tmp; 
+        if(tmp > dphase) //if phase is growing
+            dphase = tmp; //apply it
         //otherwise we'll wait until UP is at a safe place 
     }//for i
 
@@ -609,7 +611,7 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
                         step++;
                         step %= 12;
                     }
-                    slope = (2/M_PI)/(*plug->slope_p); 
+                    slope = 1/(M_PI*(1.001-*plug->slope_p));
                     sl = (M_PI-1/slope)/2;
                     sh = (M_PI+1/slope)/2;
                     for(j=0;j<3;j++)
@@ -676,7 +678,7 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
                 step++;
                 step %= 12;
                 seq = (uint8_t)*plug->seq_p;
-                slope = (2/M_PI)/(*plug->slope_p); 
+                slope = 1/(M_PI*(1.001-*plug->slope_p));
                 sl = (M_PI-1/slope)/2;
                 sh = (M_PI+1/slope)/2;
                 for(j=0;j<3;j++)
@@ -771,7 +773,7 @@ LV2_Handle init_octolo(const LV2_Descriptor *descriptor,double sample_freq, cons
     plug->phase = -M_PI;
 
     plug->sample_freq = sample_freq;
-    plug->period = sample_freq;
+    plug->period = sample_freq; //default to 1 hz
     plug->tempo = 120;
     plug->slope = 2/M_PI;
 
