@@ -345,7 +345,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
             }//if processing half cycles
 
             //process current place to pi
-            //chunk = ceil((M_PI-phase)/dphase);//TODO: remove
             chunk = (M_PI-phase)/dphase;
             if(evchunk < chunk)
                 chunk = evchunk;
@@ -485,13 +484,6 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
         {0xffff, 0xaaaa, 0xaaaa, 0x5555, 0x2492, 0x2492},
         {0xffff, 0x5555, 0x5555, 0x2222, 0x9249, 0x4924},
     };
-    #if 0
-    const uint16_t pcycles[2][8] = 
-    {    //sync  alt     alt2    alt3    alt4    step   cyclelr  cyclerl
-        {0xffff, 0x5555, 0x3333, 0x71C7, 0x0F0F, 0x7777, 0xB6DB, 0x6DB6},
-        {0xffff, 0x5555, 0xCCCC, 0x8E38, 0xF0F0, 0xDDDD, 0x6DB6, 0xB6DB},
-    };
-    #endif
     const int8_t pcycles[8][16] =
     {
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, //sync
@@ -547,7 +539,7 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
                 {
                     lv2_atom_object_get(obj,plug->URI.time_bpm,&tempoatom);
                     if(tempoatom && tempoatom->type == plug->URI.atom_float)
-                    {
+                    {//since we're disabled, we can just apply the tempo immediately
                         plug->tempo = ((LV2_Atom_Float*)tempoatom)->body;
                     }
                 }
@@ -681,7 +673,6 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
             }//if processing half cycles
 
             //process current place to pi
-            chunk = ceil((M_PI-phase)/dphase);//TODO: remove
             chunk = (M_PI-phase)/dphase;
             if(evchunk < chunk)
                 chunk = evchunk;
