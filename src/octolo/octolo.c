@@ -24,7 +24,6 @@
 //  1111 1111 1111 1111 0xFFFF
 //  1111 1111 1111 1111 0xFFFF
 //  1111 1111 1111 1111 0xFFFF
-//
 // 
 // alt1     
 //  0101 0101 0101 0101 0x5555
@@ -65,13 +64,25 @@
 //  0011 0011 0011 0011 0x3333
 //  1100 1100 1100 1100 0xCCCC
 //
+// alt3
+//  0111 0001 1100 0111 0x71C7
+//  1000 1110 0011 1000 0x8E38
+//
+// alt4
+//  0000 1111 0000 1111 0x0F0F
+//  1111 0000 1111 0000 0xF0F0
+//
 // step
 //  0111 0111 0111 0111 0x7777
 //  1101 1101 1101 1101 0xDDDD
 //
-// cycle
+// cycle l2r
 //  1011 0110 1101 1011 0xB6DB
 //  0110 1101 1011 0110 0x6DB6
+//
+// cycle r2l
+//  0110 1101 1011 0110 0x6DB6
+//  1011 0110 1101 1011 0xB6DB
 
 enum oct {
     UP = 0,
@@ -476,10 +487,10 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
         {0xffff, 0xaaaa, 0xaaaa, 0x5555, 0x2492, 0x2492},
         {0xffff, 0x5555, 0x5555, 0x2222, 0x9249, 0x4924},
     };
-    const uint16_t pcycles[2][6] = 
-    {    //sync  alt    alt2    step    cycle
-        {0xffff, 0x5555, 0x3333, 0x7777, 0xB6DB},
-        {0xffff, 0x5555, 0xCCCC, 0xDDDD, 0x6DB6},
+    const uint16_t pcycles[2][8] = 
+    {    //sync  alt     alt2    alt3    alt4    step   cyclelr  cyclerl
+        {0xffff, 0x5555, 0x3333, 0x71C7, 0x0F0F, 0x7777, 0xB6DB, 0x6DB6},
+        {0xffff, 0x5555, 0xCCCC, 0x8E38, 0xF0F0, 0xDDDD, 0x6DB6, 0xB6DB},
     };
 
     in = plug->input_p;
@@ -942,6 +953,7 @@ static const LV2_Descriptor stereoctolo_descriptor=
     cleanup_octolo,
     0//extension
 };
+
 LV2_SYMBOL_EXPORT
 const LV2_Descriptor* lv2_descriptor(uint32_t index)
 {

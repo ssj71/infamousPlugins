@@ -129,7 +129,7 @@
                 lv2:maximum 5 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:enumeration ;
-                lv2:scalePoint [ rdfs:label "Sync"; rdf:value 0 ] ;
+                lv2:scalePoint [ rdfs:label "Syncronous"; rdf:value 0 ] ;
                 lv2:scalePoint [ rdfs:label "Alternate 1 Oct"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Alternate 2 Oct"; rdf:value 2 ] ;
                 lv2:scalePoint [ rdfs:label "Step"; rdf:value 3 ] ;
@@ -272,7 +272,7 @@
                 lv2:maximum 5 ;
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:enumeration ;
-                lv2:scalePoint [ rdfs:label "Sync"; rdf:value 0 ] ;
+                lv2:scalePoint [ rdfs:label "Syncronous"; rdf:value 0 ] ;
                 lv2:scalePoint [ rdfs:label "Alternate 1 Oct"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Alternate 2 Oct"; rdf:value 2 ] ;
                 lv2:scalePoint [ rdfs:label "Step"; rdf:value 3 ] ;
@@ -302,8 +302,12 @@
                 lv2:portProperty lv2:enumeration ;
                 lv2:scalePoint [ rdfs:label "Center"; rdf:value 0 ] ;
                 lv2:scalePoint [ rdfs:label "Alternate"; rdf:value 1 ] ;
-                lv2:scalePoint [ rdfs:label "Step"; rdf:value 2 ] ;
-                lv2:scalePoint [ rdfs:label "Cycle"; rdf:value 3 ] ;
+                lv2:scalePoint [ rdfs:label "Alternate 2"; rdf:value 2 ] ;
+                lv2:scalePoint [ rdfs:label "Alternate 3"; rdf:value 3 ] ;
+                lv2:scalePoint [ rdfs:label "Alternate 4"; rdf:value 4 ] ;
+                lv2:scalePoint [ rdfs:label "Step"; rdf:value 5 ] ;
+                lv2:scalePoint [ rdfs:label "Cycle Right"; rdf:value 6 ] ;
+                lv2:scalePoint [ rdfs:label "Cycle Left"; rdf:value 7 ] ;
                 rdfs:comment "alternate panning in a pattern, if voice gain is 0 there will be silence at that point in the sequence" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
