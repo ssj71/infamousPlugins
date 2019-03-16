@@ -97,10 +97,12 @@ typedef struct _OCTOLO
     float r[3]; //read points in buffer (up and dn oct)
     float *buf;
     uint8_t stereo;
-    uint8_t seq;
+    uint8_t seq; //current sequence
     uint8_t step; //current point in sequence
+    uint8_t stepofs; //step offset for pan
+    uint8_t pseq; //pan sequence currently in use
     float phase;
-    float ofs[3]; //phase offset
+    float ofs[3]; //phase offset to allow overlap
     float sample_freq;
     float period; //frames per trem cycle
     float tempo;
@@ -466,13 +468,13 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
 {
     OCTOLO* plug = (OCTOLO*)handle;
     float* in, *outl,*outr, *buf;
-    float phase,dphase,ofs[3],gainl[4],gainr[3];
+    float phase,dphase,ofs[3],mono[5],gainl[4],gainr[3];
     float tmp,gainstep,slope,sl,sh;
     float rdn;
     uint16_t rup, rmd;
     uint16_t i,w, evchunk;
     int32_t chunk;
-    uint8_t j,seq,step,ofsf;
+    uint8_t j,seq,step,ofsf,pseq,stepofs;
     LV2_Atom* tempoatom;
     const LV2_Atom_Object* obj;
     LV2_Atom_Event* ev;
@@ -483,10 +485,23 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
         {0xffff, 0xaaaa, 0xaaaa, 0x5555, 0x2492, 0x2492},
         {0xffff, 0x5555, 0x5555, 0x2222, 0x9249, 0x4924},
     };
+    #if 0
     const uint16_t pcycles[2][8] = 
     {    //sync  alt     alt2    alt3    alt4    step   cyclelr  cyclerl
         {0xffff, 0x5555, 0x3333, 0x71C7, 0x0F0F, 0x7777, 0xB6DB, 0x6DB6},
         {0xffff, 0x5555, 0xCCCC, 0x8E38, 0xF0F0, 0xDDDD, 0x6DB6, 0xB6DB},
+    };
+    #endif
+    const int8_t pcycles[8][16] =
+    {
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, //sync
+        {-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1,-1, 1}, //alt
+        {-1,-1, 1, 1,-1,-1, 1, 1,-1,-1, 1, 1,-1,-1, 1, 1}, //alt2
+        {-1,-1,-1, 1, 1, 1,-1,-1,-1, 1, 1, 1,-1,-1,-1, 1}, //alt3
+        {-1,-1,-1,-1, 1, 1, 1, 1,-1,-1,-1,-1, 1, 1, 1, 1}, //alt4
+        {-1, 0, 1, 0,-1, 0, 1, 0,-1, 0, 1, 0,-1, 0, 1, 0}, //step
+        {-1, 0, 1,-1, 0, 1,-1, 0, 1,-1, 0, 1,-1, 0, 1,-1}, //cyclelr
+        { 1, 0,-1, 1, 0,-1, 1, 0,-1, 1, 0,-1, 1, 0,-1, 1}, //cyclerl
     };
 
     in = plug->input_p;
@@ -495,6 +510,8 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
     buf = plug->buf;
     w = plug->w;
     step = plug->step;
+    stepofs = plug->stepofs;
+    pseq = plug->pseq;
     phase = plug->phase;
     seq = plug->seq;//(uint8_t)*plug->seq_p;
     slope = plug->slope;
@@ -503,11 +520,11 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
         ofsf = 1;
     tmp  = 0;
     for(j=0;j<3;j++)
-    {
+    {//grab last state
         ofs[j] = plug->ofs[j];
         gainl[j] = plug->gain[j];
         gainr[j] = plug->gainr[j];
-        tmp += gainl[j];
+        tmp += gainl[j]+gainr[j];
     }
     gainl[DRY] = plug->gain[DRY];
 
@@ -596,10 +613,15 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
                 { 
                     //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
                     buf[w++] = in[i];
-                    outl[i] =  gainl[DRY ]*buf[rmd];
-                    outl[i] += gainl[UP  ]*myslope(phase+ofs[UP  ],slope,sl,sh)*( buf[rup] + buf[rup+1] );
-                    outl[i] += gainl[MID ]*myslope(phase+ofs[MID ],slope,sl,sh)*buf[rmd];
-                    outl[i] += gainl[DOWN]*myslope(phase+ofs[DOWN],slope,sl,sh)*buf[(uint16_t)rdn];
+                    mono[UP]  = myslope(phase+ofs[UP  ],slope,sl,sh)*( buf[rup] + buf[rup+1] );
+                    mono[MID] = myslope(phase+ofs[MID ],slope,sl,sh)*buf[rmd];
+                    mono[DOWN]= myslope(phase+ofs[DOWN],slope,sl,sh)*buf[(uint16_t)rdn];
+                    outl[i] = outr[i] = gainl[DRY]*buf[rmd];
+                    for(j=0;j<3;j++)
+                    {
+                        outl[i] += gainl[j]*mono[j];
+                        outr[i] += gainr[j]*mono[j];
+                    }
                     rup += 2;
                     rmd += 1;
                     rdn = rdn>0xFFFF?0:rdn+.5;
@@ -624,20 +646,24 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
                             if(((cycles[j][seq])>>step)&0x0001)
                             {//turn on
                                 ofs[j] = -M_PI;
+                                pan_law(*plug->width_p*pcycles[pseq][step+stepofs],&gainl[j],&gainr[j]);
                                 switch(j)
                                 {
                                 case UP:
                                     rup = w-1-ceil(plug->period);
-                                    gainl[UP] = .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
+                                    gainl[UP] *= .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
+                                    gainr[UP] *= .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
                                     dphase = 2*M_PI/plug->period;
                                     break;
                                 case MID:
                                     rmd = w-1;
-                                    gainl[MID] = *plug->md_p**plug->enable_p;
+                                    gainl[MID] *= *plug->md_p**plug->enable_p;
+                                    gainr[MID] *= *plug->md_p**plug->enable_p;
                                     break;
                                 case DOWN:
                                     rdn = w-1;
-                                    gainl[DOWN] = *plug->dn_p**plug->enable_p;
+                                    gainl[DOWN] *= *plug->dn_p**plug->enable_p;
+                                    gainr[DOWN] *= *plug->dn_p**plug->enable_p;
                                     break;
                                 }
                             }
@@ -645,6 +671,7 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
                             {//turn off
                                 ofs[j] = 0;
                                 gainl[j] = 0;
+                                gainr[j] = 0;
                                 if(j==UP)
                                     dphase = 2*M_PI/plug->period; 
                             }
@@ -663,10 +690,15 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
             { 
                 //this isn't a great AA filter, but hopefuly good enough, and yeah, a ZOH....
                 buf[w++] = in[i];
-                outl[i] =  gainl[DRY ]*buf[rmd];
-                outl[i] += gainl[UP  ]*myslope(phase+ofs[UP  ],slope,sl,sh)*( buf[rup] + buf[rup+1] );
-                outl[i] += gainl[MID ]*myslope(phase+ofs[MID ],slope,sl,sh)*buf[rmd];
-                outl[i] += gainl[DOWN]*myslope(phase+ofs[DOWN],slope,sl,sh)*buf[(uint16_t)rdn];
+                mono[UP]  = myslope(phase+ofs[UP  ],slope,sl,sh)*( buf[rup] + buf[rup+1] );
+                mono[MID] = myslope(phase+ofs[MID ],slope,sl,sh)*buf[rmd];
+                mono[DOWN]= myslope(phase+ofs[DOWN],slope,sl,sh)*buf[(uint16_t)rdn];
+                outl[i] = outr[i] = gainl[DRY]*buf[rmd];
+                for(j=0;j<3;j++)
+                {
+                    outl[i] += gainl[j]*mono[j];
+                    outr[i] += gainr[j]*mono[j];
+                }
                 rup += 2;
                 rmd += 1;
                 rdn = rdn>0xFFFF?0:rdn+.5;
@@ -677,10 +709,13 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
 
             if(phase+dphase >= M_PI)
             {
+                //we're safe to update everything
                 phase -= 2*M_PI;
                 step++;
                 step %= 12;
                 seq = (uint8_t)*plug->seq_p;
+                stepofs = (uint8_t)*plug->panoffset_p;
+                pseq = (uint8_t)*plug->panseq_p;
                 slope = 1/(M_PI*(1.001-*plug->slope_p));
                 sl = (M_PI-1/slope)/2;
                 sh = (M_PI+1/slope)/2;
@@ -691,20 +726,24 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
                         if(((cycles[j][seq])>>step)&0x0001)
                         {//turn on
                             ofs[j] = 0;
+                            pan_law(*plug->width_p*pcycles[pseq][step+stepofs],&gainl[j],&gainr[j]);
                             switch(j)
                             {
                             case UP:
                                 rup = w-1-ceil(plug->period);
-                                gainl[UP] = .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
+                                gainl[UP] *= .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
+                                gainr[UP] *= .5**plug->up_p**plug->enable_p;//.5 is for the AA filter
                                 dphase = 2*M_PI/plug->period;
                                 break;
                             case MID:
                                 rmd = w-1;
-                                gainl[MID] = *plug->md_p**plug->enable_p;
+                                gainl[MID] *= *plug->md_p**plug->enable_p;
+                                gainr[MID] *= *plug->md_p**plug->enable_p;
                                 break;
                             case DOWN:
                                 rdn = w-1;
-                                gainl[DOWN] = *plug->dn_p**plug->enable_p;
+                                gainl[DOWN] *= *plug->dn_p**plug->enable_p;
+                                gainr[DOWN] *= *plug->dn_p**plug->enable_p;
                                 break;
                             }
                         }
@@ -712,6 +751,7 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
                         {//turn off
                             ofs[j] = *plug->overlap_p*M_PI;
                             gainl[j] = 0;
+                            gainr[j] = 0;
                             if(j==UP)
                                 dphase = 2*M_PI/plug->period; 
                         }
@@ -738,7 +778,9 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
 
     //keep state stuff for next time;
     plug->step = step;
+    plug->stepofs = stepofs;
     plug->seq = seq;
+    plug->pseq = pseq;
     plug->phase = phase;
     for(j=0;j<3;j++)
     {
