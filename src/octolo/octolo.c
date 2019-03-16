@@ -238,10 +238,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
     gainstep /= nframes>64?nframes:64;
 
     dphase = 2*M_PI/plug->period; //delta phase per frame
-    //tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
-    //if(tmp <1 && tmp > dphase && gain[UP])
-    //    dphase = tmp;
-
 
     //max period is 1.4 sec = .67
     for(i=0;i<nframes;i++)
@@ -554,10 +550,6 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
     gainstep /= nframes>64?nframes:64;
 
     dphase = 2*M_PI/plug->period;
-    //tmp = (2*M_PI-phase-ofs[UP])/((rmd - rup)&0xffff);//if up was mid cycle, this calculates it based on the old phase
-    //if(tmp <1 && tmp > dphase && gain[UP])
-    //    dphase = tmp;
-
 
     //max period is 1.4 sec = .67
     for(i=0;i<nframes;i++)
