@@ -4,7 +4,7 @@ project(infamous-plugins)
 
 set(LIBDIR lib CACHE STRING "Specifies the name of the library path")
 
-foreach(plug casynth envfollower hip2b powerup powercut cheapdist stuck ewham lushlife bentdelay mindi)
+foreach(plug casynth envfollower hip2b powerup powercut cheapdist stuck ewham lushlife bentdelay mindi octolo)
     add_subdirectory(src/${plug})
 endforeach(plug)
 
