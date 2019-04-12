@@ -216,3 +216,23 @@ This is a simulated double tracking plugin capable of everything from a thin bea
     PERIOD - time in milliseconds of the cycle of low then high playback rate
     DUTY - percentage of the cycle that is low playback rate 
 
+=================================
+12. mindi
+
+this plugin was made for the MOD ecosystem, but may be of some use outside of that application. It is a mini MIDI message maker. Simply compose a midi message and enable it and it will send out the message. It also sends a message whenever you change values so you can use it to control midi CCs for example. It can compose and send sysex type messages, but not practical ones.
+
+
+    MSGTYPE - note, pressure, CC, bend you name it we'll make it
+    CHAN - channel 0-15
+    DATA1 - note, CC, or PG number
+    DATA2 - value for CCs, velocity for notes, ignored for PG
+    DELAY - send a message N milliseconds after the plugin is first created
+    AUTOFF - automatically send note-off messages when the enable is turned off and in note-on mode (makes mindi a practical one note trigger)
+
+=================================
+13. octolo
+
+A combination tremolo octave (see what I did there?). I keep wanting to make a CPU cheap octaver, and this is the closest I've gotten. By using the tremolo effect I'm able to play back the sounds at different speeds to achieve an octave up and octave down effect. At long tremolo lengths (slow speed) you will notice the timing effects which may make it a bit unweildy for certain things. With short lengths its not a problem.
+
+
+
