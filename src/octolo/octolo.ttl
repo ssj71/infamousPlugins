@@ -342,6 +342,16 @@
     rdfs:seeAlso <octolo_presets.ttl> .
 <http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:02arp>
     a pset:Preset ;
-	rdfs:label "01 Arp" ;
+	rdfs:label "02 Arp" ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+    rdfs:seeAlso <octolo_presets.ttl> .
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:03rumbley>
+    a pset:Preset ;
+	rdfs:label "03 Rumbley" ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+    rdfs:seeAlso <octolo_presets.ttl> .
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:04beater>
+    a pset:Preset ;
+	rdfs:label "04 Beater" ;
     lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
     rdfs:seeAlso <octolo_presets.ttl> .
