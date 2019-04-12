@@ -115,7 +115,7 @@
                 lv2:index 9 ;
                 lv2:symbol "SLOPE" ;
                 lv2:name "Slope" ;
-                lv2:default 1.0 ;
+                lv2:default 0.8 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
                 rdfs:comment "speed of the voice fade in/out, low values are smooth, high values a square wave" ;
