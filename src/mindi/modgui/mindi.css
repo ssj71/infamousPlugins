@@ -1,0 +1,773 @@
+@import url(/fonts/nexa/stylesheet.css);
+@import url(/fonts/questrial/stylesheet.css);
+
+/* = CONTAINER
+================================================ */
+.x42-midifilter{{{cns}}} {
+    background-image:url(/resources/smallpox.png{{{ns}}});
+    background-position:center center;
+    background-repeat:no-repeat;
+    border-radius: 21px;
+    position:absolute;
+}
+
+/* = Labels
+================================================ */
+.x42-midifilter{{{cns}}} .center {
+    text-align:center;
+}
+
+.x42-midifilter{{{cns}}} .x42-plugin-name {
+    overflow:hidden;
+    position:absolute;
+    right:7%;
+    text-align:center;
+    bottom:6.5%;
+}
+
+.x42-midifilter{{{cns}}} .x42-plugin-name h1 {
+    font-family:"Questrial";
+    font-size:19px;
+    line-height:1;
+    color:#222;
+    text-shadow: -1px -1px 0 #bbb;
+}
+
+/* = LIGHT ON/OFF
+================================================ */
+.x42-midifilter{{{cns}}} .mod-light {
+    background-position:center center;
+    background-repeat:no-repeat;
+    height:32px;
+    position:absolute;
+}
+
+
+/* = FOOTSWITCH
+================================================ */
+.x42-midifilter{{{cns}}} .mod-footswitch {
+    background-image:url(/resources/footswitch.png{{{ns}}});
+    background-position:bottom center;
+    background-repeat:no-repeat;
+    background-size:auto 88px;
+    cursor:pointer;
+    height:44px;
+    margin: auto;
+    position:absolute;
+    width: 44px;
+}
+
+.x42-midifilter{{{cns}}} .mod-footswitch.on {
+    background-position: top center !important;
+}
+
+
+/* = KNOBS
+================================================ */
+.x42-midifilter{{{cns}}} .mod-control-group {
+    margin:20px 20px 5px 20px;
+    position:relative;
+    text-align:center;
+    z-index:30;
+}
+
+.x42-midifilter{{{cns}}} .top {
+    margin-top:0px;
+}
+
+.x42-midifilter{{{cns}}} .one-knob {
+    margin-left:auto;
+    margin-right:auto;
+    width:100px;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob {
+    overflow:hidden;
+    position:relative;
+    display:inline-block;
+    height:88px;
+    margin: 3px 10px;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob.midi {
+    height:74px;
+    margin-bottom:0;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob.wide {
+    width:64px;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob.wider {
+    width:88px;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob.grid16 {
+    height:42px;
+    margin: 3px 5px 3px 15px;
+    overflow:visible;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group span.mod-knob-title {
+    color:#333;
+    font-size:11px;
+    font-weight:bold;
+    line-height:1;
+    text-transform:uppercase;
+    cursor:default;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob > span.mod-knob-title {
+    color:#333;
+    bottom:12px;
+    display:block;
+    height:12px;
+    left:0;
+    margin:0;
+    overflow:visible;
+    padding:0;
+    position:absolute;
+    right:0;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob.midi > span.mod-knob-title {
+    color:#333;
+    bottom:0px;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob.grid16 > span.mod-knob-title {
+    display:block;
+    width:10px;
+    margin:0;
+    overflow:hidden;
+    padding:0;
+    position:absolute;
+    text-align:center;
+    top:15px;
+    left:-30px;
+    width:48px;
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-value {
+    color:#333;
+    bottom:0px;
+    font-size:11px;
+    position:absolute;
+    line-height:1;
+    left:0;
+    right:0;
+    z-index:60;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-image {
+    background-image:url(/resources/knob.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 60px;
+    height:60px;
+    width:60px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-m16-image {
+    background-image:url(/resources/knob16.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 56px;
+    background-color:#222;
+    box-shadow: 2px 2px 2px 0px #000 inset, -1px -1px 2px 1px #fff inset;
+    height:56px;
+    width:64px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-m65-image {
+    background-image:url(/resources/knob65.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 56px;
+    background-color:#222;
+    box-shadow: 2px 2px 2px 0px #000 inset, -1px -1px 2px 1px #fff inset;
+    height:56px;
+    width:96px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-m4848-image {
+    background-image:url(/resources/knob48_48.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 56px;
+    background-color:#222;
+    box-shadow: 2px 2px 2px 0px #000 inset, -1px -1px 2px 1px #fff inset;
+    height:56px;
+    width:96px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-m6464-image {
+    background-image:url(/resources/knob64_64.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 56px;
+    background-color:#222;
+    box-shadow: 2px 2px 2px 0px #000 inset, -1px -1px 2px 1px #fff inset;
+    height:56px;
+    width:96px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-m6364-image {
+    background-image:url(/resources/knob63_64.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 56px;
+    background-color:#222;
+    box-shadow: 2px 2px 2px 0px #000 inset, -1px -1px 2px 1px #fff inset;
+    height:56px;
+    width:96px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-m127-image {
+    background-image:url(/resources/knob127.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 56px;
+    background-color:#222;
+    box-shadow: 2px 2px 2px 0px #000 inset, -1px -1px 2px 1px #fff inset;
+    height:56px;
+    width:96px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-n127-image {
+    background-image:url(/resources/midi127.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 56px;
+    background-color:#222;
+    box-shadow: 2px 2px 2px 0px #000 inset, -1px -1px 2px 1px #fff inset;
+    height:56px;
+    width:96px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-n128-image {
+    background-image:url(/resources/midi128.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 56px;
+    background-color:#222;
+    box-shadow: 2px 2px 2px 0px #000 inset, -1px -1px 2px 1px #fff inset;
+    height:56px;
+    width:96px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-m129-image {
+    background-image:url(/resources/knob129.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 56px;
+    background-color:#222;
+    box-shadow: 2px 2px 2px 0px #000 inset, -1px -1px 2px 1px #fff inset;
+    height:56px;
+    width:96px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-mc17-image {
+    background-image:url(/resources/knob17.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 42px;
+    background-color:#222;
+    box-shadow: 1px 1px 2px 0px #000 inset, -1px -1px 2px 0px #fff inset;
+    height:42px;
+    width:48px;
+    margin:0 auto;
+}
+
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob .mod-knob-m1312-image {
+    background-image:url(/resources/knob13_12.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 42px;
+    background-color:#222;
+    box-shadow: 1px 1px 2px 0px #000 inset, -1px -1px 2px 0px #fff inset;
+    height:42px;
+    width:72px;
+    margin:0 auto;
+}
+
+/* = ENUMERATED LIST
+================================================ */
+.x42-midifilter{{{cns}}} .mod-enum-top-group {
+    cursor:default;
+    margin:15px 20px 5px 20px;
+}
+
+.x42-midifilter{{{cns}}} .mod-enum-top-group-2items {
+    cursor:default;
+    margin:15px auto 5px;
+    width:240px;
+}
+
+.x42-midifilter{{{cns}}} .mod-enum-float-group {
+    cursor:default;
+    margin:5px 0px 5px;
+}
+
+.x42-midifilter{{{cns}}} .mod-enumerated-group {
+    cursor:default;
+    height:31px;
+    margin:20px auto 20px auto !important;
+    position:relative;
+    width:100px;
+    z-index:35;
+}
+
+.x42-midifilter{{{cns}}} .mod-enumerated-group.float {
+    margin: 0 10px 20px 10px !important;
+    float:left;
+}
+
+.x42-midifilter{{{cns}}} .mod-enumerated {
+    background-image:url(/resources/dropdown-arrow-black.png{{{ns}}});
+    background-position:right center;
+    background-repeat:no-repeat;
+    font-size:11px;
+    font-weight:bold;
+    left:0;
+    line-height:2;
+    overflow:hidden;
+    position:absolute;
+    right:0;
+    text-align:center;
+    z-index:35;
+}
+
+.x42-midifilter{{{cns}}} .mod-enumerated .mod-enumerated-selected {
+    background-color:rgba(0,0,0,.3);
+    box-shadow:inset 0 0 4px rgba(0,0,0,.3);
+    border-radius:4px;
+    padding:3px 9px;
+    z-index: 35;
+}
+
+.x42-midifilter{{{cns}}} .mod-enumerated .mod-enumerated-list {
+    cursor:pointer;
+    background-color:rgba(0,0,0,.9);
+    color:#fff;
+    display:none;
+    height:115px;
+    overflow:auto;
+    position:relative;
+    z-index: 50;
+}
+
+.x42-midifilter{{{cns}}} .mod-enumerated .mod-enumerated-list > div {
+    padding:3px 9px;
+    z-index: 50;
+}
+
+.x42-midifilter{{{cns}}} .mod-enumerated .mod-enumerated-list > div:hover {
+    background-color:rgba(255,255,255,.2);
+    z-index: 50;
+}
+
+/* = Toggle Buttons
+================================================ */
+.x42-midifilter{{{cns}}} .buttongrid {
+    overflow:hidden;
+    margin: 20px auto;
+    position:relative;
+    z-index: 30;
+}
+
+.x42-midifilter{{{cns}}} .buttongrid .togglebtn {
+    background-color:#444;
+    border-radius: 5px;
+    cursor:default;
+    float:left;
+    height: 50px;
+    margin: 5px;
+    width: 50px;
+    overflow: hidden;
+    padding: 28px 0 0 6px;
+    color:white;
+    z-index: 35;
+    background-size:20px 20px;
+    background-repeat:no-repeat;
+    background-position: 29px 1px;
+}
+
+.x42-midifilter{{{cns}}} .buttongrid .togglebtn.on {
+    background-image:url(/resources/led-grn-on.png{{{ns}}});
+    background-color:#333;
+    box-shadow: 0 -2px 2px 1px #222 inset, -1px -2px 1px 1px #888 inset;
+    padding: 29px 0 0 6px;
+    background-position: 29px 2px;
+}
+
+.x42-midifilter{{{cns}}} .buttongrid .togglebtn.off {
+    background-image:url(/resources/led-grn-off.png{{{ns}}});
+    box-shadow: 2px 2px 2px 0px #000 inset, -2px -2px 2px 1px #666 inset;
+}
+
+/* = COLORS
+================================================ */
+.x42-midifilter{{{cns}}} h1,
+.x42-midifilter{{{cns}}} .mod-enumerated,
+.x42-midifilter{{{cns}}} .mod-control-group .mod-knob > span.mod-knob-title {
+    color:black;
+}
+.x42-midifilter{{{cns}}} h1 {
+    border-color:black;
+}
+
+/* = Plugin Specifics -- TODO unify a bit more
+================================================ */
+.x42-midifilter{{{cns}}}.x42-midi-nodup .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-mididup .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-monolegato .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-transpose .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-notetoggle .mod-light {
+    bottom:90px;
+    left:20px;
+    right:20px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-velocityscale .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-strum .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-onechannelfilter .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-ntapdelay .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-randvelocity .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-mapcc .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-velocityrange .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-keyrange .mod-light,
+.x42-midifilter{{{cns}}}.mindi .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-cctonote .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-notetocc .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-delay .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-sostenuto .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-keysplit .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-quantize .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-eventblocker .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-midichord .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-mapkeyscale .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-enforcescale .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-mapkeychannel .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-channelmap .mod-light,
+.x42-midifilter{{{cns}}}.x42-midi-channelfilter .mod-light {
+    bottom:43px;
+    right:20px;
+    width:32px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-scalecc .mod-light {
+    bottom:43px;
+    right:0px;
+    left:60px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-stub .mod-light {
+    bottom:75px;
+    left:20px;
+    right:20px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-stub .mod-footswitch {
+    bottom: 25px;
+    left: 20px;
+    right: 20px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-randvelocity .mod-footswitch {
+    bottom: 25px;
+    left: 62px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-quantize .mod-footswitch {
+    bottom: 25px;
+    left: 72px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-ntapdelay .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-channelmap .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-notetocc .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-cctonote .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-delay .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-sostenuto .mod-footswitch {
+    bottom: 35px;
+    left: 10px;
+    right: 10px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-keysplit .mod-footswitch {
+    bottom: 37px;
+    left: 60px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-scalecc .mod-footswitch {
+    bottom: 37px;
+    right: 60px;
+    left: 0px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-enforcescale .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-eventblocker .mod-footswitch {
+    bottom: 37px;
+    left: 10px;
+    right: 10px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-mapkeychannel .mod-footswitch {
+    bottom: 42px;
+    left: 10px;
+    right: 10px;
+}
+
+
+.x42-midifilter{{{cns}}}.x42-midi-nodup .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-mididup .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-monolegato .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-transpose .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-onechannelfilter .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-notetoggle .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-velocityrange .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-keyrange .mod-footswitch,
+.x42-midifilter{{{cns}}}.mindi .mod-footswitch {
+    bottom: 45px;
+    left: 10px;
+    right: 10px;
+    z-index: 45;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-velocityscale .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-strum .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-midichord .mod-footswitch {
+    bottom: 47px;
+    left: 10px;
+    right: 10px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-mapcc .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-mapkeyscale .mod-footswitch,
+.x42-midifilter{{{cns}}}.x42-midi-channelmap .mod-footswitch {
+    bottom: 55px;
+    left: 10px;
+    right: 10px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-mapkeyscale {
+    background-size:430px 330px;
+    height:330px;
+    width:430px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-channelmap,
+.x42-midifilter{{{cns}}}.x42-midi-channelfilter {
+    background-size:330px 330px;
+    height:330px;
+    width:330px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-channelfilter .buttongrid {
+    width: 240px;
+    height: 240px;
+    top: 15px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-channelfilter .mod-footswitch {
+    bottom: 35px;
+    left: 82px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-nodup,
+.x42-midifilter{{{cns}}}.x42-midi-mididup,
+.x42-midifilter{{{cns}}}.x42-midi-monolegato,
+.x42-midifilter{{{cns}}}.x42-midi-onechannelfilter,
+.x42-midifilter{{{cns}}}.x42-midi-notetoggle {
+    background-size:300px 200px;
+    height:200px;
+    width:300px;
+}
+
+
+.x42-midifilter{{{cns}}}.x42-midi-mapcc,
+.x42-midifilter{{{cns}}}.x42-midi-delay,
+.x42-midifilter{{{cns}}}.x42-midi-sostenuto {
+    background-size:280px 240px;
+    height:240px;
+    width:280px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-notetocc,
+.x42-midifilter{{{cns}}}.x42-midi-cctonote {
+    background-size:444px 225px;
+    height:225px;
+    width:444px;
+}
+
+
+.x42-midifilter{{{cns}}}.x42-midi-velocityrange,
+.x42-midifilter{{{cns}}}.x42-midi-keyrange,
+.x42-midifilter{{{cns}}}.mindi {
+    background-size:332px 220px;
+    height:220px;
+    width:332px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-velocityscale,
+.x42-midifilter{{{cns}}}.x42-midi-strum {
+    background-size:420px 360px;
+    height:360px;
+    width:420px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-transpose {
+    background-size:300px 230px;
+    height:230px;
+    width:300px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-ntapdelay {
+    background-size:360px 240px;
+    height:240px;
+    width:360px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-randvelocity {
+    background-size:360px 220px;
+    height:220px;
+    width:360px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-stub {
+    background-size:170px 170px;
+    height:170px;
+    width:170px;
+}
+
+
+.x42-midifilter{{{cns}}}.x42-midi-stub .x42-plugin-name {
+    top:0px;
+    left:7%;
+}
+
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-midichord {
+    background-size:330px 280px;
+    height:280px;
+    width:330px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-midichord .buttongrid {
+    width: 300px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-enforcescale {
+    background-size:400px 170px;
+    height:170px;
+    width:400px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-eventblocker {
+    background-size:480px 280px;
+    height:280px;
+    width:480px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-eventblocker .top-float {
+    margin: 10px 20px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-eventblocker .top-float > div {
+    float:left;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-eventblocker .group-pane {
+    border: 1px solid black;
+    border-radius: 11px;
+    margin:5px;
+}
+.x42-midifilter{{{cns}}}.x42-midi-eventblocker .group-pane  > span {
+    display:block;
+    text-align:center;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-eventblocker .buttongrid {
+    width: 120px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-eventblocker .x42-brand {
+    left: 150px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-mapkeychannel {
+    background-size:330px 260px;
+    height:260px;
+    width:330px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-mididup .mod-knob.m16 {
+    margin:0px 10px;
+    width:100px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-quantize {
+    background-size:300px 220px;
+    height:220px;
+    width:300px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-quantize .buttongrid {
+    width: 60px;
+    height: 66px;
+    display:inline-block;
+    text-align:left;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-keysplit {
+    background-size:400px 320px;
+    height:320px;
+    width:400px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-keysplit .top-float {
+    margin: 10px 20px;
+}
+
+.x42-midifilter{{{cns}}}.x42-midi-keysplit .top-float > div {
+    float:left;
+    margin:0;
+    max-width:240px;
+}
+
+/* --- */
+
+.x42-midifilter{{{cns}}}.x42-midi-scalecc {
+    background-size:510px 240px;
+    height:240px;
+    width:510px;
+}
+
+/* --- */
+.x42-midifilter{{{cns}}}.x42-midi-keyrange .mod-footswitch,
+.x42-midifilter{{{cns}}}.mindi .mod-footswitch {
+    z-index:40;
+}

@@ -1,0 +1,39 @@
+  <div class="mod-pedal hip2b">
+    <div mod-role="drag-handle" class="mod-drag-handle"></div>
+    <div class="mod-knob" id="hip2bin" title="input gain">
+      <div class="mod-knob-image" mod-role="input-control-port" mod-port-symbol="IN_GAIN"></div>
+    </div>
+    <div class="mod-knob" id="hip2bout" title="output level">
+      <div class="mod-knob-image" mod-role="input-control-port" mod-port-symbol="OUT_GAIN"></div>
+    </div>
+    <div class="mod-knob" id="hip2boct" title="octave">
+      <div class="mod-knob-image" mod-role="input-control-port" mod-port-symbol="OCTAVE"></div>
+    </div>
+    <div class="mod-knob" id="hip2bmix" title="wet/dry mix">
+      <div class="mod-knob-image" mod-role="input-control-port" mod-port-symbol="WETDRY"></div>
+    </div>
+    <div class="mod-footswitch" title="bypass/enable"
+      mod-widget="switch"
+      mod-role="bypass" >
+    </div>
+    <div class="mod-light" title="bypass/enable" mod-role="bypass-light" >
+    </div>
+    <div class="mod-pedal-input" >
+      {{#effect.ports.audio.input}}
+      <div class="mod-input mod-input-disconnected" title=
+      "{{name}}" mod-role="input-audio-port" mod-port-symbol=
+      "{{symbol}}">
+        <div class="mod-pedal-input-image"></div>
+      </div>
+      {{/effect.ports.audio.input}}
+    </div>
+    <div class="mod-pedal-output">
+      {{#effect.ports.audio.output}}
+      <div class="mod-output mod-output-disconnected" title=
+      "{{name}}" mod-role="output-audio-port" mod-port-symbol=
+      "{{symbol}}">
+        <div class="mod-pedal-output-image"></div>
+      </div>
+      {{/effect.ports.audio.output}}
+    </div>
+  </div>

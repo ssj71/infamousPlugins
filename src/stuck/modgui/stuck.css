@@ -1,0 +1,115 @@
+/* = CONTAINER
+================================================ */
+.stuck {
+    background-image:url(/resources/stuckbg.svg{{{ns}}});
+    background-position:center center;
+    background-repeat:no-repeat;
+    background-size:256px 400px;
+    /*border-radius: 21px;*/
+    height:400px;
+    position:absolute;
+    width:256px;
+    padding: 10px 10px 10px 5px;
+    text-align: center;
+}
+
+/* = LIGHT ON/OFF
+================================================ */
+.stuck .mod-light {
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+    background-position:center center;
+    background-repeat:no-repeat;
+    left:82px;
+    bottom:168px;
+    height:22px;
+    width:20px;
+    position:absolute;
+}
+.stuck .mod-light.on{
+    background-image:url(/resources/led-enabled.png{{{ns}}});
+}
+.stuck .mod-light.off{
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+}
+.stuck .mod-lightbackward {
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+    background-position:center center;
+    background-repeat:no-repeat;
+    left:82px;
+    bottom:168px;
+    height:22px;
+    width:20px;
+    position:absolute;
+}
+.stuck .mod-lightbackward.on{
+    background-image:url(/resources/led-bypassed.png{{{ns}}});
+}
+.stuck .mod-lightbackward.off{
+    background-image:url(/resources/led-enabled.png{{{ns}}});
+}
+
+/* = Toggle
+================================================ */
+.stuck .mod-footswitch {
+    background-image:url(/resources/switch-key.png{{{ns}}});
+    background-position:bottom center;
+    background-repeat:no-repeat;
+    background-size:auto 120px;
+    position:absolute;
+    cursor:pointer;
+    left:43px;
+    bottom:148px;
+    width:40px;
+    height:60px;
+    margin: 4px auto 0 auto;
+}
+.stuck .mod-footswitch.on {
+    background-position: bottom center !important;
+}
+.stuck .mod-footswitch.off {
+    background-position: top center !important;
+}
+.stuck .mod-footswitch#stuckbackwardswitch.on {
+    background-position: top center !important;
+}
+.stuck .mod-footswitch#stuckbackwardswitch.off {
+    background-position: bottom center !important;
+}
+
+/* = KNOBS
+================================================ */
+.stuck .mod-knob {
+    display:inline-block;
+    overflow:hidden;
+    position:relative;
+}
+
+.stuck .mod-knob .mod-knob-image {
+    background-image:url(/resources/tabDial64.svg{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 71px; 
+    background-position:left center;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+    height:71px;
+    width:71px;
+    margin:0 auto;
+    z-index: 30;
+} 
+
+.stuck .mod-knob#stuckgain { 
+    left:47px;
+    top:280px;
+    position:absolute;
+}
+
+.stuck .mod-knob#stuckrelease { 
+    left:144px;
+    top:280px;
+    position:absolute;
+}
+
+.stuck .mod-pedal-input, .stuck .mod-pedal-output {
+    top:160px;
+}

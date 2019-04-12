@@ -60,6 +60,7 @@ void run_powerup(LV2_Handle handle, uint32_t nframes)
 
             //initialize other vars
             startup_length = (float)(plug->startup_time*plug->sample_freq);
+            plug->latency = startup_length;
             plug->w += plug->bufmask +1;
             plug->r = plug->w + startup_length - plug->latency;//final read position
 

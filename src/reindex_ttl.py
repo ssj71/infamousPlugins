@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # this takes a ttl file that is complete but port indexes are not correct
 # it will change the index so the ports appear in order
 # its useful if you add a port in the middle of an existing file

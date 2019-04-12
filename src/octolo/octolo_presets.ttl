@@ -1,0 +1,173 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:00straighttrem>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+	rdfs:label "00 Straight Trem" ;
+	lv2:port [
+		lv2:symbol "ENABLE" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "LENGTH" ;
+		pset:value 0.5
+	] , [
+		lv2:symbol "DRY" ;
+		pset:value 0.3
+	] , [
+		lv2:symbol "WET" ;
+		pset:value 0.7
+	] , [
+		lv2:symbol "OCTDOWN" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "OCTUP" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "SEQUENCE" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "OVERLAP" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "SLOPE" ;
+		pset:value 0.6
+	] .
+
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:01chopperdown>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+	rdfs:label "01 Chopper Down" ;
+	lv2:port [
+		lv2:symbol "DRY" ;
+		pset:value 0.1
+	] , [
+		lv2:symbol "ENABLE" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "LENGTH" ;
+		pset:value 0.25
+	] , [
+		lv2:symbol "OCTDOWN" ;
+		pset:value 0.34
+	] , [
+		lv2:symbol "OCTUP" ;
+		pset:value 0.34
+	] , [
+		lv2:symbol "OVERLAP" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "SEQUENCE" ;
+		pset:value 5.0
+	] , [
+		lv2:symbol "SLOPE" ;
+		pset:value 0.9
+	] , [
+		lv2:symbol "WET" ;
+		pset:value 0.34
+	] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:02arp>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+	rdfs:label "02 Arp" ;
+	lv2:port [
+		lv2:symbol "DRY" ;
+		pset:value 0.1
+	] , [
+		lv2:symbol "ENABLE" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "LENGTH" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "OCTDOWN" ;
+		pset:value 0.34
+	] , [
+		lv2:symbol "OCTUP" ;
+		pset:value 0.34
+	] , [
+		lv2:symbol "OVERLAP" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "SEQUENCE" ;
+		pset:value 3.0
+	] , [
+		lv2:symbol "SLOPE" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "WET" ;
+		pset:value 0.34
+	] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:03rumbley>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+	rdfs:label "03 Rumbley" ;
+	lv2:port [
+		lv2:symbol "DRY" ;
+		pset:value 0.2
+	] , [
+		lv2:symbol "ENABLE" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "LENGTH" ;
+		pset:value 0.125
+	] , [
+		lv2:symbol "OCTDOWN" ;
+		pset:value 0.34
+	] , [
+		lv2:symbol "OCTUP" ;
+		pset:value 0.34
+	] , [
+		lv2:symbol "OVERLAP" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "SEQUENCE" ;
+		pset:value 2.0
+	] , [
+		lv2:symbol "SLOPE" ;
+		pset:value 0.5
+	] , [
+		lv2:symbol "WET" ;
+		pset:value 0.34
+	] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo:preset:04beater>
+	a pset:Preset ;
+	lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#octolo> ;
+	rdfs:label "04 Beater" ;
+	lv2:port [
+		lv2:symbol "DRY" ;
+		pset:value 0.1
+	] , [
+		lv2:symbol "ENABLE" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "LENGTH" ;
+		pset:value 0.125
+	] , [
+		lv2:symbol "OCTDOWN" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "OCTUP" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "OVERLAP" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "SEQUENCE" ;
+		pset:value 3.0
+	] , [
+		lv2:symbol "SLOPE" ;
+		pset:value 0.7
+	] , [
+		lv2:symbol "WET" ;
+		pset:value 0.5
+	] .

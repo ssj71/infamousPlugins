@@ -1,0 +1,35 @@
+  <div class="mod-pedal stuck">
+    <div mod-role="drag-handle" class="mod-drag-handle"></div>
+    <div class="mod-knob" id="stuckgain" title="hold gain">
+      <div class="mod-knob-image" mod-role="input-control-port" mod-port-symbol="DRONE_GAIN"></div>
+    </div>
+    <div class="mod-knob" id="stuckrelease" title="release time (sec)">
+      <div class="mod-knob-image" mod-role="input-control-port" mod-port-symbol="RELEASE"></div>
+    </div>
+    <div class="mod-footswitch" title="Switch on/off hold."
+      mod-widget="switch"
+      mod-role="bypass" >
+    </div>
+    <div class="mod-light" title="Switch on/off hold."
+      mod-widget="switch"
+      mod-role="bypass-light" >
+    </div>
+    <div class="mod-pedal-input" >
+      {{#effect.ports.audio.input}}
+      <div class="mod-input mod-input-disconnected" title=
+      "{{name}}" mod-role="input-audio-port" mod-port-symbol=
+      "{{symbol}}">
+        <div class="mod-pedal-input-image"></div>
+      </div>
+      {{/effect.ports.audio.input}}
+    </div>
+    <div class="mod-pedal-output">
+      {{#effect.ports.audio.output}}
+      <div class="mod-output mod-output-disconnected" title=
+      "{{name}}" mod-role="output-audio-port" mod-port-symbol=
+      "{{symbol}}">
+        <div class="mod-pedal-output-image"></div>
+      </div>
+      {{/effect.ports.audio.output}}
+    </div>
+  </div>

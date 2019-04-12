@@ -9,7 +9,7 @@ inline int cairo_code_draw_silverDial_get_height()
 {
     return 77;
 }
-inline void cairo_code_draw_silverDial_render(cairo_t *cr, float val)
+void cairo_code_draw_silverDial_render(cairo_t *cr, float val)
 {
     cairo_pattern_t *pattern;
     cairo_matrix_t matrix;

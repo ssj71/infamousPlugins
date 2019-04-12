@@ -68,4 +68,10 @@ if(CAIRO_FOUND AND NTK_FOUND)
 
 else()
     message(WARNING "UI Libraries Missing, no GUI will be installed")
+    if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
+        install (DIRECTORY
+          modgui/
+          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
+        )
+    endif()
 endif() 

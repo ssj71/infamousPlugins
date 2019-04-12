@@ -1,0 +1,132 @@
+@prefix doap:  <http://usefulinc.com/ns/doap#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix lv2:     <http://lv2plug.in/ns/lv2core#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
+@prefix lv2atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2midi: <http://lv2plug.in/ns/ext/midi#> .
+@prefix lv2time: <http://lv2plug.in/ns/ext/time#> .
+@prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix param: <http://lv2plug.in/ns/ext/parameters#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
+@prefix pprops:   <http://lv2plug.in/ns/ext/port-props#> .
+@prefix mod: <http://moddevices.com/ns/mod#> .
+@prefix modgui: <http://moddevices.com/ns/modgui#> .
+
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#mindi>
+        a lv2:Plugin, lv2:GeneratorPlugin ;
+        doap:name "the infamous mindi" ;
+        doap:license <http://opensource.org/licenses/GPL-2.0> ;
+        doap:description "mini midi message generator";
+        doap:maintainer [
+                foaf:name "Spencer Jackson" ;
+                foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
+                foaf:mbox <mailto:ssjackson71@gmail.com> ;
+        ] ;
+        mod:brand "infamous";        
+        mod:label "mindi"; 
+        modgui:gui [
+            modgui:resourcesDirectory <modgui> ;
+            modgui:iconTemplate <modgui/mindi.html> ;
+            modgui:stylesheet <modgui/mindi.css> ;
+            modgui:screenshot <modgui/screenshot-mindi.png> ;
+            modgui:thumbnail <modgui/thumbnail-mindi.png> ;
+            modgui:brand "infamous" ;
+            modgui:label "mindi" ;
+        ] ;
+        lv2:minorVersion 0 ;
+        lv2:microVersion 1 ;
+        rdfs:comment "This is a simple midi message generator that sends a message when you change its message value. It usually requires the host automating it to really be useful." ;
+        lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
+        lv2:optionalFeature lv2:hardRTCapable ;
+
+        lv2:port [
+                a lv2:OutputPort, lv2atom:AtomPort ;
+                lv2atom:bufferType lv2atom:Sequence ;
+                lv2atom:supports lv2midi:MidiEvent ;
+                lv2:index 0 ;
+                lv2:symbol "MIDI_OUT";
+                lv2:name "MIDI Out";
+        ] ;
+        lv2:port [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 1 ;
+                lv2:symbol "ENABLE" ;
+                lv2:name "Enable" ;
+                lv2:default 1 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+                lv2:designation lv2:enabled ;
+        ] ;
+        lv2:port [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 2 ;
+                lv2:symbol "MSGTYPE" ;
+                lv2:name "Message Type" ;
+                lv2:default 11 ;
+                lv2:minimum 8 ;
+                lv2:maximum 15 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:enumeration ;
+                lv2:scalePoint [ rdfs:label "Note Off"; rdf:value 8 ] ;
+                lv2:scalePoint [ rdfs:label "Note On"; rdf:value 9 ] ;
+                lv2:scalePoint [ rdfs:label "Poly Pressure"; rdf:value 10 ] ;
+                lv2:scalePoint [ rdfs:label "Control Change"; rdf:value 11 ] ;
+                lv2:scalePoint [ rdfs:label "Program Change"; rdf:value 12 ] ;
+                lv2:scalePoint [ rdfs:label "Chan Pressure"; rdf:value 13 ] ;
+                lv2:scalePoint [ rdfs:label "Pitchbend"; rdf:value 14 ] ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 3 ;
+                lv2:symbol "CHAN" ;
+                lv2:name "Channel" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 15 ;
+                lv2:portProperty lv2:integer ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 4 ;
+                lv2:symbol "DATA1" ;
+                lv2:name "Note/CC/PG Number" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 127 ;
+                lv2:portProperty lv2:integer ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 5 ;
+                lv2:symbol "DATA2" ;
+                lv2:name "Value" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 127 ;
+                lv2:portProperty lv2:integer ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 6 ;
+                lv2:symbol "DELAY" ;
+                lv2:name "1st Msg Repeat Delay Time" ;
+                lv2:default 0.0 ;
+                lv2:minimum 0.0 ;
+                lv2:maximum 2000.0 ;
+                units:unit units:ms ;
+                lv2:scalePoint [ rdfs:label "Off"; rdf:value 0.0 ] ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 7 ;
+                lv2:symbol "AUTOFF" ;
+                lv2:name "Auto Note-Off" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+                rdfs:comment "This will send a note off when enable is set to 0 when mindi is configured to send note-on messages, only the note configuration set at that time is sent" ;
+        ] .

@@ -1,0 +1,71 @@
+/* = CONTAINER
+================================================ */
+.powercut {
+    background-image:url(/resources/powercutbg.svg{{{ns}}});
+    background-position:center center;
+    background-repeat:no-repeat;
+    background-size:487px 318px;
+    /*border-radius: 21px;*/
+    height:318px;
+    position:absolute;
+    width:487px;
+    padding: 10px 10px 10px 5px;
+    text-align: center;
+}
+
+
+/* = Toggle
+================================================ */
+.powercut .mod-footswitch {
+    background-image:url(/resources/powerbutton.svg{{{ns}}});
+    background-position:bottom center;
+    background-repeat:no-repeat;
+    background-size:auto 120px;
+    position:absolute;
+    cursor:pointer;
+    left:42px;
+    top:80px;
+    width:160px;
+    height:60px;
+    margin: 4px auto 0 auto;
+}
+.powercut .mod-footswitch.on {
+    background-position: bottom center !important;
+}
+.powercut .mod-footswitch.off {
+    background-position: top center !important;
+}
+
+/* = KNOBS
+================================================ */
+.powercut .mod-knob {
+    display:inline-block;
+    overflow:hidden;
+    position:relative;
+}
+
+.powercut .mod-knob .mod-knob-image {
+    background-image:url(/resources/silverDial64.png{{{ns}}});
+    background-repeat:no-repeat;
+    background-size:auto 77px; 
+    background-position:left center;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+    height:77px;
+    width:77px;
+    margin:0 auto;
+    z-index: 30;
+} 
+
+.powercut .mod-knob#powercuttime { 
+    left:48px;
+    top:218px;
+    position:absolute;
+}
+
+.powercut .mod-knob#powercutcurve { 
+    left:182px;
+    top:218px;
+    position:absolute;
+}

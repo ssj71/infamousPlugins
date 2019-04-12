@@ -2,6 +2,7 @@
 #define STUCK_H
 
 #define STUCK_URI "http://ssj71.github.io/infamousPlugins/plugs.html#stuck"
+#define STUCKSTACKER_URI "http://ssj71.github.io/infamousPlugins/plugs.html#stuckstacker"
 
 enum stuck_ports
 {

@@ -7,16 +7,29 @@
 @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
 
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix mod: <http://moddevices.com/ns/mod#> .
+@prefix modgui: <http://moddevices.com/ns/modgui#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#hip2b>
         a lv2:Plugin, lv2:DistortionPlugin ;
         doap:name "the infamous Hip2B" ;
         doap:license <http://opensource.org/licenses/GPL-2.0> ;
-        doap:description "A square wave distortion/destroyer";
+        doap:description "A square wave distortion/destroyer" ;
         doap:maintainer [
                 foaf:name "Spencer Jackson" ;
                 foaf:homepage <http://ssj71.github.io/infamousPlugins> ;
                 foaf:mbox <mailto:ssjackson71@gmail.com> ;
+        ] ;
+        mod:brand "infamous" ;
+        mod:label "hip2b" ;
+        modgui:gui [
+            modgui:resourcesDirectory <modgui> ;
+            modgui:iconTemplate <modgui/hip2b.html> ;
+            modgui:stylesheet <modgui/hip2b.css> ;
+            modgui:screenshot <modgui/screenshot-hip2b.png> ;
+            modgui:thumbnail <modgui/thumbnail-hip2b.png> ;
+            modgui:brand "infamous" ;
+            modgui:label "hip2b" ;
         ] ;
         lv2:minorVersion 0 ;
         lv2:microVersion 1 ;
