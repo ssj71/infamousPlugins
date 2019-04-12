@@ -317,7 +317,6 @@
                 lv2:default 0.7 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 1.0 ;
-                lv2:portProperty lv2:integer ;
                 rdfs:comment "width of panning, 0 is all centered, 1 is hard panned" ;
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
