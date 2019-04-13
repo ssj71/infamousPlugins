@@ -115,6 +115,10 @@ Parameter Description:
     CMAXV - maximum CV to send
     CREVERSE - switches direction of the CV output
 
+2b. Envelope Follower CV
+
+Due to limited CV support in hosts, the envelope follower had the CV port disabled. This second version is to be used for CV and has no midi port.
+
 ===========================================
 3. Hip2B
 
@@ -144,6 +148,10 @@ This is a clone of the electro-harmonix freeze. It drones the note being played 
     STICKIT - control the drone being on (>=1) or off (<1)
     DRONEGAIN - gain of drone
     RELEASE - time of drone decay in seconds
+
+5b. stuck stacker
+
+This is identical to the stuck but it does not pass the dry signal through at all. This allows you to put several together in parallel without changing the dry signal gain.
 
 =============================================
 6. power cut
@@ -235,4 +243,12 @@ this plugin was made for the MOD ecosystem, but may be of some use outside of th
 A combination tremolo octave (see what I did there?). I keep wanting to make a CPU cheap octaver, and this is the closest I've gotten. By using the tremolo effect I'm able to play back the sounds at different speeds to achieve an octave up and octave down effect. At long tremolo lengths (slow speed) you will notice the timing effects which may make it a bit unweildy for certain things. With short lengths its not a problem.
 
 
+    LENGTH - number of beats per tremolo cycle
+    DRY - gain of dry signal (no tremolo effect)
+    WET -  gain of unshifted voice (only tremolo effect)
+    OCTDOWN - gain of octave down voice
+    OCTUP - gain of octave up voice
+    SLOPE - speed of voice fade ("shape" of the tremolo effect)
+    SEQUENCE - pattern that voices play back in, if voice is 0 there is silence at that point in the sequence
+    OVERLAP - begin playing the next voice before the previous is faded out
 
