@@ -8,7 +8,7 @@ inline int cairo_code_draw_squareDial_get_height()
 {
     return 88;
 }
-void cairo_code_draw_squareDial_render(cairo_t *cr, int ccw, float r, float g, float b, float val)
+inline void cairo_code_draw_squareDial_render(cairo_t *cr, int ccw, float r, float g, float b, float val)
 {
     cairo_pattern_t *pattern;
 
@@ -69,32 +69,32 @@ void cairo_code_draw_squareDial_render(cairo_t *cr, int ccw, float r, float g, f
     cairo_stroke_preserve(cr);
     /********************/
 }
-void cairo_code_draw_squareDialr_render(cairo_t *cr, float val)
+inline void cairo_code_draw_squareDialr_render(cairo_t *cr, float val)
 {
     cairo_code_draw_squareDial_render(cr, 0, 1, 0, 0, val);
 }
 
-void cairo_code_draw_squareDialbccw_render(cairo_t *cr, float val)
+inline void cairo_code_draw_squareDialbccw_render(cairo_t *cr, float val)
 {
     cairo_code_draw_squareDial_render(cr, 1, 0, 0, 1, val);
 }
 
-void cairo_code_draw_squareDialgccw_render(cairo_t *cr, float val)
+inline void cairo_code_draw_squareDialgccw_render(cairo_t *cr, float val)
 {
     cairo_code_draw_squareDial_render(cr, 1, 0, 0.88235, 0, val);
 }
 
-void cairo_code_draw_squareDialo_render(cairo_t *cr, float val)
+inline void cairo_code_draw_squareDialo_render(cairo_t *cr, float val)
 {
     cairo_code_draw_squareDial_render(cr, 0, 1, .33333, 0, val);
 }
 
-void cairo_code_draw_squareDialy_render(cairo_t *cr, float val)
+inline void cairo_code_draw_squareDialy_render(cairo_t *cr, float val)
 {
     cairo_code_draw_squareDial_render(cr, 0, 0.92157, 0.92157, 0, val);
 }
 
-void cairo_code_draw_squareDialpccw_render(cairo_t *cr, float val)
+inline void cairo_code_draw_squareDialpccw_render(cairo_t *cr, float val)
 {
     cairo_code_draw_squareDial_render(cr, 1, 0.78431, 0, 1, val);
 }
