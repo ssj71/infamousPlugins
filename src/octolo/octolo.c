@@ -973,7 +973,7 @@ static const LV2_Descriptor stereoctolo_descriptor=
     init_octolo,
     connect_stereoctolo_ports,
     0,//activate
-    run_octolo,
+    run_stereoctolo,
     0,//deactivate
     cleanup_octolo,
     0//extension
