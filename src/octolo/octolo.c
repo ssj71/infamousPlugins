@@ -450,7 +450,7 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
 void pan_law(float pan, float *l, float *r)
 {
     float ysin,ycos;
-    ysin = -pan - pan*pan;
+    ysin = pan*(-.25*pan +.5) + .75;
     ycos = ysin - pan;
     *l = 0.225*(ysin*(ysin>0?ysin:-ysin) - ysin) + ysin;
     *r = 0.225*(ycos*(ycos>0?ycos:-ycos) - ycos) + ycos;
