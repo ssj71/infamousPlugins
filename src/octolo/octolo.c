@@ -304,7 +304,6 @@ void run_octolo(LV2_Handle handle, uint32_t nframes)
                         step++;
                         step %= 12;
                     }
-                    //TODO: this is all wrong, slope sl sh
                     slope = 1/(M_PI*(1.001-*plug->slope_p));
                     sl = (M_PI-1/slope)/2;
                     sh = (M_PI+1/slope)/2;
@@ -507,6 +506,8 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
     phase = plug->phase;
     seq = plug->seq;//(uint8_t)*plug->seq_p;
     slope = plug->slope;
+    sl = (M_PI-1/slope)/2;
+    sh = (M_PI+1/slope)/2;
     ofsf = 0;
     if(plug->ofs[0] || plug->ofs[1] || plug->ofs[2] || *plug->overlap_p)
         ofsf = 1;
