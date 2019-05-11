@@ -778,6 +778,7 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
     {
         plug->ofs[j] = ofs[j];
         plug->gain[j] = gainl[j];
+        plug->gainr[j] = gainr[j];
     }
     plug->gain[DRY] = gainl[DRY];
     plug->r[UP]  = rup;
@@ -802,11 +803,15 @@ LV2_Handle init_octolo(const LV2_Descriptor *descriptor,double sample_freq, cons
         plug->r[i] = 0;
         plug->ofs[i] = 0;
         plug->gain[i] = 0;
+        plug->gainr[i] = 0;
     }
     plug->gain[DRY] = 0;
+    plug->gainr[DRY] = 0;
     plug->w = 0;
     plug->seq = 0;
+    plug->pseq = 0;
     plug->step = 12;
+    plug->stepofs = 0;
     plug->phase = -M_PI;
 
     plug->sample_freq = sample_freq;
