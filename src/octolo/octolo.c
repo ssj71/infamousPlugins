@@ -466,7 +466,7 @@ void run_stereoctolo(LV2_Handle handle, uint32_t nframes)
 {
     OCTOLO* plug = (OCTOLO*)handle;
     float* in, *outl,*outr, *buf;
-    float phase,dphase,ofs[3],mono[5],gainl[4],gainr[3];
+    float phase,dphase,ofs[3],mono[3],gainl[4],gainr[3];
     float tmp,gainstep,slope,sl,sh;
     float rdn;
     uint16_t rup, rmd;
