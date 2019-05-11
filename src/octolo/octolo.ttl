@@ -304,8 +304,8 @@
                 lv2:scalePoint [ rdfs:label "Alternate"; rdf:value 1 ] ;
                 lv2:scalePoint [ rdfs:label "Alternate 2"; rdf:value 2 ] ;
                 lv2:scalePoint [ rdfs:label "Alternate 3"; rdf:value 3 ] ;
-                lv2:scalePoint [ rdfs:label "Alternate 4"; rdf:value 4 ] ;
-                lv2:scalePoint [ rdfs:label "Step"; rdf:value 5 ] ;
+                lv2:scalePoint [ rdfs:label "Step"; rdf:value 4 ] ;
+                lv2:scalePoint [ rdfs:label "Step 2"; rdf:value 5 ] ;
                 lv2:scalePoint [ rdfs:label "Cycle Right"; rdf:value 6 ] ;
                 lv2:scalePoint [ rdfs:label "Cycle Left"; rdf:value 7 ] ;
                 rdfs:comment "alternate panning in a pattern, if voice gain is 0 there will be silence at that point in the sequence" ;
