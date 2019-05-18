@@ -11,6 +11,11 @@
 @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
+<http://ssj71.github.io/infamousPlugins/plugs.html#octolo_ui>
+	a ui:X11UI ;
+	ui:binary <octolo_ui.so> ;
+	lv2:extensionData ui:idleInterface, ui:resize .
+
 <http://ssj71.github.io/infamousPlugins/plugs.html#octolo>
         a lv2:Plugin, lv2:ModulatorPlugin ;
         doap:name "the infamous octolo" ;
@@ -26,6 +31,7 @@
         lv2:microVersion 1 ;
         rdfs:comment "a combination octaver and tremolo with mix, phase control, and sequencing";
         lv2:optionalFeature lv2:hardRTCapable ;
+        ui:ui <http://ssj71.github.io/infamousPlugins/plugs.html#octolo_ui> ;
 
         lv2:port [
                 a lv2:InputPort, lv2atom:AtomPort ;

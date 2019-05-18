@@ -1,7 +1,6 @@
 project('octolo', 'c')
 
 subdir('tikloo')
-            
 
 lv2_dep = dependency('lv2', version : '>=1.14.0')
 
@@ -24,8 +23,13 @@ install_data(
     install_dir : install_dir,
     )
 
-#shared_library('octolo_ui',
-#        ['octolo_ui.c']
-#        link_args : '-lm'
-#        dependencies : tk_deps
-#        )
+shared_library(
+    'octolo_ui',
+    ['octolo_ui.c'],
+    name_prefix : '',
+    link_with : tikloo,
+    link_args : '-lm',
+    dependencies : tk_deps,
+    install : true,
+    install_dir : install_dir,
+    )
