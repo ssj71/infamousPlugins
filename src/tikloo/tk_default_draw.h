@@ -22,6 +22,7 @@ void tk_drawdial(cairo_t *cr, float w, float h, void* cache, void* valp);
 void tk_drawbutton(cairo_t *cr, float w, float h, void* cache, void* val);
 void tk_drawbg(cairo_t *cr, float w, float h, void* cache, void* valp);
 void tk_drawtext(cairo_t *cr, float w, float h, void* cache, void* valp);
+void tk_drawverticaltext(cairo_t *cr, float w, float h, void* cache, void* valp);//in text.h
 void tk_drawtip(cairo_t *cr, float w, float h, void* cache, void* valp);//in text.h
 void tk_drawtextentry(cairo_t *cr, float w, float h, void* cache, void* valp);//in text.h
 

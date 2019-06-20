@@ -1096,7 +1096,7 @@ bool tk_textlayout(cairo_t* cr, tk_text_table* tkt, uint16_t n, uint16_t *w, uin
 {
 //TODO: should this be changed to batch process all strings?
     bool fit;
-    uint16_t i,j,size,str_index,lastwhite;
+    uint16_t i,j,size,str_index,lastwhite,*tmp;
     const int margin = 2;
     float x,y,xmax,xstart,ostart;
     tk_font_stuff* tkf = tkt->tkf[n];
@@ -1108,6 +1108,13 @@ bool tk_textlayout(cairo_t* cr, tk_text_table* tkt, uint16_t n, uint16_t *w, uin
     cairo_glyph_t* glyphs = tkt->glyphs[n];
     unsigned int glyph_count = tkt->glyph_count[n];
     uint16_t *cluster_map = tkt->cluster_map[n];
+
+    if(props&TK_TEXT_VERTICAL)
+    {
+       tmp = w;
+       w = h;
+       h = tmp;
+    }
 
     *w /= tkt->scale;
     *w -= margin;//leave space for RHS margin
@@ -1125,7 +1132,7 @@ bool tk_textlayout(cairo_t* cr, tk_text_table* tkt, uint16_t n, uint16_t *w, uin
 
         glyph_info = hb_buffer_get_glyph_infos(tkf->buf, &glyph_count);
         glyph_position = hb_buffer_get_glyph_positions(tkf->buf, &glyph_count);
-        //TODO: why separate _end and _count?
+        //TODO: why separate _end and _count? _end is number to be drawn, _count is number allocated
         tkt->glyph_end[n] = glyph_count;
         if(glyph_count > tkt->glyph_count[n])
         {
@@ -1202,6 +1209,7 @@ bool tk_textlayout(cairo_t* cr, tk_text_table* tkt, uint16_t n, uint16_t *w, uin
             }
             else if(tkt->glyph_end[n] > i)
             {
+                //TODO: need to reset glyph end if now its wider
                 tkt->glyph_end[n] = i;
             }
         }
@@ -1226,6 +1234,8 @@ bool tk_textlayout(cairo_t* cr, tk_text_table* tkt, uint16_t n, uint16_t *w, uin
     if(y > *h)
         fit = false; 
     //TODO: show what you can at least
+    if(!fit)
+    fprintf(stderr, "doesn't fit! %f>%i or %f>%i  %s\n",xmax,*w,y,*h,tkt->str[n]);
 
     if(fit && props&TK_TEXT_CENTER)
     {//center
@@ -1240,6 +1250,14 @@ bool tk_textlayout(cairo_t* cr, tk_text_table* tkt, uint16_t n, uint16_t *w, uin
 
     *w = (xmax+margin)*tkt->scale;
     *h = y*tkt->scale;
+
+    if(props&TK_TEXT_VERTICAL)
+    {
+       tmp = w;
+       w = h;
+       h = tmp;
+    }
+
     return fit;
 }
 
@@ -1372,6 +1390,16 @@ uint16_t tk_addaText(tk_t tk, uint16_t x, uint16_t y, uint16_t w, uint16_t h, tk
 
     return n; 
 } 
+
+uint16_t tk_addaVerticalText(tk_t tk, uint16_t x, uint16_t y, uint16_t w, uint16_t h, tk_font_stuff* font, const char* str)
+{
+    uint16_t n = tk_addaText(tk,x,y,h,w,font,str); //notice the tricky w,h transpose!
+    tk->w[n] = w;
+    tk->h[n] = h;
+    tk->props[n] |= TK_TEXT_VERTICAL;
+    tk->draw_f[n] = tk_drawverticaltext;
+    return n;
+}
 
 // Text_Entry_Stuff
 

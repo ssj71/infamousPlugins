@@ -38,6 +38,24 @@ void tk_drawtext(cairo_t *cr, float w, float h, void* cache, void* valp)
     tk_drawtextcolor(cr,w,h,valp,line,fill);
 }
 
+void tk_drawverticaltext(cairo_t *cr, float w, float h, void* cache, void* valp)
+{
+    float line[] = {.1,.1,.1,1,.1};//rgba width
+    float fill[] = {.9,.9,.9,1};//rgba
+    //TODO: add #def to switch rotation direction
+    const float pihalf = 3.1415926535897932384626433832795/2.0;
+    float rp;
+    rp = h/2.0;
+    if(w<h)
+        rp = w/2.0;
+    cairo_save( cr );
+    cairo_translate(cr,rp,rp);
+    cairo_rotate(cr,pihalf);
+    cairo_translate(cr,-rp,-rp);
+    tk_drawtextcolor(cr,h,w,valp,line,fill);
+    cairo_restore( cr );
+}
+
 void tk_drawtip(cairo_t *cr, float w, float h, void* cache, void* valp)
 {
     //float line[] = {.2,.2,.2,1,.5};//rgba width

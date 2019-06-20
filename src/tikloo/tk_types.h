@@ -98,6 +98,7 @@ typedef enum
     //Text Properties
     TK_TEXT_WRAP = 0x2,
     TK_TEXT_CENTER = 0x4,
+    TK_TEXT_VERTICAL = 0x08,
     
 }TK_PROPERTIES;
 
