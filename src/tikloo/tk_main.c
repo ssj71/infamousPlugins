@@ -180,13 +180,15 @@ void tk_cleanup(tk_t tk)
 
     //deal with text table 
     //free text double arrays 
-    n = ((tk_text_stuff*)(tk->value[tk->ttip-1]))->n;
-    for(i=0;tk->tkt.glyphs[i];i++)
-        if(tk->tkt.str[i] && !(tk->ttip && i ==n))//must skip tooltip because its pointing to somebody else's string
-            free(tk->tkt.str[i]);
+    if(tk->ttip)
+        n = ((tk_text_stuff*)(tk->value[tk->ttip-1]))->n;
+    if(tk->tkt.glyphs)
+        for(i=0;tk->tkt.glyphs[i];i++)
+            if(tk->tkt.str[i] && !(tk->ttip && i ==n))//must skip tooltip because its pointing to somebody else's string
+                free(tk->tkt.str[i]);
     free(tk->tkt.str);
     n = i;
-    tk_rmdupptr((void**)(tk->tkt.tkf));
+    if(tk->tkt.tkf)tk_rmdupptr((void**)(tk->tkt.tkf));
     for(i=0;i<n;i++)
     {
         if(tk->tkt.brk[i])
