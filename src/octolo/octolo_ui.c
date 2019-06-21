@@ -14,11 +14,61 @@ typedef struct
 {
     LV2UI_Write_Function write_function;
     LV2UI_Controller controller;
+    uint8_t map[OVERLAP+1];
+}shared_t;
+
+typedef struct
+{
+    uint16_t id;
+    float v;
 }baggage_t;
+
+
+void lv2dial_callback(tk_t tk, const PuglEvent* ev, uint16_t n)
+{
+    shared_t* s = (shared_t*)tk->user[0];
+    baggage_t* b = (baggage_t*)tk->user[n];
+    b->v = tk_getdial(tk,n);
+    s->write_function(s->controller,b->id,sizeof(float),0,&(b->v));
+}
+
+void lv2button_callback(tk_t tk, const PuglEvent* ev, uint16_t n)
+{
+    shared_t* s = (shared_t*)tk->user[0];
+    baggage_t* b = (baggage_t*)tk->user[n];
+    b->v = *(bool*)tk->value[n];
+    s->write_function(s->controller,b->id,sizeof(float),0,&(b->v));
+}
 
 void setup_octolo_ui(tk_t tk)
 {
-    tk_addaDial(tk,10,10,50,50,0,1,0);
+    uint8_t n;
+    baggage_t* b;
+    shared_t* s = (shared_t*)tk->user[0];
+
+    //length
+    n = tk_addaDial(tk, /*xywh*/10,10,80,80, /*min*/.01, /*max*/8, /*dflt*/1);
+    b = (baggage_t*)malloc(sizeof(baggage_t));
+    b->id = LENGTH;
+    tk->user[n] = b;
+    tk->callback_f[n] = lv2dial_callback;
+    s->map[LENGTH] = n;
+
+    //slope
+    n = tk_addaDial(tk, /*xywh*/100,10,80,80, /*min*/0, /*max*/1, /*dflt*/.8);
+    b = (baggage_t*)malloc(sizeof(baggage_t));
+    b->id = LENGTH;
+    tk->user[n] = b;
+    tk->callback_f[n] = lv2dial_callback;
+    s->map[SLOPE] = n;
+
+    //overlap
+    n = tk_addaButton(tk, /*xywh*/190,10,50,50, /*dflt*/false);
+    b = (baggage_t*)malloc(sizeof(baggage_t));
+    b->id = LENGTH;
+    tk->user[n] = b;
+    tk->callback_f[n] = lv2button_callback;
+    s->map[OVERLAP] = n;
 }
 
 static LV2UI_Handle init_octolo_ui(
@@ -32,7 +82,6 @@ static LV2UI_Handle init_octolo_ui(
     ) 
 {
     tk_t tk;
-    baggage_t* baggage;
     if(strcmp(plugin_uri, OCTOLO_URI) != 0)
     {
         return 0;
@@ -57,19 +106,18 @@ static LV2UI_Handle init_octolo_ui(
                           444, //h
                           (char*)"the infamous octolo", //title
                           parentWindow); //parent
-
     if(!tk) return 0;
-    baggage = (baggage_t*)malloc(sizeof(baggage_t));
-    tk->user[0] = baggage;
-
-    baggage->controller = controller;
-    baggage->write_function = write_function;
 
     if (resize)
     {
         resize->ui_resize(resize->handle, tk->w[0], tk->h[0]);
     }
-    //TODO: UI specific setup 
+
+    shared_t* s = (shared_t*)calloc(1,sizeof(shared_t));
+    s->controller = controller;
+    s->write_function = write_function;
+    tk->user[0] = s;
+    setup_octolo_ui(tk);
 
     *widget = (LV2UI_Widget)tk_embedit(tk);
 
@@ -85,6 +133,33 @@ void cleanup_octolo_ui(LV2UI_Handle handle)
 
 void octolo_ui_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_size, uint32_t format, const void * buffer)
 {
+    tk_t tk = (tk_t)ui;
+    if(!format)
+    {
+      float val = *(float*)buffer;
+      uint8_t* map = ((shared_t*)tk->user[0])->map;
+      switch(port_index)
+      {
+      //dials
+      case LENGTH:
+      case SLOPE:
+          tk_setdial(tk,map[port_index],val);
+          break;
+      case DRYG:
+      case WET:
+      case OCTDOWN:
+      case OCTUP:
+      case SEQUENCE:
+        //not yet implemented
+          break;
+      //switch
+      case OVERLAP:
+          *(bool*)tk->value[map[port_index]] = (bool)val;
+          break;
+      default:
+          break;
+      }//switch index
+    }//if float
 }
 
 static int idle(LV2UI_Handle handle)
