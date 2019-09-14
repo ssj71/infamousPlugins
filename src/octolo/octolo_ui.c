@@ -57,18 +57,60 @@ void setup_octolo_ui(tk_t tk)
     //slope
     n = tk_addaDial(tk, /*xywh*/100,10,80,80, /*min*/0, /*max*/1, /*dflt*/.8);
     b = (baggage_t*)malloc(sizeof(baggage_t));
-    b->id = LENGTH;
+    b->id = SLOPE;
     tk->user[n] = b;
     tk->callback_f[n] = lv2dial_callback;
     s->map[SLOPE] = n;
 
     //overlap
-    n = tk_addaButton(tk, /*xywh*/190,10,50,50, /*dflt*/false);
+    n = tk_addaButton(tk, /*xywh*/190,20,50,50, /*dflt*/false);
     b = (baggage_t*)malloc(sizeof(baggage_t));
-    b->id = LENGTH;
+    b->id = OVERLAP;
     tk->user[n] = b;
     tk->callback_f[n] = lv2button_callback;
     s->map[OVERLAP] = n;
+
+    //dry
+    n = tk_addaDial(tk, /*xywh*/10,100,50,50, /*min*/0, /*max*/1, /*dflt*/.5);
+    b = (baggage_t*)malloc(sizeof(baggage_t));
+    b->id = DRYG;
+    tk->user[n] = b;
+    tk->callback_f[n] = lv2dial_callback;
+    s->map[DRYG] = n;
+
+    //wet
+    n = tk_addaDial(tk, /*xywh*/70,100,50,50, /*min*/0, /*max*/1, /*dflt*/.5);
+    b = (baggage_t*)malloc(sizeof(baggage_t));
+    b->id = WET;
+    tk->user[n] = b;
+    tk->callback_f[n] = lv2dial_callback;
+    s->map[WET] = n;
+
+    //down
+    n = tk_addaDial(tk, /*xywh*/130,100,50,50, /*min*/0, /*max*/1, /*dflt*/.5);
+    b = (baggage_t*)malloc(sizeof(baggage_t));
+    b->id = OCTDOWN;
+    tk->user[n] = b;
+    tk->callback_f[n] = lv2dial_callback;
+    s->map[OCTDOWN] = n;
+
+    //up
+    n = tk_addaDial(tk, /*xywh*/190,100,50,50, /*min*/0, /*max*/1, /*dflt*/.5);
+    b = (baggage_t*)malloc(sizeof(baggage_t));
+    b->id = OCTUP;
+    tk->user[n] = b;
+    tk->callback_f[n] = lv2dial_callback;
+    s->map[OCTUP] = n;
+
+    //seq
+    //TODO: this should be a drop down thingo
+    n = tk_addaDial(tk, /*xywh*/10,160,50,50, /*min*/0, /*max*/5, /*dflt*/0);
+    b = (baggage_t*)malloc(sizeof(baggage_t));
+    b->id = SEQUENCE;
+    tk->user[n] = b;
+    tk->callback_f[n] = lv2dial_callback;
+    s->map[SEQUENCE] = n;
+
 }
 
 static LV2UI_Handle init_octolo_ui(
@@ -143,13 +185,13 @@ void octolo_ui_port_event(LV2UI_Handle ui, uint32_t port_index, uint32_t buffer_
       //dials
       case LENGTH:
       case SLOPE:
-          tk_setdial(tk,map[port_index],val);
-          break;
       case DRYG:
       case WET:
       case OCTDOWN:
       case OCTUP:
       case SEQUENCE:
+          tk_setdial(tk,map[port_index],val);
+          break;
         //not yet implemented
           break;
       //switch

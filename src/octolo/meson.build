@@ -1,4 +1,5 @@
-project('octolo', 'c')
+project('octolo', 'c',
+        default_options: 'libdir=lib')
 
 subdir('tikloo')
 
