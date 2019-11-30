@@ -3,6 +3,6 @@
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
 
 <http://ssj71.github.io/infamousPlugins/plugs.html#mindi>
-    a lv2:Plugin, lv2:GeneratorPlugin ;
+    a lv2:Plugin, lv2:MIDIPlugin ;
     lv2:binary <mindi.so> ;
     rdfs:seeAlso <mindi.ttl> .
