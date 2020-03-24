@@ -129,4 +129,26 @@
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
                 rdfs:comment "This will send a note off when enable is set to 0 when mindi is configured to send note-on messages, only the note configuration set at that time is sent" ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 8 ;
+                lv2:symbol "MOMENT" ;
+                lv2:name "Momentary Button" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+                lv2:portProperty pprops:trigger ;
+                rdfs:comment "This control will send one midi message when pressed, and another when released" ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 9 ;
+                lv2:symbol "DATA2B" ;
+                lv2:name "Momentary Pressed Value" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 127 ;
+                lv2:portProperty lv2:integer ;
+                rdfs:comment "data to send when momentary button is pressed, for notes set this to the desired velocity and Value to 0" ;
         ] .
