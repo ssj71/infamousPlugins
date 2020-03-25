@@ -39,7 +39,7 @@
             modgui:label "mindi" ;
         ] ;
         lv2:minorVersion 0 ;
-        lv2:microVersion 1 ;
+        lv2:microVersion 3 ;
         rdfs:comment "This is a simple midi message generator that sends a message when you change its message value. It usually requires the host automating it to really be useful." ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
@@ -152,3 +152,48 @@
                 lv2:portProperty lv2:integer ;
                 rdfs:comment "data to send when momentary button is pressed, for notes set this to the desired velocity and Value to 0" ;
         ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#mindi:preset:00Program>
+    a pset:Preset ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#mindi> ;
+    rdfs:label "00 Program" ;
+	lv2:port
+        [ lv2:symbol "AUTOFF" ; pset:value 0.0 ] ,
+        [ lv2:symbol "CHAN" ; pset:value 0.0 ] ,
+        [ lv2:symbol "DATA1" ; pset:value 3.0 ] ,
+        [ lv2:symbol "DATA2" ; pset:value 0.0 ] ,
+        [ lv2:symbol "DATA2B" ; pset:value 125.0 ] ,
+        [ lv2:symbol "DELAY" ; pset:value 0.0 ] ,
+        [ lv2:symbol "ENABLE" ; pset:value 1.0 ] ,
+        [ lv2:symbol "MOMENT" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MSGTYPE" ; pset:value 12.0 ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#mindi:preset:01Snare>
+    a pset:Preset ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#mindi> ;
+    rdfs:label "01 Snare" ;
+	lv2:port
+        [ lv2:symbol "AUTOFF" ; pset:value 0.0 ] ,
+        [ lv2:symbol "CHAN" ; pset:value 9.0 ] ,
+        [ lv2:symbol "DATA1" ; pset:value 38.0 ] ,
+        [ lv2:symbol "DATA2" ; pset:value 0.0 ] ,
+        [ lv2:symbol "DATA2B" ; pset:value 125.0 ] ,
+        [ lv2:symbol "DELAY" ; pset:value 0.0 ] ,
+        [ lv2:symbol "ENABLE" ; pset:value 1.0 ] ,
+        [ lv2:symbol "MOMENT" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MSGTYPE" ; pset:value 9.0 ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#mindi:preset:02CCboost>
+    a pset:Preset ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#mindi> ;
+    rdfs:label "02 CC Boost" ;
+	lv2:port
+        [ lv2:symbol "AUTOFF" ; pset:value 0.0 ] ,
+        [ lv2:symbol "CHAN" ; pset:value 0.0 ] ,
+        [ lv2:symbol "DATA1" ; pset:value 38.0 ] ,
+        [ lv2:symbol "DATA2" ; pset:value 20.0 ] ,
+        [ lv2:symbol "DATA2B" ; pset:value 100.0 ] ,
+        [ lv2:symbol "DELAY" ; pset:value 0.0 ] ,
+        [ lv2:symbol "ENABLE" ; pset:value 1.0 ] ,
+        [ lv2:symbol "MOMENT" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MSGTYPE" ; pset:value 11.0 ] .
