@@ -7,6 +7,7 @@
 #include"tikloo/tk.h"
 #include"octolo.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+#include"Library_3_am.h"
 
 #define OCTOLO_UI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#octolo_ui"
 
@@ -53,6 +54,8 @@ void setup_octolo_ui(tk_t tk)
     tk->user[n] = b;
     tk->callback_f[n] = lv2dial_callback;
     s->map[LENGTH] = n;
+    tk_setstring(&tk->tip[n],"Length",0);
+
 
     //slope
     n = tk_addaDial(tk, /*xywh*/100,10,80,80, /*min*/0, /*max*/1, /*dflt*/.8);
@@ -61,6 +64,7 @@ void setup_octolo_ui(tk_t tk)
     tk->user[n] = b;
     tk->callback_f[n] = lv2dial_callback;
     s->map[SLOPE] = n;
+    tk_setstring(&tk->tip[n],"Slope",0);
 
     //overlap
     n = tk_addaButton(tk, /*xywh*/190,20,50,50, /*dflt*/false);
@@ -69,6 +73,7 @@ void setup_octolo_ui(tk_t tk)
     tk->user[n] = b;
     tk->callback_f[n] = lv2button_callback;
     s->map[OVERLAP] = n;
+    tk_setstring(&tk->tip[n],"Overlap",0);
 
     //dry
     n = tk_addaDial(tk, /*xywh*/10,100,50,50, /*min*/0, /*max*/1, /*dflt*/.5);
@@ -77,6 +82,7 @@ void setup_octolo_ui(tk_t tk)
     tk->user[n] = b;
     tk->callback_f[n] = lv2dial_callback;
     s->map[DRYG] = n;
+    tk_setstring(&tk->tip[n],"Dry Gain",0);
 
     //wet
     n = tk_addaDial(tk, /*xywh*/70,100,50,50, /*min*/0, /*max*/1, /*dflt*/.5);
@@ -85,6 +91,7 @@ void setup_octolo_ui(tk_t tk)
     tk->user[n] = b;
     tk->callback_f[n] = lv2dial_callback;
     s->map[WET] = n;
+    tk_setstring(&tk->tip[n],"Wet Gain",0);
 
     //down
     n = tk_addaDial(tk, /*xywh*/130,100,50,50, /*min*/0, /*max*/1, /*dflt*/.5);
@@ -93,6 +100,7 @@ void setup_octolo_ui(tk_t tk)
     tk->user[n] = b;
     tk->callback_f[n] = lv2dial_callback;
     s->map[OCTDOWN] = n;
+    tk_setstring(&tk->tip[n],"Oct. Down Gain",0);
 
     //up
     n = tk_addaDial(tk, /*xywh*/190,100,50,50, /*min*/0, /*max*/1, /*dflt*/.5);
@@ -101,15 +109,27 @@ void setup_octolo_ui(tk_t tk)
     tk->user[n] = b;
     tk->callback_f[n] = lv2dial_callback;
     s->map[OCTUP] = n;
+    tk_setstring(&tk->tip[n],"Oct. Up Gain",0);
 
     //seq
-    //TODO: this should be a drop down thingo
     n = tk_addaDial(tk, /*xywh*/10,160,50,50, /*min*/0, /*max*/5, /*dflt*/0);
     b = (baggage_t*)malloc(sizeof(baggage_t));
     b->id = SEQUENCE;
     tk->user[n] = b;
     tk->callback_f[n] = lv2dial_callback;
     s->map[SEQUENCE] = n;
+    tk_setstring(&tk->tip[n],"Sequence",0);
+
+    tk_addaTooltip(tk,0);
+
+    tk_font_stuff* f = tk_gimmeaFont(tk,
+                            Library_3_am_otf, // font data
+                            sizeof(Library_3_am_otf), // size
+                            0, // index
+                            72); // height
+    tk_addaText(tk, /*xywh*/10,220,230,10, /*font*/f, /*msg*/"the infamous");
+    tk_addaText(tk, /*xywh*/10,300,230,70, /*font*/f, /*msg*/"OCToLO");
+    //TODO: need a way to make the title auto-scale
 
 }
 
