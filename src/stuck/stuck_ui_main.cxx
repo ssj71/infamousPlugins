@@ -10,7 +10,7 @@
 #define STUCKUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#stuck_ui"
 #define STUCKSTACKERUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#stuckstacker_ui"
 
-static LV2UI_Handle init_stuckUI(const struct _LV2UI_Descriptor * descriptor,
+static LV2UI_Handle init_stuckUI(const struct LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,
 		const char * bundle_path,
 		LV2UI_Write_Function write_function,
