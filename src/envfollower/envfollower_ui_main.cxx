@@ -12,7 +12,7 @@
 #define ENVFOLLOWERUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollower_ui"
 #define ENVFOLLOWERCVUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#envfollowerCV_ui"
 
-static LV2UI_Handle init_envfollowerUI(const struct _LV2UI_Descriptor * descriptor,
+static LV2UI_Handle init_envfollowerUI(const struct LV2UI_Descriptor * descriptor,
 		const char * plugin_uri,
 		const char * bundle_path,
 		LV2UI_Write_Function write_function,
