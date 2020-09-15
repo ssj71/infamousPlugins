@@ -232,7 +232,7 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
 
     plug->dcprevin = 0;
     plug->dcprevout = 0;
-    plug->gain = 0;
+    plug->gain = 1;
 
     return plug;
 }
