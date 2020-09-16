@@ -217,6 +217,7 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
     plug->state = 0;
     plug->outstate = 0;
     plug->nextstate = 0;
+    plug->pos = 0;
     plug->headway = HALF + 1;
     plug->skip = 1;
 
@@ -231,6 +232,7 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
 
     plug->dcprevin = 0;
     plug->dcprevout = 0;
+    plug->gain = 1;
 
     return plug;
 }
