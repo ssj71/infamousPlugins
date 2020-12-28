@@ -16,6 +16,8 @@ To install the package under a specific library path (i.e. if you are using fedo
     make
     sudo make install
 
+To install the MOD gui resources, use the optional variable '-DMOD=ON' to cmake.
+
 Once this is complete you can already start using the plugins in your favorite LV2 host
 
 There is also an uninstall available:

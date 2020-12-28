@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project(infamous-plugins)
 
+option(MOD "Install MOD gui resources" OFF)
+
 set(LIBDIR lib CACHE STRING "Specifies the name of the library path")
 
 foreach(plug casynth envfollower hip2b powerup powercut cheapdist stuck ewham lushlife bentdelay mindi octolo)
