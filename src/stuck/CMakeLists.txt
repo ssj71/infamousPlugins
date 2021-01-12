@@ -50,6 +50,23 @@ install (FILES manifest.ttl ${PLUGIN}.ttl
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
 
+if( MOD )
+    install (FILES 
+        modgui/${PLUGIN}.html 
+        modgui/stuckstacker.html 
+        modgui/${PLUGIN}.css
+        modgui/stuckbg.svg
+        modgui/stacker.svg
+        modgui/led-bypassed.png
+        modgui/led-enabled.png
+        modgui/switch-key.png
+        modgui/tabDial64.svg
+        modgui/screenshot-stuck.png
+        modgui/thumbnail-stuck.png
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
+    )
+endif()
+
 if(CAIRO_FOUND AND NTK_FOUND)
     find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
     fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
@@ -70,21 +87,5 @@ if(CAIRO_FOUND AND NTK_FOUND)
 
 else()
     message(WARNING "UI Libraries Missing, no GUI will be installed")
-    if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
-        install (FILES 
-          modgui/${PLUGIN}.html 
-          modgui/stuckstacker.html 
-          modgui/${PLUGIN}.css
-          modgui/stuckbg.svg
-          modgui/stacker.svg
-          modgui/led-bypassed.png
-          modgui/led-enabled.png
-          modgui/switch-key.png
-          modgui/tabDial64.svg
-          modgui/screenshot-stuck.png
-          modgui/thumbnail-stuck.png
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
-        )
-    endif()
 endif()
 

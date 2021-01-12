@@ -52,14 +52,14 @@ install(TARGETS ${PLUGIN}
 install (FILES manifest.ttl ${PLUGIN}.ttl
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
 )
+if(MOD)
+    install (DIRECTORY modgui/
+      DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
+    )
+endif()
 
 if(NOT CAIRO_FOUND OR NOT NTK_FOUND)
     message(WARNING "UI Libraries Missing, no GUI will be installed")
-    if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
-        install (DIRECTORY modgui/
-          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
-        )
-    endif()
 endif() 
 #    find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
 #    fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
