@@ -14,7 +14,8 @@ enum mindi_ports
     DATA1,
     DATA2,
     DELAY,
-    AUTOFF
+    AUTOFF,
+    REPEATWHENDISABLE
 };
 
 #endif

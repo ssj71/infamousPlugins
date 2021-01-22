@@ -129,4 +129,15 @@
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
                 rdfs:comment "This will send a note off when enable is set to 0 when mindi is configured to send note-on messages, only the note configuration set at that time is sent" ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 8 ;
+                lv2:symbol "REPEATWHENDISABLE" ;
+                lv2:name "Repeat Msg When Disable" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+                rdfs:comment "This will repeat the midi message when enable is set to 0 (message would be identical to the initial message, regardless of the Auto Note-Off setting)" ;
         ] .

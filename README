@@ -238,6 +238,7 @@ this plugin was made for the MOD ecosystem, but may be of some use outside of th
     DATA2 - value for CCs, velocity for notes, ignored for PG
     DELAY - send a message N milliseconds after the plugin is first created
     AUTOFF - automatically send note-off messages when the enable is turned off and in note-on mode (makes mindi a practical one note trigger)
+    REPEATWHENDISABLE - repeats the midi message when the enable is turned off (regardless of AUTOFF setting)
 
 =================================
 13. octolo

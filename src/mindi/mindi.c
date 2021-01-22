@@ -39,7 +39,7 @@ typedef struct _MINDI
     float startup;
     float msPerFrame;
     bool oneshot;
-    bool notesent;
+    bool msgsent;
 
     //midi
     LV2_URID_Map* urid_map;
@@ -56,6 +56,7 @@ typedef struct _MINDI
     float* data2_p;
     float* delay_p;
     float* autoff_p;
+    float* repeatwhendisable_p;
 } MINDI;
 
 //main functions
@@ -68,7 +69,7 @@ LV2_Handle init_mindi(const LV2_Descriptor *descriptor,double sample_rate, const
     plug->startup = 0;
     plug->msPerFrame = 1000.0/sample_rate;
     plug->oneshot = false;
-    plug->notesent = false;
+    plug->msgsent = false;
 
     //get urid map value for midi events
     for (int i = 0; host_features[i]; i++)
@@ -101,6 +102,7 @@ void connect_mindi_ports(LV2_Handle handle, uint32_t port, void *data)
     else if(port == DATA2)  plug->data2_p = (float*)data;
     else if(port == DELAY)  plug->delay_p = (float*)data;
     else if(port == AUTOFF)  plug->autoff_p = (float*)data;
+    else if(port == REPEATWHENDISABLE)  plug->repeatwhendisable_p = (float*)data;
 }
 
 void run_mindi( LV2_Handle handle, uint32_t nframes)
@@ -116,7 +118,7 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
             (plug->enable != *plug->enable_p) ||
             (!plug->oneshot && plug->startup > *plug->delay_p) )
         ) ||
-        (!*plug->enable_p && plug->notesent && *plug->msgtype_p == 0x09) 
+        (!*plug->enable_p && plug->msgsent && ((*plug->autoff_p && *plug->msgtype_p == 0x09) || *plug->repeatwhendisable_p))
       )
     {
         if(plug->startup >= *plug->delay_p)
@@ -135,14 +137,16 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
 
         //make event
         msg[0] = (((uint8_t)*plug->msgtype_p)<<4) + (uint8_t)(*plug->chan_p);
-        //convert to note-off if appropriate
-        if(!*plug->enable_p && plug->notesent && *plug->msgtype_p == 0x09)
+        if(!*plug->enable_p && plug->msgsent)
         {
-            plug->notesent = false;
-            msg[0] -= 0x10;
+            plug->msgsent = false;
+
+            //convert to note-off if appropriate
+            if(*plug->autoff_p && *plug->msgtype_p == 0x09 && !*plug->repeatwhendisable_p)
+                msg[0] -= 0x10;
         }
-        else if(*plug->autoff_p && *plug->msgtype_p == 0x09)
-            plug->notesent = true; 
+        else
+            plug->msgsent = true;
 
         msg[1] = MIDI_DATA_MASK & (uint8_t)*plug->data1_p;
         msg[2] = MIDI_DATA_MASK & (uint8_t)*plug->data2_p;
