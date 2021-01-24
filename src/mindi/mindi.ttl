@@ -39,7 +39,7 @@
             modgui:label "mindi" ;
         ] ;
         lv2:minorVersion 0 ;
-        lv2:microVersion 3 ;
+        lv2:microVersion 4 ;
         rdfs:comment "This is a simple midi message generator that sends a message when you change its message value. It usually requires the host automating it to really be useful." ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
@@ -93,8 +93,8 @@
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 4 ;
-                lv2:symbol "DATA1" ;
-                lv2:name "Note/CC/PG Number" ;
+                lv2:symbol "NOTECCPG" ;
+                lv2:name "Note/CC/PG" ;
                 lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 127 ;
@@ -102,7 +102,7 @@
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 5 ;
-                lv2:symbol "DATA2" ;
+                lv2:symbol "VALUE" ;
                 lv2:name "Value" ;
                 lv2:default 0 ;
                 lv2:minimum 0 ;
@@ -112,7 +112,7 @@
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 6 ;
                 lv2:symbol "DELAY" ;
-                lv2:name "1st Msg Repeat Delay Time" ;
+                lv2:name "Msg Repeat Delay" ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 2000.0 ;
@@ -144,8 +144,8 @@
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 9 ;
-                lv2:symbol "DATA2B" ;
-                lv2:name "Momentary Pressed Value" ;
+                lv2:symbol "MOMENTARYVALUE" ;
+                lv2:name "Momentary Value" ;
                 lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 127 ;
@@ -160,9 +160,9 @@
 	lv2:port
         [ lv2:symbol "AUTOFF" ; pset:value 0.0 ] ,
         [ lv2:symbol "CHAN" ; pset:value 0.0 ] ,
-        [ lv2:symbol "DATA1" ; pset:value 3.0 ] ,
-        [ lv2:symbol "DATA2" ; pset:value 0.0 ] ,
-        [ lv2:symbol "DATA2B" ; pset:value 125.0 ] ,
+        [ lv2:symbol "NOTECCPG" ; pset:value 3.0 ] ,
+        [ lv2:symbol "VALUE" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MOMENTARYVALUE" ; pset:value 125.0 ] ,
         [ lv2:symbol "DELAY" ; pset:value 0.0 ] ,
         [ lv2:symbol "ENABLE" ; pset:value 1.0 ] ,
         [ lv2:symbol "MOMENT" ; pset:value 0.0 ] ,
@@ -175,9 +175,9 @@
 	lv2:port
         [ lv2:symbol "AUTOFF" ; pset:value 0.0 ] ,
         [ lv2:symbol "CHAN" ; pset:value 9.0 ] ,
-        [ lv2:symbol "DATA1" ; pset:value 38.0 ] ,
-        [ lv2:symbol "DATA2" ; pset:value 0.0 ] ,
-        [ lv2:symbol "DATA2B" ; pset:value 125.0 ] ,
+        [ lv2:symbol "NOTECCPG" ; pset:value 38.0 ] ,
+        [ lv2:symbol "VALUE" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MOMENTARYVALUE" ; pset:value 125.0 ] ,
         [ lv2:symbol "DELAY" ; pset:value 0.0 ] ,
         [ lv2:symbol "ENABLE" ; pset:value 1.0 ] ,
         [ lv2:symbol "MOMENT" ; pset:value 0.0 ] ,
@@ -190,9 +190,9 @@
 	lv2:port
         [ lv2:symbol "AUTOFF" ; pset:value 0.0 ] ,
         [ lv2:symbol "CHAN" ; pset:value 0.0 ] ,
-        [ lv2:symbol "DATA1" ; pset:value 38.0 ] ,
-        [ lv2:symbol "DATA2" ; pset:value 20.0 ] ,
-        [ lv2:symbol "DATA2B" ; pset:value 100.0 ] ,
+        [ lv2:symbol "NOTECCPG" ; pset:value 38.0 ] ,
+        [ lv2:symbol "VALUE" ; pset:value 20.0 ] ,
+        [ lv2:symbol "MOMENTARYVALUE" ; pset:value 100.0 ] ,
         [ lv2:symbol "DELAY" ; pset:value 0.0 ] ,
         [ lv2:symbol "ENABLE" ; pset:value 1.0 ] ,
         [ lv2:symbol "MOMENT" ; pset:value 0.0 ] ,

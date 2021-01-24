@@ -11,12 +11,12 @@ enum mindi_ports
     ENABLE,
     MSGTYPE,
     CHAN,
-    DATA1,
-    DATA2,
+    NOTECCPG,
+    VALUE,
     DELAY,
     AUTOFF,
     MOMENT,
-    DATA2B
+    MOMENTARYVALUE
 };
 
 #endif

@@ -34,8 +34,8 @@
 typedef struct _MINDI
 {
     float enable;
-    float data1;
-    float data2;
+    float noteccpg;
+    float value;
     float startup;
     float msPerFrame;
     bool oneshot;
@@ -53,12 +53,12 @@ typedef struct _MINDI
     float* enable_p;
     float* msgtype_p;
     float* chan_p; 
-    float* data1_p;
-    float* data2_p;
+    float* noteccpg_p;
+    float* value_p;
     float* delay_p;
     float* autoff_p;
     float* moment_p;
-    float* data2b_p;
+    float* momentaryvalue_p;
 } MINDI;
 
 //main functions
@@ -66,8 +66,8 @@ LV2_Handle init_mindi(const LV2_Descriptor *descriptor,double sample_rate, const
 {
     MINDI* plug = malloc(sizeof(MINDI));
     plug->enable = 1;
-    plug->data1 = 0;
-    plug->data2 = 0;
+    plug->noteccpg = 0;
+    plug->value = 0;
     plug->startup = 0;
     plug->msPerFrame = 1000.0/sample_rate;
     plug->oneshot = false;
@@ -97,16 +97,16 @@ LV2_Handle init_mindi(const LV2_Descriptor *descriptor,double sample_rate, const
 void connect_mindi_ports(LV2_Handle handle, uint32_t port, void *data)
 {
     MINDI* plug = (MINDI*)handle;
-    if(port == MIDI_OUT)    plug->midi_out_p = (LV2_Atom_Sequence*)data;
-    else if(port == ENABLE)plug->enable_p = (float*)data;
-    else if(port == MSGTYPE)plug->msgtype_p = (float*)data;
-    else if(port == CHAN)   plug->chan_p = (float*)data;
-    else if(port == DATA1)  plug->data1_p = (float*)data;
-    else if(port == DATA2)  plug->data2_p = (float*)data;
-    else if(port == DELAY)  plug->delay_p = (float*)data;
-    else if(port == AUTOFF)  plug->autoff_p = (float*)data;
-    else if(port == MOMENT)  plug->moment_p = (float*)data;
-    else if(port == DATA2B)  plug->data2b_p = (float*)data;
+    if(port == MIDI_OUT)            plug->midi_out_p = (LV2_Atom_Sequence*)data;
+    else if(port == ENABLE)         plug->enable_p = (float*)data;
+    else if(port == MSGTYPE)        plug->msgtype_p = (float*)data;
+    else if(port == CHAN)           plug->chan_p = (float*)data;
+    else if(port == NOTECCPG)       plug->noteccpg_p = (float*)data;
+    else if(port == VALUE)          plug->value_p = (float*)data;
+    else if(port == DELAY)          plug->delay_p = (float*)data;
+    else if(port == AUTOFF)         plug->autoff_p = (float*)data;
+    else if(port == MOMENT)         plug->moment_p = (float*)data;
+    else if(port == MOMENTARYVALUE) plug->momentaryvalue_p = (float*)data;
 }
 
 void run_mindi( LV2_Handle handle, uint32_t nframes)
@@ -115,10 +115,9 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
     LV2_Atom midiatom;
     uint8_t msg[3];
 
-
     if( (*plug->enable_p && 
-          ( (plug->data1 != *plug->data1_p) || 
-            (plug->data2 != *plug->data2_p) || 
+          ( (plug->noteccpg != *plug->noteccpg_p) ||
+            (plug->value != *plug->value_p) ||
             (plug->enable != *plug->enable_p) ||
             (!plug->oneshot && plug->startup > *plug->delay_p) ||
             (plug->momentstate != *plug->moment_p) )
@@ -130,10 +129,12 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
             plug->oneshot = true;
         if(!plug->oneshot)
             plug->startup += nframes*plug->msPerFrame;
-        plug->momentstate = *plug->moment_p;
 
-        plug->data1 = *plug->data1_p;
-        plug->data2 = *plug->data2_p;
+        plug->noteccpg = *plug->noteccpg_p;
+        plug->value = *plug->value_p;
+
+        float valuetosend = (*plug->moment_p) ? (*plug->momentaryvalue_p) : (*plug->value_p);
+
         //get midi port ready
         const uint32_t capacity = plug->midi_out_p->atom.size;
         lv2_atom_forge_set_buffer(&plug->forge,(uint8_t*)plug->midi_out_p, capacity);
@@ -144,7 +145,7 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
         //make event
         msg[0] = (((uint8_t)*plug->msgtype_p)<<4) + (uint8_t)(*plug->chan_p);
         //convert to note-off if appropriate
-        if(!*plug->enable_p && plug->notesent && *plug->msgtype_p == 0x09)
+        if(((!*plug->moment_p && plug->momentstate) || !*plug->enable_p) && plug->notesent && *plug->msgtype_p == 0x09)
         {
             plug->notesent = false;
             msg[0] -= 0x10;
@@ -152,11 +153,17 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
         else if(*plug->autoff_p && *plug->msgtype_p == 0x09)
             plug->notesent = true; 
 
-        msg[1] = MIDI_DATA_MASK & (uint8_t)*plug->data1_p;
-        if(*plug->moment_p)
-            msg[2] = MIDI_DATA_MASK & (uint8_t)*plug->data2b_p;
+        if(*plug->msgtype_p == 0x0D)
+        {
+            // Channel Pressure messages use value (only)
+            msg[1] = MIDI_DATA_MASK & (uint8_t)valuetosend;
+        }
         else
-            msg[2] = MIDI_DATA_MASK & (uint8_t)*plug->data2_p;
+        {        
+            msg[1] = MIDI_DATA_MASK & (uint8_t)plug->noteccpg;
+            msg[2] = MIDI_DATA_MASK & (uint8_t)valuetosend;
+        }
+
         midiatom.type = plug->midi_ev_urid;
 
         switch(msg[0]&MIDI_TYPE_MASK)
@@ -183,6 +190,7 @@ void run_mindi( LV2_Handle handle, uint32_t nframes)
     else if(!plug->oneshot && plug->startup)
         plug->startup += nframes*plug->msPerFrame;
     plug->enable = *plug->enable_p;
+    plug->momentstate = *plug->moment_p;
 }
 
 void cleanup_mindi(LV2_Handle handle)
