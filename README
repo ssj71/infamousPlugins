@@ -232,12 +232,13 @@ This is a simulated double tracking plugin capable of everything from a thin bea
 this plugin was made for the MOD ecosystem, but may be of some use outside of that application. It is a mini MIDI message maker. Simply compose a midi message and enable it and it will send out the message. It also sends a message whenever you change values so you can use it to control midi CCs for example. It can compose and send sysex type messages, but not practical ones.
 
 
-    MSGTYPE - note, pressure, CC, bend you name it we'll make it
+    MSGTYPE - note on/off, CC, PG, poly pressure, channel pressure, pitchbend
     CHAN - channel 0-15
-    DATA1 - note, CC, or PG number
-    DATA2 - value for CCs, velocity for notes, ignored for PG
+    NOTECCPG - note, CC, or PG number
+    VALUE - value for CCs, pressure, pitchbend, and velocity for notes, ignored for PG
     DELAY - send a message N milliseconds after the plugin is first created
     AUTOFF - automatically send note-off messages when the enable is turned off and in note-on mode (makes mindi a practical one note trigger)
+    MOMENT - button to send a midi message with MOMENTARYVALUE when pressed and a second message with VALUE when released (which will be a note-off message when AUTOFF is used to turn off note-on messages) 
 
 =================================
 13. octolo

@@ -39,7 +39,7 @@
             modgui:label "mindi" ;
         ] ;
         lv2:minorVersion 0 ;
-        lv2:microVersion 1 ;
+        lv2:microVersion 4 ;
         rdfs:comment "This is a simple midi message generator that sends a message when you change its message value. It usually requires the host automating it to really be useful." ;
         lv2:requiredFeature <http://lv2plug.in/ns/ext/urid#map> ;
         lv2:optionalFeature lv2:hardRTCapable ;
@@ -93,8 +93,8 @@
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 4 ;
-                lv2:symbol "DATA1" ;
-                lv2:name "Note/CC/PG Number" ;
+                lv2:symbol "NOTECCPG" ;
+                lv2:name "Note/CC/PG" ;
                 lv2:default 0 ;
                 lv2:minimum 0 ;
                 lv2:maximum 127 ;
@@ -102,7 +102,7 @@
         ], [
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 5 ;
-                lv2:symbol "DATA2" ;
+                lv2:symbol "VALUE" ;
                 lv2:name "Value" ;
                 lv2:default 0 ;
                 lv2:minimum 0 ;
@@ -112,7 +112,7 @@
                 a lv2:InputPort, lv2:ControlPort ;
                 lv2:index 6 ;
                 lv2:symbol "DELAY" ;
-                lv2:name "1st Msg Repeat Delay Time" ;
+                lv2:name "Msg Repeat Delay" ;
                 lv2:default 0.0 ;
                 lv2:minimum 0.0 ;
                 lv2:maximum 2000.0 ;
@@ -129,4 +129,71 @@
                 lv2:portProperty lv2:integer ;
                 lv2:portProperty lv2:toggled ;
                 rdfs:comment "This will send a note off when enable is set to 0 when mindi is configured to send note-on messages, only the note configuration set at that time is sent" ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 8 ;
+                lv2:symbol "MOMENT" ;
+                lv2:name "Momentary Button" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 1 ;
+                lv2:portProperty lv2:integer ;
+                lv2:portProperty lv2:toggled ;
+                lv2:portProperty pprops:trigger ;
+                rdfs:comment "This control will send one midi message when pressed, and another when released" ;
+        ], [
+                a lv2:InputPort, lv2:ControlPort ;
+                lv2:index 9 ;
+                lv2:symbol "MOMENTARYVALUE" ;
+                lv2:name "Momentary Value" ;
+                lv2:default 0 ;
+                lv2:minimum 0 ;
+                lv2:maximum 127 ;
+                lv2:portProperty lv2:integer ;
+                rdfs:comment "data to send when momentary button is pressed, for notes set this to the desired velocity and Value to 0" ;
         ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#mindi:preset:00Program>
+    a pset:Preset ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#mindi> ;
+    rdfs:label "00 Program" ;
+	lv2:port
+        [ lv2:symbol "AUTOFF" ; pset:value 0.0 ] ,
+        [ lv2:symbol "CHAN" ; pset:value 0.0 ] ,
+        [ lv2:symbol "NOTECCPG" ; pset:value 3.0 ] ,
+        [ lv2:symbol "VALUE" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MOMENTARYVALUE" ; pset:value 125.0 ] ,
+        [ lv2:symbol "DELAY" ; pset:value 0.0 ] ,
+        [ lv2:symbol "ENABLE" ; pset:value 1.0 ] ,
+        [ lv2:symbol "MOMENT" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MSGTYPE" ; pset:value 12.0 ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#mindi:preset:01Snare>
+    a pset:Preset ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#mindi> ;
+    rdfs:label "01 Snare" ;
+	lv2:port
+        [ lv2:symbol "AUTOFF" ; pset:value 0.0 ] ,
+        [ lv2:symbol "CHAN" ; pset:value 9.0 ] ,
+        [ lv2:symbol "NOTECCPG" ; pset:value 38.0 ] ,
+        [ lv2:symbol "VALUE" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MOMENTARYVALUE" ; pset:value 125.0 ] ,
+        [ lv2:symbol "DELAY" ; pset:value 0.0 ] ,
+        [ lv2:symbol "ENABLE" ; pset:value 1.0 ] ,
+        [ lv2:symbol "MOMENT" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MSGTYPE" ; pset:value 9.0 ] .
+
+<http://ssj71.github.io/infamousPlugins/plugs.html#mindi:preset:02CCboost>
+    a pset:Preset ;
+    lv2:appliesTo <http://ssj71.github.io/infamousPlugins/plugs.html#mindi> ;
+    rdfs:label "02 CC Boost" ;
+	lv2:port
+        [ lv2:symbol "AUTOFF" ; pset:value 0.0 ] ,
+        [ lv2:symbol "CHAN" ; pset:value 0.0 ] ,
+        [ lv2:symbol "NOTECCPG" ; pset:value 38.0 ] ,
+        [ lv2:symbol "VALUE" ; pset:value 20.0 ] ,
+        [ lv2:symbol "MOMENTARYVALUE" ; pset:value 100.0 ] ,
+        [ lv2:symbol "DELAY" ; pset:value 0.0 ] ,
+        [ lv2:symbol "ENABLE" ; pset:value 1.0 ] ,
+        [ lv2:symbol "MOMENT" ; pset:value 0.0 ] ,
+        [ lv2:symbol "MSGTYPE" ; pset:value 11.0 ] .
