@@ -33,7 +33,7 @@ Dependencies:
     fftw3
 
 If you do not have ntk and ntk-fluid already installed use these commands to install:
-    git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk
+    git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk *NOTE* This source code has been removed by the author, but is available from another source: https://git.kx.studio/non/ntk/archive/v1.3.1001.tar.gz
     cd ntk
     ./waf configure
     ./waf
