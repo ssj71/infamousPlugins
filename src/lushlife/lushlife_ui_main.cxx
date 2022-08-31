@@ -7,6 +7,7 @@
 
 #include "lushlife_ui.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+#include <ctime>
 
 #define LUSHLIFEUI_URI "http://ssj71.github.io/infamousPlugins/plugs.html#lushlife_ui"
 
