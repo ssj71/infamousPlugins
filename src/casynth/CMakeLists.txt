@@ -1,5 +1,5 @@
 #CMake file for infamous casynth
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 4.2)
 
 set(PLUGIN "casynth") 
 include(CheckCCompilerFlag)
